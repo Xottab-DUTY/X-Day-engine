@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="ConfigurationDefs.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
+    <xdPlatform>Win32</xdPlatform>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x86'">
+    <xdPlatform>Win32</xdPlatform>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x64'">
+    <xdPlatform>Win64</xdPlatform>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(xdPlatform)'==''">
+    <xdPlatform>$(Platform)</xdPlatform>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros">
+    <xdBinRootDir>$(SolutionDir)bin\</xdBinRootDir>
+    <xdLibRootDir>$(SolutionDir)lib\</xdLibRootDir>
+    <xdBinDir>$(SolutionDir)bin\</xdBinDir>
+    <xdLibDir>$(SolutionDir)lib\</xdLibDir>
+    <xdIntDir>$(SolutionDir)intermediate\$(xdPlatform)\$(Configuration)\</xdIntDir>
+    <xdSrcDir>$(SolutionDir)src\</xdSrcDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ConfigurationType)'=='Application'">
+    <OutDir>$(xdBinDir)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ConfigurationType)'=='DynamicLibrary'">
+    <OutDir>$(xdBinDir)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ConfigurationType)'=='StaticLibrary'">
+    <OutDir>$(xdLibDir)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(xdIntDir)$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(xdSrcDir);$(ProjectDir);$(xdSrcDir)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(xdLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>$(xdLibDir)$(TargetName).lib</ImportLibrary>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(xdLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(xdLibDir)$(TargetName).lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+</Project>
