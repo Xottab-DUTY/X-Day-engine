@@ -54,6 +54,8 @@ int main(int argc, char* argv[])
     #endif
     Core.Initialize("X-Day Engine", **argv);
     InitializeConsole();
+    Console->Log(Core.GetBuildString(), true);
+
     Console->Log("Core.Params: " + Core.Params, true);
     Console->Log("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.", false);
     Console->Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.", true);

@@ -2,9 +2,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <algorithm>
 
+#include "xdEngine.hpp"
 #include "Console.hpp"
 #include "xdCore.hpp"
 
@@ -37,8 +36,8 @@ void xdConsole::InitLog()
     if (Core.FindParam("-nologflush")) nologflush = true;
     if (!nolog)
     {
-	    LogContainer = new std::vector<std::string>();
-	    LogContainer->reserve(1000);
+        LogContainer = new std::vector<std::string>();
+        LogContainer->reserve(1000);
     }
 }
 
@@ -46,13 +45,13 @@ void xdConsole::CloseLog()
 {
     if (!nolog) 
     {
-	    FlushLog();
-	    LogContainer->clear();
-	    delete LogContainer;
+        FlushLog();
+        LogContainer->clear();
+        delete LogContainer;
     }
 }
 
-void xdConsole::Log(std::string&& log, bool&& cmd)
+void xdConsole::Log(std::string&& log, bool cmd)
 {
     if (!nolog)
     {
@@ -67,15 +66,15 @@ void xdConsole::FlushLog()
     {
         if (!nologflush)
         {
-	        Console->Log("Flushing log..", true);
-	        std::ofstream f;
-	        f.open(LogFile);
+            Console->Log("Flushing log..", true);
+            std::ofstream f;
+            f.open(LogFile);
             //for (auto itr = LogContainer->cbegin(); itr != LogContainer->cend(); ++itr) // TODO: fix for below issue, but body cycle broken then
-	        for (auto i = 0; i < LogContainer->size(); i++) // TODO: fixed size type(int) < dynamic size type(std::vector). Needs fix.
-	        {
-	            f << LogContainer->data()[i] << std::endl; // TODO: dynamic size type(std::vector)[fixed size type(int)]. Child from above issue. Needs fix.
-	        }
-	        f.close();
+            for (auto i = 0; i < LogContainer->size(); i++) // TODO: fixed size type(int) < dynamic size type(std::vector). Needs fix.
+            {
+                f << LogContainer->data()[i] << std::endl; // TODO: dynamic size type(std::vector)[fixed size type(int)]. Child from above issue. Needs fix.
+            }
+            f.close();
         }
 
     }

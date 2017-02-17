@@ -1,5 +1,4 @@
 #include <iostream>
-#include <sstream>
 #include <ctime>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
@@ -28,7 +27,7 @@ void xdCore::Initialize(std::string&& _AppName, char& argv)
 
     CalculateBuildId();
 
-    std::cout << "xdCore build " << buildId << ", " << buildDate << std::endl; // TODO: Use Console.Msg() instead
+    buildString << "xdCore build " << buildId << ", " << buildDate << ", " << buildTime;
 }
 
 // Finds command line parameters and returns true if param exists

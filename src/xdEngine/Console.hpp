@@ -22,8 +22,7 @@ public:
     void CloseLog();
     void FlushLog();
 
-    void Msg(std::string&& format, ...); // TODO: Implement
-    void Log(std::string&& log, bool&& cmd);
+    void Log(std::string&& log, bool cmd);
 
     //void AddCommand(xdConsoleCommand cmd);
     //void RemoveCommand(xdConsoleCommand cmd);

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <sstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
@@ -8,11 +9,14 @@ namespace filesystem = std::experimental::filesystem::v1;
 class XDENGINE_API xdCore
 {
 private:
-    std::string buildDate = __DATE__;
-    std::string buildTime = __TIME__;
-    unsigned buildId;
+    unsigned buildId = 0;
+    std::ostringstream buildString;
 
 public:
+    const std::string buildDate = __DATE__;
+    const std::string buildTime = __TIME__;
+    
+
     std::string AppName;
     filesystem::path AppPath;
     filesystem::path WorkPath;
@@ -35,10 +39,10 @@ public:
 public:
     void Initialize(std::string&& ApplicationName, char& argv);
     void Destroy();
-    const std::string GetBuildDate() const { return buildDate; }
     auto GetBuildId() const { return buildId; }
-    //void LoadModule(std::string&& ModuleName, bool&& log);
-    //void UnloadModule(std::string&& ModuleName, bool&& log);
+    auto GetBuildString() const { return buildString.str(); }
+    void LoadModule(std::string&& ModuleName, bool&& log);
+    void UnloadModule(std::string&& ModuleName, bool&& log);
     void CreateDirIfNotExist(filesystem::path&& p);
     bool FindParam(std::string&& Param);
     std::string ReturnParam(std::string&& Param);
