@@ -9,7 +9,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 class XDENGINE_API xdCore
 {
 private:
-    unsigned buildId = 0;
+    double buildId = 0;
     std::ostringstream buildString;
 
 public:

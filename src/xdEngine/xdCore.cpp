@@ -56,34 +56,41 @@ void xdCore::CreateDirIfNotExist(filesystem::path&& p)
     if (!filesystem::exists(p)) filesystem::create_directory(p);
 }
 
-void xdCore::CalculateBuildId() // TODO: Implement start time with buildTime compare
+void xdCore::CalculateBuildId()
 {
     // All started in ~01.01.2017
     std::tm startDate;
-    startDate.tm_mday = 1;
-    startDate.tm_mon = 0;
-    startDate.tm_year = 2017 - 1900;
-    startDate.tm_hour = 12; //random hour(don't remember exact hour)
-    startDate.tm_min = 0;
-    startDate.tm_sec = 0;
-    const char* monthId[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    { // Start date and time
+        startDate.tm_mday = 1;
+        startDate.tm_mon = 0;
+        startDate.tm_year = 2017 - 1900;
+        startDate.tm_hour = 12; //random hour(don't remember exact hour)
+        startDate.tm_min = 0;
+        startDate.tm_sec = 0;
+        
+    }
 
     std::tm buildDate_tm;
-    buildDate_tm.tm_hour = 12;
-    buildDate_tm.tm_min = 0;
-    buildDate_tm.tm_sec = 0;
+    { // Build date
+        std::string stringMonth;
+        std::istringstream buffer(buildDate);
+        buffer >> stringMonth >> buildDate_tm.tm_mday >> buildDate_tm.tm_year;
+        buildDate_tm.tm_year -= 1900;
 
-    std::string stringMonth;
-    std::istringstream buffer(buildDate);
-    buffer >> stringMonth >> buildDate_tm.tm_mday >> buildDate_tm.tm_year;
-
-    buildDate_tm.tm_year -= 1900;
-
-    for (int i = 0; i < 12; i++)
-    {
-        if (stringMonth.compare(monthId[i])) continue;
-        buildDate_tm.tm_mon = i;
-        break;
+        const char* monthId[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+        for (int i = 0; i < 12; i++)
+        {
+            if (stringMonth.compare(monthId[i])) continue;
+            buildDate_tm.tm_mon = i;
+            break;
+        }
     }
+    { // Build time
+        std::string timeBuffer(buildTime);
+        std::replace(timeBuffer.begin(), timeBuffer.end(), ':', ' '); // Costyl (TM)
+        std::istringstream buffer2(timeBuffer);
+        buffer2 >> buildDate_tm.tm_hour >> buildDate_tm.tm_min >> buildDate_tm.tm_sec;
+    }
+    
     buildId = -difftime(std::mktime(&startDate), std::mktime(&buildDate_tm)) / 86400;
 }
