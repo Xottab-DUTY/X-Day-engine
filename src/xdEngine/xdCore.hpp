@@ -41,8 +41,6 @@ public:
     void Destroy();
     auto GetBuildId() const { return buildId; }
     auto GetBuildString() const { return buildString.str(); }
-    void LoadModule(std::string&& ModuleName, bool&& log);
-    void UnloadModule(std::string&& ModuleName, bool&& log);
     void CreateDirIfNotExist(filesystem::path&& p);
     bool FindParam(std::string&& Param);
     std::string ReturnParam(std::string&& Param);

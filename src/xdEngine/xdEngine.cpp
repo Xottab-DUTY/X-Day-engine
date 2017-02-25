@@ -31,7 +31,7 @@ void HelpCmdArgs()
                     "-mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
                     "-mainlog - Specifies path and name of main log file (path/name.extension), default is \"*DataPath*/main.log\"\n"\
                     "-nolog - Completely disables engine log. May increase performance\n"\
-                    "-nologflush - Disables log flushing. Useless if -nolog defined", true);
+                    "-nologflush - Disables log flushing. Useless if -nolog defined");
 
     Console->Log("\nИспользуйте параметры только с кавычками(-параметр \"значение\")\n"\
                     "-параметр значение вернёт \"начени\"\n"\
@@ -54,11 +54,11 @@ int main(int argc, char* argv[])
     #endif
     Core.Initialize("X-Day Engine", **argv);
     InitializeConsole();
-    Console->Log(Core.GetBuildString(), true);
+    Console->Log(Core.GetBuildString());
 
-    Console->Log("Core.Params: " + Core.Params, true);
+    Console->Log("Core.Params: " + Core.Params);
     Console->Log("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.", false);
-    Console->Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.", true);
+    Console->Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
 
     HelpCmdArgs();
 
