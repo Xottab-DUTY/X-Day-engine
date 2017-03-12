@@ -3,12 +3,14 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
+#include "fmt/fmt/format.h"
+
 #include "xdCore.hpp"
 #include "Console.hpp"
 
 XDENGINE_API xdCore Core;
 
-void xdCore::Initialize(std::string&& _AppName, char& argv)
+void xdCore::Initialize(std::string&& _AppName, const char& argv)
 {
     FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _AppName;
     FindParam("-game") ? GameModule = ReturnParam("-game") : GameModule = "xdGame";
@@ -27,7 +29,7 @@ void xdCore::Initialize(std::string&& _AppName, char& argv)
 
     CalculateBuildId();
 
-    buildString << "xdCore build " << buildId << ", " << buildDate << ", " << buildTime;
+    buildString = fmt::format("xdCore build {}, {}, {}", buildId, buildDate, buildTime);
 }
 
 // Finds command line parameters and returns true if param exists
@@ -59,14 +61,14 @@ void xdCore::CreateDirIfNotExist(filesystem::path&& p)
 void xdCore::CalculateBuildId()
 {
     // All started in ~01.01.2017
-    std::tm startDate;
+    std::tm startDate_tm;
     { // Start date and time
-        startDate.tm_mday = 1;
-        startDate.tm_mon = 0;
-        startDate.tm_year = 2017 - 1900;
-        startDate.tm_hour = 12; //random hour(don't remember exact hour)
-        startDate.tm_min = 0;
-        startDate.tm_sec = 0;
+        startDate_tm.tm_mday = 1;
+        startDate_tm.tm_mon = 0;
+        startDate_tm.tm_year = 2017 - 1900;
+        startDate_tm.tm_hour = 12; //random hour(don't remember exact hour)
+        startDate_tm.tm_min = 0;
+        startDate_tm.tm_sec = 0;
     }
 
     std::tm buildDate_tm;
@@ -91,5 +93,5 @@ void xdCore::CalculateBuildId()
         buffer2 >> buildDate_tm.tm_hour >> buildDate_tm.tm_min >> buildDate_tm.tm_sec;
     }
 
-    buildId = -difftime(std::mktime(&startDate), std::mktime(&buildDate_tm)) / 86400;
+    buildId = -difftime(std::mktime(&startDate_tm), std::mktime(&buildDate_tm)) / 86400;
 }

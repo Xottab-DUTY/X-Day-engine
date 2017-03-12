@@ -11,13 +11,11 @@ class XDENGINE_API xdCore
 {
 private:
     double buildId = 0;
-    std::ostringstream buildString;
-
-public:
     const std::string buildDate = __DATE__;
     const std::string buildTime = __TIME__;
-    
+    std::string buildString;
 
+public:
     std::string AppName;
     filesystem::path AppPath;
     filesystem::path WorkPath;
@@ -37,10 +35,12 @@ public:
     std::string Params;
 
 public:
-    void Initialize(std::string&& ApplicationName, char& argv);
+    void Initialize(std::string&& ApplicationName, const char& argv);
     void Destroy();
     auto GetBuildId() const { return buildId; }
-    auto GetBuildString() const { return buildString.str(); }
+    auto GetBuildDate() const { return buildDate; }
+    auto GetBuildTime() const { return buildTime; }
+    auto GetBuildString() const { return buildString; }
     void CreateDirIfNotExist(filesystem::path&& p);
     bool FindParam(std::string&& Param);
     std::string ReturnParam(std::string&& Param);
