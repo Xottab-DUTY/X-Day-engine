@@ -9,6 +9,7 @@
     <ClCompile Include="ConsoleCommand.cpp">
       <Filter>Console\Command</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
@@ -16,7 +17,7 @@
     <ClInclude Include="Console.hpp">
       <Filter>Console</Filter>
     </ClInclude>
-    <ClInclude Include="Platform.hpp">
+    <ClInclude Include="Platform\Platform.hpp">
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleCommand.hpp">
@@ -24,13 +25,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Compiler.inl">
+    <None Include="Platform\Compiler.inl">
       <Filter>Platform</Filter>
     </None>
-    <None Include="PlatformLinux.inl">
+    <None Include="Platform\PlatformLinux.inl">
       <Filter>Platform</Filter>
     </None>
-    <None Include="PlatformWindows.inl">
+    <None Include="Platform\PlatformWindows.inl">
       <Filter>Platform</Filter>
     </None>
   </ItemGroup>
