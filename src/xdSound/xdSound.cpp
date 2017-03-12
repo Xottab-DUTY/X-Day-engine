@@ -1,6 +1,6 @@
 
 #include "xdSound.hpp"
-#include "xdEngine/Platform.hpp"
+#include "xdEngine/Platform/Platform.hpp"
 #include <cstdio>
 
 #ifdef WINDOWS

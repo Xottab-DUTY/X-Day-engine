@@ -1,6 +1,6 @@
 #pragma  once
 
-#include "xdEngine/Platform.hpp"
+#include "xdEngine/Platform/Platform.hpp"
 
 #ifdef XDSOUND_IMPORTS
 #define XDSOUND_API XD_IMPORT
