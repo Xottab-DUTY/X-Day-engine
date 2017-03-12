@@ -1,3 +1,9 @@
 [submodule "include/dynlib"]
 	path = include/dynlib
 	url = https://github.com/volnt/dynlib.git
+[submodule "include/fmt"]
+	path = include/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "include/spdlog"]
+	path = include/spdlog
+	url = https://github.com/gabime/spdlog.git
