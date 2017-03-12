@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+
 #include <sstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
@@ -31,9 +32,8 @@ public:
 
     std::string GameModule;
     
-
-    std::string UserName = u8"X-Day User";
-    //std::string CompName = u8"X-Day Computer";
+    std::string UserName = "X-Day User";
+    std::string CompName = "X-Day Computer";
     std::string Params;
 
 public:

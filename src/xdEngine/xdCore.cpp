@@ -46,7 +46,7 @@ bool xdCore::FindParam(std::string&& Param)
 // else you will get an unexpected behavior
 std::string xdCore::ReturnParam(std::string&& Param)
 {
-    Param = Params.substr(Params.find(Param) + (Param.length()+2), Params.find(Param+" %[^ ]"));
+    Param = Params.substr(Params.find(Param) + (Param.length() + 2), Params.find(Param + " %[^ ]"));
     Param.pop_back(); // Costyl (TM)
     return Param;
 }
@@ -67,7 +67,6 @@ void xdCore::CalculateBuildId()
         startDate.tm_hour = 12; //random hour(don't remember exact hour)
         startDate.tm_min = 0;
         startDate.tm_sec = 0;
-        
     }
 
     std::tm buildDate_tm;
@@ -91,6 +90,6 @@ void xdCore::CalculateBuildId()
         std::istringstream buffer2(timeBuffer);
         buffer2 >> buildDate_tm.tm_hour >> buildDate_tm.tm_min >> buildDate_tm.tm_sec;
     }
-    
+
     buildId = -difftime(std::mktime(&startDate), std::mktime(&buildDate_tm)) / 86400;
 }

@@ -1,4 +1,3 @@
-
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -7,7 +6,7 @@
 #include "Console.hpp"
 #include "xdCore.hpp"
 
-XDENGINE_API xdConsole* Console;
+XDENGINE_API xdConsole* Console = nullptr;
 
 void xdConsole::Initialize()
 {
@@ -43,11 +42,14 @@ void xdConsole::InitLog()
 
 void xdConsole::CloseLog()
 {
-    if (!nolog) 
+    if (!nolog)
     {
-        FlushLog();
-        LogContainer->clear();
-        delete LogContainer;
+        if (LogContainer)
+        {
+            FlushLog();
+            LogContainer->clear();
+            delete LogContainer;
+        }
     }
 }
 
@@ -76,7 +78,5 @@ void xdConsole::FlushLog()
             }
             f.close();
         }
-
     }
-    
 }
