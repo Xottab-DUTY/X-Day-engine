@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
     <Import Project="ConfigurationDefs.props" />
@@ -22,6 +22,7 @@
     <xdLibDir>$(SolutionDir)lib\</xdLibDir>
     <xdIntDir>$(SolutionDir)intermediate\$(xdPlatform)\$(Configuration)\</xdIntDir>
     <xdSrcDir>$(SolutionDir)src\</xdSrcDir>
+    <xdIncludeDir>$(SolutionDir)include\</xdIncludeDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ConfigurationType)'=='Application'">
     <OutDir>$(xdBinDir)</OutDir>
@@ -37,7 +38,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)include;$(xdSrcDir);$(ProjectDir);$(xdSrcDir)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(xdIncludeDir);$(xdSrcDir);$(ProjectDir);$(xdSrcDir)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>

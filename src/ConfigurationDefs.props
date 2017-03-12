@@ -23,9 +23,9 @@
     <TargetName>$(ProjectName)_Dx64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>$(ProjectName)_x86</TargetName>
+    <TargetName>$(ProjectName)_Rx86</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>$(ProjectName)_x64</TargetName>
+    <TargetName>$(ProjectName)_Rx64</TargetName>
   </PropertyGroup>
 </Project>
