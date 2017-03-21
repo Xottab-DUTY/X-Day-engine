@@ -68,13 +68,11 @@ void xdConsole::FlushLog()
     {
         if (!nologflush)
         {
-            Console->Log("Flushing log..", true);
-            std::ofstream f;
-            f.open(LogFile);
-            //for (auto itr = LogContainer->cbegin(); itr != LogContainer->cend(); ++itr) // TODO: fix for below issue, but body cycle broken then
-            for (auto i = 0; i < LogContainer->size(); i++) // TODO: fixed size type(int) < dynamic size type(std::vector). Needs fix.
+            Console->Log("Flushing log..");
+            std::ofstream f(LogFile);
+            for (auto&& str : *LogContainer)
             {
-                f << LogContainer->data()[i] << std::endl; // TODO: dynamic size type(std::vector)[fixed size type(int)]. Child from above issue. Needs fix.
+                f << str << std::endl;
             }
             f.close();
         }
