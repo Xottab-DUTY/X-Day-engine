@@ -10,6 +10,9 @@
       <Filter>Console\Command</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Debug\QuantMS.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
@@ -22,6 +25,9 @@
     </ClInclude>
     <ClInclude Include="ConsoleCommand.hpp">
       <Filter>Console\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\QuantMS.hpp">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +50,9 @@
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{dddc8ce4-7b80-41a4-b686-cda73cb01303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{54e4b787-9183-4e3e-8506-25f8466bf931}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
