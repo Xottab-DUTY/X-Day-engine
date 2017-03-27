@@ -10,6 +10,11 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 XDENGINE_API xdCore Core;
 
+static void error_callback(int error, const char* description)
+{
+    Console->Log(fmt::format("GLFW Error: {}", description));
+}
+
 void xdCore::Initialize(std::string&& _AppName, const char& argv)
 {
     FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _AppName;
@@ -31,6 +36,7 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
 
     buildString = fmt::format("xdCore build {}, {}, {}", buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
+    glfwSetErrorCallback(error_callback);
 }
 
 // Finds command line parameters and returns true if param exists
