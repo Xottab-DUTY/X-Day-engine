@@ -2,13 +2,13 @@
 
 #include "Platform/Platform.hpp"
 
-#ifdef XDENGINE_IMPORTS
-#define XDENGINE_API XD_IMPORT
-#else
+#ifdef XDENGINE_EXPORTS
 #define XDENGINE_API XD_EXPORT
+#else
+#define XDENGINE_API XD_IMPORT
 #endif
 
-class XDayEngine
+class XDENGINE_API XDayEngine
 {
 
 };
