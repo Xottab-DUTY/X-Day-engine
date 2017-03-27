@@ -68,7 +68,12 @@ int main(int argc, char* argv[])
 
     HelpCmdArgs();
 
+    glfwInit();
+    Console->Log("GLFW initialized.");
     Startup();
+
+    glfwTerminate();
+    Console->Log("GLFW terminated.");
 
     destroyConsole();
 
