@@ -78,3 +78,9 @@ void xdConsole::FlushLog()
         }
     }
 }
+
+/*
+void xdConsole::AddCommand(xdConsoleCommand&& cmdName)
+{
+CommandsContainer[cmdName.GetName()] = cmdName;
+}*/
