@@ -49,7 +49,10 @@ void HelpCmdArgs()
 
 void Startup()
 {
-    
+    while (!glfwWindowShouldClose(Engine.window))
+    {
+        glfwPollEvents();
+    }
 }
 
 int main(int argc, char* argv[])
@@ -70,6 +73,10 @@ int main(int argc, char* argv[])
 
     glfwInit();
     Console->Log("GLFW initialized.");
+
+    Engine.Initialize();
+    Engine.xdCreateWindow();
+
     Startup();
 
     glfwTerminate();
