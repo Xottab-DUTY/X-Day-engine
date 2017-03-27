@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{5FBE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fmt", "include\fmt.vcxproj", "{F3A00ED5-79B7-43C7-8D9C-58874DC61845}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dynlib", "include\dynlib.vcxproj", "{0624A030-BC85-46AE-A529-A2EE1E656E2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -42,11 +44,20 @@ Global
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Release|x64.Build.0 = Release|x64
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Release|x86.ActiveCfg = Release|Win32
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Release|x86.Build.0 = Release|Win32
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x64.ActiveCfg = Debug|x64
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x64.Build.0 = Debug|x64
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x86.ActiveCfg = Debug|Win32
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x86.Build.0 = Debug|Win32
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x64.ActiveCfg = Release|x64
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x64.Build.0 = Release|x64
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x86.ActiveCfg = Release|Win32
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845} = {5FBE068F-5316-4080-8EAA-7D31C9E0848E}
+		{0624A030-BC85-46AE-A529-A2EE1E656E2C} = {5FBE068F-5316-4080-8EAA-7D31C9E0848E}
 	EndGlobalSection
 EndGlobal
