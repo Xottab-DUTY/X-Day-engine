@@ -12,6 +12,7 @@ void InitializeConsole()
 
 void destroyConsole()
 {
+    Console->CloseLog();
     delete Console;
 }
 
@@ -66,7 +67,6 @@ int main(int argc, char* argv[])
 
     Startup();
 
-    Console->CloseLog();
     destroyConsole();
 
     system("pause");
