@@ -1,8 +1,10 @@
 // 01.01.2017 Султан Xottab_DUTY Урамаев
 // Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.
+#include <GLFW/glfw3.h>
 
 #include "xdCore.hpp"
 #include "Console.hpp"
+#include "xdEngine.hpp"
 
 void InitializeConsole()
 {
@@ -57,8 +59,9 @@ int main(int argc, char* argv[])
 #endif
     Core.Initialize("X-Day Engine", **argv);
     InitializeConsole();
-    Console->Log(Core.GetBuildString());
 
+    Console->Log(Core.GetGLFWVersionString());
+    Console->Log(Core.GetBuildString());
     Console->Log("Core.Params: " + Core.Params);
     Console->Log("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.", false);
     Console->Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");

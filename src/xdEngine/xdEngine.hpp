@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
+
 #include "Platform/Platform.hpp"
 
 #ifdef XDENGINE_EXPORTS

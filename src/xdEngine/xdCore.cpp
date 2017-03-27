@@ -1,9 +1,9 @@
-#include <iostream>
 #include <ctime>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
-#include "fmt/fmt/format.h"
+#include <fmt/format.h>
+#include <GLFW/glfw3.h>
 
 #include "xdCore.hpp"
 #include "Console.hpp"
@@ -30,6 +30,7 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     CalculateBuildId();
 
     buildString = fmt::format("xdCore build {}, {}, {}", buildId, buildDate, buildTime);
+    GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
 }
 
 // Finds command line parameters and returns true if param exists

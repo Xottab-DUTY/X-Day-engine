@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
-
 #include <sstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
+
+#include <GLFW/glfw3.h>
 
 #include "xdEngine.hpp"
 
@@ -14,6 +15,7 @@ private:
     const std::string buildDate = __DATE__;
     const std::string buildTime = __TIME__;
     std::string buildString;
+    std::string GLFWVersionString;
 
 public:
     std::string AppName;
@@ -41,6 +43,7 @@ public:
     auto GetBuildDate() const { return buildDate; }
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
+    auto GetGLFWVersionString() const { return GLFWVersionString; }
     void CreateDirIfNotExist(filesystem::path&& p);
     bool FindParam(std::string&& Param);
     std::string ReturnParam(std::string&& Param);
