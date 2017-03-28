@@ -2,8 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="fmt\fmt\format.cc" />
+    <ClCompile Include="fmt\fmt\ostream.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fmt\fmt\format.h" />
+    <ClInclude Include="fmt\fmt\ostream.h" />
   </ItemGroup>
 </Project>
