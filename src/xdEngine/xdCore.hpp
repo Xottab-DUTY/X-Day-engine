@@ -8,6 +8,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine.hpp"
 
+using importedFunction = void(*)();
+
 class XDENGINE_API xdCore
 {
 private:
