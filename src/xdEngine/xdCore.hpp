@@ -23,14 +23,14 @@ public:
     std::string AppName;
     filesystem::path AppPath;
     filesystem::path WorkPath;
-    filesystem::path binPath;
+    filesystem::path BinPath;
     filesystem::path DataPath;
     filesystem::path ResPath;
-    filesystem::path configsPath;
-    filesystem::path texturesPath;
-    filesystem::path modelsPath;
-    filesystem::path soundsPath;
-    filesystem::path archivesPath;
+    filesystem::path ArchivesPath;
+    filesystem::path ConfigsPath;
+    filesystem::path ModelsPath;
+    filesystem::path SoundsPath;
+    filesystem::path TexturesPath;
 
     std::string GameModule;
     
@@ -46,7 +46,7 @@ public:
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
     auto GetGLFWVersionString() const { return GLFWVersionString; }
-    void CreateDirIfNotExist(filesystem::path&& p);
+    void CreateDirIfNotExist(const filesystem::path& p);
     bool FindParam(std::string&& Param);
     std::string ReturnParam(std::string&& Param);
 

@@ -22,15 +22,23 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     Params = &argv;
     AppPath = filesystem::absolute(&Params[0]);
     WorkPath = filesystem::current_path();
-    binPath = WorkPath.string() + "/bin/";
-    FindParam("-datapath") ? DataPath = ReturnParam("-datapath") : DataPath = WorkPath.string() + "/appdata/"; CreateDirIfNotExist(DataPath.c_str());
-    FindParam("-respath") ? ResPath = ReturnParam("-respath") : ResPath = WorkPath.string() + "/res/"; CreateDirIfNotExist(ResPath.c_str());
+    BinPath = WorkPath.string() + "/bin/";
+    FindParam("-datapath") ? DataPath = ReturnParam("-datapath") : DataPath = WorkPath.string() + "/appdata/";
+    FindParam("-respath") ? ResPath = ReturnParam("-respath") : ResPath = WorkPath.string() + "/res/";
 
-    configsPath = ResPath.string() + "/configs/"; CreateDirIfNotExist(configsPath.c_str());
-    texturesPath = ResPath.string() + "/textures/"; CreateDirIfNotExist(texturesPath.c_str());
-    modelsPath = ResPath.string() + "/models/"; CreateDirIfNotExist(modelsPath.c_str());
-    soundsPath = ResPath.string() + "/sounds/"; CreateDirIfNotExist(soundsPath.c_str());
-    archivesPath = ResPath.string() + "/archives/"; CreateDirIfNotExist(archivesPath.c_str());
+    ArchivesPath = ResPath.string() + "/archives/";
+    ConfigsPath = ResPath.string() + "/configs/";
+    ModelsPath = ResPath.string() + "/models/";
+    SoundsPath = ResPath.string() + "/sounds/";
+    TexturesPath = ResPath.string() + "/textures/";
+
+    CreateDirIfNotExist(DataPath);
+    CreateDirIfNotExist(ResPath);
+    CreateDirIfNotExist(ArchivesPath);
+    CreateDirIfNotExist(ConfigsPath);
+    CreateDirIfNotExist(ModelsPath);
+    CreateDirIfNotExist(SoundsPath);
+    CreateDirIfNotExist(TexturesPath);
 
     CalculateBuildId();
 
@@ -60,7 +68,7 @@ std::string xdCore::ReturnParam(std::string&& Param)
     return Param;
 }
 
-void xdCore::CreateDirIfNotExist(filesystem::path&& p)
+void xdCore::CreateDirIfNotExist(const filesystem::path& p)
 {
     if (!filesystem::exists(p)) filesystem::create_directory(p);
 }
