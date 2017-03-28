@@ -50,6 +50,8 @@ public:
     bool FindParam(std::string&& Param);
     std::string ReturnParam(std::string&& Param);
 
+    const std::string GetModuleName(std::string&& xdModule);
+
 private:
     void CalculateBuildId();
 };

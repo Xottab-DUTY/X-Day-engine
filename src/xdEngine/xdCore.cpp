@@ -7,6 +7,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdCore.hpp"
 #include "Console.hpp"
+#include "Platform/Platform.hpp"
 
 XDENGINE_API xdCore Core;
 
@@ -71,6 +72,26 @@ std::string xdCore::ReturnParam(std::string&& Param)
 void xdCore::CreateDirIfNotExist(const filesystem::path& p)
 {
     if (!filesystem::exists(p)) filesystem::create_directory(p);
+}
+
+// Returns given module name with configuration and architecture
+const std::string xdCore::GetModuleName(std::string&& xdModule)
+{
+#ifdef DEBUG
+#ifdef XD_X64
+    return xdModule + "_Dx64";
+#else
+    return xdModule + "_Dx86";
+#endif
+#elif NDEBUG
+#ifdef XD_X64
+    return xdModule + "_Rx64";
+#else
+    return xdModule + "_Rx86";
+#endif
+#endif
+    Console->Log("Something went wrong when calling GetModuleName()");
+    return xdModule;
 }
 
 void xdCore::CalculateBuildId()
