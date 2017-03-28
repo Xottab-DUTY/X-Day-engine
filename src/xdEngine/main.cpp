@@ -1,6 +1,7 @@
 // 01.01.2017 Султан Xottab_DUTY Урамаев
 // Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.
 #include <GLFW/glfw3.h>
+#include <dynlib/Dynlib.hpp>
 
 #include "xdCore.hpp"
 #include "Console.hpp"
@@ -76,6 +77,23 @@ int main(int argc, char* argv[])
 
     Engine.Initialize();
     Engine.xdCreateWindow();
+
+    auto xdSoundModule = Dynlib::open(Core.GetModuleName("xdSound").c_str());
+    if (xdSoundModule)
+    {
+        Console->Log("Module loaded successfully");
+    }
+
+    auto impFunc = (importedFunction)Dynlib::load(xdSoundModule, "funcToExport");
+    if (impFunc)
+        impFunc();
+    else
+        Console->Log("Failed to import function");
+
+    if (Dynlib::close(xdSoundModule))
+    {
+        Console->Log("Module unloaded successfully");
+    }
 
     Startup();
 
