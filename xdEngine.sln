@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 14.0.25420.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdEngine", "src\xdEngine\xdEngine.vcxproj", "{C164222D-A92B-4C30-90CE-BD2927E7EB6D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F53A12F1-889F-420B-B22F-52EF33AE9F4A} = {F53A12F1-889F-420B-B22F-52EF33AE9F4A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdSound", "src\xdSound\xdSound.vcxproj", "{F53A12F1-889F-420B-B22F-52EF33AE9F4A}"
 EndProject
