@@ -6,26 +6,35 @@
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Mixed'">
-    <ClCompile>
-      <PreprocessorDefinitions>DEBUG;MIXED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
+
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <xdNameCA>_Dx64</xdNameCA>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <xdNameCA>_Dx86</xdNameCA>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <xdNameCA>_Rx64</xdNameCA>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <xdNameCA>_Rx86</xdNameCA>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)_Dx86</TargetName>
+    <TargetName>$(ProjectName)$(xdNameCA)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)_Dx64</TargetName>
+    <TargetName>$(ProjectName)$(xdNameCA)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>$(ProjectName)_Rx86</TargetName>
+    <TargetName>$(ProjectName)$(xdNameCA)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>$(ProjectName)_Rx64</TargetName>
+    <TargetName>$(ProjectName)$(xdNameCA)</TargetName>
   </PropertyGroup>
 </Project>
