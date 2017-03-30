@@ -1,11 +1,11 @@
 #pragma once
-//#include <map>
 #include <string>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine.hpp"
-#include "ConsoleCommand.hpp"
+
+class XDENGINE_API xdConsoleCommand;
 
 class XDENGINE_API xdConsole
 {
@@ -16,7 +16,6 @@ public:
     filesystem::path ConfigFile;
     filesystem::path LogFile;
     std::vector<std::string>* LogContainer = nullptr;
-    //std::map<std::string, xdConsoleCommand> CommandsContainer;
 
 public:
     void Initialize();
@@ -25,8 +24,6 @@ public:
     void FlushLog();
 
     void Log(std::string&& log, bool cmd = true);
-    //void AddCommand(xdConsoleCommand&& cmdName);
-    //void RemoveCommand(xdConsoleCommand&& cmdName);
 
     void Show();
     void Hide();

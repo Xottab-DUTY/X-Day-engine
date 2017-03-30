@@ -3,10 +3,12 @@
 #include <iostream>
 
 #include "xdEngine.hpp"
-#include "Console.hpp"
 #include "xdCore.hpp"
+#include "Console.hpp"
+#include "ConsoleCommand.hpp"
 
 XDENGINE_API xdConsole* Console = nullptr;
+XDENGINE_API xdCC_Container* ConsoleCommands = nullptr;
 
 void xdConsole::Initialize()
 {
@@ -78,9 +80,3 @@ void xdConsole::FlushLog()
         }
     }
 }
-
-/*
-void xdConsole::AddCommand(xdConsoleCommand&& cmdName)
-{
-CommandsContainer[cmdName.GetName()] = cmdName;
-}*/
