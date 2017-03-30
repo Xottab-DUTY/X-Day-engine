@@ -122,6 +122,9 @@
   <ItemGroup>
     <ClInclude Include="xdSound.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="xdSound_impexp.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

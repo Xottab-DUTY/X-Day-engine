@@ -95,7 +95,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
-      <PreprocessorDefinitions>XDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)fmt\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
@@ -114,7 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
-      <PreprocessorDefinitions>XDENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)fmt\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
@@ -145,6 +145,7 @@
     <None Include="Platform\Compiler.inl" />
     <None Include="Platform\PlatformLinux.inl" />
     <None Include="Platform\PlatformWindows.inl" />
+    <None Include="xdEngine_impexp.inl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\include\dynlib.vcxproj">

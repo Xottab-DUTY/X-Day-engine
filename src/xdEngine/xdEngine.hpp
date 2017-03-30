@@ -2,15 +2,9 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Platform/Platform.hpp"
+#include "xdEngine_impexp.inl"
 
-#ifdef XDENGINE_EXPORTS
-#define XDENGINE_API XD_EXPORT
-#else
-#define XDENGINE_API XD_IMPORT
-#endif
-
-class XDENGINE_API XDayEngine
+class XDAY_API XDayEngine
 {
 private:
     int MonitorsCount;
@@ -33,4 +27,4 @@ public:
     int GetVideoModesCount() { return VideoModesCount; };
 };
 
-extern XDENGINE_API XDayEngine Engine;
+extern XDAY_API XDayEngine Engine;

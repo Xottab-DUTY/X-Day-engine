@@ -6,11 +6,11 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include <GLFW/glfw3.h>
 
-#include "xdEngine.hpp"
+#include "xdEngine_impexp.inl"
 
 using importedFunction = void(*)();
 
-class XDENGINE_API xdCore
+class XDAY_API xdCore
 {
 private:
     double buildId = 0;
@@ -56,4 +56,4 @@ private:
     void CalculateBuildId();
 };
 
-extern XDENGINE_API xdCore Core;
+extern XDAY_API xdCore Core;

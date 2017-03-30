@@ -7,7 +7,7 @@
 #include "xdCore.hpp"
 #include "Console.hpp"
 
-XDENGINE_API XDayEngine Engine;
+XDAY_API XDayEngine Engine;
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {

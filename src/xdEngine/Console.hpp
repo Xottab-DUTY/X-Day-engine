@@ -5,11 +5,11 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include <fmt/format.h>
 
-#include "xdEngine.hpp"
+#include "xdEngine_impexp.inl"
 
-class XDENGINE_API xdConsoleCommand;
+class XDAY_API xdConsoleCommand;
 
-class XDENGINE_API xdConsole
+class XDAY_API xdConsole
 {
 public:
     bool isVisible = false;
@@ -32,4 +32,4 @@ public:
     void Hide();
 };
 
-extern XDENGINE_API xdConsole* Console;
+extern XDAY_API xdConsole* Console;

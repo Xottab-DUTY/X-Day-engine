@@ -9,7 +9,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "Console.hpp"
 #include "Platform/Platform.hpp"
 
-XDENGINE_API xdCore Core;
+XDAY_API xdCore Core;
 
 static void error_callback(int error, const char* description)
 {

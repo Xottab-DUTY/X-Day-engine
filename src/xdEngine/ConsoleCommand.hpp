@@ -4,11 +4,11 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
-#include "xdEngine.hpp"
+#include "xdEngine_impexp.inl"
 
-class XDENGINE_API xdConsoleCommand;
+class XDAY_API xdConsoleCommand;
 
-class XDENGINE_API xdCC_Container
+class XDAY_API xdCC_Container
 {
 public:
     std::map<const char*, xdConsoleCommand*> CommandsContainer;
@@ -18,9 +18,9 @@ public:
     bool Execute(const char* args);
 };
 
-XDENGINE_API extern xdCC_Container* ConsoleCommands;
+XDAY_API extern xdCC_Container* ConsoleCommands;
 
-class XDENGINE_API xdConsoleCommand
+class XDAY_API xdConsoleCommand
 {
 public:
     friend class xdConsole;
@@ -47,7 +47,7 @@ public:
     virtual void AddCommandToCache(std::string&& cmd);
 };
 
-class XDENGINE_API xdCC_Bool : public xdConsoleCommand
+class XDAY_API xdCC_Bool : public xdConsoleCommand
 {
     using super = xdConsoleCommand;
 
@@ -59,7 +59,7 @@ protected:
 };
 
 template<class T>
-class XDENGINE_API xdCC_Value : public xdConsoleCommand
+class XDAY_API xdCC_Value : public xdConsoleCommand
 {
     using super = xdConsoleCommand;
 public:
@@ -70,7 +70,7 @@ protected:
     T max;
 };
 
-class XDENGINE_API xdCC_Unsigned : public xdCC_Value<unsigned>
+class XDAY_API xdCC_Unsigned : public xdCC_Value<unsigned>
 {
     using super = xdCC_Value<unsigned>;
 

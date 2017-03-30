@@ -7,8 +7,8 @@
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
 
-XDENGINE_API xdConsole* Console = nullptr;
-XDENGINE_API xdCC_Container* ConsoleCommands = nullptr;
+XDAY_API xdConsole* Console = nullptr;
+XDAY_API xdCC_Container* ConsoleCommands = nullptr;
 
 void xdConsole::Initialize()
 {

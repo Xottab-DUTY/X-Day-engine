@@ -40,6 +40,7 @@
     <None Include="Platform\PlatformWindows.inl">
       <Filter>Platform</Filter>
     </None>
+    <None Include="xdEngine_impexp.inl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Console">
