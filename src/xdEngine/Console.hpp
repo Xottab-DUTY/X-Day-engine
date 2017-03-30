@@ -3,6 +3,8 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
+#include <fmt/format.h>
+
 #include "xdEngine.hpp"
 
 class XDENGINE_API xdConsoleCommand;
@@ -23,6 +25,7 @@ public:
     void CloseLog();
     void FlushLog();
 
+#define ConsoleMsg(log, ...) { Console->Log(fmt::format(log, __VA_ARGS__)); }
     void Log(std::string&& log, bool cmd = true);
 
     void Show();

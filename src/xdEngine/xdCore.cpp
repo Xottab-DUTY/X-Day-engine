@@ -13,7 +13,7 @@ XDENGINE_API xdCore Core;
 
 static void error_callback(int error, const char* description)
 {
-    Console->Log(fmt::format("GLFW Error: {}", description));
+    ConsoleMsg("GLFW Error: Code: {}, Means: {}", error, description);
 }
 
 void xdCore::Initialize(std::string&& _AppName, const char& argv)
