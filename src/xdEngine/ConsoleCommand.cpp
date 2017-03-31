@@ -115,6 +115,30 @@ const char* xdCC_Bool::Status()
 }
 #pragma endregion ConsoleCommand Boolean
 
+#pragma region ConsoleCommand Toggle
+xdCC_Toggle::xdCC_Toggle(const char* _name, bool& _value) : super(_name), value(_value)
+{
+    AllowEmptyArgs = true;
+}
+
+void xdCC_Toggle::Execute(const char* args)
+{
+    value = !value;
+    ConsoleMsg("ConsoleCommand {} toggled ({})", Name, value);
+}
+
+const char* xdCC_Toggle::Info()
+{
+    return "Command with no arguments needed";
+}
+const char* xdCC_Toggle::Status()
+{
+    return value ? "on" : "off";
+}
+
+
+#pragma endregion ConsoleCommand Toggle
+
 #pragma region ConsoleCommand String
 xdCC_String::xdCC_String(const char* _name, std::string&& _value, unsigned _size)
     : super(_name), value(_value), size(_size)

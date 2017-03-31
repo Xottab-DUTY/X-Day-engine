@@ -38,7 +38,7 @@ class XDAY_API xdConsoleCommand
 {
 public:
     friend class xdConsole;
-private:
+protected:
     const char* Name;
     bool Enabled;
     bool LowerCaseArgs;
@@ -84,6 +84,24 @@ protected:
     bool& value;
 };
 #pragma endregion ConsoleCommand Boolean
+
+#pragma region ConsoleCommand Toggle
+class XDAY_API xdCC_Toggle : public xdConsoleCommand
+{
+    using super = xdConsoleCommand;
+
+public:
+    xdCC_Toggle(const char* _name, bool& _value);
+
+    virtual void Execute(const char* args) override;
+
+    virtual const char* Info() override;
+    virtual const char* Status() override;
+
+protected:
+    bool& value;
+};
+#pragma endregion ConsoleCommand Toggle
 
 #pragma region ConsoleCommand String
 class XDAY_API xdCC_String : public xdConsoleCommand
