@@ -1,21 +1,95 @@
+#include <sstream>
 #include <fstream>
+#include <locale>
 
+#include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
 
 #pragma region ConsoleCommand Container
-void xdCC_Container::AddCommand(xdConsoleCommand* cmdName)
+bool xdCC_Container::Execute(std::string cmd)
 {
-    CommandsContainer[cmdName->GetName()] = cmdName;
+    std::string cmd_str, cmd_val;
+
+    std::istringstream buffer(cmd);
+    buffer >> cmd_str >> cmd_val;
+
+    xdConsoleCommand* command(GetCommand(cmd_str));
+    if (command && command->isEnabled())
+    {
+        if (command->isLowerCaseArgs())
+        {
+            std::locale loc;
+            for (auto&& elem : cmd_val)
+                elem = std::tolower(elem, loc);
+        }
+        if (cmd_val.empty())
+        {
+            if (command->isEmptyArgsAllowed())
+                command->Execute(cmd_val.c_str());
+            else
+                ConsoleMsg("Console: {} {}", command->GetName(), command->Status());
+        }
+        else
+            command->Execute(cmd_val.c_str());
+    }
+    else
+    {
+        ConsoleMsg("Unknown command: {}", cmd_str);
+        return false;
+    }
+    return true;
 }
 
-void xdCC_Container::RemoveCommand(xdConsoleCommand* cmdName)
+void xdCC_Container::ExecuteConfig(std::string filename)
 {
-    
+    filename.insert(0, "config_load ");
+    Execute(filename);
+}
+
+xdConsoleCommand* xdCC_Container::GetCommand(std::string cmd) const
+{
+    auto e = CommandsContainer.find(cmd);
+    if (e != CommandsContainer.end())
+    {
+        return e->second;
+    }
+    else
+    {
+        Console->Log("CC not found");
+        return nullptr;
+    }
+        
+}
+
+bool xdCC_Container::GetBool(std::string cmd) const
+{
+    xdConsoleCommand* command = GetCommand(cmd);
+    xdCC_Bool* b = dynamic_cast<xdCC_Bool*>(command);
+    if (b)
+        return b->GetValue();
+    return false;
+}
+
+void xdCC_Container::AddCommand(xdConsoleCommand* cc)
+{
+    CommandsContainer[cc->GetName()] = cc;
+}
+
+void xdCC_Container::RemoveCommand(xdConsoleCommand* cc)
+{
+    auto e = CommandsContainer.find(cc->GetName());
+    if (e != CommandsContainer.end())
+        CommandsContainer.erase(e);
+}
+
+void xdCC_Container::Destroy()
+{
+    CommandsContainer.clear();
 }
 #pragma endregion ConsoleCommand Container
 
 #pragma region Basic ConsoleCommand
-xdConsoleCommand::xdConsoleCommand(const char* _name) : Name(_name), Enabled(true), LowerCaseArgs(true), AllowEmptyArgs(false)
+xdConsoleCommand::xdConsoleCommand(std::string _name) : Name(_name), Enabled(true), LowerCaseArgs(true), AllowEmptyArgs(false)
 {
     CommandsCache.reserve(LRUCount + 1);
     CommandsCache.erase(CommandsCache.begin(), CommandsCache.end());
@@ -27,27 +101,42 @@ xdConsoleCommand::~xdConsoleCommand()
         ConsoleCommands->RemoveCommand(this);
 }
 
-const char* xdConsoleCommand::GetName()
+std::string xdConsoleCommand::GetName()
 {
     return Name;
 }
 
-const char* xdConsoleCommand::Status()
+bool xdConsoleCommand::isEnabled()
+{
+    return Enabled;
+}
+
+bool xdConsoleCommand::isLowerCaseArgs()
+{
+    return LowerCaseArgs;
+}
+
+bool xdConsoleCommand::isEmptyArgsAllowed()
+{
+    return AllowEmptyArgs;
+}
+
+std::string xdConsoleCommand::Status()
 {
     return "No status.";
 }
 
-const char* xdConsoleCommand::Info()
+std::string xdConsoleCommand::Info()
 {
     return "Basic ConsoleCommand class.";
 }
 
-const char* xdConsoleCommand::Syntax()
+std::string xdConsoleCommand::Syntax()
 {
     return "No arguments.";
 }
 
-void xdConsoleCommand::InvalidSyntax(const char* args)
+void xdConsoleCommand::InvalidSyntax(std::string args)
 {
     ConsoleMsg("Invalid syntax in call [{} {}]", Name, args);
     ConsoleMsg("Valid arguments: {}", Syntax());
@@ -79,16 +168,16 @@ void xdConsoleCommand::AddCommandToCache(std::string&& cmd)
 #pragma endregion Basic ConsoleCommand
 
 #pragma region ConsoleCommand Boolean
-xdCC_Bool::xdCC_Bool(const char* _name, bool& _value) : super(_name), value(_value) {}
+xdCC_Bool::xdCC_Bool(std::string _name, bool& _value) : super(_name), value(_value) {}
 
-void xdCC_Bool::Execute(const char* args)
+void xdCC_Bool::Execute(std::string args)
 {
     bool v;
-    if (!strcmp(args, "on") || !strcmp(args, "true") || !strcmp(args, "1"))
+    if (args.compare("on") == 0 || args.compare("true") == 0 || args.compare("1") == 0)
     {
         v = true;
     }
-    else if (!strcmp(args, "off") || !strcmp(args, "false") || !strcmp(args, "0"))
+    else if (args.compare("off") !=0 || args.compare("false") != 0 || args.compare("0") != 0)
     {
         v = false;
     }
@@ -100,38 +189,44 @@ void xdCC_Bool::Execute(const char* args)
     value = v;
 }
 
-const char* xdCC_Bool::Info()
+std::string xdCC_Bool::Info()
 {
     return "Boolean value.";
 }
 
-const char* xdCC_Bool::Syntax()
+std::string xdCC_Bool::Syntax()
 {
     return "on/off, true/false, 1/0";
 }
-const char* xdCC_Bool::Status()
+std::string xdCC_Bool::Status()
 {
     return value ? "on" : "off";
 }
+
+const bool xdCC_Bool::GetValue() const
+{
+    return value;
+}
+
 #pragma endregion ConsoleCommand Boolean
 
 #pragma region ConsoleCommand Toggle
-xdCC_Toggle::xdCC_Toggle(const char* _name, bool& _value) : super(_name), value(_value)
+xdCC_Toggle::xdCC_Toggle(std::string _name, bool& _value) : super(_name), value(_value)
 {
     AllowEmptyArgs = true;
 }
 
-void xdCC_Toggle::Execute(const char* args)
+void xdCC_Toggle::Execute(std::string args)
 {
     value = !value;
     ConsoleMsg("ConsoleCommand {} toggled ({})", Name, value);
 }
 
-const char* xdCC_Toggle::Info()
+std::string xdCC_Toggle::Info()
 {
     return "Command with no arguments needed";
 }
-const char* xdCC_Toggle::Status()
+std::string xdCC_Toggle::Status()
 {
     return value ? "on" : "off";
 }
@@ -140,13 +235,13 @@ const char* xdCC_Toggle::Status()
 #pragma endregion ConsoleCommand Toggle
 
 #pragma region ConsoleCommand String
-xdCC_String::xdCC_String(const char* _name, std::string&& _value, unsigned _size)
+xdCC_String::xdCC_String(std::string _name, std::string&& _value, unsigned _size)
     : super(_name), value(_value), size(_size)
 {}
 
-void xdCC_String::Execute(const char* args)
+void xdCC_String::Execute(std::string args)
 {
-    if (strlen(args) > size)
+    if (args.length() > size)
     {
         InvalidSyntax(args);
         return;
@@ -154,37 +249,37 @@ void xdCC_String::Execute(const char* args)
     value = args;
 }
 
-const char* xdCC_String::Info()
+std::string xdCC_String::Info()
 {
     return "String value.";
 }
 
-const char* xdCC_String::Syntax()
+std::string xdCC_String::Syntax()
 {
-    return fmt::format("Max size is %d", size).c_str();
+    return fmt::format("Max size is %d", size);
 }
 
-const char* xdCC_String::Status()
+std::string xdCC_String::Status()
 {
-    return value.c_str();
+    return value;
 }
 
 #pragma endregion ConsoleCommand String
 
 #pragma region ConsoleCommand Value Template
 template<class T>
-inline xdCC_Value<T>::xdCC_Value(const char* _name, T& _value, T const _min, T const _max)
+inline xdCC_Value<T>::xdCC_Value(std::string _name, T& _value, T const _min, T const _max)
     : super(_name), value(_value), min(_min), max(_max) {}
 #pragma endregion ConsoleCommand Value Template
 
 #pragma region ConsoleCommand Unsigned Integer
-xdCC_Unsigned::xdCC_Unsigned(const char* _name, unsigned& _value, unsigned const _min, unsigned const _max)
+xdCC_Unsigned::xdCC_Unsigned(std::string _name, unsigned& _value, unsigned const _min, unsigned const _max)
     : super(_name, _value, _min, _max) {}
 
-void xdCC_Unsigned::Execute(const char* args)
+void xdCC_Unsigned::Execute(std::string args)
 {
     unsigned v;
-    if (1 != sscanf_s(args, "%d", &v) || v < min || v > max)
+    if (1 != sscanf_s(args.c_str(), "%d", &v) || v < min || v > max)
     {
         InvalidSyntax(args);
         return;
@@ -193,30 +288,30 @@ void xdCC_Unsigned::Execute(const char* args)
     value = v;
 }
 
-const char* xdCC_Unsigned::Info()
+std::string xdCC_Unsigned::Info()
 {
     return "Integer value.";
 }
 
-const char* xdCC_Unsigned::Syntax()
+std::string xdCC_Unsigned::Syntax()
 {
-    return fmt::format("Range [{}, {}]", min, max).c_str();
+    return fmt::format("Range [{}, {}]", min, max);
 }
 
-const char* xdCC_Unsigned::Status()
+std::string xdCC_Unsigned::Status()
 {
-    return std::to_string(value).c_str();
+    return std::to_string(value);
 }
 #pragma endregion ConsoleCommand Unsigned Integer
 
 #pragma region ConsoleCommand Float
-xdCC_Float::xdCC_Float(const char* _name, float& _value, float const _min, float const _max)
+xdCC_Float::xdCC_Float(std::string _name, float& _value, float const _min, float const _max)
     : super(_name, _value, _min, _max) {}
 
-void xdCC_Float::Execute(const char* args)
+void xdCC_Float::Execute(std::string args)
 {
     float v = min;
-    if (1 != sscanf_s(args, "%f", &v) || v < min || v > max)
+    if (1 != sscanf_s(args.c_str(), "%f", &v) || v < min || v > max)
     {
         InvalidSyntax(args);
         return;
@@ -224,16 +319,46 @@ void xdCC_Float::Execute(const char* args)
     value = v;
 }
 
-const char* xdCC_Float::Info()
+std::string xdCC_Float::Info()
 {
     return "Float value.";
 }
-const char* xdCC_Float::Syntax()
+std::string xdCC_Float::Syntax()
 {
-    return fmt::format("Range [{}, {}]", min, max).c_str();
+    return fmt::format("Range [{}, {}]", min, max);
 }
-const char* xdCC_Float::Status()
+std::string xdCC_Float::Status()
 {
-    return std::to_string(value).c_str();
+    return std::to_string(value);
 }
 #pragma endregion ConsoleCommand Float
+
+#pragma region ConsoleCommand Config Loader
+xdCC_LoadConfig::xdCC_LoadConfig(std::string _name) : super(_name)
+{
+    LowerCaseArgs = false;
+}
+
+void xdCC_LoadConfig::Execute(std::string args)
+{
+    ConsoleMsg("Loading config file {}...", args);
+    std::ifstream config_file(args);
+    std::string line;
+
+    if (config_file.is_open())
+        while (std::getline(config_file, line))
+            ConsoleCommands->Execute(line);
+    else
+        ConsoleMsg("Failed to open config file {}", args);
+
+    config_file.close();
+}
+#pragma endregion ConsoleCommand Config Loader
+
+bool r_fullscreen = false;
+
+void RegisterConsoleCommands()
+{
+    CMD1(xdCC_LoadConfig, LoadConfigCC, "config_load");
+    CMD2(xdCC_Bool, FullscreenCC, "r_fullscreen", r_fullscreen);
+}

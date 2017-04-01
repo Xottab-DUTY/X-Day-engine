@@ -15,6 +15,9 @@ void xdConsole::Initialize()
     Core.FindParam("-mainconfig") ? ConfigFile = Core.ReturnParam("-mainconfig") : ConfigFile = Core.DataPath.string() + "main.config";
     Core.FindParam("-mainlog") ? LogFile = Core.ReturnParam("-mainlog") : LogFile = Core.LogsPath.string() + "main.log";
     Console->InitLog();
+
+    extern void RegisterConsoleCommands();
+    RegisterConsoleCommands();
 }
 
 void xdConsole::Show()

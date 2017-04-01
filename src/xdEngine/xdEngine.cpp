@@ -6,6 +6,7 @@
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
 #include "Console.hpp"
+#include "ConsoleCommand.hpp"
 
 XDAY_API XDayEngine Engine;
 
@@ -14,8 +15,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
-
-        glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
+    {
+        ConsoleCommands->Execute(fmt::format("r_fullscreen {}", !ConsoleCommands->GetBool("r_fullscreen")));
+    }
 }
 
 void XDayEngine::Initialize()
@@ -35,6 +37,9 @@ void XDayEngine::Initialize()
 
 void XDayEngine::xdCreateWindow()
 {
-    window = glfwCreateWindow(CurrentMode->width-256, CurrentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
+    if (ConsoleCommands->GetBool("r_fullscreen"))
+        window = glfwCreateWindow(CurrentMode->width, CurrentMode->height, Core.AppName.c_str(), CurrentMonitor, nullptr);
+    else
+        window = glfwCreateWindow(CurrentMode->width-256, CurrentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
     glfwSetKeyCallback(window, key_callback);
 }

@@ -5,10 +5,12 @@
 
 #include "xdCore.hpp"
 #include "Console.hpp"
+#include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
 
 void InitializeConsole()
 {
+    ConsoleCommands = new xdCC_Container;
     Console = new xdConsole;
     Console->Initialize();
 }
@@ -21,7 +23,7 @@ void destroyConsole()
 
 void HelpCmdArgs()
 {
-    Console->Log("\nUse parameters with values only with commas(-param \"value\")\n"\
+    Console->Log("\nUse parameters with values only with quotes(-param \"value\")\n"\
         "-param value will return \"alue\"\n"\
         "-param \"value\" will return \"value\"\n\n"\
         "Available parameters:\n"\
@@ -32,7 +34,7 @@ void HelpCmdArgs()
         "-mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
         "-mainlog - Specifies path and name of main log file (path/name.extension), default is \"*DataPath*/main.log\"\n"\
         "-nolog - Completely disables engine log. May increase performance\n"\
-        "-nologflush - Disables log flushing. Useless if -nolog defined");
+        "-nologflush - Disables log flushing. Useless if -nolog defined\n");
 
     Console->Log("\nИспользуйте параметры только с кавычками(-параметр \"значение\")\n"\
         "-параметр значение вернёт \"начени\"\n"\
@@ -45,13 +47,22 @@ void HelpCmdArgs()
         "-mainconfig - Задаёт путь и имя главного файла настроек (путь/имя.расширение), по умолчанию: \"*DataPath*/main.config\" \n"\
         "-mainlog - Задаёт путь и имя главного лог файла (путь/имя.расширение), по умолчанию: \"*DataPath*/main.log\"\n"\
         "-nolog - Полностью выключает лог движка. Может повысить производительность\n"\
-        "-nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog", false);
+        "-nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n", false);
 }
 
 void Startup()
 {
     while (!glfwWindowShouldClose(Engine.window))
     {
+        if (ConsoleCommands->GetBool("r_fullscreen"))
+        {
+            glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
+        }
+        else
+        {
+            glfwSetWindowMonitor(Engine.window, nullptr, 0, 0, Engine.CurrentMode->width-256, Engine.CurrentMode->height-256, Engine.CurrentMode->refreshRate);
+        }
+
         glfwPollEvents();
     }
 }
@@ -71,6 +82,9 @@ int main(int argc, char* argv[])
     Console->Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
 
     HelpCmdArgs();
+
+    ConsoleCommands->ExecuteConfig(Console->ConfigFile.string());
+    //Console->Log(ConsoleCommands->CommandsContainer[0]);
 
     glfwInit();
     Console->Log("GLFW initialized.");
