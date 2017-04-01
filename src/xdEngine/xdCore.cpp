@@ -27,6 +27,8 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     FindParam("-datapath") ? DataPath = ReturnParam("-datapath") : DataPath = WorkPath.string() + "/appdata/";
     FindParam("-respath") ? ResPath = ReturnParam("-respath") : ResPath = WorkPath.string() + "/res/";
 
+    LogsPath = DataPath.string() + "/logs/";
+    SavesPath = DataPath.string() + "/saves/";
     ArchivesPath = ResPath.string() + "/archives/";
     ConfigsPath = ResPath.string() + "/configs/";
     ModelsPath = ResPath.string() + "/models/";
@@ -34,6 +36,8 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     TexturesPath = ResPath.string() + "/textures/";
 
     CreateDirIfNotExist(DataPath);
+    CreateDirIfNotExist(LogsPath);
+    CreateDirIfNotExist(SavesPath);
     CreateDirIfNotExist(ResPath);
     CreateDirIfNotExist(ArchivesPath);
     CreateDirIfNotExist(ConfigsPath);

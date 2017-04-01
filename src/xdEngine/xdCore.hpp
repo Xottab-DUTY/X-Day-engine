@@ -25,6 +25,8 @@ public:
     filesystem::path WorkPath;
     filesystem::path BinPath;
     filesystem::path DataPath;
+    filesystem::path LogsPath;
+    filesystem::path SavesPath;
     filesystem::path ResPath;
     filesystem::path ArchivesPath;
     filesystem::path ConfigsPath;
