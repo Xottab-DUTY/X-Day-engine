@@ -8,7 +8,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine_impexp.inl"
 
-using importedFunction = void(*)();
+using FunctionPointer = void(*)();
 
 class XDAY_API xdCore
 {

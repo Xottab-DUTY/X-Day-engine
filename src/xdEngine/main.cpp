@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         Console->Log("Module loaded successfully");
     }
 
-    auto impFunc = (importedFunction)Dynlib::load(xdSoundModule, "funcToExport");
+    auto impFunc = (FunctionPointer)Dynlib::load(xdSoundModule, "funcToExport");
     if (impFunc)
         impFunc();
     else
