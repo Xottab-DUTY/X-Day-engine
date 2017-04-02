@@ -7,7 +7,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine_impexp.inl"
 
-class XDAY_API xdConsoleCommand;
+class XDAY_API ConsoleCommand;
 
 class XDAY_API xdConsole
 {

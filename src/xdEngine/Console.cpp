@@ -8,7 +8,7 @@
 #include "ConsoleCommand.hpp"
 
 XDAY_API xdConsole* Console = nullptr;
-XDAY_API xdCC_Container* ConsoleCommands = nullptr;
+XDAY_API CC_Container* ConsoleCommands = nullptr;
 
 void xdConsole::Initialize()
 {
@@ -16,7 +16,6 @@ void xdConsole::Initialize()
     Core.FindParam("-mainlog") ? LogFile = Core.ReturnParam("-mainlog") : LogFile = Core.LogsPath.string() + "main.log";
     Console->InitLog();
 
-    extern void RegisterConsoleCommands();
     RegisterConsoleCommands();
 }
 

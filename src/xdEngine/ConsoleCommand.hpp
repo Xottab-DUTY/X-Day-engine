@@ -9,27 +9,27 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "xdEngine_impexp.inl"
 #include "Console.hpp"
 
-class XDAY_API xdConsoleCommand;
+class XDAY_API ConsoleCommand;
 
 #pragma region ConsoleCommand Container
-class XDAY_API xdCC_Container
+class XDAY_API CC_Container
 {
 public:
-    std::map<std::string, xdConsoleCommand*> CommandsContainer;
+    std::map<std::string, ConsoleCommand*> CommandsContainer;
 
     bool Execute(std::string cmd);
     void ExecuteConfig(std::string filename);
-    xdConsoleCommand* GetCommand(std::string cmd) const;
+    ConsoleCommand* GetCommand(std::string cmd) const;
     bool GetBool(std::string cmd) const;
 
-    void AddCommand(xdConsoleCommand* cc);
-    void RemoveCommand(xdConsoleCommand* cc);
+    void AddCommand(ConsoleCommand* cc);
+    void RemoveCommand(ConsoleCommand* cc);
 
     void Destroy();
 };
 #pragma endregion ConsoleCommand Container
 
-XDAY_API extern xdCC_Container* ConsoleCommands;
+XDAY_API extern CC_Container* ConsoleCommands;
 
 #pragma region ConsoleCommand Adding Macros
 #define CMD0(cls, ccname)                   { static cls ccname();              ConsoleCommands->AddCommand(&ccname); }
@@ -40,7 +40,7 @@ XDAY_API extern xdCC_Container* ConsoleCommands;
 #pragma endregion ConsoleCommand Adding Macros
 
 #pragma region Basic ConsoleCommand
-class XDAY_API xdConsoleCommand
+class XDAY_API ConsoleCommand
 {
 public:
     friend class xdConsole;
@@ -49,14 +49,15 @@ protected:
     bool Enabled;
     bool LowerCaseArgs;
     bool AllowEmptyArgs;
+    bool AllowSaving;
 
     // Commands LRU cache
     unsigned LRUCount = 10; // Max latest commands to remember
     std::vector<std::string> CommandsCache;
 
 public:
-    xdConsoleCommand(std::string _name);
-    virtual ~xdConsoleCommand();
+    ConsoleCommand(std::string _name);
+    virtual ~ConsoleCommand();
 
     virtual void Execute(std::string args) = 0;
 
@@ -64,25 +65,26 @@ public:
     bool isEnabled();
     bool isLowerCaseArgs();
     bool isEmptyArgsAllowed();
+    bool isSavingAllowed();
 
     virtual std::string Status();
     virtual std::string Info();
     virtual std::string Syntax();
     void InvalidSyntax(std::string args);
 
-    virtual void Save(filesystem::path&& p);
+    virtual std::string Save();
 
     virtual void AddCommandToCache(std::string&& cmd);
 };
 #pragma endregion Basic ConsoleCommand
 
 #pragma region ConsoleCommand Boolean
-class XDAY_API xdCC_Bool : public xdConsoleCommand
+class XDAY_API CC_Bool : public ConsoleCommand
 {
-    using super = xdConsoleCommand;
+    using super = ConsoleCommand;
 
 public:
-    xdCC_Bool(std::string _name, bool& _value);
+    CC_Bool(std::string _name, bool& _value);
 
     virtual void Execute(std::string args) override;
 
@@ -98,12 +100,12 @@ protected:
 #pragma endregion ConsoleCommand Boolean
 
 #pragma region ConsoleCommand Toggle
-class XDAY_API xdCC_Toggle : public xdConsoleCommand
+class XDAY_API CC_Toggle : public ConsoleCommand
 {
-    using super = xdConsoleCommand;
+    using super = ConsoleCommand;
 
 public:
-    xdCC_Toggle(std::string _name, bool& _value);
+    CC_Toggle(std::string _name, bool& _value);
 
     virtual void Execute(std::string args) override;
 
@@ -116,11 +118,11 @@ protected:
 #pragma endregion ConsoleCommand Toggle
 
 #pragma region ConsoleCommand String
-class XDAY_API xdCC_String : public xdConsoleCommand
+class XDAY_API CC_String : public ConsoleCommand
 {
-    using super = xdConsoleCommand;
+    using super = ConsoleCommand;
 public:
-    xdCC_String(std::string _name, std::string&& _value, unsigned _size);
+    CC_String(std::string _name, std::string&& _value, unsigned _size);
 
     virtual void Execute(std::string args) override;
 
@@ -136,11 +138,11 @@ protected:
 
 #pragma region ConsoleCommand Value Template
 template<class T>
-class XDAY_API xdCC_Value : public xdConsoleCommand
+class XDAY_API CC_Value : public ConsoleCommand
 {
-    using super = xdConsoleCommand;
+    using super = ConsoleCommand;
 public:
-    inline xdCC_Value(std::string _name, T& _value, T const _min, T const _max);
+    inline CC_Value(std::string _name, T& _value, T const _min, T const _max);
 protected:
     T& value;
     T min;
@@ -149,12 +151,12 @@ protected:
 #pragma endregion ConsoleCommand Value Template
 
 #pragma region ConsoleCommand Unsigned Integer
-class XDAY_API xdCC_Unsigned : public xdCC_Value<unsigned>
+class XDAY_API CC_Unsigned : public CC_Value<unsigned>
 {
-    using super = xdCC_Value<unsigned>;
+    using super = CC_Value<unsigned>;
 
 public:
-    xdCC_Unsigned(std::string _name, unsigned& _value, unsigned const _min, unsigned const _max);
+    CC_Unsigned(std::string _name, unsigned& _value, unsigned const _min, unsigned const _max);
 
     virtual void Execute(std::string args) override;
 
@@ -165,12 +167,12 @@ public:
 #pragma endregion ConsoleCommand Unsigned Integer
 
 #pragma region ConsoleCommand Float
-class XDAY_API xdCC_Float : public xdCC_Value<float>
+class XDAY_API CC_Float : public CC_Value<float>
 {
-    using super = xdCC_Value<float>;
+    using super = CC_Value<float>;
 
 public:
-    xdCC_Float(std::string _name, float& _value, float const _min, float const _max);
+    CC_Float(std::string _name, float& _value, float const _min, float const _max);
 
     virtual void Execute(std::string args) override;
 
@@ -180,13 +182,19 @@ public:
 };
 #pragma endregion ConsoleCommand Float
 
-#pragma region ConsoleCommand Config Loader
-class XDAY_API xdCC_LoadConfig : public xdConsoleCommand
+#pragma region ConsoleCommand Function Call
+class XDAY_API CC_FCall : public ConsoleCommand
 {
-    using super = xdConsoleCommand;
+    using super = ConsoleCommand;
 
 public:
-    xdCC_LoadConfig(std::string _name);
+    CC_FCall(std::string _name, void(*_func)(std::string), bool _AllowEmptyArgs);
     void Execute(std::string args) override;
+
+    std::string Info() override;
+protected:
+    void (*function)(std::string);
 };
-#pragma endregion ConsoleCommand Config Loader
+#pragma endregion ConsoleCommand Function Call
+
+void RegisterConsoleCommands();

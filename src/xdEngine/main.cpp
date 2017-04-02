@@ -1,5 +1,7 @@
 // 01.01.2017 Султан Xottab_DUTY Урамаев
 // Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.
+#include <iostream>
+
 #include <GLFW/glfw3.h>
 #include <dynlib/Dynlib.hpp>
 
@@ -10,13 +12,16 @@
 
 void InitializeConsole()
 {
-    ConsoleCommands = new xdCC_Container;
+    ConsoleCommands = new CC_Container;
     Console = new xdConsole;
     Console->Initialize();
 }
 
 void destroyConsole()
 {
+    ConsoleCommands->Execute("config_save");
+    ConsoleCommands->Destroy();
+    delete ConsoleCommands;
     Console->CloseLog();
     delete Console;
 }
@@ -63,6 +68,10 @@ void Startup()
             glfwSetWindowMonitor(Engine.window, nullptr, 0, 0, Engine.CurrentMode->width-256, Engine.CurrentMode->height-256, Engine.CurrentMode->refreshRate);
         }
 
+        std::string input;
+        std::getline(std::cin, input);
+        ConsoleCommands->Execute(input);
+
         glfwPollEvents();
     }
 }
@@ -84,7 +93,6 @@ int main(int argc, char* argv[])
     HelpCmdArgs();
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile.string());
-    //Console->Log(ConsoleCommands->CommandsContainer[0]);
 
     glfwInit();
     Console->Log("GLFW initialized.");
