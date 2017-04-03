@@ -1,4 +1,7 @@
 #pragma once
+#ifndef xdCore_hpp__
+#define xdCore_hpp__
+
 #include <string>
 #include <sstream>
 #include <filesystem>
@@ -59,3 +62,5 @@ private:
 };
 
 extern XDAY_API xdCore Core;
+
+#endif // xdCore_hpp__

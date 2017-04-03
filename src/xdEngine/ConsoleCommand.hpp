@@ -1,4 +1,7 @@
 #pragma once
+#ifndef ConsoleCommand_hpp__
+#define ConsoleCommand_hpp__
+
 #include <string>
 #include <map>
 #include <filesystem>
@@ -198,3 +201,5 @@ protected:
 #pragma endregion ConsoleCommand Function Call
 
 void RegisterConsoleCommands();
+
+#endif // ConsoleCommand_h__

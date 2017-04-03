@@ -1,4 +1,6 @@
 #pragma once
+#ifndef Platform_hpp__
+#define Platform_hpp__
 
 #if defined(__linux__)
 #define LINUX
@@ -21,3 +23,5 @@
 #elif defined(WINDOWS)
 #include "PlatformWindows.inl"
 #endif
+
+#endif // Platform_hpp__
