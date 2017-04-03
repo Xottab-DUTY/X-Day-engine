@@ -4,6 +4,9 @@
 appdata/
 res/
 
+*.PVS-Studio.*
+*.i
+
 # User-specific files
 *.suo
 *.user
