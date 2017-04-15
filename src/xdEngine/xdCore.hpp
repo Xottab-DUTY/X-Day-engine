@@ -23,6 +23,9 @@ private:
     std::string GLFWVersionString;
 
 public:
+    std::string EngineName;
+    std::string EngineVersion;
+
     std::string AppName;
     filesystem::path AppPath;
     filesystem::path WorkPath;
@@ -44,6 +47,7 @@ public:
     std::string Params;
 
 public:
+    xdCore();
     void Initialize(std::string&& ApplicationName, const char& argv);
     void Destroy();
     auto GetBuildId() const { return buildId; }

@@ -16,6 +16,12 @@ static void error_callback(int error, const char* description)
     ConsoleMsg("GLFW Error: Code: {}, Means: {}", error, description);
 }
 
+xdCore::xdCore()
+{
+    EngineName = "X-Day Engine";
+    EngineVersion = "1.0";
+}
+
 void xdCore::Initialize(std::string&& _AppName, const char& argv)
 {
     FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _AppName;
