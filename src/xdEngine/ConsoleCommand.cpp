@@ -336,20 +336,20 @@ std::string CC_Float::Status()
 #pragma endregion ConsoleCommand Float
 
 #pragma region ConsoleCommand Function Call
-CC_FCall::CC_FCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs) : super(_name)
+CC_FunctionCall::CC_FunctionCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs) : super(_name)
 {
     AllowEmptyArgs = _AllowEmptyArgs;
     AllowSaving = false;
     function = _func;
 }
 
-void CC_FCall::Execute(std::string args)
+void CC_FunctionCall::Execute(std::string args)
 {
     if (function)
         function(args);
 }
 
-std::string CC_FCall::Info()
+std::string CC_FunctionCall::Info()
 {
     return "Function call.";
 }
@@ -415,8 +415,8 @@ bool r_fullscreen = false;
 
 void RegisterConsoleCommands()
 {
-    CMD3(CC_FCall, ConfigLoadCC, "config_load", ConfigLoad, true);
-    CMD3(CC_FCall, ConfigSaveCC, "config_save", ConfigSave, true);
-    CMD3(CC_FCall, HelpCC, "help", Help, true);
+    CMD3(CC_FunctionCall, ConfigLoadCC, "config_load", ConfigLoad, true);
+    CMD3(CC_FunctionCall, ConfigSaveCC, "config_save", ConfigSave, true);
+    CMD3(CC_FunctionCall, HelpCC, "help", Help, true);
     CMD2(CC_Bool, FullscreenCC, "r_fullscreen", r_fullscreen);
 }

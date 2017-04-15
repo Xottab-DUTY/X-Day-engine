@@ -186,12 +186,12 @@ public:
 #pragma endregion ConsoleCommand Float
 
 #pragma region ConsoleCommand Function Call
-class XDAY_API CC_FCall : public ConsoleCommand
+class XDAY_API CC_FunctionCall : public ConsoleCommand
 {
     using super = ConsoleCommand;
 
 public:
-    CC_FCall(std::string _name, void(*_func)(std::string), bool _AllowEmptyArgs);
+    CC_FunctionCall(std::string _name, void(*_func)(std::string), bool _AllowEmptyArgs);
     void Execute(std::string args) override;
 
     std::string Info() override;
