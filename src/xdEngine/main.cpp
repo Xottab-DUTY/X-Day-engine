@@ -89,7 +89,6 @@ int main(int argc, char* argv[])
     Console->Log("Core.Params: " + Core.Params);
     Console->Log("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.", false);
     Console->Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
-
     HelpCmdArgs();
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile.string());

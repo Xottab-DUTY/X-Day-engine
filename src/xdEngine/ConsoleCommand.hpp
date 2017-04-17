@@ -89,11 +89,11 @@ class XDAY_API CC_Bool : public ConsoleCommand
 public:
     CC_Bool(std::string _name, bool& _value);
 
-    virtual void Execute(std::string args) override;
+    void Execute(std::string args) override;
 
-    virtual std::string Info() override;
-    virtual std::string Syntax() override;
-    virtual std::string Status() override;
+    std::string Info() override;
+    std::string Syntax() override;
+    std::string Status() override;
 
     const bool GetValue() const;
 
@@ -110,10 +110,10 @@ class XDAY_API CC_Toggle : public ConsoleCommand
 public:
     CC_Toggle(std::string _name, bool& _value);
 
-    virtual void Execute(std::string args) override;
+    void Execute(std::string args) override;
 
-    virtual std::string Info() override;
-    virtual std::string Status() override;
+    std::string Info() override;
+    std::string Status() override;
 
 protected:
     bool& value;
@@ -125,13 +125,13 @@ class XDAY_API CC_String : public ConsoleCommand
 {
     using super = ConsoleCommand;
 public:
-    CC_String(std::string _name, std::string&& _value, unsigned _size);
+    CC_String(std::string _name, std::string _value, unsigned _size);
 
-    virtual void Execute(std::string args) override;
+    void Execute(std::string args) override;
 
-    virtual std::string Info() override;
-    virtual std::string Syntax() override;
-    virtual std::string Status() override;
+    std::string Info() override;
+    std::string Syntax() override;
+    std::string Status() override;
 
 protected:
     std::string value;
@@ -144,8 +144,12 @@ template<class T>
 class XDAY_API CC_Value : public ConsoleCommand
 {
     using super = ConsoleCommand;
+
 public:
-    inline CC_Value(std::string _name, T& _value, T const _min, T const _max);
+    CC_Value(std::string _name, T& _value, T const _min, T const _max);
+
+    std::string Syntax() override;
+
 protected:
     T& value;
     T min;
@@ -153,21 +157,20 @@ protected:
 };
 #pragma endregion ConsoleCommand Value Template
 
-#pragma region ConsoleCommand Unsigned Integer
-class XDAY_API CC_Unsigned : public CC_Value<unsigned>
+#pragma region ConsoleCommand Integer
+class XDAY_API CC_Integer : public CC_Value<int>
 {
-    using super = CC_Value<unsigned>;
+    using super = CC_Value<int>;
 
 public:
-    CC_Unsigned(std::string _name, unsigned& _value, unsigned const _min, unsigned const _max);
+    CC_Integer(std::string _name, int& _value, int const _min, int const _max);
 
-    virtual void Execute(std::string args) override;
+    void Execute(std::string args) override;
 
-    virtual std::string Info() override;
-    virtual std::string Syntax() override;
-    virtual std::string Status() override;
+    std::string Info() override;
+    std::string Status() override;
 };
-#pragma endregion ConsoleCommand Unsigned Integer
+#pragma endregion ConsoleCommand Integer
 
 #pragma region ConsoleCommand Float
 class XDAY_API CC_Float : public CC_Value<float>
@@ -177,13 +180,27 @@ class XDAY_API CC_Float : public CC_Value<float>
 public:
     CC_Float(std::string _name, float& _value, float const _min, float const _max);
 
-    virtual void Execute(std::string args) override;
+    void Execute(std::string args) override;
 
-    virtual std::string Info() override;
-    virtual std::string Syntax() override;
-    virtual std::string Status() override;
+    std::string Info() override;
+    std::string Status() override;
 };
 #pragma endregion ConsoleCommand Float
+
+#pragma region ConsoleCommand Double
+class XDAY_API CC_Double : public CC_Value<double>
+{
+    using super = CC_Value<double>;
+
+public:
+    CC_Double(std::string _name, double& _value, double const _min, double const _max);
+
+    void Execute(std::string args) override;
+
+    std::string Info() override;
+    std::string Status() override;
+};
+#pragma endregion ConsoleCommand Double
 
 #pragma region ConsoleCommand Function Call
 class XDAY_API CC_FunctionCall : public ConsoleCommand
