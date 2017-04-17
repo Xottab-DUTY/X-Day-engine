@@ -13,6 +13,9 @@
     <ClCompile Include="Debug\QuantMS.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="XMLDocument.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
@@ -28,6 +31,9 @@
     </ClInclude>
     <ClInclude Include="Debug\QuantMS.hpp">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLDocument.hpp">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +60,9 @@
     </Filter>
     <Filter Include="Debug">
       <UniqueIdentifier>{54e4b787-9183-4e3e-8506-25f8466bf931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{a4cd1e03-cc1d-4238-953a-70946d9e02df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

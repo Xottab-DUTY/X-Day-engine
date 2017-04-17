@@ -132,6 +132,9 @@
     <ClCompile Include="Debug\QuantMS.cpp" />
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
+    <ClCompile Include="XMLDocument.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.hpp" />
@@ -140,6 +143,7 @@
     <ClInclude Include="Debug\QuantMS.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
+    <ClInclude Include="XMLDocument.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Platform\Compiler.inl" />
