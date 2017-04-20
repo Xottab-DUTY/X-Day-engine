@@ -2,7 +2,10 @@
 #include <fstream>
 #include <locale>
 
+#include <GLFW/glfw3.h>
+
 #include "xdCore.hpp"
+#include "xdEngine.hpp"
 #include "ConsoleCommand.hpp"
 
 #pragma region ConsoleCommand Container
@@ -413,7 +416,7 @@ void ConfigSave(std::string args)
     ConsoleMsg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
 }
 
-void Help(std::string args)
+void CC_Help(std::string args)
 {
     ConsoleCommand* CommandToHelp;
     if (!args.empty())
@@ -433,6 +436,11 @@ void Help(std::string args)
             ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
         }
     }
+}
+
+void CC_Exit(std::string args)
+{
+    glfwSetWindowShouldClose(Engine.window, GLFW_TRUE);
 }
 
 bool r_fullscreen = false;
@@ -462,8 +470,10 @@ void RegisterConsoleCommands()
 
         CC_String       – CMD3(CC_String,       command_name_in_this_file, "command_name_in_console", variable_to_change, max_string_size);
     */
+    CMD3(CC_FunctionCall, ExitCC, "exit", CC_Exit, true);
+    CMD3(CC_FunctionCall, QuitCC, "quit", CC_Exit, true);
 
-    CMD3(CC_FunctionCall, HelpCC, "help", Help, true);
+    CMD3(CC_FunctionCall, HelpCC, "help", CC_Help, true);
 
     CMD3(CC_FunctionCall, ConfigLoadCC, "config_load", ConfigLoad, true);
     CMD3(CC_FunctionCall, ConfigSaveCC, "config_save", ConfigSave, true);
