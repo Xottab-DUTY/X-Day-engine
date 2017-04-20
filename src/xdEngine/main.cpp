@@ -1,6 +1,7 @@
 // 01.01.2017 Султан Xottab_DUTY Урамаев
 // Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.
 #include <iostream>
+#include <thread>
 
 #include <GLFW/glfw3.h>
 #include <dynlib/Dynlib.hpp>
@@ -55,23 +56,25 @@ void HelpCmdArgs()
         "-nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n", false);
 }
 
+void threadedConsole()
+{
+    while (!glfwWindowShouldClose(Engine.window))
+    {
+        std::string input;
+        std::getline(std::cin, input);
+        ConsoleCommands->Execute(input);
+    }
+    
+}
+
 void Startup()
 {
     while (!glfwWindowShouldClose(Engine.window))
     {
         if (ConsoleCommands->GetBool("r_fullscreen"))
-        {
             glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
-        }
         else
-        {
             glfwSetWindowMonitor(Engine.window, nullptr, 0, 0, Engine.CurrentMode->width-256, Engine.CurrentMode->height-256, Engine.CurrentMode->refreshRate);
-        }
-
-        std::string input;
-        std::getline(std::cin, input);
-        ConsoleCommands->Execute(input);
-
         glfwPollEvents();
     }
 }
@@ -116,6 +119,8 @@ int main(int argc, char* argv[])
         Console->Log("Module unloaded successfully");
     }
 
+    std::thread WatchConsole(threadedConsole);
+    WatchConsole.detach();
     Startup();
 
     glfwTerminate();
