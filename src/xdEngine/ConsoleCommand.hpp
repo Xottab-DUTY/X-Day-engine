@@ -213,7 +213,7 @@ public:
 
     std::string Info() override;
 protected:
-    void (*function)(std::string);
+    void (*function)(std::string args);
 };
 #pragma endregion ConsoleCommand Function Call
 
