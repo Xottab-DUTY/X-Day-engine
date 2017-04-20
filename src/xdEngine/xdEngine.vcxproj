@@ -132,9 +132,7 @@
     <ClCompile Include="Debug\QuantMS.cpp" />
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
-    <ClCompile Include="XMLDocument.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="XMLDocument.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.hpp" />
@@ -157,6 +155,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\include\fmt.vcxproj">
       <Project>{f3a00ed5-79b7-43c7-8d9c-58874dc61845}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\include\tinyxml2.vcxproj">
+      <Project>{d1c528b6-aa02-4d29-9d61-dc08e317a70d}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
