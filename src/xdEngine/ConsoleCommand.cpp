@@ -403,15 +403,14 @@ void ConfigSave(std::string args)
 {
     ConsoleMsg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
     std::ofstream f(args.empty() ? Console->ConfigFile : args);
-    ConsoleCommand* CommandToSave;
     for (auto str : ConsoleCommands->CommandsContainer)
     {
-        CommandToSave = str.second;
+        auto CommandToSave = str.second;
         if (CommandToSave->isSavingAllowed())
             f << CommandToSave->Save() << std::endl;
     }
-    ConsoleMsg("Saved config file {}...", args.empty() ? Console->ConfigFile.string() : args);
     f.close();
+    ConsoleMsg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
 }
 
 void Help(std::string args)
