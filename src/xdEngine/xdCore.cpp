@@ -31,20 +31,21 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
     FindParam("-datapath") ? DataPath = ReturnParam("-datapath") : DataPath = WorkPath.string() + "/appdata/";
-    FindParam("-respath") ? ResPath = ReturnParam("-respath") : ResPath = WorkPath.string() + "/res/";
+    FindParam("-respath") ? ResourcesPath = ReturnParam("-respath") : ResourcesPath = WorkPath.string() + "/res/";
 
     LogsPath = DataPath.string() + "/logs/";
     SavesPath = DataPath.string() + "/saves/";
-    ArchivesPath = ResPath.string() + "/archives/";
-    ConfigsPath = ResPath.string() + "/configs/";
-    ModelsPath = ResPath.string() + "/models/";
-    SoundsPath = ResPath.string() + "/sounds/";
-    TexturesPath = ResPath.string() + "/textures/";
+    ArchivesPath = ResourcesPath.string() + "/archives/";
+    ConfigsPath = ResourcesPath.string() + "/configs/";
+    ModelsPath = ResourcesPath.string() + "/models/";
+    SoundsPath = ResourcesPath.string() + "/sounds/";
+    TexturesPath = ResourcesPath.string() + "/textures/";
 
     CreateDirIfNotExist(DataPath);
     CreateDirIfNotExist(LogsPath);
     CreateDirIfNotExist(SavesPath);
-    CreateDirIfNotExist(ResPath);
+
+    CreateDirIfNotExist(ResourcesPath);
     CreateDirIfNotExist(ArchivesPath);
     CreateDirIfNotExist(ConfigsPath);
     CreateDirIfNotExist(ModelsPath);

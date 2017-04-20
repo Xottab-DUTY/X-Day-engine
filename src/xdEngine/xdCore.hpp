@@ -33,7 +33,7 @@ public:
     filesystem::path DataPath;
     filesystem::path LogsPath;
     filesystem::path SavesPath;
-    filesystem::path ResPath;
+    filesystem::path ResourcesPath;
     filesystem::path ArchivesPath;
     filesystem::path ConfigsPath;
     filesystem::path ModelsPath;
