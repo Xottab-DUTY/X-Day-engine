@@ -21,3 +21,10 @@ void xdXMLDocument::Load(filesystem::path&& resources_type, filesystem::path&& p
         ConsoleMsg("XML file loaded: {}", buffer);
     }
 }
+void xdXMLDocument::Load(filesystem::path&& full_path)
+{
+    if (xml_document.LoadFile(full_path.string().c_str())) // string().c_str() what a beautiful costyl
+    {
+        ConsoleMsg("XML file loaded: {}");
+    }
+}
