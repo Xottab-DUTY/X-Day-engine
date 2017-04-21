@@ -30,12 +30,9 @@ void destroyConsole()
 
 void HelpCmdArgs()
 {
-    Console->Log("\nUse parameters with values only with quotes(-param \"value\")\n"\
-        "-param value will return \"alue\"\n"\
-        "-param \"value\" will return \"value\"\n\n"\
-        "Available parameters:\n"\
+    Console->Log("\nAvailable parameters:\n"\
         "-name - Specifies AppName, default is \"X-Day Engine\" \n"\
-        "-game - Specifies game library to be attached, default is \"xdGame\";\n"
+        "-game - Specifies game module to be attached, default is \"xdGame\";\n"
         "-datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
         "-respath - Specifies path of resources folder, default is \"*WorkingDirectory*/res\"\n"\
         "-mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
@@ -43,10 +40,7 @@ void HelpCmdArgs()
         "-nolog - Completely disables engine log. May increase performance\n"\
         "-nologflush - Disables log flushing. Useless if -nolog defined\n");
 
-    Console->Log("\nИспользуйте параметры только с кавычками(-параметр \"значение\")\n"\
-        "-параметр значение вернёт \"начени\"\n"\
-        "-параметр \"значение\" вернёт \"значение\"\n"\
-        "\nДоступные параметры:\n"\
+    Console->Log("\nДоступные параметры:\n"\
         "-name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
         "-game - Задаёт игровую библиотеку для подключения, по умолчанию: \"xdGame\";\n"
         "-datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\

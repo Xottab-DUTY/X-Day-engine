@@ -68,15 +68,10 @@ bool xdCore::FindParam(std::string&& Param) const
 }
 
 // Finds command line parameter and returns it's value.
-// Keep in mind that command line parameter:
-// -name value will return "alue"
-// -name "value" will return correct "value"
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
 std::string xdCore::ReturnParam(std::string&& Param) const
 {
-    Param = Params.substr(Params.find(Param) + (Param.length() + 2), Params.find(Param + " %[^ ]"));
-    Param.pop_back(); // Costyl (TM)
     return Param;
 }
 
