@@ -1,4 +1,5 @@
 #include <ctime>
+#include <sstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
@@ -7,7 +8,6 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdCore.hpp"
 #include "Console.hpp"
-#include "Platform/Platform.hpp"
 
 XDAY_API xdCore Core;
 

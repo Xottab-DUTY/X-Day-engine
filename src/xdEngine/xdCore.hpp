@@ -1,13 +1,9 @@
 #pragma once
 #ifndef xdCore_hpp__
 #define xdCore_hpp__
-
 #include <string>
-#include <sstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
-
-#include <GLFW/glfw3.h>
 
 #include "xdEngine_impexp.inl"
 
