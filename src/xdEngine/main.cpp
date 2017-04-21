@@ -10,6 +10,7 @@
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
+#include "Debug/QuantMS.hpp"
 
 void InitializeConsole()
 {
@@ -75,12 +76,14 @@ void Startup()
             glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
         else
             glfwSetWindowMonitor(Engine.window, nullptr, 0, 0, Engine.CurrentMode->width-256, Engine.CurrentMode->height-256, Engine.CurrentMode->refreshRate);
+
         glfwPollEvents();
     }
 }
 
 int main(int argc, char* argv[])
 {
+    QuantMS();
 #ifdef WINDOWS
     system("chcp 65001");
 #endif
@@ -126,6 +129,8 @@ int main(int argc, char* argv[])
     glfwTerminate();
     Console->Log("GLFW terminated.");
 
+    auto TotalTimer = QuantMS();
+    ConsoleMsg("Total time: {} seconds", TotalTimer/1000000);
     destroyConsole();
 
     system("pause");
