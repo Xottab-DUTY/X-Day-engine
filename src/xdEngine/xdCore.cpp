@@ -22,11 +22,19 @@ xdCore::xdCore()
     EngineVersion = "1.0";
 }
 
-void xdCore::Initialize(std::string&& _AppName, const char& argv)
+void xdCore::InitializeArguments(int argc, char* argv[])
 {
-    FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _AppName;
+    for (int i = 0; i<argc;++i)
+    {
+        Params += argv[i];
+        Params += " ";
+    }
+}
+
+void xdCore::Initialize(std::string&& _appname)
+{
+    FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _appname;
     FindParam("-game") ? GameModule = ReturnParam("-game") : GameModule = "xdGame";
-    Params = &argv;
     AppPath = filesystem::absolute(&Params[0]);
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";

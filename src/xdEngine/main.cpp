@@ -81,7 +81,8 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
     system("chcp 65001");
 #endif
-    Core.Initialize("X-Day Engine", **argv);
+    Core.InitializeArguments(argc, argv);
+    Core.Initialize("X-Day Engine");
     InitializeConsole();
 
     Console->Log(Core.GetGLFWVersionString());
