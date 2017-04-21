@@ -35,6 +35,8 @@ public:
 XDAY_API extern CC_Container* ConsoleCommands;
 
 #pragma region ConsoleCommand Adding Macros
+#define CMDA(ccname) { ConsoleCommands->AddCommand(&ccname); }
+
 #define CMD0(cls, ccname)                   { static cls ccname();              ConsoleCommands->AddCommand(&ccname); }
 #define CMD1(cls, ccname, p1)               { static cls ccname(p1);            ConsoleCommands->AddCommand(&ccname); }
 #define CMD2(cls, ccname, p1, p2)           { static cls ccname(p1,p2);         ConsoleCommands->AddCommand(&ccname); }
