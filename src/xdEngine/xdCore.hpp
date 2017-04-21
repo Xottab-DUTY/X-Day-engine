@@ -30,9 +30,11 @@ public:
     filesystem::path AppPath;
     filesystem::path WorkPath;
     filesystem::path BinPath;
+
     filesystem::path DataPath;
     filesystem::path LogsPath;
     filesystem::path SavesPath;
+
     filesystem::path ResourcesPath;
     filesystem::path ArchivesPath;
     filesystem::path ConfigsPath;
@@ -50,16 +52,18 @@ public:
     xdCore();
     void Initialize(std::string&& ApplicationName, const char& argv);
     void Destroy();
+
     auto GetBuildId() const { return buildId; }
     auto GetBuildDate() const { return buildDate; }
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
     auto GetGLFWVersionString() const { return GLFWVersionString; }
-    void CreateDirIfNotExist(const filesystem::path& p);
-    bool FindParam(std::string&& Param);
-    std::string ReturnParam(std::string&& Param);
 
-    const std::string GetModuleName(std::string&& xdModule);
+    void CreateDirIfNotExist(const filesystem::path& p) const;
+    bool FindParam(std::string&& Param) const;
+    std::string ReturnParam(std::string&& Param) const;
+
+    static const std::string GetModuleName(std::string&& xdModule);
 
 private:
     void CalculateBuildId();

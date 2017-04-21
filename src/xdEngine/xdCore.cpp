@@ -60,7 +60,7 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
 }
 
 // Finds command line parameters and returns true if param exists
-bool xdCore::FindParam(std::string&& Param)
+bool xdCore::FindParam(std::string&& Param) const
 {
     if (Params.find(Param) != std::string::npos)
         return true;
@@ -73,14 +73,14 @@ bool xdCore::FindParam(std::string&& Param)
 // -name "value" will return correct "value"
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
-std::string xdCore::ReturnParam(std::string&& Param)
+std::string xdCore::ReturnParam(std::string&& Param) const
 {
     Param = Params.substr(Params.find(Param) + (Param.length() + 2), Params.find(Param + " %[^ ]"));
     Param.pop_back(); // Costyl (TM)
     return Param;
 }
 
-void xdCore::CreateDirIfNotExist(const filesystem::path& p)
+void xdCore::CreateDirIfNotExist(const filesystem::path& p) const
 {
     if (!filesystem::exists(p)) filesystem::create_directory(p);
 }
@@ -101,8 +101,6 @@ const std::string xdCore::GetModuleName(std::string&& xdModule)
     return xdModule + "_Rx86";
 #endif
 #endif
-    Console->Log("Something went wrong when calling GetModuleName()");
-    return xdModule;
 }
 
 void xdCore::CalculateBuildId()
