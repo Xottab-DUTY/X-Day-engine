@@ -513,6 +513,11 @@ void CC_Exit(std::string args)
     glfwSetWindowShouldClose(Engine.window, GLFW_TRUE);
 }
 
+void CC_FlushLog(std::string args)
+{
+    Console->FlushLog();
+}
+
 bool r_fullscreen = false;
 
 int int_test = 1;
@@ -544,8 +549,9 @@ void RegisterConsoleCommands()
     */
     CMDA(ExitCC);
     CMDA(QuitCC);
-
     CMDA(HelpCC);
+
+    CMDA(FlushLogCC);
 
     CMDA(ConfigLoadCC);
     CMDA(ConfigSaveCC);

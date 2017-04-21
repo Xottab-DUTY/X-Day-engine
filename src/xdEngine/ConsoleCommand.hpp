@@ -221,10 +221,30 @@ protected:
 };
 #pragma endregion ConsoleCommand Function Call
 
+/*
+A bit of help:
+
+CC_FunctionCall ("command_name_in_console", function_to_call, is_empty_args_allowed);
+
+CC_Bool         ("command_name_in_console", variable_to_change);
+
+CC_Toggle       ("command_name_in_console", variable_to_change);
+
+CC_Integer      ("command_name_in_console", variable_to_change, minimum_value, maximum_value);
+
+CC_Float        ("command_name_in_console", variable_to_change, minimum_value, maximum_value);
+
+CC_Double       ("command_name_in_console", variable_to_change, minimum_value, maximum_value);
+
+CC_String       ("command_name_in_console", variable_to_change, max_string_size);
+*/
+
 #pragma region Console commands
 // Don't put here not ready testing functions, use CMD0-4 in RegisterConsoleCommands for them
 void CC_ConfigLoad(std::string args);
 void CC_ConfigSave(std::string args);
+
+void CC_FlushLog(std::string args);
 
 void CC_Help(std::string args);
 void CC_Exit(std::string args);
@@ -232,6 +252,8 @@ void CC_Exit(std::string args);
 static CC_FunctionCall ExitCC("exit", CC_Exit, true);
 static CC_FunctionCall QuitCC("quit", CC_Exit, true);
 static CC_FunctionCall HelpCC("help", CC_Help, true);
+
+static CC_FunctionCall FlushLogCC("flush", CC_FlushLog, true);
 
 static CC_FunctionCall ConfigLoadCC("config_load", CC_ConfigLoad, true);
 static CC_FunctionCall ConfigSaveCC("config_save", CC_ConfigSave, true);
