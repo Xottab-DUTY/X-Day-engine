@@ -99,8 +99,10 @@ int main(int argc, char* argv[])
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile.string());
 
-    glfwInit();
-    Console->Log("GLFW initialized.");
+    if (glfwInit())
+        Console->Log("GLFW initialized.");
+    else
+        Console->Log("GLFW not initialized.");
 
     Engine.Initialize();
     Engine.xdCreateWindow();
