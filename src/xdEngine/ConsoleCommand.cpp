@@ -9,7 +9,7 @@
 #include "ConsoleCommand.hpp"
 
 #pragma region ConsoleCommand Container
-bool CC_Container::Execute(std::string cmd)
+bool CC_Container::Execute(std::string cmd) const
 {
     std::string cmd_str, cmd_val;
 
@@ -17,27 +17,97 @@ bool CC_Container::Execute(std::string cmd)
     buffer >> cmd_str >> cmd_val;
 
     ConsoleCommand* command(GetCommand(cmd_str));
-    if (command && command->isEnabled())
+    if (command)
     {
-        if (command->isLowerCaseArgs())
+        if (command->isEnabled())
         {
-            std::locale loc;
-            for (auto&& elem : cmd_val)
-                elem = std::tolower(elem, loc);
-        }
-        if (cmd_val.empty())
-        {
-            if (command->isEmptyArgsAllowed())
-                command->Execute(cmd_val.c_str());
-            else
-                ConsoleMsg("{} {}", command->GetName(), command->Status());
-        }
+	        if (command->isLowerCaseArgs())
+	        {
+	            std::locale loc;
+	            for (auto&& elem : cmd_val)
+	                elem = std::tolower(elem, loc);
+	        }
+	        if (cmd_val.empty())
+	        {
+	            if (command->isEmptyArgsAllowed())
+	                command->Execute(cmd_val.c_str());
+	            else
+	                ConsoleMsg("{} {}", command->GetName(), command->Status());
+	        }
+	        else
+	            command->Execute(cmd_val.c_str());
+        } 
         else
-            command->Execute(cmd_val.c_str());
+        {
+            ConsoleMsg("Command is disabled: {}", cmd_str);
+            return false;
+        }
     }
     else
     {
         ConsoleMsg("Unknown command: {}", cmd_str);
+        return false;
+    }
+    return true;
+}
+
+bool CC_Container::Execute(ConsoleCommand* cmd) const
+{
+    if (cmd)
+    {
+        if (cmd->isEnabled())
+        {
+            if (cmd->isEmptyArgsAllowed())
+                 cmd->Execute("");
+            else
+                ConsoleMsg("{} {}", cmd->GetName(), cmd->Status());
+        }
+        else
+        {
+            ConsoleMsg("Command is disabled: {}", cmd->GetName());
+            return false;
+        }
+            
+    }
+    else
+    {
+        Console->Log("Unknown command.");
+        return false;
+    }
+    return true;
+}
+
+bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
+{
+    if (cmd)
+    {
+        if (cmd->isEnabled())
+        {
+            if (cmd->isLowerCaseArgs())
+            {
+                std::locale loc;
+                for (auto&& elem : args)
+                    elem = std::tolower(elem, loc);
+            }
+            if (args.empty())
+            {
+                if (cmd->isEmptyArgsAllowed())
+                    cmd->Execute(args.c_str());
+                else
+                    ConsoleMsg("{} {}", cmd->GetName(), cmd->Status());
+            }
+            else
+                cmd->Execute(args.c_str());
+        }
+        else
+        {
+            ConsoleMsg("Command is disabled: {}", cmd->GetName());
+            return false;
+        }
+    }
+    else
+    {
+        Console->Log("Unknown command.");
         return false;
     }
     return true;
