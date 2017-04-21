@@ -526,21 +526,21 @@ void RegisterConsoleCommands()
     /*
         A bit of help:
         
-        CMDA – Adds already declared function
+        CMDA â€“ Adds already declared function
 
-        CC_FunctionCall – CMD3(CC_FunctionCall, command_name_in_this_file, "command_name_in_console", function_to_call, is_empty_args_allowed);
+        CC_FunctionCall â€“ CMD3(CC_FunctionCall, command_name_in_this_file, "command_name_in_console", function_to_call, is_empty_args_allowed);
 
-        CC_Bool         – CMD2(CC_Bool,         command_name_in_this_file, "command_name_in_console", variable_to_change);
+        CC_Bool         â€“ CMD2(CC_Bool,         command_name_in_this_file, "command_name_in_console", variable_to_change);
 
-        CC_Toggle       – CMD2(CC_Toggle,       command_name_in_this_file, "command_name_in_console", variable_to_change);
+        CC_Toggle       â€“ CMD2(CC_Toggle,       command_name_in_this_file, "command_name_in_console", variable_to_change);
 
-        CC_Integer      – CMD4(CC_Integer,      command_name_in_this_file, "command_name_in_console", variable_to_change, minimum_value, maximum_value);
+        CC_Integer      â€“ CMD4(CC_Integer,      command_name_in_this_file, "command_name_in_console", variable_to_change, minimum_value, maximum_value);
 
-        CC_Float        – CMD4(CC_Float,        command_name_in_this_file, "command_name_in_console", variable_to_change, minimum_value, maximum_value);
+        CC_Float        â€“ CMD4(CC_Float,        command_name_in_this_file, "command_name_in_console", variable_to_change, minimum_value, maximum_value);
 
-        CC_Double       – CMD4(CC_Double,       command_name_in_this_file, "command_name_in_console", variable_to_change, minimum_value, maximum_value);
+        CC_Double       â€“ CMD4(CC_Double,       command_name_in_this_file, "command_name_in_console", variable_to_change, minimum_value, maximum_value);
 
-        CC_String       – CMD3(CC_String,       command_name_in_this_file, "command_name_in_console", variable_to_change, max_string_size);
+        CC_String       â€“ CMD3(CC_String,       command_name_in_this_file, "command_name_in_console", variable_to_change, max_string_size);
     */
     CMDA(ExitCC);
     CMDA(QuitCC);
