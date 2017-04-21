@@ -1,7 +1,7 @@
 #pragma once
 #ifndef xdRender_impexp_inl__
 #define xdRender_impexp_inl__
-#include "common/import_export_macros.inl"
+#include "Common/import_export_macros.inl"
 
 #ifdef RENDERER_EXPORTS
 #define RENDERER_API XD_EXPORT

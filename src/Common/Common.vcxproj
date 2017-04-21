@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9D0F7A42-2D85-412C-B476-EBB8ED541924}</ProjectGuid>
-    <RootNamespace>common</RootNamespace>
+    <RootNamespace>Common</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -30,5 +30,9 @@
   </ImportGroup>
   <ItemGroup>
     <None Include="import_export_macros.inl" />
+    <None Include="Compiler.inl" />
+    <None Include="Platform.hpp" />
+    <None Include="PlatformLinux.inl" />
+    <None Include="PlatformWindows.inl" />
   </ItemGroup>
 </Project>

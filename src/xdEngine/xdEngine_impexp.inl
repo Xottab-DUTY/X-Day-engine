@@ -2,7 +2,7 @@
 #ifndef xdEngine_impexp_inl__
 #define xdEngine_impexp_inl__
 
-#include "common/import_export_macros.inl"
+#include "Common/import_export_macros.inl"
 
 #ifdef XDAY_EXPORTS
 #define XDAY_API XD_EXPORT
