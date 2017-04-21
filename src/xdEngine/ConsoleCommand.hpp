@@ -221,6 +221,22 @@ protected:
 };
 #pragma endregion ConsoleCommand Function Call
 
+#pragma region Console commands
+// Don't put here not ready testing functions, use CMD0-4 in RegisterConsoleCommands for them
+void CC_ConfigLoad(std::string args);
+void CC_ConfigSave(std::string args);
+
+void CC_Help(std::string args);
+void CC_Exit(std::string args);
+
+static CC_FunctionCall ExitCC("exit", CC_Exit, true);
+static CC_FunctionCall QuitCC("quit", CC_Exit, true);
+static CC_FunctionCall HelpCC("help", CC_Help, true);
+
+static CC_FunctionCall ConfigLoadCC("config_load", CC_ConfigLoad, true);
+static CC_FunctionCall ConfigSaveCC("config_save", CC_ConfigSave, true);
+
 void RegisterConsoleCommands();
+#pragma endregion Console commands
 
 #endif // ConsoleCommand_h__

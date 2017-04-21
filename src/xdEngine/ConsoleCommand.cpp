@@ -454,7 +454,7 @@ std::string CC_FunctionCall::Info()
 
 #pragma endregion ConsoleCommand Function Call
 
-void ConfigLoad(std::string args)
+void CC_ConfigLoad(std::string args)
 {
     ConsoleMsg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
     std::ifstream config_file(args.empty() ? Console->ConfigFile : args);
@@ -472,7 +472,7 @@ void ConfigLoad(std::string args)
     config_file.close();
 }
 
-void ConfigSave(std::string args)
+void CC_ConfigSave(std::string args)
 {
     ConsoleMsg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
     std::ofstream f(args.empty() ? Console->ConfigFile : args);
@@ -525,6 +525,8 @@ void RegisterConsoleCommands()
 {
     /*
         A bit of help:
+        
+        CMDA – Adds already declared function
 
         CC_FunctionCall – CMD3(CC_FunctionCall, command_name_in_this_file, "command_name_in_console", function_to_call, is_empty_args_allowed);
 
@@ -540,13 +542,13 @@ void RegisterConsoleCommands()
 
         CC_String       – CMD3(CC_String,       command_name_in_this_file, "command_name_in_console", variable_to_change, max_string_size);
     */
-    CMD3(CC_FunctionCall, ExitCC, "exit", CC_Exit, true);
-    CMD3(CC_FunctionCall, QuitCC, "quit", CC_Exit, true);
+    CMDA(ExitCC);
+    CMDA(QuitCC);
 
-    CMD3(CC_FunctionCall, HelpCC, "help", CC_Help, true);
+    CMDA(HelpCC);
 
-    CMD3(CC_FunctionCall, ConfigLoadCC, "config_load", ConfigLoad, true);
-    CMD3(CC_FunctionCall, ConfigSaveCC, "config_save", ConfigSave, true);
+    CMDA(ConfigLoadCC);
+    CMDA(ConfigSaveCC);
 
     CMD2(CC_Bool, FullscreenCC, "r_fullscreen", r_fullscreen);
 
