@@ -360,7 +360,7 @@ CC_Integer::CC_Integer(std::string _name, int& _value, int const _min, int const
 
 void CC_Integer::Execute(std::string args)
 {
-    unsigned v;
+    int v;
     if (1 != sscanf_s(args.c_str(), "%d", &v) || v < min || v > max)
     {
         InvalidSyntax(args);
@@ -413,7 +413,7 @@ CC_Double::CC_Double(std::string _name, double& _value, double const _min, doubl
 
 void CC_Double::Execute(std::string args)
 {
-    float v = min;
+    double v = min;
     if (1 != sscanf_s(args.c_str(), "%f", &v) || v < min || v > max)
     {
         InvalidSyntax(args);
