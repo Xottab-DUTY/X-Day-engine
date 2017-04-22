@@ -433,7 +433,7 @@ CC_Double::CC_Double(std::string _name, double& _value, double const _min, doubl
 void CC_Double::Execute(std::string args)
 {
     double v = min;
-    if (1 != sscanf_s(args.c_str(), "%f", &v) || v < min || v > max)
+    if (1 != sscanf_s(args.c_str(), "%lf", &v) || v < min || v > max)
     {
         InvalidSyntax(args);
         return;
