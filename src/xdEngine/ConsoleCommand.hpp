@@ -39,11 +39,12 @@ XDAY_API extern CC_Container* ConsoleCommands;
 #pragma region ConsoleCommand Adding Macros
 #define CMDA(ccname) { ConsoleCommands->AddCommand(&ccname); }
 
-#define CMD0(cls, ccname)                   { static cls ccname();              ConsoleCommands->AddCommand(&ccname); }
-#define CMD1(cls, ccname, p1)               { static cls ccname(p1);            ConsoleCommands->AddCommand(&ccname); }
-#define CMD2(cls, ccname, p1, p2)           { static cls ccname(p1,p2);         ConsoleCommands->AddCommand(&ccname); }
-#define CMD3(cls, ccname, p1, p2, p3)       { static cls ccname(p1,p2,p3);      ConsoleCommands->AddCommand(&ccname); }
-#define CMD4(cls, ccname, p1, p2, p3, p4)   { static cls ccname(p1,p2,p3,p4);   ConsoleCommands->AddCommand(&ccname); }
+#define CMD0(cls, ccname)                       { static cls ccname();                  ConsoleCommands->AddCommand(&ccname); }
+#define CMD1(cls, ccname, p1)                   { static cls ccname(p1);                ConsoleCommands->AddCommand(&ccname); }
+#define CMD2(cls, ccname, p1, p2)               { static cls ccname(p1,p2);             ConsoleCommands->AddCommand(&ccname); }
+#define CMD3(cls, ccname, p1, p2, p3)           { static cls ccname(p1,p2,p3);          ConsoleCommands->AddCommand(&ccname); }
+#define CMD4(cls, ccname, p1, p2, p3, p4)       { static cls ccname(p1,p2,p3,p4);       ConsoleCommands->AddCommand(&ccname); }
+#define CMD5(cls, ccname, p1, p2, p3, p4, p5)   { static cls ccname(p1,p2,p3,p4,p5);    ConsoleCommands->AddCommand(&ccname); }
 #pragma endregion ConsoleCommand Adding Macros
 
 #pragma region Basic ConsoleCommand
@@ -91,7 +92,7 @@ class XDAY_API CC_Bool : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_Bool(std::string _name, bool& _value);
+    CC_Bool(std::string _name, bool& _value, bool _enabled = true);
 
     void Execute(std::string args) override;
 
@@ -112,7 +113,7 @@ class XDAY_API CC_Toggle : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_Toggle(std::string _name, bool& _value);
+    CC_Toggle(std::string _name, bool& _value, bool _enabled = true);
 
     void Execute(std::string args) override;
 
@@ -129,7 +130,7 @@ class XDAY_API CC_String : public ConsoleCommand
 {
     using super = ConsoleCommand;
 public:
-    CC_String(std::string _name, std::string _value, unsigned _size);
+    CC_String(std::string _name, std::string _value, unsigned _size, bool _enabled = true);
 
     void Execute(std::string args) override;
 
@@ -167,7 +168,7 @@ class XDAY_API CC_Integer : public CC_Value<int>
     using super = CC_Value<int>;
 
 public:
-    CC_Integer(std::string _name, int& _value, int const _min, int const _max);
+    CC_Integer(std::string _name, int& _value, int const _min, int const _max, bool _enabled = true);
 
     void Execute(std::string args) override;
 
@@ -182,7 +183,7 @@ class XDAY_API CC_Float : public CC_Value<float>
     using super = CC_Value<float>;
 
 public:
-    CC_Float(std::string _name, float& _value, float const _min, float const _max);
+    CC_Float(std::string _name, float& _value, float const _min, float const _max, bool _enabled = true);
 
     void Execute(std::string args) override;
 
@@ -197,7 +198,7 @@ class XDAY_API CC_Double : public CC_Value<double>
     using super = CC_Value<double>;
 
 public:
-    CC_Double(std::string _name, double& _value, double const _min, double const _max);
+    CC_Double(std::string _name, double& _value, double const _min, double const _max, bool _enabled = true);
 
     void Execute(std::string args) override;
 
@@ -212,7 +213,7 @@ class XDAY_API CC_FunctionCall : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_FunctionCall(std::string _name, void(*_func)(std::string), bool _AllowEmptyArgs);
+    CC_FunctionCall(std::string _name, void(*_func)(std::string), bool _AllowEmptyArgs, bool _enabled = true);
     void Execute(std::string args) override;
 
     std::string Info() override;
@@ -220,6 +221,12 @@ protected:
     void (*function)(std::string args);
 };
 #pragma endregion ConsoleCommand Function Call
+
+#ifdef DEBUG
+static bool DebugOnlyCommand = true;
+#else
+static bool DebugOnlyCommand = false;
+#endif
 
 /*
 A bit of help:
@@ -253,7 +260,7 @@ void CC_FlushLog(std::string args);
 static CC_FunctionCall ExitCC("exit", CC_Exit, true);
 static CC_FunctionCall QuitCC("quit", CC_Exit, true);
 static CC_FunctionCall HelpCC("help", CC_Help, true);
-static CC_FunctionCall SystemCommandCC("system", CC_SystemCommand, false);
+static CC_FunctionCall SystemCommandCC("system", CC_SystemCommand, false, DebugOnlyCommand);
 
 static CC_FunctionCall FlushLogCC("flush", CC_FlushLog, true);
 

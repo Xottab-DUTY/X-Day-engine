@@ -247,7 +247,10 @@ void ConsoleCommand::AddCommandToCache(std::string&& cmd)
 #pragma endregion Basic ConsoleCommand
 
 #pragma region ConsoleCommand Boolean
-CC_Bool::CC_Bool(std::string _name, bool& _value) : super(_name), value(_value) {}
+CC_Bool::CC_Bool(std::string _name, bool& _value, bool _enabled) : super(_name), value(_value)
+{
+    Enabled = _enabled;
+}
 
 void CC_Bool::Execute(std::string args)
 {
@@ -290,10 +293,11 @@ const bool CC_Bool::GetValue() const
 #pragma endregion ConsoleCommand Boolean
 
 #pragma region ConsoleCommand Toggle
-CC_Toggle::CC_Toggle(std::string _name, bool& _value) : super(_name), value(_value)
+CC_Toggle::CC_Toggle(std::string _name, bool& _value, bool _enabled) : super(_name), value(_value)
 {
     AllowEmptyArgs = true;
     AllowSaving = false;
+    Enabled = _enabled;
 }
 
 void CC_Toggle::Execute(std::string args)
@@ -315,9 +319,11 @@ std::string CC_Toggle::Status()
 #pragma endregion ConsoleCommand Toggle
 
 #pragma region ConsoleCommand String
-CC_String::CC_String(std::string _name, std::string _value, unsigned _size)
+CC_String::CC_String(std::string _name, std::string _value, unsigned _size, bool _enabled)
     : super(_name), value(_value), size(_size)
-{}
+{
+    Enabled = _enabled;
+}
 
 void CC_String::Execute(std::string args)
 {
@@ -359,8 +365,11 @@ std::string CC_Value<T>::Syntax()
 #pragma endregion ConsoleCommand Value Template
 
 #pragma region ConsoleCommand Integer
-CC_Integer::CC_Integer(std::string _name, int& _value, int const _min, int const _max)
-    : super(_name, _value, _min, _max) {}
+CC_Integer::CC_Integer(std::string _name, int& _value, int const _min, int const _max, bool _enabled)
+    : super(_name, _value, _min, _max)
+{
+    Enabled = _enabled;
+}
 
 void CC_Integer::Execute(std::string args)
 {
@@ -386,8 +395,11 @@ std::string CC_Integer::Status()
 #pragma endregion ConsoleCommand Integer
 
 #pragma region ConsoleCommand Float
-CC_Float::CC_Float(std::string _name, float& _value, float const _min, float const _max)
-    : super(_name, _value, _min, _max) {}
+CC_Float::CC_Float(std::string _name, float& _value, float const _min, float const _max, bool _enabled)
+    : super(_name, _value, _min, _max)
+{
+    Enabled = _enabled;
+}
 
 void CC_Float::Execute(std::string args)
 {
@@ -412,8 +424,11 @@ std::string CC_Float::Status()
 #pragma endregion ConsoleCommand Float
 
 #pragma region ConsoleCommand Double
-CC_Double::CC_Double(std::string _name, double& _value, double const _min, double const _max)
-    : super(_name, _value, _min, _max) {}
+CC_Double::CC_Double(std::string _name, double& _value, double const _min, double const _max, bool _enabled)
+    : super(_name, _value, _min, _max)
+{
+    Enabled = _enabled;
+}
 
 void CC_Double::Execute(std::string args)
 {
@@ -438,10 +453,11 @@ std::string CC_Double::Status()
 #pragma endregion ConsoleCommand Double
 
 #pragma region ConsoleCommand Function Call
-CC_FunctionCall::CC_FunctionCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs) : super(_name)
+CC_FunctionCall::CC_FunctionCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs, bool _enabled) : super(_name)
 {
     AllowEmptyArgs = _AllowEmptyArgs;
     AllowSaving = false;
+    Enabled = _enabled;
     function = _func;
 }
 
@@ -573,10 +589,10 @@ void RegisterConsoleCommands()
 
     CMD2(CC_Bool, FullscreenCC, "r_fullscreen", r_fullscreen);
 
-    CMD3(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true);
-    CMD2(CC_Toggle, toggle_testCC, "test_toggle", toggle_test);
-    CMD4(CC_Integer, int_testCC, "test_int", int_test, 1, 10);
-    CMD4(CC_Float, float_testCC, "test_float", float_test, 1.0, 10.0);
-    CMD4(CC_Double, double_testCC, "test_double", double_test, 1.0, 10.0);
-    CMD3(CC_String, string_testCC, "test_string", string_test, 512);
+    CMD4(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true, DebugOnlyCommand);
+    CMD3(CC_Toggle, toggle_testCC, "test_toggle", toggle_test, DebugOnlyCommand);
+    CMD5(CC_Integer, int_testCC, "test_int", int_test, 1, 10, DebugOnlyCommand);
+    CMD5(CC_Float, float_testCC, "test_float", float_test, 1.0, 10.0, DebugOnlyCommand);
+    CMD5(CC_Double, double_testCC, "test_double", double_test, 1.0, 10.0, DebugOnlyCommand);
+    CMD4(CC_String, string_testCC, "test_string", string_test, 512, DebugOnlyCommand);
 }
