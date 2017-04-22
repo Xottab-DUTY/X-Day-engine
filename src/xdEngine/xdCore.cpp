@@ -39,7 +39,7 @@ void xdCore::Initialize(std::string&& _appname)
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
     FindParam("-datapath") ? DataPath = ReturnParam("-datapath") : DataPath = WorkPath.string() + "/appdata/";
-    FindParam("-respath") ? ResourcesPath = ReturnParam("-respath") : ResourcesPath = WorkPath.string() + "/res/";
+    FindParam("-respath") ? ResourcesPath = ReturnParam("-respath") : ResourcesPath = WorkPath.string() + "/resources/";
 
     LogsPath = DataPath.string() + "/logs/";
     SavesPath = DataPath.string() + "/saves/";
