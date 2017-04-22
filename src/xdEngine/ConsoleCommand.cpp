@@ -11,10 +11,14 @@
 #pragma region ConsoleCommand Container
 bool CC_Container::Execute(std::string cmd) const
 {
-    std::string cmd_str, cmd_val;
+    std::string cmd_str = "", cmd_val = "";
 
     std::istringstream buffer(cmd);
-    buffer >> cmd_str >> cmd_val;
+    buffer >> cmd_str;
+    for (std::string i = ""; buffer >> i;)
+    {
+        cmd_val += i + " ";
+    }
 
     ConsoleCommand* command(GetCommand(cmd_str));
     if (command)
