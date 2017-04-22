@@ -522,6 +522,11 @@ void CC_FlushLog(std::string args)
     Console->FlushLog();
 }
 
+void CC_SystemCommand(std::string args = "")
+{
+    system(args.c_str());
+}
+
 void CC_FCallTest(std::string args)
 {
     ConsoleMsg("Function call test {}", args);
@@ -559,6 +564,7 @@ void RegisterConsoleCommands()
     CMDA(ExitCC);
     CMDA(QuitCC);
     CMDA(HelpCC);
+    CMDA(SystemCommandCC);
 
     CMDA(FlushLogCC);
 

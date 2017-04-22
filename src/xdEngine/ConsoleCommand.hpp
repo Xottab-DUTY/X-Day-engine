@@ -240,18 +240,20 @@ CC_String       ("command_name_in_console", variable_to_change, max_string_size)
 */
 
 #pragma region Console commands
-// Don't put here not ready testing functions, use CMD0-4 in RegisterConsoleCommands for them
+// Don't put here not ready testing functions, use CMD0-4 in RegisterConsoleCommands() for them
+void CC_Exit(std::string args);
+void CC_Help(std::string args);
+void CC_SystemCommand(std::string args);
+
 void CC_ConfigLoad(std::string args);
 void CC_ConfigSave(std::string args);
 
 void CC_FlushLog(std::string args);
 
-void CC_Help(std::string args);
-void CC_Exit(std::string args);
-
 static CC_FunctionCall ExitCC("exit", CC_Exit, true);
 static CC_FunctionCall QuitCC("quit", CC_Exit, true);
 static CC_FunctionCall HelpCC("help", CC_Help, true);
+static CC_FunctionCall SystemCommandCC("system", CC_SystemCommand, false);
 
 static CC_FunctionCall FlushLogCC("flush", CC_FlushLog, true);
 
