@@ -518,6 +518,11 @@ void CC_FlushLog(std::string args)
     Console->FlushLog();
 }
 
+void CC_FCallTest(std::string args)
+{
+    ConsoleMsg("Function call test {}", args);
+}
+
 bool r_fullscreen = false;
 
 int int_test = 1;
@@ -558,9 +563,10 @@ void RegisterConsoleCommands()
 
     CMD2(CC_Bool, FullscreenCC, "r_fullscreen", r_fullscreen);
 
-    CMD2(CC_Toggle, toggle_testCC, "toggle_test", toggle_test);
-    CMD4(CC_Integer, int_testCC, "int_test", int_test, 1, 10);
-    CMD4(CC_Float, float_testCC, "float_test", float_test, 1.0, 10.0);
-    CMD4(CC_Double, double_testCC, "double_test", double_test, 1.0, 10.0);
-    CMD3(CC_String, string_testCC, "string_test", string_test, 512);
+    CMD3(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true);
+    CMD2(CC_Toggle, toggle_testCC, "test_toggle", toggle_test);
+    CMD4(CC_Integer, int_testCC, "test_int", int_test, 1, 10);
+    CMD4(CC_Float, float_testCC, "test_float", float_test, 1.0, 10.0);
+    CMD4(CC_Double, double_testCC, "test_double", double_test, 1.0, 10.0);
+    CMD3(CC_String, string_testCC, "test_string", string_test, 512);
 }
