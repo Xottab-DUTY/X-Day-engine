@@ -4,29 +4,23 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
-
 #include "tinyxml2/tinyxml2.h"
 
 #include "xdEngine_impexp.inl"
-#include "xdCore.hpp"
 
 class XDAY_API xdXMLDocument
 {
 public:
     xdXMLDocument();
-    ~xdXMLDocument();
+    xdXMLDocument(filesystem::path resources_type, filesystem::path _path, std::string xml_filename);
+    xdXMLDocument(filesystem::path resources_type, std::string xml_filename);
+    xdXMLDocument(filesystem::path full_path);
 
-    void Load(filesystem::path&& resources_type, filesystem::path&& path, std::string&& xml_filename);
-    void Load(filesystem::path&& full_path);
+    virtual ~xdXMLDocument();
 
-    //used for resources_type
-    const filesystem::path& AppData = Core.DataPath;
-    const filesystem::path& Resources = Core.ResourcesPath;
-    const filesystem::path& Archives = Core.ArchivesPath;
-    const filesystem::path& Configs = Core.ConfigsPath;
-    const filesystem::path& Models = Core.ModelsPath;
-    const filesystem::path& Sounds = Core.SoundsPath;
-    const filesystem::path& Textures = Core.TexturesPath;
+    void Load(filesystem::path resources_type, filesystem::path _path, std::string xml_filename);
+    void Load(filesystem::path resources_type, std::string xml_filename);
+    void Load(filesystem::path full_path);
 
 protected:
     tinyxml2::XMLNode* root_node;
@@ -34,4 +28,4 @@ protected:
 private:
     tinyxml2::XMLDocument xml_document;
 };
-#endif // !XMLDocument_hpp__
+#endif // XMLDocument_hpp__

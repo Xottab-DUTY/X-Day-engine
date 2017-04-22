@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<resources>
+<resource type="archives" path="/archives/"/>
+<resource type="configs" path="/configs/"/>
+<resource type="models" path="/models/"/>
+<resource type="sounds" path="/sounds/"/>
+<resource type="textures" path="/textures/"/>
+</resources>

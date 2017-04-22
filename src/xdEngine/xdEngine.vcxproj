@@ -133,6 +133,7 @@
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="XMLDocument.cpp" />
+    <ClCompile Include="XMLResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.hpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="XMLDocument.hpp" />
+    <ClInclude Include="XMLResource.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Platform\Compiler.inl" />
