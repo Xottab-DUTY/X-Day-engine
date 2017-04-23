@@ -21,7 +21,7 @@ void InitializeConsole()
 
 void destroyConsole()
 {
-    ConsoleCommands->Execute("config_save");
+    ConsoleCommands->Execute(&ConfigSaveCC);
     ConsoleCommands->Destroy();
     delete ConsoleCommands;
     Console->CloseLog();
