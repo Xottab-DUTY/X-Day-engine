@@ -58,7 +58,10 @@ void threadedConsole()
     {
         std::string input;
         std::getline(std::cin, input);
-        ConsoleCommands->Execute(input);
+        if (Console && ConsoleCommands && !glfwWindowShouldClose(Engine.window))
+            ConsoleCommands->Execute(input);
+        else
+            break;
     }
     
 }
@@ -124,6 +127,7 @@ int main(int argc, char* argv[])
     std::thread WatchConsole(threadedConsole);
     WatchConsole.detach();
     Startup();
+    WatchConsole.~thread();
 
     glfwTerminate();
     Console->Log("GLFW terminated.");
