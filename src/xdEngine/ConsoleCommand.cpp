@@ -7,6 +7,7 @@
 #include "xdCore.hpp"
 #include "xdEngine.hpp"
 #include "ConsoleCommand.hpp"
+#include "XMLResource.hpp"
 
 #pragma region ConsoleCommand Container
 bool CC_Container::Execute(std::string cmd) const
@@ -546,6 +547,7 @@ void CC_SystemCommand(std::string args = "")
 void CC_FCallTest(std::string args)
 {
     ConsoleMsg("Function call test {}", args);
+    xdXMLResource xml_res(Core.ResourcesPath, "resources.xml");
 }
 
 bool r_fullscreen = false;
