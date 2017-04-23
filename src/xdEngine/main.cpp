@@ -86,8 +86,7 @@ int main(int argc, char* argv[])
     //system("chcp 65001");
 #endif
     //setlocale(LC_ALL, "");
-    Core.InitializeArguments(argc, argv);
-    Core.Initialize("X-Day Engine");
+    Core.Initialize("X-Day Engine", **argv);
     InitializeConsole();
 
     Console->Log(Core.GetGLFWVersionString());
