@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <dynlib/Dynlib.hpp>
 
+#include "Common/Platform.hpp"
 #include "xdCore.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
@@ -79,8 +80,9 @@ int main(int argc, char* argv[])
 {
     QuantMS();
 #ifdef WINDOWS
-    system("chcp 65001");
+    //system("chcp 65001");
 #endif
+    //setlocale(LC_ALL, "");
     Core.InitializeArguments(argc, argv);
     Core.Initialize("X-Day Engine");
     InitializeConsole();
