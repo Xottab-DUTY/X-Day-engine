@@ -553,8 +553,6 @@ void CC_FCallTest(std::string args)
     xdXMLResource xml_res(Core.ResourcesPath, "resources.xml");
 }
 
-bool r_fullscreen = false;
-
 int int_test = 1;
 float float_test = 1.0;
 double double_test = 1.0;
@@ -592,7 +590,7 @@ void RegisterConsoleCommands()
     CMDA(ConfigLoadCC);
     CMDA(ConfigSaveCC);
 
-    CMD2(CC_Bool, FullscreenCC, "r_fullscreen", r_fullscreen);
+    CMDA(FullscreenCC);
 
     CMD4(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true, DebugOnlyCommand);
     CMD3(CC_Toggle, toggle_testCC, "test_toggle", toggle_test, DebugOnlyCommand);

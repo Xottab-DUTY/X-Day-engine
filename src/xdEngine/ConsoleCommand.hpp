@@ -227,6 +227,8 @@ static bool DebugOnlyCommand = true;
 static bool DebugOnlyCommand = false;
 #endif
 
+static bool GlobalFullscreen = false;
+
 /*
 A bit of help:
 
@@ -265,6 +267,8 @@ static CC_FunctionCall FlushLogCC("flush", CC_FlushLog, true);
 
 static CC_FunctionCall ConfigLoadCC("config_load", CC_ConfigLoad, true);
 static CC_FunctionCall ConfigSaveCC("config_save", CC_ConfigSave, true);
+
+static CC_Bool FullscreenCC("r_fullscreen", GlobalFullscreen);
 
 void RegisterConsoleCommands();
 #pragma endregion Console commands
