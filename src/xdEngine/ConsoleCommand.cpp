@@ -131,11 +131,7 @@ ConsoleCommand* CC_Container::GetCommand(std::string cmd) const
     {
         return e->second;
     }
-    else
-    {
-        return nullptr;
-    }
-        
+    return nullptr;
 }
 
 bool CC_Container::GetBool(std::string cmd) const
