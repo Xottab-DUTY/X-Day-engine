@@ -71,6 +71,7 @@ public:
     CC_Bool(std::string _name, bool& _value, bool _enabled = true);
 
     void Execute(std::string args) override;
+    void Execute(bool _value) const;
 
     std::string Info() override;
     std::string Syntax() override;
@@ -207,6 +208,9 @@ public:
     bool Execute(std::string cmd) const;
     bool Execute(ConsoleCommand* cmd) const;
     bool Execute(ConsoleCommand* cmd, std::string args) const;
+
+    bool ExecuteBool(CC_Bool* cmd, bool value) const;
+
     void ExecuteConfig(std::string filename);
 
     ConsoleCommand* GetCommand(std::string cmd) const;

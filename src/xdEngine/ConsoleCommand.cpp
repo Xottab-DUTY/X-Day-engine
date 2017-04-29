@@ -111,6 +111,24 @@ bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
     return true;
 }
 
+bool CC_Container::ExecuteBool(CC_Bool* cmd, bool value) const
+{
+    if (cmd)
+        if (cmd->isEnabled())
+            cmd->Execute(value);
+        else
+        {
+            ConsoleMsg("Command is disabled: {}", cmd->GetName());
+            return false;
+        }
+    else
+    {
+        Console->Log("Unknown command.");
+        return false;
+    }
+    return true;
+}
+
 void CC_Container::ExecuteConfig(std::string filename)
 {
     filename.insert(0, "config_load ");
@@ -266,6 +284,11 @@ void CC_Bool::Execute(std::string args)
         return;
     }
     value = v;
+}
+
+void CC_Bool::Execute(bool _value) const
+{
+    value = _value;
 }
 
 std::string CC_Bool::Info()
