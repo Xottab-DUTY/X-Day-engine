@@ -221,7 +221,7 @@ public:
 
 XDAY_API extern CC_Container* ConsoleCommands;
 
-#ifdef DEBUG
+#if 1//def DEBUG
 static bool DebugOnlyCommand = true;
 #else
 static bool DebugOnlyCommand = false;
