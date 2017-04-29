@@ -108,9 +108,9 @@ int main(int argc, char* argv[])
 
     auto xdSoundModule = Dynlib::open(Core.GetModuleName("xdSound").c_str());
     if (xdSoundModule)
-    {
         Console->Log("Module loaded successfully");
-    }
+    else
+        Console->Log("Failed to load module");
 
     auto impFunc = (FunctionPointer)Dynlib::load(xdSoundModule, "funcToExport");
     if (impFunc)
@@ -119,9 +119,7 @@ int main(int argc, char* argv[])
         Console->Log("Failed to import function");
 
     if (Dynlib::close(xdSoundModule))
-    {
         Console->Log("Module unloaded successfully");
-    }
 
     std::thread WatchConsole(threadedConsole);
     WatchConsole.detach();
