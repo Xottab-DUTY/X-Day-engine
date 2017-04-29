@@ -12,30 +12,6 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "xdEngine_impexp.inl"
 #include "Console.hpp"
 
-class XDAY_API ConsoleCommand;
-
-#pragma region ConsoleCommand Container
-class XDAY_API CC_Container
-{
-public:
-    std::map<std::string, ConsoleCommand*> CommandsContainer;
-
-    bool Execute(std::string cmd) const;
-    bool Execute(ConsoleCommand* cmd) const;
-    bool Execute(ConsoleCommand* cmd, std::string args) const;
-    void ExecuteConfig(std::string filename);
-    ConsoleCommand* GetCommand(std::string cmd) const;
-    bool GetBool(std::string cmd) const;
-
-    void AddCommand(ConsoleCommand* cc);
-    void RemoveCommand(ConsoleCommand* cc);
-
-    void Destroy();
-};
-#pragma endregion ConsoleCommand Container
-
-XDAY_API extern CC_Container* ConsoleCommands;
-
 #pragma region ConsoleCommand Adding Macros
 #define CMDA(ccname) { ConsoleCommands->AddCommand(&ccname); }
 
@@ -221,6 +197,28 @@ protected:
     void (*function)(std::string args);
 };
 #pragma endregion ConsoleCommand Function Call
+
+#pragma region ConsoleCommand Container
+class XDAY_API CC_Container
+{
+public:
+    std::map<std::string, ConsoleCommand*> CommandsContainer;
+
+    bool Execute(std::string cmd) const;
+    bool Execute(ConsoleCommand* cmd) const;
+    bool Execute(ConsoleCommand* cmd, std::string args) const;
+    void ExecuteConfig(std::string filename);
+    ConsoleCommand* GetCommand(std::string cmd) const;
+    bool GetBool(std::string cmd) const;
+
+    void AddCommand(ConsoleCommand* cc);
+    void RemoveCommand(ConsoleCommand* cc);
+
+    void Destroy();
+};
+#pragma endregion ConsoleCommand Container
+
+XDAY_API extern CC_Container* ConsoleCommands;
 
 #ifdef DEBUG
 static bool DebugOnlyCommand = true;
