@@ -208,6 +208,7 @@ public:
     bool Execute(ConsoleCommand* cmd) const;
     bool Execute(ConsoleCommand* cmd, std::string args) const;
     void ExecuteConfig(std::string filename);
+
     ConsoleCommand* GetCommand(std::string cmd) const;
     bool GetBool(std::string cmd) const;
     bool GetBool(CC_Bool* cmd) const;

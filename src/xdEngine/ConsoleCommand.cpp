@@ -23,7 +23,6 @@ bool CC_Container::Execute(std::string cmd) const
 
     ConsoleCommand* command(GetCommand(cmd_str));
     if (command)
-    {
         if (command->isEnabled())
         {
 	        if (command->isLowerCaseArgs())
@@ -47,7 +46,6 @@ bool CC_Container::Execute(std::string cmd) const
             ConsoleMsg("Command is disabled: {}", cmd_str);
             return false;
         }
-    }
     else
     {
         ConsoleMsg("Unknown command: {}", cmd_str);
@@ -59,7 +57,6 @@ bool CC_Container::Execute(std::string cmd) const
 bool CC_Container::Execute(ConsoleCommand* cmd) const
 {
     if (cmd)
-    {
         if (cmd->isEnabled())
         {
             if (cmd->isEmptyArgsAllowed())
@@ -72,8 +69,6 @@ bool CC_Container::Execute(ConsoleCommand* cmd) const
             ConsoleMsg("Command is disabled: {}", cmd->GetName());
             return false;
         }
-            
-    }
     else
     {
         Console->Log("Unknown command.");
@@ -85,7 +80,6 @@ bool CC_Container::Execute(ConsoleCommand* cmd) const
 bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
 {
     if (cmd)
-    {
         if (cmd->isEnabled())
         {
             if (cmd->isLowerCaseArgs())
@@ -109,7 +103,6 @@ bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
             ConsoleMsg("Command is disabled: {}", cmd->GetName());
             return false;
         }
-    }
     else
     {
         Console->Log("Unknown command.");
