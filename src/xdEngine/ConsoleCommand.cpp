@@ -550,6 +550,10 @@ void CC_SystemCommand(std::string args = "")
 void CC_FCallTest(std::string args)
 {
     ConsoleMsg("Function call test {}", args);
+}
+
+void CC_XMLTest(std::string args)
+{
     xdXMLResource xml_res(Core.ResourcesPath, "resources.xml");
 }
 
@@ -592,6 +596,7 @@ void RegisterConsoleCommands()
 
     CMDA(FullscreenCC);
 
+    CMD4(CC_FunctionCall, XMLTestCC, "test_xml", CC_XMLTest, true, DebugOnlyCommand);
     CMD4(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true, DebugOnlyCommand);
     CMD3(CC_Toggle, toggle_testCC, "test_toggle", toggle_test, DebugOnlyCommand);
     CMD5(CC_Integer, int_testCC, "test_int", int_test, 1, 10, DebugOnlyCommand);
