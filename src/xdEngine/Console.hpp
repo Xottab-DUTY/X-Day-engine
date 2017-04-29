@@ -2,7 +2,6 @@
 #ifndef Console_hpp__
 #define Console_hpp__
 
-#include <string>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
