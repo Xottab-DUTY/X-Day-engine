@@ -579,6 +579,8 @@ double double_test = 1.0;
 bool toggle_test = false;
 std::string string_test = "test";
 
+bool GlobalFullscreen = false;
+
 void RegisterConsoleCommands()
 {
     /*

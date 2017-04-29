@@ -232,7 +232,7 @@ static bool DebugOnlyCommand = true;
 static bool DebugOnlyCommand = false;
 #endif
 
-static bool GlobalFullscreen = false;
+extern bool GlobalFullscreen;
 
 /*
 A bit of help:
