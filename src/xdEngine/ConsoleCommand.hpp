@@ -210,6 +210,7 @@ public:
     void ExecuteConfig(std::string filename);
     ConsoleCommand* GetCommand(std::string cmd) const;
     bool GetBool(std::string cmd) const;
+    bool GetBool(CC_Bool* cmd) const;
 
     void AddCommand(ConsoleCommand* cc);
     void RemoveCommand(ConsoleCommand* cc);

@@ -143,6 +143,13 @@ bool CC_Container::GetBool(std::string cmd) const
     return false;
 }
 
+bool CC_Container::GetBool(CC_Bool* cmd) const
+{
+    if (cmd)
+        return cmd->GetValue();
+    return false;
+}
+
 void CC_Container::AddCommand(ConsoleCommand* cc)
 {
     CommandsContainer[cc->GetName()] = cc;
