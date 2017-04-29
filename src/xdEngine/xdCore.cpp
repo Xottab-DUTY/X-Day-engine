@@ -55,7 +55,7 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
 
     CalculateBuildId();
 
-    buildString = fmt::format("xdCore build {}, {}, {}", buildId, buildDate, buildTime);
+    buildString = fmt::format("{} build {}, {}, {}", GetModuleName("xdCore"), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
 }
