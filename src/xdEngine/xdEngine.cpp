@@ -1,11 +1,9 @@
 // 01.01.2017 Султан Xottab_DUTY Урамаев
 // Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.
 #include <GLFW/glfw3.h>
-#include <fmt/format.h>
 
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
-#include "Console.hpp"
 #include "ConsoleCommand.hpp"
 
 XDAY_API XDayEngine Engine;
@@ -15,7 +13,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         ConsoleCommands->Execute(&ExitCC);
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
-        ConsoleCommands->Execute(fmt::format("r_fullscreen {}", !ConsoleCommands->GetBool("r_fullscreen")));
+        ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
 }
 
 void XDayEngine::Initialize()
