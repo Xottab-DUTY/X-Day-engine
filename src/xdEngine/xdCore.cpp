@@ -6,6 +6,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include <fmt/format.h>
 #include <GLFW/glfw3.h>
 
+#include "Common/Platform.hpp"
 #include "xdCore.hpp"
 #include "Console.hpp"
 
