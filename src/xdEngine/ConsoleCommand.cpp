@@ -424,7 +424,7 @@ CC_Float::CC_Float(std::string _name, float& _value, float const _min, float con
 void CC_Float::Execute(std::string args)
 {
     float v = min;
-    if (1 != sscanf_s(args.c_str(), "%f", &v) || v < min || v > max)
+    if (sscanf_s(args.c_str(), "%f", &v) == 0 || v < min || v > max)
     {
         InvalidSyntax(args);
         return;
@@ -453,7 +453,7 @@ CC_Double::CC_Double(std::string _name, double& _value, double const _min, doubl
 void CC_Double::Execute(std::string args)
 {
     double v = min;
-    if (1 != sscanf_s(args.c_str(), "%lf", &v) || v < min || v > max)
+    if (sscanf_s(args.c_str(), "%lf", &v) == 0 || v < min || v > max)
     {
         InvalidSyntax(args);
         return;
