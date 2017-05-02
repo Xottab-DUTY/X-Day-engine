@@ -70,11 +70,6 @@ void Startup()
 {
     while (!glfwWindowShouldClose(Engine.window))
     {
-        if (ConsoleCommands->GetBool(&FullscreenCC))
-            glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
-        else
-            glfwSetWindowMonitor(Engine.window, nullptr, 0, 0, Engine.CurrentMode->width-256, Engine.CurrentMode->height-256, Engine.CurrentMode->refreshRate);
-
         glfwPollEvents();
     }
 }
