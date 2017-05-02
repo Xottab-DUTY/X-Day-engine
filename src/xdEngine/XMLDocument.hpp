@@ -24,8 +24,6 @@ public:
 
 protected:
     tinyxml2::XMLNode* root_node;
-
-private:
     tinyxml2::XMLDocument xml_document;
 };
 #endif // XMLDocument_hpp__

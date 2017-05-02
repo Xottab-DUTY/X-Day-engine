@@ -14,16 +14,19 @@ xdXMLDocument::xdXMLDocument()
 xdXMLDocument::xdXMLDocument(filesystem::path resources_type, filesystem::path _path, std::string xml_filename)
 {
     Load(resources_type, _path, xml_filename);
+    root_node = nullptr;
 }
 
 xdXMLDocument::xdXMLDocument(filesystem::path resources_type, std::string xml_filename)
 {
     Load(resources_type, xml_filename);
+    root_node = nullptr;
 }
 
 xdXMLDocument::xdXMLDocument(filesystem::path full_path)
 {
     Load(full_path);
+    root_node = nullptr;
 }
 
 xdXMLDocument::~xdXMLDocument()
@@ -40,6 +43,7 @@ void xdXMLDocument::Load(filesystem::path resources_type, filesystem::path _path
     else
         ConsoleMsg("XML failed to load file: {}", buffer);
     root_node = xml_document.FirstChild();
+    xml_document.Print();
 }
 
 void xdXMLDocument::Load(filesystem::path resources_type, std::string xml_filename)
@@ -51,13 +55,15 @@ void xdXMLDocument::Load(filesystem::path resources_type, std::string xml_filena
     else
         ConsoleMsg("XML failed to load file: {}", buffer);
     root_node = xml_document.FirstChild();
+    xml_document.Print();
 }
 
 void xdXMLDocument::Load(filesystem::path full_path)
 {
-    if (xml_document.LoadFile(full_path.string().c_str())) // string().c_str() what a beautiful costyl
+    if (xml_document.LoadFile(full_path.string().c_str())) // string().c_str() what a nice costyl
         ConsoleMsg("XML file loaded: {}", full_path.string())
     else
         ConsoleMsg("XML failed to load file: {}", full_path.string());
     root_node = xml_document.FirstChild();
+    xml_document.Print();
 }

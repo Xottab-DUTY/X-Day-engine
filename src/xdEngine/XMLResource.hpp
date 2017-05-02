@@ -19,6 +19,7 @@ public:
     xdXMLResource(filesystem::path resources_type, std::string xml_filename);
     xdXMLResource(filesystem::path full_path);
 
+    void ParseResources();
     //<? xml version = "1.0" encoding = "UTF-8" ?>
     //<node name = "бла-бла" / >
     //printf("%s", settingsFile.FirstChildElement("node")->Attribute("name"));
