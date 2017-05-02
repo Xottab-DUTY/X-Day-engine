@@ -494,73 +494,76 @@ std::string CC_FunctionCall::Info()
 
 #pragma endregion ConsoleCommand Function Call
 
-void CC_ConfigLoad(std::string args)
+namespace cc_functions
 {
-    ConsoleMsg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
-    std::ifstream config_file(args.empty() ? Console->ConfigFile : args);
-    std::string line;
-
-    if (config_file.is_open())
-    {
-        while (std::getline(config_file, line))
-            ConsoleCommands->Execute(line);
-        ConsoleMsg("Loaded config file {}", args.empty() ? Console->ConfigFile.string() : args);
-    }
-    else
-        ConsoleMsg("Failed to open config file {}", args.empty() ? Console->ConfigFile.string() : args);
-
-    config_file.close();
-}
-
-void CC_ConfigSave(std::string args)
-{
-    ConsoleMsg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
-    std::ofstream f(args.empty() ? Console->ConfigFile : args);
-    for (auto str : ConsoleCommands->CommandsContainer)
-    {
-        auto CommandToSave = str.second;
-        if (CommandToSave->isSavingAllowed())
-            f << CommandToSave->Save() << std::endl;
-    }
-    f.close();
-    ConsoleMsg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
-}
-
-void CC_Help(std::string args)
-{
-    ConsoleCommand* CommandToHelp;
-    if (!args.empty())
-    {
-        CommandToHelp = ConsoleCommands->GetCommand(args);
-        if (CommandToHelp)
-            ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax())
-        else
-            Console->Log("Command not found.");
-    }
-    else
-    {
-        Console->Log("Available commands:");
-        for (auto str : ConsoleCommands->CommandsContainer)
-        {
-            CommandToHelp = str.second;
-            ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
-        }
-    }
-}
-
-void CC_Exit(std::string args)
-{
-    glfwSetWindowShouldClose(Engine.window, GLFW_TRUE);
-}
-
-void CC_FlushLog(std::string args)
-{
-    Console->FlushLog();
-}
-
-void CC_SystemCommand(std::string args = "")
-{
-    system(args.c_str());
+	void CC_ConfigLoad(std::string args)
+	{
+	    ConsoleMsg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
+	    std::ifstream config_file(args.empty() ? Console->ConfigFile : args);
+	    std::string line;
+	
+	    if (config_file.is_open())
+	    {
+	        while (std::getline(config_file, line))
+	            ConsoleCommands->Execute(line);
+	        ConsoleMsg("Loaded config file {}", args.empty() ? Console->ConfigFile.string() : args);
+	    }
+	    else
+	        ConsoleMsg("Failed to open config file {}", args.empty() ? Console->ConfigFile.string() : args);
+	
+	    config_file.close();
+	}
+	
+	void CC_ConfigSave(std::string args)
+	{
+	    ConsoleMsg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
+	    std::ofstream f(args.empty() ? Console->ConfigFile : args);
+	    for (auto str : ConsoleCommands->CommandsContainer)
+	    {
+	        auto CommandToSave = str.second;
+	        if (CommandToSave->isSavingAllowed())
+	            f << CommandToSave->Save() << std::endl;
+	    }
+	    f.close();
+	    ConsoleMsg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
+	}
+	
+	void CC_Help(std::string args)
+	{
+	    ConsoleCommand* CommandToHelp;
+	    if (!args.empty())
+	    {
+	        CommandToHelp = ConsoleCommands->GetCommand(args);
+	        if (CommandToHelp)
+	            ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax())
+	        else
+	            Console->Log("Command not found.");
+	    }
+	    else
+	    {
+	        Console->Log("Available commands:");
+	        for (auto str : ConsoleCommands->CommandsContainer)
+	        {
+	            CommandToHelp = str.second;
+	            ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
+	        }
+	    }
+	}
+	
+	void CC_Exit(std::string args)
+	{
+	    glfwSetWindowShouldClose(Engine.window, GLFW_TRUE);
+	}
+	
+	void CC_FlushLog(std::string args)
+	{
+	    Console->FlushLog();
+	}
+	
+	void CC_SystemCommand(std::string args)
+	{
+	    system(args.c_str());
+	}
 }
 
 void CC_FCallTest(std::string args)

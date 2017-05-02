@@ -254,24 +254,28 @@ CC_String       ("command_name_in_console", variable_to_change, max_string_size)
 
 #pragma region Console commands
 // Don't put here not ready testing functions, use CMD0-4 in RegisterConsoleCommands() for them
-void CC_Exit(std::string args);
-void CC_Help(std::string args);
-void CC_SystemCommand(std::string args);
 
-void CC_ConfigLoad(std::string args);
-void CC_ConfigSave(std::string args);
+namespace cc_functions
+{
+	void CC_Exit(std::string args);
+	void CC_Help(std::string args);
+	void CC_SystemCommand(std::string args);
+	
+	void CC_ConfigLoad(std::string args);
+	void CC_ConfigSave(std::string args);
+	
+	void CC_FlushLog(std::string args);
+}
 
-void CC_FlushLog(std::string args);
+static CC_FunctionCall ExitCC("exit", cc_functions::CC_Exit, true);
+static CC_FunctionCall QuitCC("quit", cc_functions::CC_Exit, true);
+static CC_FunctionCall HelpCC("help", cc_functions::CC_Help, true);
+static CC_FunctionCall SystemCommandCC("system", cc_functions::CC_SystemCommand, false, DebugOnlyCommand);
 
-static CC_FunctionCall ExitCC("exit", CC_Exit, true);
-static CC_FunctionCall QuitCC("quit", CC_Exit, true);
-static CC_FunctionCall HelpCC("help", CC_Help, true);
-static CC_FunctionCall SystemCommandCC("system", CC_SystemCommand, false, DebugOnlyCommand);
+static CC_FunctionCall FlushLogCC("flush", cc_functions::CC_FlushLog, true);
 
-static CC_FunctionCall FlushLogCC("flush", CC_FlushLog, true);
-
-static CC_FunctionCall ConfigLoadCC("config_load", CC_ConfigLoad, true);
-static CC_FunctionCall ConfigSaveCC("config_save", CC_ConfigSave, true);
+static CC_FunctionCall ConfigLoadCC("config_load", cc_functions::CC_ConfigLoad, true);
+static CC_FunctionCall ConfigSaveCC("config_save", cc_functions::CC_ConfigSave, true);
 
 static CC_Bool FullscreenCC("r_fullscreen", GlobalFullscreen);
 
