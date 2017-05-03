@@ -20,35 +20,11 @@ xdXMLResource::xdXMLResource(filesystem::path full_path)
 
 void xdXMLResource::ParseResources()
 {
-    tinyxml2::XMLElement* Resource = xml_document.FirstChildElement()->FirstChildElement("resource");
-    tinyxml2::XMLPrinter printer;
-    Resource->Accept(&printer);
-    ConsoleMsg("\nElement: {}",printer.CStr());
-    const char* Attribute = nullptr;
-    Attribute = Resource->Attribute("type");
-    if (strcmp(Resource->Attribute("type"), "") == 0)
+    for (auto resource = root_node->NextSiblingElement("resources")->FirstChildElement("resource");
+        resource;
+        resource = resource->NextSiblingElement("resource"))
     {
-        Console->Log("xml failed");
-    }
-    else if (strcmp(Resource->Attribute("type"), "archives") == 0)
-    {
-        ConsoleMsg("archives: {}", Resource->Attribute("path"));
-    }
-    else if (strcmp(Resource->Attribute("type"), "configs") == 0)
-    {
-        ConsoleMsg("configs: {}", Resource->Attribute("path"));
-    }
-    else if (strcmp(Resource->Attribute("type"), "models") == 0)
-    {
-        ConsoleMsg("models: {}", Resource->Attribute("path"));
-    }
-    else if (strcmp(Resource->Attribute("type"), "sounds") == 0)
-    {
-        ConsoleMsg("sounds: {}", Resource->Attribute("path"));
-    }
-    else if (strcmp(Resource->Attribute("type"), "textures") == 0)
-    {
-        ConsoleMsg("textures: {}", Resource->Attribute("path"));
+        ConsoleMsg("{}: {}", resource->Attribute("type"), resource->FirstChildElement("path")->GetText());
     }
 }
 
