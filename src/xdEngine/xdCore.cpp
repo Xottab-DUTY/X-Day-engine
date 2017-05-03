@@ -9,6 +9,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "Common/Platform.hpp"
 #include "xdCore.hpp"
 #include "Console.hpp"
+#include "XMLResource.hpp"
 
 XDAY_API xdCore Core;
 
@@ -36,11 +37,8 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
 
     LogsPath = DataPath.string() + "/logs/";
     SavesPath = DataPath.string() + "/saves/";
-    ArchivesPath = ResourcesPath.string() + "/archives/";
-    ConfigsPath = ResourcesPath.string() + "/configs/";
-    ModelsPath = ResourcesPath.string() + "/models/";
-    SoundsPath = ResourcesPath.string() + "/sounds/";
-    TexturesPath = ResourcesPath.string() + "/textures/";
+    
+    InitializeResources();
 
     CreateDirIfNotExist(DataPath);
     CreateDirIfNotExist(LogsPath);
@@ -58,6 +56,19 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     buildString = fmt::format("{} build {}, {}, {}", GetModuleName("xdCore"), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
+}
+
+void xdCore::InitializeResources()
+{
+    ArchivesPath = ResourcesPath.string() + "/archives/";
+    ConfigsPath = ResourcesPath.string() + "/configs/";
+    ModelsPath = ResourcesPath.string() + "/models/";
+    SoundsPath = ResourcesPath.string() + "/sounds/";
+    TexturesPath = ResourcesPath.string() + "/textures/";
+
+    xdXMLResource resource_initializer(Core.ResourcesPath, "resources.xml");
+    if (!resource_initializer.isErrored())
+        resource_initializer.ParseResources();
 }
 
 // Finds command line parameters and returns true if param exists

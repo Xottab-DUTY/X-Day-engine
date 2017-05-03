@@ -63,6 +63,7 @@ public:
 
 private:
     void CalculateBuildId();
+    void InitializeResources();
 };
 
 extern XDAY_API xdCore Core;

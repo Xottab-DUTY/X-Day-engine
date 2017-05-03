@@ -67,3 +67,8 @@ void xdXMLDocument::Load(filesystem::path full_path)
     root_node = xml_document.FirstChild();
     xml_document.Print();
 }
+
+bool xdXMLDocument::isErrored() const
+{
+    return xml_document.Error();
+}

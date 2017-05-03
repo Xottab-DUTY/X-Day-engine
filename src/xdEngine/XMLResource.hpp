@@ -9,7 +9,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "xdEngine_impexp.inl"
 #include "XMLDocument.hpp"
 
-class XDAY_API xdXMLResource : xdXMLDocument
+class XDAY_API xdXMLResource : public xdXMLDocument
 {
     using super = xdXMLDocument;
 
@@ -19,9 +19,6 @@ public:
     xdXMLResource(filesystem::path resources_type, std::string xml_filename);
     xdXMLResource(filesystem::path full_path);
 
-    void ParseResources();
-    //<? xml version = "1.0" encoding = "UTF-8" ?>
-    //<node name = "бла-бла" / >
-    //printf("%s", settingsFile.FirstChildElement("node")->Attribute("name"));
+    void ParseResources() const;
 };
 #endif // XMLResource_hpp__

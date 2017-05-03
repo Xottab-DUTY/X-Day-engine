@@ -22,6 +22,8 @@ public:
     void Load(filesystem::path resources_type, std::string xml_filename);
     void Load(filesystem::path full_path);
 
+    bool isErrored() const;
+
 protected:
     tinyxml2::XMLNode* root_node;
     tinyxml2::XMLDocument xml_document;

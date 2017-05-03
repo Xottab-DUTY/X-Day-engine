@@ -573,8 +573,9 @@ void CC_FCallTest(std::string args)
 
 void CC_XMLTest(std::string args)
 {
-    xdXMLResource xml_res(Core.ResourcesPath, "resources.xml");
-    xml_res.ParseResources();
+    Console->Log("XML test");
+
+    Console->Log("XML tested");
 }
 
 int int_test = 1;
