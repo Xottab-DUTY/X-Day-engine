@@ -8,25 +8,25 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 xdXMLDocument::xdXMLDocument()
 {
-
+    root_node = nullptr;
 }
 
 xdXMLDocument::xdXMLDocument(filesystem::path resources_type, filesystem::path _path, std::string xml_filename)
 {
-    Load(resources_type, _path, xml_filename);
     root_node = nullptr;
+    Load(resources_type, _path, xml_filename);
 }
 
 xdXMLDocument::xdXMLDocument(filesystem::path resources_type, std::string xml_filename)
 {
-    Load(resources_type, xml_filename);
     root_node = nullptr;
+    Load(resources_type, xml_filename);
 }
 
 xdXMLDocument::xdXMLDocument(filesystem::path full_path)
 {
-    Load(full_path);
     root_node = nullptr;
+    Load(full_path);
 }
 
 xdXMLDocument::~xdXMLDocument()
