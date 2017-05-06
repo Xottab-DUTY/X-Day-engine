@@ -12,14 +12,16 @@
 #pragma region ConsoleCommand Container
 bool CC_Container::Execute(std::string cmd) const
 {
-    std::string cmd_str = "", cmd_val = "";
+    std::string cmd_str, cmd_val;
 
     std::istringstream buffer(cmd);
     buffer >> cmd_str;
-    for (std::string i = ""; buffer >> i;)
+    for (std::string i; buffer >> i;)
     {
         cmd_val += i + " ";
     }
+    if (!cmd_val.empty())
+        cmd_val.pop_back(); // remove the last " "
 
     ConsoleCommand* command(GetCommand(cmd_str));
     if (command)
