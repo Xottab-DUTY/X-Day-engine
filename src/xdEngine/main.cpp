@@ -130,6 +130,5 @@ int main(int argc, char* argv[])
     Msg("Total time: {} seconds", TotalTimer/1000000);
     destroyConsole();
 
-    system("pause");
     return 0;
 }
