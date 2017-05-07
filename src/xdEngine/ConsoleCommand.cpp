@@ -38,19 +38,19 @@ bool CC_Container::Execute(std::string cmd) const
 	            if (command->isEmptyArgsAllowed())
 	                command->Execute(cmd_val.c_str());
 	            else
-	                ConsoleMsg("{} {}", command->GetName(), command->Status());
+	                Msg("{} {}", command->GetName(), command->Status());
 	        }
 	        else
 	            command->Execute(cmd_val.c_str());
         } 
         else
         {
-            ConsoleMsg("Command is disabled: {}", cmd_str);
+            Msg("Command is disabled: {}", cmd_str);
             return false;
         }
     else
     {
-        ConsoleMsg("Unknown command: {}", cmd_str);
+        Msg("Unknown command: {}", cmd_str);
         return false;
     }
     return true;
@@ -64,11 +64,11 @@ bool CC_Container::Execute(ConsoleCommand* cmd) const
             if (cmd->isEmptyArgsAllowed())
                  cmd->Execute("");
             else
-                ConsoleMsg("{} {}", cmd->GetName(), cmd->Status());
+                Msg("{} {}", cmd->GetName(), cmd->Status());
         }
         else
         {
-            ConsoleMsg("Command is disabled: {}", cmd->GetName());
+            Msg("Command is disabled: {}", cmd->GetName());
             return false;
         }
     else
@@ -95,14 +95,14 @@ bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
                 if (cmd->isEmptyArgsAllowed())
                     cmd->Execute(args.c_str());
                 else
-                    ConsoleMsg("{} {}", cmd->GetName(), cmd->Status());
+                    Msg("{} {}", cmd->GetName(), cmd->Status());
             }
             else
                 cmd->Execute(args.c_str());
         }
         else
         {
-            ConsoleMsg("Command is disabled: {}", cmd->GetName());
+            Msg("Command is disabled: {}", cmd->GetName());
             return false;
         }
     else
@@ -120,7 +120,7 @@ bool CC_Container::ExecuteBool(CC_Bool* cmd, bool value) const
             cmd->Execute(value);
         else
         {
-            ConsoleMsg("Command is disabled: {}", cmd->GetName());
+            Msg("Command is disabled: {}", cmd->GetName());
             return false;
         }
     else
@@ -236,8 +236,8 @@ std::string ConsoleCommand::Syntax()
 
 void ConsoleCommand::InvalidSyntax(std::string args)
 {
-    ConsoleMsg("Invalid syntax in call [{} {}]", Name, args);
-    ConsoleMsg("Valid arguments: {}", Syntax());
+    Msg("Invalid syntax in call [{} {}]", Name, args);
+    Msg("Valid arguments: {}", Syntax());
 }
 
 std::string ConsoleCommand::Save()
@@ -500,7 +500,7 @@ namespace cc_functions
 {
 	void CC_ConfigLoad(std::string args)
 	{
-	    ConsoleMsg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
+	    Msg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
 	    std::ifstream config_file(args.empty() ? Console->ConfigFile : args);
 	    std::string line;
 	
@@ -508,17 +508,17 @@ namespace cc_functions
 	    {
 	        while (std::getline(config_file, line))
 	            ConsoleCommands->Execute(line);
-	        ConsoleMsg("Loaded config file {}", args.empty() ? Console->ConfigFile.string() : args);
+	        Msg("Loaded config file {}", args.empty() ? Console->ConfigFile.string() : args);
 	    }
 	    else
-	        ConsoleMsg("Failed to open config file {}", args.empty() ? Console->ConfigFile.string() : args);
+	        Msg("Failed to open config file {}", args.empty() ? Console->ConfigFile.string() : args);
 	
 	    config_file.close();
 	}
 	
 	void CC_ConfigSave(std::string args)
 	{
-	    ConsoleMsg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
+	    Msg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
 	    std::ofstream f(args.empty() ? Console->ConfigFile : args);
 	    for (auto str : ConsoleCommands->CommandsContainer)
 	    {
@@ -527,7 +527,7 @@ namespace cc_functions
 	            f << CommandToSave->Save() << std::endl;
 	    }
 	    f.close();
-	    ConsoleMsg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
+	    Msg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
 	}
 	
 	void CC_Help(std::string args)
@@ -537,7 +537,7 @@ namespace cc_functions
 	    {
 	        CommandToHelp = ConsoleCommands->GetCommand(args);
 	        if (CommandToHelp)
-	            ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax())
+	            Msg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax())
 	        else
 	            Console->Log("Command not found.");
 	    }
@@ -547,7 +547,7 @@ namespace cc_functions
 	        for (auto str : ConsoleCommands->CommandsContainer)
 	        {
 	            CommandToHelp = str.second;
-	            ConsoleMsg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
+	            Msg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
 	        }
 	    }
 	}
@@ -570,7 +570,7 @@ namespace cc_functions
 
 void CC_FCallTest(std::string args)
 {
-    ConsoleMsg("Function call test {}", args);
+    Msg("Function call test {}", args);
 }
 
 void CC_XMLTest(std::string args)

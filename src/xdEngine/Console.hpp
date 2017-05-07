@@ -25,7 +25,7 @@ public:
     void CloseLog();
     void FlushLog();
 
-#define ConsoleMsg(log, ...) { Console->Log(fmt::format(log, __VA_ARGS__)); }
+#define Msg(log, ...) { Console->Log(fmt::format(log, __VA_ARGS__)); }
     void Log(std::string&& log, bool cmd = true);
 
     void Show();

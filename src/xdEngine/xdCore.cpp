@@ -15,7 +15,7 @@ XDAY_API xdCore Core;
 
 static void error_callback(int error, const char* description)
 {
-    ConsoleMsg("GLFW Error: Code: {}, Means: {}", error, description);
+    Msg("GLFW Error: Code: {}, Means: {}", error, description);
 }
 
 xdCore::xdCore()

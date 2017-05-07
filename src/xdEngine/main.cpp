@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
     Console->Log("GLFW terminated.");
 
     auto TotalTimer = QuantMS();
-    ConsoleMsg("Total time: {} seconds", TotalTimer/1000000);
+    Msg("Total time: {} seconds", TotalTimer/1000000);
     destroyConsole();
 
     system("pause");
