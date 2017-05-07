@@ -46,7 +46,7 @@ public:
 
 public:
     xdCore();
-    void Initialize(std::string&& ApplicationName, const char& argv);
+    void Initialize(std::string&& ApplicationName);
     void Destroy();
 
     auto GetBuildId() const { return buildId; }

@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 #endif
     //setlocale(LC_ALL, "");
     InitLogger();
-    Core.Initialize("X-Day Engine", **argv);
+    Core.Initialize("X-Day Engine");
     InitializeConsole();
 
     Log(Core.GetGLFWVersionString());

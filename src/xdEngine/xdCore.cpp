@@ -24,9 +24,8 @@ xdCore::xdCore()
     EngineVersion = "1.0";
 }
 
-void xdCore::Initialize(std::string&& _AppName, const char& argv)
+void xdCore::Initialize(std::string&& _appname)
 {
-    Params = &argv;
     FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _AppName;
     FindParam("-game") ? GameModule = ReturnParam("-game") : GameModule = "xdGame";
     AppPath = filesystem::absolute(&Params[0]);
