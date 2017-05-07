@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleCommand.cpp" />
+    <ClCompile Include="Debug\Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Debug\QuantMS.cpp" />
     <ClCompile Include="xdCore.cpp" />
@@ -138,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="Console.hpp" />
     <ClInclude Include="ConsoleCommand.hpp" />
+    <ClInclude Include="Debug\Log.hpp" />
     <ClInclude Include="Platform\Platform.hpp" />
     <ClInclude Include="Debug\QuantMS.hpp" />
     <ClInclude Include="xdCore.hpp" />

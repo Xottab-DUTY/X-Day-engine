@@ -19,6 +19,9 @@
     <ClCompile Include="XMLResource.cpp">
       <Filter>XML</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\Log.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
@@ -40,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="XMLResource.hpp">
       <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\Log.hpp">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

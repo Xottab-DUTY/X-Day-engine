@@ -7,8 +7,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include <GLFW/glfw3.h>
 
 #include "Common/Platform.hpp"
+#include "Debug/Log.hpp"
 #include "xdCore.hpp"
-#include "Console.hpp"
 #include "XMLResource.hpp"
 
 XDAY_API xdCore Core;
@@ -56,6 +56,7 @@ void xdCore::Initialize(std::string&& _AppName, const char& argv)
     buildString = fmt::format("{} build {}, {}, {}", GetModuleName("xdCore"), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
+    Logger->InitLog();
 }
 
 void xdCore::InitializeResources()

@@ -4,10 +4,12 @@
 
 #include <GLFW/glfw3.h>
 
+#include "Debug/Log.hpp"
 #include "xdCore.hpp"
 #include "xdEngine.hpp"
 #include "ConsoleCommand.hpp"
 #include "XMLResource.hpp"
+
 
 #pragma region ConsoleCommand Container
 bool CC_Container::Execute(std::string cmd) const
@@ -73,7 +75,7 @@ bool CC_Container::Execute(ConsoleCommand* cmd) const
         }
     else
     {
-        Console->Log("Unknown command.");
+        Log("Unknown command.");
         return false;
     }
     return true;
@@ -107,7 +109,7 @@ bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
         }
     else
     {
-        Console->Log("Unknown command.");
+        Log("Unknown command.");
         return false;
     }
     return true;
@@ -125,7 +127,7 @@ bool CC_Container::ExecuteBool(CC_Bool* cmd, bool value) const
         }
     else
     {
-        Console->Log("Unknown command.");
+        Log("Unknown command.");
         return false;
     }
     return true;
@@ -539,11 +541,11 @@ namespace cc_functions
 	        if (CommandToHelp)
 	            Msg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax())
 	        else
-	            Console->Log("Command not found.");
+	            Log("Command not found.");
 	    }
 	    else
 	    {
-	        Console->Log("Available commands:");
+	        Log("Available commands:");
 	        for (auto str : ConsoleCommands->CommandsContainer)
 	        {
 	            CommandToHelp = str.second;
@@ -559,7 +561,7 @@ namespace cc_functions
 	
 	void CC_FlushLog(std::string args)
 	{
-	    Console->FlushLog();
+	    Logger->FlushLog();
 	}
 	
 	void CC_SystemCommand(std::string args)
@@ -575,9 +577,9 @@ void CC_FCallTest(std::string args)
 
 void CC_XMLTest(std::string args)
 {
-    Console->Log("XML test");
+    Log("XML test");
 
-    Console->Log("XML tested");
+    Log("XML tested");
 }
 
 int int_test = 1;
