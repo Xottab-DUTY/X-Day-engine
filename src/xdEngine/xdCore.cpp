@@ -24,15 +24,32 @@ xdCore::xdCore()
     EngineVersion = "1.0";
 }
 
+void xdCore::InitializeArguments(int argc, char* argv[])
+{
+    std::vector<std::string> args;
+    for (int i = 0; i < argc; ++i)
+    {
+        args.push_back(argv[i]);
+    }
+
+    Params = move(args);
+
+    for (auto&& str : Core.Params)
+    {
+        ParamsString += str + " ";
+    }
+    ParamsString.pop_back(); // remove the last " "
+}
+
 void xdCore::Initialize(std::string&& _appname)
 {
-    FindParam("-name") ? AppName = ReturnParam("-name") : AppName = _AppName;
-    FindParam("-game") ? GameModule = ReturnParam("-game") : GameModule = "xdGame";
-    AppPath = filesystem::absolute(&Params[0]);
+    FindParam("--p_name") ? AppName = ReturnParam("--p_name") : AppName = _appname;
+    FindParam("--p_game") ? GameModule = ReturnParam("--p_game") : GameModule = "xdGame";
+    AppPath = filesystem::absolute(Params.front());
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
-    FindParam("-datapath") ? DataPath = ReturnParam("-datapath") : DataPath = WorkPath.string() + "/appdata/";
-    FindParam("-respath") ? ResourcesPath = ReturnParam("-respath") : ResourcesPath = WorkPath.string() + "/resources/";
+    FindParam("--p_datapath") ? DataPath = ReturnParam("--p_datapath") : DataPath = WorkPath.string() + "/appdata/";
+    FindParam("--p_respath") ? ResourcesPath = ReturnParam("--p_respath") : ResourcesPath = WorkPath.string() + "/resources/";
 
     LogsPath = DataPath.string() + "/logs/";
     SavesPath = DataPath.string() + "/saves/";
@@ -74,17 +91,33 @@ void xdCore::InitializeResources()
 // Finds command line parameters and returns true if param exists
 bool xdCore::FindParam(std::string&& Param) const
 {
-    if (Params.find(Param) != std::string::npos)
+    if (ParamsString.find(Param) != std::string::npos)
         return true;
     return false;
 }
 
 // Finds command line parameter and returns it's value.
+// If parameter isn't found it returns empty string.
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
 std::string xdCore::ReturnParam(std::string&& Param) const
 {
-    return Param;
+    bool found = false;
+    for (auto i : Params)
+    {
+        if (found && i.find("--p_") != std::string::npos)
+        {
+            Msg("xdCore::ReturnParam: wrong construction \"{0} {1}\" used instead of \"{0} value {1}\"", Param, i);
+            break;
+        }
+        if (found)
+            return i;
+        if (i.find(Param) == std::string::npos)
+            continue;
+        found = true;
+    }
+    Msg("xdCore::ReturnParam: returning empty string for {} param", Param);
+    return "";
 }
 
 void xdCore::CreateDirIfNotExist(const filesystem::path& p) const

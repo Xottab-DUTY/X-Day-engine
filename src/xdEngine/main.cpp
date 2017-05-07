@@ -34,7 +34,7 @@ void HelpCmdArgs()
         "--p_name - Specifies AppName, default is \"X-Day Engine\" \n"\
         "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"
         "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
-        "--p_respath - Specifies path of resources folder, default is \"*WorkingDirectory*/res\"\n"\
+        "--p_respath - Specifies path of resources folder, default is \"*WorkingDirectory*/resources\"\n"\
         "--p_mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
         "--p_mainlog - Specifies path and name of main log file (path/name.extension), default is \"*DataPath*/main.log\"\n"\
         "--p_nolog - Completely disables engine log. May increase performance\n"\
@@ -44,7 +44,7 @@ void HelpCmdArgs()
         "-name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
         "-game - Задаёт игровую библиотеку для подключения, по умолчанию: \"xdGame\";\n"
         "-datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\
-        "-respath - Задаёт путь до папки с ресурсами, по умолчанию: \"*WorkingDirectory*/res\"\n"\
+        "-respath - Задаёт путь до папки с ресурсами, по умолчанию: \"*WorkingDirectory*/resources\"\n"\
         "-mainconfig - Задаёт путь и имя главного файла настроек (путь/имя.расширение), по умолчанию: \"*DataPath*/main.config\" \n"\
         "-mainlog - Задаёт путь и имя главного лог файла (путь/имя.расширение), по умолчанию: \"*DataPath*/main.log\"\n"\
         "-nolog - Полностью выключает лог движка. Может повысить производительность\n"\
@@ -81,6 +81,8 @@ int main(int argc, char* argv[])
 #endif
     //setlocale(LC_ALL, "");
     InitLogger();
+
+    Core.InitializeArguments(argc, argv);
     Core.Initialize("X-Day Engine");
     InitializeConsole();
 

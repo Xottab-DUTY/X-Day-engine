@@ -12,7 +12,7 @@ XDAY_API CC_Container* ConsoleCommands = nullptr;
 
 void xdConsole::Initialize()
 {
-    Core.FindParam("-mainconfig") ? ConfigFile = Core.ReturnParam("-mainconfig") : ConfigFile = Core.DataPath.string() + "main.config";
+    Core.FindParam("--p_mainconfig") ? ConfigFile = Core.ReturnParam("--p_mainconfig") : ConfigFile = Core.DataPath.string() + "main.config";
 
     RegisterConsoleCommands();
 }

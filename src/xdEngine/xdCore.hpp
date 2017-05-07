@@ -42,10 +42,12 @@ public:
     
     std::string UserName = "X-Day User";
     std::string CompName = "X-Day Computer";
-    std::string Params;
+    std::vector<std::string> Params;
+    std::string ParamsString;
 
 public:
     xdCore();
+    void InitializeArguments(int argc, char* argv[]);
     void Initialize(std::string&& ApplicationName);
     void Destroy();
 

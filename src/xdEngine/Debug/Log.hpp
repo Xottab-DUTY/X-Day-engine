@@ -10,7 +10,7 @@ class XDAY_API CLog
 {
     bool nolog = false;
     bool nologflush = false;
-    filesystem::path LogFile = "init.log";
+    filesystem::path LogFile = "X-Day.init.log";
     std::vector<std::string>* LogContainer = nullptr;
 
 public:
