@@ -62,8 +62,8 @@ public:
     static const std::string GetModuleName(std::string&& xdModule);
 
 private:
-    void CalculateBuildId();
     void InitializeResources();
+    void CalculateBuildId();
 };
 
 extern XDAY_API xdCore Core;
