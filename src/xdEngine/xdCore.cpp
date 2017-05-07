@@ -43,6 +43,8 @@ void xdCore::InitializeArguments(int argc, char* argv[])
 
 void xdCore::Initialize(std::string&& _appname)
 {
+    Log(EngineName + " " + EngineVersion);
+    Log("Core: Initializing", false);
     FindParam("--p_name") ? AppName = ReturnParam("--p_name") : AppName = _appname;
     FindParam("--p_game") ? GameModule = ReturnParam("--p_game") : GameModule = "xdGame";
     AppPath = filesystem::absolute(Params.front());
@@ -72,6 +74,7 @@ void xdCore::Initialize(std::string&& _appname)
     buildString = fmt::format("{} build {}, {}, {}", GetModuleName("xdCore"), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
+    Log("Core: Initialized", false);
     Logger->InitLog();
 }
 
@@ -107,7 +110,7 @@ std::string xdCore::ReturnParam(std::string&& Param) const
     {
         if (found && i.find("--p_") != std::string::npos)
         {
-            Msg("xdCore::ReturnParam: wrong construction \"{0} {1}\" used instead of \"{0} value {1}\"", Param, i);
+            Msg("xdCore::ReturnParam: wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", Param, i);
             break;
         }
         if (found)
@@ -116,7 +119,7 @@ std::string xdCore::ReturnParam(std::string&& Param) const
             continue;
         found = true;
     }
-    Msg("xdCore::ReturnParam: returning empty string for {} param", Param);
+    Msg("xdCore::ReturnParam: returning empty string for param {}", Param);
     return "";
 }
 
