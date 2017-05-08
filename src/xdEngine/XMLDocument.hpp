@@ -15,6 +15,7 @@ public:
     xdXMLDocument(filesystem::path resources_type, filesystem::path _path, std::string xml_filename);
     xdXMLDocument(filesystem::path resources_type, std::string xml_filename);
     xdXMLDocument(filesystem::path full_path);
+    void operator=(filesystem::path full_path);
 
     virtual ~xdXMLDocument();
 

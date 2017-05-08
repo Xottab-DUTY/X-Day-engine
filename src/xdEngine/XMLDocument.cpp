@@ -29,6 +29,11 @@ xdXMLDocument::xdXMLDocument(filesystem::path full_path)
     Load(full_path);
 }
 
+void xdXMLDocument::operator=(filesystem::path full_path)
+{
+    Load(full_path);
+}
+
 xdXMLDocument::~xdXMLDocument()
 {
 
