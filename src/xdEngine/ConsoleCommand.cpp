@@ -561,7 +561,7 @@ namespace cc_functions
 	
 	void CC_FlushLog(std::string args)
 	{
-	    Logger->FlushLog();
+	    FlushLog();
 	}
 	
 	void CC_SystemCommand(std::string args)

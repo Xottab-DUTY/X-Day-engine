@@ -4,6 +4,8 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
+#include <fmt/format.h>
+
 #include "xdEngine_impexp.inl"
 
 class XDAY_API CLog
@@ -15,7 +17,6 @@ class XDAY_API CLog
 
 public:
     CLog();
-
     CLog(std::string _logfile);
 
     void InitLog();
@@ -32,5 +33,7 @@ void InitLogger();
 
 #define Msg(log, ...) { Log(fmt::format(log, __VA_ARGS__)); }
 void Log(std::string&& log, bool log_to_stdout = true);
+
+void FlushLog();
 
 #endif // Log_hpp__

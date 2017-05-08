@@ -5,8 +5,6 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
-#include <fmt/format.h>
-
 #include "xdEngine_impexp.inl"
 
 class XDAY_API xdConsole

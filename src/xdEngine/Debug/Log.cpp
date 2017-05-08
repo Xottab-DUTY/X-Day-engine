@@ -1,9 +1,8 @@
-#include "Log.hpp"
-
 #include <fstream>
 #include <iostream>
 
 #include "xdCore.hpp"
+#include "Log.hpp"
 
 XDAY_API CLog* Logger = nullptr;
 
@@ -15,10 +14,8 @@ CLog::CLog()
 
 
 
-CLog::CLog(std::string _logfile)
+CLog::CLog(std::string _logfile) : CLog()
 {
-    LogContainer = new std::vector<std::string>();
-    LogContainer->reserve(1000);
     LogFile = _logfile;
 }
 
@@ -30,8 +27,7 @@ void CLog::InitLog()
     if (!nolog)
     {
         Core.FindParam("--p_mainlog") ? LogFile = Core.ReturnParam("--p_mainlog") : LogFile = Core.LogsPath.string() + "main.log";
-        LogContainer = new std::vector<std::string>();
-        LogContainer->reserve(1000);
+        this->CLog::CLog();
     }
 }
 
@@ -72,6 +68,11 @@ void Log(std::string&& log, bool log_to_stdout)
 {
     Logger->Log(move(log));
     if (log_to_stdout) std::cout << log << std::endl;
+}
+
+void FlushLog()
+{
+    Logger->FlushLog();
 }
 
 void InitLogger()
