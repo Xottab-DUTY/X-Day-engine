@@ -21,6 +21,8 @@ CLog::CLog(std::string _logfile) : CLog()
 
 void CLog::InitLog()
 {
+    if (!Core.LogsPath.empty())
+        LogFile = Core.LogsPath.string() + "init.log";
     if (LogContainer) CloseLog();
     if (Core.FindParam("--p_nolog")) nolog = true;
     if (Core.FindParam("--p_nologflush")) nologflush = true;
