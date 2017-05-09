@@ -22,6 +22,7 @@ xdCore::xdCore()
 {
     EngineName = "X-Day Engine";
     EngineVersion = "1.0";
+    CalculateBuildId();
 }
 
 void xdCore::InitializeArguments(int argc, char* argv[])
@@ -43,7 +44,7 @@ void xdCore::InitializeArguments(int argc, char* argv[])
 
 void xdCore::Initialize(std::string&& _appname)
 {
-    Log(EngineName + " " + EngineVersion);
+    Msg("{} {} (build {})", EngineName, EngineVersion, buildId);
     Log("Core: Initializing", false);
     FindParam("--p_name") ? AppName = ReturnParam("--p_name") : AppName = _appname;
     FindParam("--p_game") ? GameModule = ReturnParam("--p_game") : GameModule = "xdGame";
@@ -68,8 +69,6 @@ void xdCore::Initialize(std::string&& _appname)
     CreateDirIfNotExist(ModelsPath);
     CreateDirIfNotExist(SoundsPath);
     CreateDirIfNotExist(TexturesPath);
-
-    CalculateBuildId();
 
     buildString = fmt::format("{} build {}, {}, {}", GetModuleName("xdCore"), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
