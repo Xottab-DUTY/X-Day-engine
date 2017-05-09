@@ -38,12 +38,12 @@ bool CC_Container::Execute(std::string cmd) const
 	        if (cmd_val.empty())
 	        {
 	            if (command->isEmptyArgsAllowed())
-	                command->Execute(cmd_val.c_str());
+	                command->Execute(cmd_val);
 	            else
 	                Msg("{} {}", command->GetName(), command->Status());
 	        }
 	        else
-	            command->Execute(cmd_val.c_str());
+	            command->Execute(cmd_val);
         } 
         else
         {
@@ -95,12 +95,12 @@ bool CC_Container::Execute(ConsoleCommand* cmd, std::string args) const
             if (args.empty())
             {
                 if (cmd->isEmptyArgsAllowed())
-                    cmd->Execute(args.c_str());
+                    cmd->Execute(args);
                 else
                     Msg("{} {}", cmd->GetName(), cmd->Status());
             }
             else
-                cmd->Execute(args.c_str());
+                cmd->Execute(args);
         }
         else
         {
@@ -133,10 +133,9 @@ bool CC_Container::ExecuteBool(CC_Bool* cmd, bool value) const
     return true;
 }
 
-void CC_Container::ExecuteConfig(std::string filename)
+void CC_Container::ExecuteConfig(std::string filename) const
 {
-    filename.insert(0, "config_load ");
-    Execute(filename);
+    Execute(&ConfigLoadCC, filename);
 }
 
 ConsoleCommand* CC_Container::GetCommand(std::string cmd) const
