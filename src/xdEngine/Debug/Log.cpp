@@ -4,9 +4,9 @@
 #include "xdCore.hpp"
 #include "Log.hpp"
 
-XDAY_API CLog* Logger = nullptr;
+XDAY_API Logger* GlobalLog = nullptr;
 
-CLog::CLog()
+Logger::Logger()
 {
     LogContainer = new std::vector<std::string>();
     LogContainer->reserve(1000);
@@ -14,12 +14,12 @@ CLog::CLog()
 
 
 
-CLog::CLog(std::string _logfile) : CLog()
+Logger::Logger(std::string _logfile) : Logger()
 {
     LogFile = _logfile;
 }
 
-void CLog::InitLog()
+void Logger::InitLog()
 {
     if (!Core.LogsPath.empty())
         LogFile = Core.LogsPath.string() + "init.log";
@@ -29,11 +29,11 @@ void CLog::InitLog()
     if (!nolog)
     {
         Core.FindParam("--p_mainlog") ? LogFile = Core.ReturnParam("--p_mainlog") : LogFile = Core.LogsPath.string() + "main.log";
-        this->CLog::CLog();
+        this->Logger::Logger();
     }
 }
 
-void CLog::CloseLog()
+void Logger::CloseLog()
 {
     if (LogContainer)
     {
@@ -43,7 +43,7 @@ void CLog::CloseLog()
     }
 }
 
-void CLog::FlushLog()
+void Logger::FlushLog()
 {
     if (LogContainer)
     {
@@ -60,7 +60,7 @@ void CLog::FlushLog()
     }
 }
 
-void CLog::Log(std::string&& log)
+void Logger::Log(std::string&& log)
 {
     if (LogContainer)
         LogContainer->push_back(log);
@@ -68,16 +68,16 @@ void CLog::Log(std::string&& log)
 
 void Log(std::string&& log, bool log_to_stdout)
 {
-    Logger->Log(move(log));
+    GlobalLog->Log(move(log));
     if (log_to_stdout) std::cout << log << std::endl;
 }
 
 void FlushLog()
 {
-    Logger->FlushLog();
+    GlobalLog->FlushLog();
 }
 
 void InitLogger()
 {
-    Logger = new CLog;
+    GlobalLog = new Logger;
 }

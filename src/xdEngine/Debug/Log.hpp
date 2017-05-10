@@ -8,7 +8,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine_impexp.inl"
 
-class XDAY_API CLog
+class XDAY_API Logger
 {
     bool nolog = false;
     bool nologflush = false;
@@ -16,8 +16,8 @@ class XDAY_API CLog
     std::vector<std::string>* LogContainer = nullptr;
 
 public:
-    CLog();
-    CLog(std::string _logfile);
+    Logger();
+    Logger(std::string _logfile);
 
     void InitLog();
     void CloseLog();
@@ -27,7 +27,7 @@ public:
     void Log(std::string&& log);
 };
 
-extern XDAY_API CLog* Logger;
+extern XDAY_API Logger* GlobalLog;
 
 void InitLogger();
 

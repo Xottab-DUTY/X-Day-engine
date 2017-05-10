@@ -74,7 +74,7 @@ void xdCore::Initialize(std::string&& _appname)
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
     Log("Core: Initialized", false);
-    Logger->InitLog();
+    GlobalLog->InitLog();
 }
 
 void xdCore::InitializeResources()
