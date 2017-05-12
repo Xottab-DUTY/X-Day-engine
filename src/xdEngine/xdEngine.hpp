@@ -25,8 +25,8 @@ public:
 
     void xdCreateWindow();
 
-    int GetMonitorsCount() { return MonitorsCount; };
-    int GetVideoModesCount() { return VideoModesCount; };
+    int GetMonitorsCount() const { return MonitorsCount; };
+    int GetVideoModesCount() const { return VideoModesCount; };
 };
 
 extern XDAY_API XDayEngine Engine;

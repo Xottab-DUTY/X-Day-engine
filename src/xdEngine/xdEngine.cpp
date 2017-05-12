@@ -40,9 +40,10 @@ void XDayEngine::Initialize()
 
 void XDayEngine::xdCreateWindow()
 {
-    if (ConsoleCommands->GetBool("r_fullscreen"))
+    if (ConsoleCommands->GetBool(&FullscreenCC))
         window = glfwCreateWindow(CurrentMode->width, CurrentMode->height, Core.AppName.c_str(), CurrentMonitor, nullptr);
     else
         window = glfwCreateWindow(CurrentMode->width-256, CurrentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
+
     glfwSetKeyCallback(window, key_callback);
 }
