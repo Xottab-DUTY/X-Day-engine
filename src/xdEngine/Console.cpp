@@ -1,7 +1,3 @@
-#include <string>
-#include <fstream>
-#include <iostream>
-
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
 #include "Console.hpp"
