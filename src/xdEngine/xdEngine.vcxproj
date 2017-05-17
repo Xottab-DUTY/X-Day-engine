@@ -163,6 +163,9 @@
     <ProjectReference Include="..\..\include\tinyxml2.vcxproj">
       <Project>{d1c528b6-aa02-4d29-9d61-dc08e317a70d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\xdRender\xdRender.vcxproj">
+      <Project>{f4f9811c-44f5-4611-a91d-ef2e618fc5cb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,7 @@
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
+#include "xdRender/xdRender.hpp"
 
 XDAY_API XDayEngine Engine;
 
@@ -46,4 +47,6 @@ void XDayEngine::xdCreateWindow()
         window = glfwCreateWindow(CurrentMode->width-256, CurrentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
 
     glfwSetKeyCallback(window, key_callback);
+
+    Render.Initialize();
 }

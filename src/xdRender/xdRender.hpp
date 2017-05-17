@@ -4,19 +4,30 @@
 #include "xdRender_impexp.inl"
 
 #include <vulkan/vulkan.hpp>
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 
 class RENDERER_API Renderer
 {
 public:
-    VkApplicationInfo applicationInfo;
-    VkInstanceCreateInfo instanceInfo;
-    VkInstance instance;
-    VkResult result;
+    //vk::ApplicationInfo applicationInfo;
+    //vk::InstanceCreateInfo instanceInfo;
+    vk::Instance instance;
+    vk::PhysicalDevice physDevice;
+    vk::Device device;
+    vk::SurfaceKHR surface;
+    vk::Result result;
 
     Renderer();
     void Initialize();
+
+    void CreateVkInstance();
+    void CreateVkSurface();
+    void CreateDevice();
+    void GetPhysDevice();
+
     void Destroy();
+
+    bool isPhysDeviceSuitable(vk::PhysicalDevice _device);
 };
 
 #endif // xdRender_hpp__
