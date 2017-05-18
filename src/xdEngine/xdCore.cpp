@@ -36,13 +36,10 @@ xdCore::xdCore()
 
 void xdCore::InitializeArguments(int argc, char* argv[])
 {
-    std::vector<std::string> args;
     for (int i = 0; i < argc; ++i)
     {
-        args.push_back(argv[i]);
+        Params.push_back(argv[i]);
     }
-
-    Params = move(args);
 
     for (auto&& str : Core.Params)
     {
