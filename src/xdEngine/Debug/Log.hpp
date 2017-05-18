@@ -29,11 +29,11 @@ public:
 
 extern XDAY_API Logger* GlobalLog;
 
-void InitLogger();
+void XDAY_API InitLogger();
 
 #define Msg(log, ...) { Log(fmt::format(log, __VA_ARGS__)); }
-void Log(std::string&& log, bool log_to_stdout = true);
+void XDAY_API Log(std::string&& log, bool log_to_stdout = true);
 
-void FlushLog();
+void XDAY_API FlushLog();
 
 #endif // Log_hpp__
