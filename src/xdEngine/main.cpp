@@ -11,7 +11,6 @@
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
-#include "Debug/QuantMS.hpp"
 
 void InitializeConsole()
 {
@@ -75,7 +74,6 @@ void Startup()
 
 int main(int argc, char* argv[])
 {
-    QuantMS();
 #ifdef WINDOWS
     //system("chcp 65001");
 #endif
@@ -126,8 +124,6 @@ int main(int argc, char* argv[])
     glfwTerminate();
     Log("GLFW terminated.");
 
-    auto TotalTimer = QuantMS();
-    Msg("Total time: {} seconds", TotalTimer/1000000);
     destroyConsole();
 
     return 0;
