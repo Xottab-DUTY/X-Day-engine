@@ -6,6 +6,7 @@ res/
 
 *.PVS-Studio.*
 *.i
+*.tss
 
 # User-specific files
 *.suo
@@ -21,7 +22,6 @@ res/
 [Oo]bj/
 [Ll]ib/
 [Bb]in/
-
 
 # Visual Studio 2015 cache/options directory
 .vs/
