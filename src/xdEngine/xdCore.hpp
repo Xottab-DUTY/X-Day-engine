@@ -45,6 +45,8 @@ public:
     std::vector<std::string> Params;
     std::string ParamsString;
 
+    static bool isGlobalDebug();
+
 public:
     xdCore();
     void InitializeArguments(int argc, char* argv[]);

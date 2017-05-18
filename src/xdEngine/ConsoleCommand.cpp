@@ -622,11 +622,11 @@ void RegisterConsoleCommands()
 
     CMDA(FullscreenCC);
 
-    CMD4(CC_FunctionCall, XMLTestCC, "test_xml", CC_XMLTest, true, DebugOnlyCommand);
-    CMD4(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true, DebugOnlyCommand);
-    CMD3(CC_Toggle, toggle_testCC, "test_toggle", toggle_test, DebugOnlyCommand);
-    CMD5(CC_Integer, int_testCC, "test_int", int_test, 1, 10, DebugOnlyCommand);
-    CMD5(CC_Float, float_testCC, "test_float", float_test, 1.0, 10.0, DebugOnlyCommand);
-    CMD5(CC_Double, double_testCC, "test_double", double_test, 1.0, 10.0, DebugOnlyCommand);
-    CMD4(CC_String, string_testCC, "test_string", string_test, 512, DebugOnlyCommand);
+    CMD4(CC_FunctionCall, XMLTestCC, "test_xml", CC_XMLTest, true, Core.isGlobalDebug());
+    CMD4(CC_FunctionCall, FCallTestCC, "test_fcall", CC_FCallTest, true, Core.isGlobalDebug());
+    CMD3(CC_Toggle, toggle_testCC, "test_toggle", toggle_test, Core.isGlobalDebug());
+    CMD5(CC_Integer, int_testCC, "test_int", int_test, 1, 10, Core.isGlobalDebug());
+    CMD5(CC_Float, float_testCC, "test_float", float_test, 1.0, 10.0, Core.isGlobalDebug());
+    CMD5(CC_Double, double_testCC, "test_double", double_test, 1.0, 10.0, Core.isGlobalDebug());
+    CMD4(CC_String, string_testCC, "test_string", string_test, 512, Core.isGlobalDebug());
 }

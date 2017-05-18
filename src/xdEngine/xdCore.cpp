@@ -18,6 +18,15 @@ static void error_callback(int error, const char* description)
     Msg("GLFW Error: Code: {}, Means: {}", error, description);
 }
 
+bool xdCore::isGlobalDebug()
+{
+#ifdef DEBUG
+    return true;
+#else
+    return false;
+#endif
+}
+
 xdCore::xdCore()
 {
     EngineName = "X-Day Engine";

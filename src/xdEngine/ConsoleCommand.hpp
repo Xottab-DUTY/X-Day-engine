@@ -226,12 +226,6 @@ public:
 
 XDAY_API extern CC_Container* ConsoleCommands;
 
-#if 1//def DEBUG
-static bool DebugOnlyCommand = true;
-#else
-static bool DebugOnlyCommand = false;
-#endif
-
 extern bool GlobalFullscreen;
 
 /*
@@ -270,7 +264,7 @@ namespace cc_functions
 static CC_FunctionCall ExitCC("exit", cc_functions::CC_Exit, true);
 static CC_FunctionCall QuitCC("quit", cc_functions::CC_Exit, true);
 static CC_FunctionCall HelpCC("help", cc_functions::CC_Help, true);
-static CC_FunctionCall SystemCommandCC("system", cc_functions::CC_SystemCommand, false, DebugOnlyCommand);
+static CC_FunctionCall SystemCommandCC("system", cc_functions::CC_SystemCommand, false, Core.isGlobalDebug());
 
 static CC_FunctionCall FlushLogCC("flush", cc_functions::CC_FlushLog, true);
 
