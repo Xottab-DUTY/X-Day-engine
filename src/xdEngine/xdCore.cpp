@@ -52,6 +52,7 @@ void xdCore::Initialize(std::string&& _appname)
 {
     Msg("{} {} (build {})", EngineName, EngineVersion, buildId);
     Log("Core: Initializing", false);
+    AppVersion = "1.0";
     FindParam("--p_name") ? AppName = ReturnParam("--p_name") : AppName = _appname;
     FindParam("--p_game") ? GameModule = ReturnParam("--p_game") : GameModule = "xdGame";
     AppPath = filesystem::absolute(Params.front());

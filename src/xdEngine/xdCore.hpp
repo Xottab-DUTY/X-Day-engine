@@ -23,6 +23,7 @@ public:
     std::string EngineVersion;
 
     std::string AppName;
+    std::string AppVersion;
     filesystem::path AppPath;
     filesystem::path WorkPath;
     filesystem::path BinPath;
