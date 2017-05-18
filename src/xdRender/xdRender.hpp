@@ -21,13 +21,16 @@ public:
     void Initialize();
 
     void CreateVkInstance();
-    void CreateVkSurface();
-    void CreateDevice();
-    void GetPhysDevice();
-
-    void Destroy();
+    bool CheckValidationLayersSupport();
+    std::vector<const char*> getRequiredExtensions();
 
     bool isPhysDeviceSuitable(vk::PhysicalDevice _device);
+    void GetPhysDevice();
+    void CreateDevice();
+
+    void CreateVkSurface();
+
+    void Destroy();
 };
 
 #endif // xdRender_hpp__
