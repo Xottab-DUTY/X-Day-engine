@@ -19,6 +19,11 @@ const std::vector<const char*> validationLayers =
     "VK_LAYER_LUNARG_standard_validation"
 };
 
+const std::vector<const char*> deviceExtensions =
+{
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
 static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
     vk::DebugReportFlagsEXT flags,
     vk::DebugReportObjectTypeEXT objType,
@@ -65,61 +70,31 @@ void Renderer::Destroy()
 
 void Renderer::CreateVkInstance()
 {
-    auto extensions = getRequiredExtensions();
+    uint32_t glfwExtensionCount = 0;
+    auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion), 
                                 VK_MAKE_VERSION(1, 0, 42));
 
     vk::InstanceCreateInfo i;
+    i.setPApplicationInfo(&appInfo);
+    i.setEnabledExtensionCount(glfwExtensionCount);
+    i.setPpEnabledExtensionNames(glfwExtensions);
+
     if (enableValidationLayers)
-        i = vk::InstanceCreateInfo()
-            .setFlags({})
-            .setPApplicationInfo(&appInfo)
-            .setEnabledLayerCount(static_cast<uint32_t>(validationLayers.size()))
-            .setPpEnabledLayerNames(validationLayers.data())
-            .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()))
-            .setPpEnabledExtensionNames(extensions.data());
-    else
-        i = vk::InstanceCreateInfo()
-            .setFlags({})
-            .setPApplicationInfo(&appInfo)
-            .setEnabledLayerCount(0)
-            .setPpEnabledLayerNames(nullptr)
-            .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()))
-            .setPpEnabledExtensionNames(extensions.data());
+    {
+        i.setEnabledLayerCount(static_cast<uint32_t>(validationLayers.size()));
+        i.setPpEnabledLayerNames(validationLayers.data());
+    }
 
     result = vk::createInstance(&i, nullptr, &instance);
     assert(result == vk::Result::eSuccess);
 }
 
-std::vector<const char*> Renderer::getRequiredExtensions()
-{
-    auto extensionProperties = vk::enumerateInstanceExtensionProperties();
-
-    std::vector<const char*> extensions;
-
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-    for (uint32_t i = 0; i < glfwExtensionCount; ++i)
-    {
-        extensions.push_back(glfwExtensions[i]);
-    }
-
-    if (enableValidationLayers)
-        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
-
-    return extensions;
-}
-
 bool Renderer::CheckValidationLayersSupport()
 {
-    uint32_t layerCount;
-    vk::enumerateInstanceLayerProperties(&layerCount, nullptr);
-
-    std::vector<vk::LayerProperties> availableLayers(layerCount);
-    vk::enumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+    std::vector<vk::LayerProperties> availableLayers = vk::enumerateInstanceLayerProperties();
 
     for (std::string layerName : validationLayers)
     {
@@ -137,11 +112,6 @@ bool Renderer::CheckValidationLayersSupport()
             return false;
     }
 
-    return true;
-}
-
-static VKAPI_ATTR VkBool32 VKAPI_CALL cback()
-{
     return true;
 }
 
@@ -192,6 +162,31 @@ Renderer::QueueFamilyIndices Renderer::findQueueFamilies(vk::PhysicalDevice _phy
     return indices;
 }
 
+struct Renderer::SwapChainSupportDetails
+{
+    vk::SurfaceCapabilitiesKHR capabilities;
+    std::vector<vk::SurfaceFormatKHR> formats;
+    std::vector<vk::PresentModeKHR> presentModes;
+};
+
+Renderer::SwapChainSupportDetails Renderer::querySwapChainSupport(vk::PhysicalDevice _physDevice) const
+{
+    SwapChainSupportDetails details;
+
+    _physDevice.getSurfaceCapabilitiesKHR(surface, &details.capabilities);
+
+    uint32_t presentModeCount;
+    _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, nullptr);
+
+    if (presentModeCount != 0)
+    {
+        details.presentModes.resize(presentModeCount);
+        _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
+    }
+
+    return details;
+}
+
 void Renderer::GetPhysDevice()
 {
     std::vector<vk::PhysicalDevice> physDevices = instance.enumeratePhysicalDevices();
@@ -207,11 +202,34 @@ void Renderer::GetPhysDevice()
     assert(physDevice);
 }
 
-bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _device) const
+bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _physDevice) const
 {
-    QueueFamilyIndices indices = findQueueFamilies(_device);
+    QueueFamilyIndices indices = findQueueFamilies(_physDevice);
 
-    return indices.isComplete();
+    bool extensionsSupported = checkDeviceExtensionSupport(_physDevice);
+
+    bool swapChainAdequate = false;
+    if (extensionsSupported)
+    {
+        SwapChainSupportDetails swapChainSupport = querySwapChainSupport(_physDevice);
+        swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+    }
+
+    return indices.isComplete() && extensionsSupported && swapChainAdequate;
+}
+
+bool Renderer::checkDeviceExtensionSupport(vk::PhysicalDevice _physDevice) const
+{
+    std::vector<vk::ExtensionProperties> availableExtensions = _physDevice.enumerateDeviceExtensionProperties();
+
+    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+    for (const auto& extension : availableExtensions)
+    {
+        requiredExtensions.erase(extension.extensionName);
+    }
+
+    return requiredExtensions.empty();
 }
 
 void Renderer::CreateDevice()
@@ -234,7 +252,8 @@ void Renderer::CreateDevice()
     deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
     deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
-    deviceCreateInfo.enabledExtensionCount = 0;
+    deviceCreateInfo.enabledExtensionCount = deviceExtensions.size();
+    deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     if (enableValidationLayers)
     {

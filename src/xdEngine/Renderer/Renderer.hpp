@@ -18,19 +18,22 @@ public:
     vk::Result result;
 
     struct QueueFamilyIndices;
-    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device) const;
+    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
+
+    struct SwapChainSupportDetails;
+    SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
 
     Renderer();
     void Initialize();
     void Destroy();
 
     void CreateVkInstance();
-    std::vector<const char*> getRequiredExtensions();
     bool CheckValidationLayersSupport();
     void SetupDebugCallback();
 
     void GetPhysDevice();
-    bool isPhysDeviceSuitable(vk::PhysicalDevice _device) const;
+    bool isPhysDeviceSuitable(vk::PhysicalDevice _physDevice) const;
+    bool checkDeviceExtensionSupport(vk::PhysicalDevice _physDevice) const;
     void CreateDevice();
 
     void CreateVkSurface();
