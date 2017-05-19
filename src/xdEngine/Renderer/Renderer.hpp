@@ -1,23 +1,24 @@
-#pragma  once
+#pragma once
 #ifndef xdRender_hpp__
 #define xdRender_hpp__
-#include "xdRender_impexp.inl"
-
 #include <vulkan/vulkan.hpp>
-//#include <GLFW/glfw3.h>
 
-class RENDERER_API Renderer
+#include "xdEngine_impexp.inl"
+
+class XDAY_API Renderer
 {
 public:
-    //vk::ApplicationInfo applicationInfo;
-    //vk::InstanceCreateInfo instanceInfo;
     vk::Instance instance;
     vk::DebugReportCallbackEXT vkDebugCallback;
     vk::PhysicalDevice physDevice;
     vk::Device device;
     vk::Queue graphicsQueue;
+    vk::Queue presentQueue;
     vk::SurfaceKHR surface;
     vk::Result result;
+
+    struct QueueFamilyIndices;
+    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device) const;
 
     Renderer();
     void Initialize();
@@ -29,12 +30,12 @@ public:
     void SetupDebugCallback();
 
     void GetPhysDevice();
-    bool isPhysDeviceSuitable(vk::PhysicalDevice _device);
+    bool isPhysDeviceSuitable(vk::PhysicalDevice _device) const;
     void CreateDevice();
 
     void CreateVkSurface();
 };
 
-#endif // xdRender_hpp__
+extern XDAY_API Renderer Render;
 
-extern RENDERER_API Renderer Render;
+#endif // xdRender_hpp__

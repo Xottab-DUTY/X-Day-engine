@@ -1,14 +1,16 @@
+#include <set>
 #include <vulkan/vulkan.hpp>
 
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <fmt/ostream.h>
 
 #include "xdEngine/Debug/Log.hpp"
 #include "xdEngine/xdCore.hpp"
 #include "xdEngine/xdEngine.hpp"
-#include "xdRender.hpp"
+#include "Renderer.hpp"
 
-RENDERER_API Renderer Render;
+XDAY_API Renderer Render;
 
 const bool enableValidationLayers = Core.isGlobalDebug();
 
@@ -49,16 +51,15 @@ void Renderer::Initialize()
     if (enableValidationLayers && !CheckValidationLayersSupport())
         Log("Vulkan: not all validation layers supported.");
 
+    CreateVkSurface();
     GetPhysDevice();
     CreateDevice();
-    CreateVkSurface();
-    
 }
 
 void Renderer::Destroy()
 {
     device.destroy();
-
+    instance.destroySurfaceKHR(surface);
     instance.destroy();
 }
 
@@ -67,8 +68,8 @@ void Renderer::CreateVkInstance()
     auto extensions = getRequiredExtensions();
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
-        Core.EngineName.c_str(), stoi(Core.EngineVersion), 
-        VK_MAKE_VERSION(1, 0, 42));
+                                Core.EngineName.c_str(), stoi(Core.EngineVersion), 
+                                VK_MAKE_VERSION(1, 0, 42));
 
     vk::InstanceCreateInfo i;
     if (enableValidationLayers)
@@ -94,12 +95,14 @@ void Renderer::CreateVkInstance()
 
 std::vector<const char*> Renderer::getRequiredExtensions()
 {
+    auto extensionProperties = vk::enumerateInstanceExtensionProperties();
+
     std::vector<const char*> extensions;
 
-    unsigned int glfwExtensionCount = 0;
+    uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-    for (unsigned int i = 0; i < glfwExtensionCount; ++i)
+    for (uint32_t i = 0; i < glfwExtensionCount; ++i)
     {
         extensions.push_back(glfwExtensions[i]);
     }
@@ -150,31 +153,35 @@ void Renderer::SetupDebugCallback()
 
 }
 
-struct QueueFamilyIndices
+struct Renderer::QueueFamilyIndices
 {
     int graphicsFamily = -1;
+    int presentFamily = -1;
 
     bool isComplete() const
     {
-        return graphicsFamily >= 0;
+        return graphicsFamily >= 0 && presentFamily >= 0;
     }
 };
 
-QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device)
+Renderer::QueueFamilyIndices Renderer::findQueueFamilies(vk::PhysicalDevice _physDevice) const
 {
     QueueFamilyIndices indices;
 
-    uint32_t queueFamilyCount = 0;
-    device.getQueueFamilyProperties(&queueFamilyCount, nullptr);
-
-    std::vector<vk::QueueFamilyProperties> queueFamilies(queueFamilyCount);
-    device.getQueueFamilyProperties(&queueFamilyCount, queueFamilies.data());
+    std::vector<vk::QueueFamilyProperties> queueFamilies = _physDevice.getQueueFamilyProperties();
 
     int i = 0;
     for (const auto& queueFamily : queueFamilies)
     {
         if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
             indices.graphicsFamily = i;
+
+        vk::Bool32 presentSupport = false;
+        _physDevice.getSurfaceSupportKHR(i, surface, &presentSupport);
+
+        if (queueFamily.queueCount > 0 && presentSupport) {
+            indices.presentFamily = i;
+        }
 
         if (indices.isComplete())
             break;
@@ -200,7 +207,7 @@ void Renderer::GetPhysDevice()
     assert(physDevice);
 }
 
-bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _device)
+bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _device) const
 {
     QueueFamilyIndices indices = findQueueFamilies(_device);
 
@@ -211,12 +218,21 @@ void Renderer::CreateDevice()
 {
     QueueFamilyIndices indices = findQueueFamilies(physDevice);
 
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
+    std::set<int> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
+
     float queuePriority = 1.0f;
-    vk::DeviceQueueCreateInfo queueCreateInfo({}, indices.graphicsFamily, 1, &queuePriority);
+    for (int queueFamily : uniqueQueueFamilies)
+    {
+        vk::DeviceQueueCreateInfo queueCreateInfo({}, queueFamily, 1, &queuePriority);
+        queueCreateInfos.push_back(queueCreateInfo);
+    }
     
     vk::PhysicalDeviceFeatures deviceFeatures = {};
 
-    vk::DeviceCreateInfo deviceCreateInfo({}, 1, &queueCreateInfo);
+    vk::DeviceCreateInfo deviceCreateInfo;
+    deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+    deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
     deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
     deviceCreateInfo.enabledExtensionCount = 0;
 
@@ -232,9 +248,13 @@ void Renderer::CreateDevice()
     assert(device);
 
     device.getQueue(indices.graphicsFamily, 0, &graphicsQueue);
+    device.getQueue(indices.presentFamily, 0, &presentQueue);
 }
 
 void Renderer::CreateVkSurface()
 {
+    vk::Win32SurfaceCreateInfoKHR surfaceInfo({}, nullptr, glfwGetWin32Window(Engine.window));
     
+    instance.createWin32SurfaceKHR(&surfaceInfo, nullptr, &surface);
+    assert(result == vk::Result::eSuccess);
 }

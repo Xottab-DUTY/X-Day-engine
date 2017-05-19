@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XDAY_EXPORTS;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -66,7 +66,7 @@
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>glfw3$(xdNameCA).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
   </ItemDefinitionGroup>
@@ -76,14 +76,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XDAY_EXPORTS;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
     </Link>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalDependencies>glfw3$(xdNameCA).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
   </ItemDefinitionGroup>
@@ -95,7 +95,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
-      <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XDAY_EXPORTS;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
@@ -103,7 +103,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalDependencies>glfw3$(xdNameCA).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -114,7 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
-      <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XDAY_EXPORTS;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
@@ -122,7 +122,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalDependencies>glfw3$(xdNameCA).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -131,6 +131,7 @@
     <ClCompile Include="Debug\Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Debug\QuantMS.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="XMLDocument.cpp" />
@@ -142,6 +143,8 @@
     <ClInclude Include="Debug\Log.hpp" />
     <ClInclude Include="Platform\Platform.hpp" />
     <ClInclude Include="Debug\QuantMS.hpp" />
+    <ClInclude Include="Renderer\Renderer.hpp" />
+    <ClInclude Include="Renderer\VDeleter.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="XMLDocument.hpp" />
@@ -162,9 +165,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\include\tinyxml2.vcxproj">
       <Project>{d1c528b6-aa02-4d29-9d61-dc08e317a70d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\xdRender\xdRender.vcxproj">
-      <Project>{f4f9811c-44f5-4611-a91d-ef2e618fc5cb}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

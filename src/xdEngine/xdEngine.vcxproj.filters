@@ -22,6 +22,9 @@
     <ClCompile Include="Debug\Log.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
@@ -46,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="Debug\Log.hpp">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderer.hpp">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\VDeleter.hpp">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +84,9 @@
     </Filter>
     <Filter Include="XML">
       <UniqueIdentifier>{a4cd1e03-cc1d-4238-953a-70946d9e02df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{d1c3ea44-023b-4755-8103-574b49b69a73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

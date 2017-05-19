@@ -1,21 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 14.0.25420.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdEngine", "src\xdEngine\xdEngine.vcxproj", "{C164222D-A92B-4C30-90CE-BD2927E7EB6D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A} = {F53A12F1-889F-420B-B22F-52EF33AE9F4A}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdSound", "src\xdSound\xdSound.vcxproj", "{F53A12F1-889F-420B-B22F-52EF33AE9F4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{5FBE068F-5316-4080-8EAA-7D31C9E0848E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fmt", "include\fmt.vcxproj", "{F3A00ED5-79B7-43C7-8D9C-58874DC61845}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dynlib", "include\dynlib.vcxproj", "{0624A030-BC85-46AE-A529-A2EE1E656E2C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdRender", "src\xdRender\xdRender.vcxproj", "{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinyxml2", "include\tinyxml2.vcxproj", "{D1C528B6-AA02-4D29-9D61-DC08E317A70D}"
 EndProject
@@ -37,14 +30,6 @@ Global
 		{C164222D-A92B-4C30-90CE-BD2927E7EB6D}.Release|x64.Build.0 = Release|x64
 		{C164222D-A92B-4C30-90CE-BD2927E7EB6D}.Release|x86.ActiveCfg = Release|Win32
 		{C164222D-A92B-4C30-90CE-BD2927E7EB6D}.Release|x86.Build.0 = Release|Win32
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Debug|x64.ActiveCfg = Debug|x64
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Debug|x64.Build.0 = Debug|x64
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Debug|x86.ActiveCfg = Debug|Win32
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Debug|x86.Build.0 = Debug|Win32
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Release|x64.ActiveCfg = Release|x64
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Release|x64.Build.0 = Release|x64
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Release|x86.ActiveCfg = Release|Win32
-		{F53A12F1-889F-420B-B22F-52EF33AE9F4A}.Release|x86.Build.0 = Release|Win32
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Debug|x64.ActiveCfg = Debug|x64
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Debug|x64.Build.0 = Debug|x64
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Debug|x86.ActiveCfg = Debug|Win32
@@ -61,14 +46,6 @@ Global
 		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x64.Build.0 = Release|x64
 		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x86.ActiveCfg = Release|Win32
 		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x86.Build.0 = Release|Win32
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Debug|x64.ActiveCfg = Debug|x64
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Debug|x64.Build.0 = Debug|x64
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Debug|x86.ActiveCfg = Debug|Win32
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Debug|x86.Build.0 = Debug|Win32
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Release|x64.ActiveCfg = Release|x64
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Release|x64.Build.0 = Release|x64
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Release|x86.ActiveCfg = Release|Win32
-		{F4F9811C-44F5-4611-A91D-EF2E618FC5CB}.Release|x86.Build.0 = Release|Win32
 		{D1C528B6-AA02-4D29-9D61-DC08E317A70D}.Debug|x64.ActiveCfg = Debug|x64
 		{D1C528B6-AA02-4D29-9D61-DC08E317A70D}.Debug|x64.Build.0 = Debug|x64
 		{D1C528B6-AA02-4D29-9D61-DC08E317A70D}.Debug|x86.ActiveCfg = Debug|Win32

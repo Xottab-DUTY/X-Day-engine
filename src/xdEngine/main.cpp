@@ -4,14 +4,13 @@
 #include <thread>
 
 #include <GLFW/glfw3.h>
-#include <dynlib/Dynlib.hpp>
 
 #include "Common/Platform.hpp"
 #include "Debug/Log.hpp"
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
-#include "xdRender/xdRender.hpp"
+#include "Renderer/Renderer.hpp"
 
 void InitializeConsole()
 {
@@ -102,21 +101,6 @@ int main(int argc, char* argv[])
     Engine.Initialize();
     Engine.xdCreateWindow();
     Render.Initialize();
-
-    /*auto xdSoundModule = Dynlib::open(Core.GetModuleName("xdSound").c_str());
-    if (xdSoundModule)
-        Log("Module loaded successfully");
-    else
-        Log("Failed to load module");
-
-    auto impFunc = (FunctionPointer)Dynlib::load(xdSoundModule, "funcToExport");
-    if (impFunc)
-        impFunc();
-    else
-        Log("Failed to import function");
-
-    if (Dynlib::close(xdSoundModule))
-        Log("Module unloaded successfully");*/
 
     std::thread WatchConsole(threadedConsole);
     WatchConsole.detach();
