@@ -11,6 +11,7 @@
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
+#include "xdRender/xdRender.hpp"
 
 void InitializeConsole()
 {
@@ -100,8 +101,9 @@ int main(int argc, char* argv[])
 
     Engine.Initialize();
     Engine.xdCreateWindow();
+    Render.Initialize();
 
-    auto xdSoundModule = Dynlib::open(Core.GetModuleName("xdSound").c_str());
+    /*auto xdSoundModule = Dynlib::open(Core.GetModuleName("xdSound").c_str());
     if (xdSoundModule)
         Log("Module loaded successfully");
     else
@@ -114,7 +116,7 @@ int main(int argc, char* argv[])
         Log("Failed to import function");
 
     if (Dynlib::close(xdSoundModule))
-        Log("Module unloaded successfully");
+        Log("Module unloaded successfully");*/
 
     std::thread WatchConsole(threadedConsole);
     WatchConsole.detach();

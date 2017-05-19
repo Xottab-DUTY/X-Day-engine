@@ -12,6 +12,7 @@ public:
     //vk::ApplicationInfo applicationInfo;
     //vk::InstanceCreateInfo instanceInfo;
     vk::Instance instance;
+    vk::DebugReportCallbackEXT vkDebugCallback;
     vk::PhysicalDevice physDevice;
     vk::Device device;
     vk::SurfaceKHR surface;
@@ -22,6 +23,7 @@ public:
 
     void CreateVkInstance();
     bool CheckValidationLayersSupport();
+    void SetupDebugCallback();
     std::vector<const char*> getRequiredExtensions();
 
     bool isPhysDeviceSuitable(vk::PhysicalDevice _device);
