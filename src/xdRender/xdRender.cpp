@@ -1,6 +1,6 @@
 #include <vulkan/vulkan.hpp>
-#include <GLFW/glfw3.h>
 
+#include <GLFW/glfw3.h>
 #include <fmt/ostream.h>
 
 #include "xdEngine/Debug/Log.hpp"
@@ -45,35 +45,69 @@ Renderer::Renderer(): result(vk::Result::eNotReady) {}
 
 void Renderer::Initialize()
 {
-    PFN_vkCreateInstance pfnCreateInstance = (PFN_vkCreateInstance)
-        glfwGetInstanceProcAddress(nullptr, "vkCreateInstance");
-
     CreateVkInstance();
     if (enableValidationLayers && !CheckValidationLayersSupport())
         Log("Vulkan: not all validation layers supported.");
 
-    
-
-    PFN_vkCreateDevice pfnCreateDevice = (PFN_vkCreateDevice)
-        glfwGetInstanceProcAddress(static_cast<VkInstance>(instance), "vkCreateDevice");
-    
     GetPhysDevice();
     CreateDevice();
     CreateVkSurface();
     
 }
 
+void Renderer::Destroy()
+{
+    device.destroy();
+
+    instance.destroy();
+}
+
 void Renderer::CreateVkInstance()
 {
     auto extensions = getRequiredExtensions();
 
-    vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion), Core.EngineName.c_str(), stoi(Core.EngineVersion), VK_MAKE_VERSION(1, 0, 42));
-    vk::InstanceCreateInfo i({}, &appInfo,
-        static_cast<uint32_t>(validationLayers.size()), validationLayers.data(),
-        static_cast<uint32_t>(extensions.size()), extensions.data());
+    vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
+        Core.EngineName.c_str(), stoi(Core.EngineVersion), 
+        VK_MAKE_VERSION(1, 0, 42));
+
+    vk::InstanceCreateInfo i;
+    if (enableValidationLayers)
+        i = vk::InstanceCreateInfo()
+            .setFlags({})
+            .setPApplicationInfo(&appInfo)
+            .setEnabledLayerCount(static_cast<uint32_t>(validationLayers.size()))
+            .setPpEnabledLayerNames(validationLayers.data())
+            .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()))
+            .setPpEnabledExtensionNames(extensions.data());
+    else
+        i = vk::InstanceCreateInfo()
+            .setFlags({})
+            .setPApplicationInfo(&appInfo)
+            .setEnabledLayerCount(0)
+            .setPpEnabledLayerNames(nullptr)
+            .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()))
+            .setPpEnabledExtensionNames(extensions.data());
 
     result = vk::createInstance(&i, nullptr, &instance);
     assert(result == vk::Result::eSuccess);
+}
+
+std::vector<const char*> Renderer::getRequiredExtensions()
+{
+    std::vector<const char*> extensions;
+
+    unsigned int glfwExtensionCount = 0;
+    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    for (unsigned int i = 0; i < glfwExtensionCount; ++i)
+    {
+        extensions.push_back(glfwExtensions[i]);
+    }
+
+    if (enableValidationLayers)
+        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+
+    return extensions;
 }
 
 bool Renderer::CheckValidationLayersSupport()
@@ -111,40 +145,44 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL cback()
 void Renderer::SetupDebugCallback()
 {
     if (!enableValidationLayers) return;
-    //vk::DebugReportCallbackCreateInfoEXT callbackInfo({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning}, debugCallback, nullptr);
+    /*vk::DebugReportCallbackCreateInfoEXT callbackInfo({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
+        debugCallback, nullptr);*/
 
-    /*VkDebugReportCallbackCreateInfoEXT createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-    createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
-    createInfo.pfnCallback = debugCallback;*/
-
-    VkDebugReportCallbackCreateInfoEXT createInfo = {};
-    createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-    createInfo.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
-    createInfo.pfnCallback = cback;
 }
 
-std::vector<const char*> Renderer::getRequiredExtensions()
+struct QueueFamilyIndices
 {
-    std::vector<const char*> extensions;
+    int graphicsFamily = -1;
 
-    unsigned int glfwExtensionCount = 0;
-    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-    for (unsigned int i = 0; i < glfwExtensionCount; i++)
+    bool isComplete() const
     {
-        extensions.push_back(glfwExtensions[i]);
+        return graphicsFamily >= 0;
+    }
+};
+
+QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device)
+{
+    QueueFamilyIndices indices;
+
+    uint32_t queueFamilyCount = 0;
+    device.getQueueFamilyProperties(&queueFamilyCount, nullptr);
+
+    std::vector<vk::QueueFamilyProperties> queueFamilies(queueFamilyCount);
+    device.getQueueFamilyProperties(&queueFamilyCount, queueFamilies.data());
+
+    int i = 0;
+    for (const auto& queueFamily : queueFamilies)
+    {
+        if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
+            indices.graphicsFamily = i;
+
+        if (indices.isComplete())
+            break;
+
+        ++i;
     }
 
-    if (enableValidationLayers)
-        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
-
-    return extensions;
-}
-
-bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _device)
-{
-    return true;
+    return indices;
 }
 
 void Renderer::GetPhysDevice()
@@ -162,12 +200,41 @@ void Renderer::GetPhysDevice()
     assert(physDevice);
 }
 
-void Renderer::CreateDevice()
+bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _device)
 {
-    vk::DeviceCreateInfo _createInfo;
-    device = physDevice.createDevice(_createInfo);
+    QueueFamilyIndices indices = findQueueFamilies(_device);
+
+    return indices.isComplete();
 }
 
-void Renderer::Destroy() {}
+void Renderer::CreateDevice()
+{
+    QueueFamilyIndices indices = findQueueFamilies(physDevice);
 
-void Renderer::CreateVkSurface() {}
+    float queuePriority = 1.0f;
+    vk::DeviceQueueCreateInfo queueCreateInfo({}, indices.graphicsFamily, 1, &queuePriority);
+    
+    vk::PhysicalDeviceFeatures deviceFeatures = {};
+
+    vk::DeviceCreateInfo deviceCreateInfo({}, 1, &queueCreateInfo);
+    deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+    deviceCreateInfo.enabledExtensionCount = 0;
+
+    if (enableValidationLayers)
+    {
+        deviceCreateInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+        deviceCreateInfo.ppEnabledLayerNames = validationLayers.data();
+    }
+    else
+        deviceCreateInfo.enabledLayerCount = 0;
+
+    device = physDevice.createDevice(deviceCreateInfo);
+    assert(device);
+
+    device.getQueue(indices.graphicsFamily, 0, &graphicsQueue);
+}
+
+void Renderer::CreateVkSurface()
+{
+    
+}

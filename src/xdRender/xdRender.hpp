@@ -15,24 +15,24 @@ public:
     vk::DebugReportCallbackEXT vkDebugCallback;
     vk::PhysicalDevice physDevice;
     vk::Device device;
+    vk::Queue graphicsQueue;
     vk::SurfaceKHR surface;
     vk::Result result;
 
     Renderer();
     void Initialize();
+    void Destroy();
 
     void CreateVkInstance();
+    std::vector<const char*> getRequiredExtensions();
     bool CheckValidationLayersSupport();
     void SetupDebugCallback();
-    std::vector<const char*> getRequiredExtensions();
 
-    bool isPhysDeviceSuitable(vk::PhysicalDevice _device);
     void GetPhysDevice();
+    bool isPhysDeviceSuitable(vk::PhysicalDevice _device);
     void CreateDevice();
 
     void CreateVkSurface();
-
-    void Destroy();
 };
 
 #endif // xdRender_hpp__
