@@ -1,3 +1,5 @@
+#include "Common/Platform.hpp" // this must be first
+
 #include <set>
 #include <vulkan/vulkan.hpp>
 
@@ -48,7 +50,8 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
     return VK_FALSE;
 }
 
-Renderer::Renderer(): result(vk::Result::eNotReady) {}
+Renderer::Renderer(): result(vk::Result::eNotReady),
+    swapChainImageFormat(vk::Format::eUndefined) {}
 
 void Renderer::Initialize()
 {
@@ -59,10 +62,18 @@ void Renderer::Initialize()
     CreateVkSurface();
     GetPhysDevice();
     CreateDevice();
+    CreateSwapChain();
+    CreateImageViews();
 }
 
 void Renderer::Destroy()
 {
+    for (size_t i = 0; i < swapChainImageViews.size(); i++)
+    {
+        device.destroyImageView(swapChainImageViews[i], nullptr);
+    }
+
+    device.destroySwapchainKHR(swapchain);
     device.destroy();
     instance.destroySurfaceKHR(surface);
     instance.destroy();
@@ -101,13 +112,12 @@ bool Renderer::CheckValidationLayersSupport()
         bool layerFound = false;
 
         for (const auto& layerProperties : availableLayers)
-        {
             if (layerName.compare(layerProperties.layerName))
             {
                 layerFound = true;
                 break;
             }
-        }
+
         if (!layerFound)
             return false;
     }
@@ -121,6 +131,14 @@ void Renderer::SetupDebugCallback()
     /*vk::DebugReportCallbackCreateInfoEXT callbackInfo({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
         debugCallback, nullptr);*/
 
+}
+
+void Renderer::CreateVkSurface()
+{
+    vk::Win32SurfaceCreateInfoKHR surfaceInfo({}, nullptr, glfwGetWin32Window(Engine.window));
+
+    instance.createWin32SurfaceKHR(&surfaceInfo, nullptr, &surface);
+    assert(result == vk::Result::eSuccess);
 }
 
 struct Renderer::QueueFamilyIndices
@@ -175,13 +193,26 @@ Renderer::SwapChainSupportDetails Renderer::querySwapChainSupport(vk::PhysicalDe
 
     _physDevice.getSurfaceCapabilitiesKHR(surface, &details.capabilities);
 
-    uint32_t presentModeCount;
-    _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, nullptr);
-
-    if (presentModeCount != 0)
     {
-        details.presentModes.resize(presentModeCount);
-        _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
+        uint32_t formatCount;
+        _physDevice.getSurfaceFormatsKHR(surface, &formatCount, nullptr);
+
+        if (formatCount != 0)
+        {
+            details.formats.resize(formatCount);
+            _physDevice.getSurfaceFormatsKHR(surface, &formatCount, details.formats.data());
+        }
+    }
+
+    {
+        uint32_t presentModeCount;
+        _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, nullptr);
+
+        if (presentModeCount != 0)
+        {
+            details.presentModes.resize(presentModeCount);
+            _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
+        }
     }
 
     return details;
@@ -191,13 +222,11 @@ void Renderer::GetPhysDevice()
 {
     std::vector<vk::PhysicalDevice> physDevices = instance.enumeratePhysicalDevices();
     for (const auto& _device : physDevices)
-    {
         if (isPhysDeviceSuitable(_device))
         {
             physDevice = _device;
             break;
         }
-    }
 
     assert(physDevice);
 }
@@ -225,9 +254,7 @@ bool Renderer::checkDeviceExtensionSupport(vk::PhysicalDevice _physDevice) const
     std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
     for (const auto& extension : availableExtensions)
-    {
         requiredExtensions.erase(extension.extensionName);
-    }
 
     return requiredExtensions.empty();
 }
@@ -270,10 +297,102 @@ void Renderer::CreateDevice()
     device.getQueue(indices.presentFamily, 0, &presentQueue);
 }
 
-void Renderer::CreateVkSurface()
+vk::SurfaceFormatKHR Renderer::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) const
 {
-    vk::Win32SurfaceCreateInfoKHR surfaceInfo({}, nullptr, glfwGetWin32Window(Engine.window));
-    
-    instance.createWin32SurfaceKHR(&surfaceInfo, nullptr, &surface);
-    assert(result == vk::Result::eSuccess);
+    if (availableFormats.size() == 1 && availableFormats[0].format == vk::Format::eUndefined)
+        return { vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eSrgbNonlinear };
+
+    for (const auto& availableFormat : availableFormats)
+        if (availableFormat.format == vk::Format::eB8G8R8A8Unorm && availableFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
+            return availableFormat;
+
+    return availableFormats[0];
+}
+
+vk::PresentModeKHR Renderer::chooseSwapPresentMode(const std::vector<vk::PresentModeKHR> availablePresentModes) const
+{
+    for (const auto& availablePresentMode : availablePresentModes)
+        if (availablePresentMode == vk::PresentModeKHR::eMailbox)
+            return availablePresentMode;
+
+    return vk::PresentModeKHR::eFifo;
+}
+
+vk::Extent2D Renderer::chooseSwapExtent(const vk::SurfaceCapabilitiesKHR& capabilities) const
+{
+    if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
+        return capabilities.currentExtent;
+
+    vk::Extent2D actualExtent = { static_cast<uint32_t>(Engine.CurrentMode->width), static_cast<uint32_t>(Engine.CurrentMode->height) };
+
+    actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
+    actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
+
+    return actualExtent;
+}
+
+void Renderer::CreateSwapChain()
+{
+    SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physDevice);
+
+    vk::SurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
+    vk::PresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
+    vk::Extent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
+
+    uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
+    if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount)
+        imageCount = swapChainSupport.capabilities.maxImageCount;
+
+    vk::SwapchainCreateInfoKHR swapchainInfo = {};
+    swapchainInfo.setSurface(surface);
+    swapchainInfo.setMinImageCount(imageCount);
+    swapchainInfo.setImageFormat(surfaceFormat.format);
+    swapchainInfo.setImageColorSpace(surfaceFormat.colorSpace);
+    swapchainInfo.setImageExtent(extent);
+    swapchainInfo.setImageArrayLayers(1);
+    swapchainInfo.setImageUsage(vk::ImageUsageFlagBits::eColorAttachment);
+
+    QueueFamilyIndices indices = findQueueFamilies(physDevice);
+    uint32_t queueFamilyIndices[] = { static_cast<uint32_t>(indices.graphicsFamily), static_cast<uint32_t>(indices.presentFamily) };
+
+    if (indices.graphicsFamily != indices.presentFamily)
+    {
+        swapchainInfo.setImageSharingMode(vk::SharingMode::eConcurrent);
+        swapchainInfo.setQueueFamilyIndexCount(2);
+        swapchainInfo.setPQueueFamilyIndices(queueFamilyIndices);
+    }
+    else
+    {
+        swapchainInfo.setImageSharingMode(vk::SharingMode::eExclusive);
+        swapchainInfo.setQueueFamilyIndexCount(0); // Optional
+        swapchainInfo.setPQueueFamilyIndices(nullptr); // Optional
+    }
+
+    swapchainInfo.setPreTransform(swapChainSupport.capabilities.currentTransform);
+    swapchainInfo.setCompositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque);
+    swapchainInfo.setPresentMode(presentMode);
+    swapchainInfo.setClipped(true);
+    swapchainInfo.setOldSwapchain(nullptr);
+
+    device.createSwapchainKHR(&swapchainInfo, nullptr, &swapchain);
+    assert(swapchain);
+
+    swapChainImages = device.getSwapchainImagesKHR(swapchain);
+    swapChainImageFormat = surfaceFormat.format;
+    swapChainExtent = extent;
+}
+
+void Renderer::CreateImageViews()
+{
+    swapChainImageViews.resize(swapChainImages.size());
+
+    for (size_t i = 0; i < swapChainImages.size(); ++i)
+    {
+        vk::ImageSubresourceRange range(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
+        vk::ImageViewCreateInfo imageViewInfo({}, swapChainImages[i], vk::ImageViewType::e2D,
+            swapChainImageFormat, vk::ComponentSwizzle::eIdentity, range);
+
+        result = device.createImageView(&imageViewInfo, nullptr, &swapChainImageViews[i]);
+        assert(result == vk::Result::eSuccess);
+    }
 }

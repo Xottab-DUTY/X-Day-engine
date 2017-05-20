@@ -107,6 +107,8 @@ int main(int argc, char* argv[])
     Startup();
     WatchConsole.~thread();
 
+    Render.Destroy();
+
     glfwTerminate();
     Log("GLFW terminated.");
 
