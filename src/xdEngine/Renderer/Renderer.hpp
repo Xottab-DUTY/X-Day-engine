@@ -1,6 +1,7 @@
 #pragma once
 #ifndef xdRender_hpp__
 #define xdRender_hpp__
+#include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 
 #include "xdEngine_impexp.inl"
@@ -9,7 +10,7 @@ class XDAY_API Renderer
 {
 public:
     vk::Instance instance;
-    vk::DebugReportCallbackEXT vkDebugCallback;
+    vk::DebugReportCallbackEXT vkCallback;
     vk::PhysicalDevice physDevice;
     vk::Device device;
     vk::Queue graphicsQueue;
@@ -34,7 +35,8 @@ public:
 
     void CreateVkInstance();
     bool CheckValidationLayersSupport();
-    void SetupDebugCallback();
+    std::vector<const char*> getRequiredExtensions();
+    void CreateDebugCallback();
 
     void CreateVkSurface();
     void GetPhysDevice();

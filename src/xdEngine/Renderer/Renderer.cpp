@@ -4,7 +4,6 @@
 #include <vulkan/vulkan.hpp>
 
 #include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 #include <fmt/ostream.h>
 
 #include "xdEngine/Debug/Log.hpp"
@@ -26,7 +25,24 @@ const std::vector<const char*> deviceExtensions =
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
+VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
+    const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback)
+{
+    auto func = (PFN_vkCreateDebugReportCallbackEXT)glfwGetInstanceProcAddress(instance, "vkCreateDebugReportCallbackEXT");
+    if (func)
+        return func(instance, pCreateInfo, pAllocator, pCallback);
+
+    return VK_ERROR_EXTENSION_NOT_PRESENT;
+}
+
+void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator = nullptr)
+{
+    auto func = (PFN_vkDestroyDebugReportCallbackEXT)glfwGetInstanceProcAddress(instance, "vkDestroyDebugReportCallbackEXT");
+    if (func)
+        func(instance, callback, pAllocator);
+}
+
+static VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugCallback(
     vk::DebugReportFlagsEXT flags,
     vk::DebugReportObjectTypeEXT objType,
     uint64_t obj,
@@ -36,13 +52,15 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
     const char* msg,
     void* userData)
 {
-
-    Msg("Validation layer reports: \n" \
+    Msg("\nValidation layer reports: \n" \
+        "Object type: {} \n" \
         "Object: {} \n" \
+        "Location: {} \n" \
         "Code: {} \n" \
         "Layer prefix: {} \n" \
         "Message: {} \n" \
-        "User data: {}",
+        "User data: {}\n",
+        vk::to_string(objType),
         obj, location,
         code, layerPrefix,
         msg, userData);
@@ -56,9 +74,7 @@ Renderer::Renderer(): result(vk::Result::eNotReady),
 void Renderer::Initialize()
 {
     CreateVkInstance();
-    if (enableValidationLayers && !CheckValidationLayersSupport())
-        Log("Vulkan: not all validation layers supported.");
-
+    CreateDebugCallback();
     CreateVkSurface();
     GetPhysDevice();
     CreateDevice();
@@ -68,21 +84,20 @@ void Renderer::Initialize()
 
 void Renderer::Destroy()
 {
-    for (size_t i = 0; i < swapChainImageViews.size(); i++)
-    {
+    for (size_t i = 0; i < swapChainImageViews.size(); ++i)
         device.destroyImageView(swapChainImageViews[i], nullptr);
-    }
 
     device.destroySwapchainKHR(swapchain);
     device.destroy();
     instance.destroySurfaceKHR(surface);
+    instance.destroyDebugReportCallbackEXT(vkCallback);
     instance.destroy();
 }
 
 void Renderer::CreateVkInstance()
 {
-    uint32_t glfwExtensionCount = 0;
-    auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+    if (enableValidationLayers && !CheckValidationLayersSupport())
+        Log("Vulkan: not all validation layers supported.");
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion), 
@@ -90,8 +105,10 @@ void Renderer::CreateVkInstance()
 
     vk::InstanceCreateInfo i;
     i.setPApplicationInfo(&appInfo);
-    i.setEnabledExtensionCount(glfwExtensionCount);
-    i.setPpEnabledExtensionNames(glfwExtensions);
+
+    auto extensions = getRequiredExtensions();    
+    i.setEnabledExtensionCount(extensions.size());
+    i.setPpEnabledExtensionNames(extensions.data());
 
     if (enableValidationLayers)
     {
@@ -125,19 +142,40 @@ bool Renderer::CheckValidationLayersSupport()
     return true;
 }
 
-void Renderer::SetupDebugCallback()
+std::vector<const char*> Renderer::getRequiredExtensions()
+{
+    std::vector<const char*> extensions;
+
+    uint32_t glfwExtensionCount = 0;
+    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+    for (uint32_t i = 0; i < glfwExtensionCount; i++)
+        extensions.push_back(glfwExtensions[i]);
+
+    if (enableValidationLayers)
+        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+
+    return extensions;
+}
+
+void Renderer::CreateDebugCallback()
 {
     if (!enableValidationLayers) return;
-    /*vk::DebugReportCallbackCreateInfoEXT callbackInfo({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
-        debugCallback, nullptr);*/
 
+    vk::DebugReportCallbackCreateInfoEXT callbackInfo
+        ({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
+        (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
+
+    result = instance.createDebugReportCallbackEXT(&callbackInfo, nullptr, &vkCallback);
+    assert(result == vk::Result::eSuccess);
 }
 
 void Renderer::CreateVkSurface()
 {
-    vk::Win32SurfaceCreateInfoKHR surfaceInfo({}, nullptr, glfwGetWin32Window(Engine.window));
+    result = (vk::Result)glfwCreateWindowSurface(
+        (VkInstance)instance, Engine.window,
+        nullptr, (VkSurfaceKHR*)&surface);
 
-    instance.createWin32SurfaceKHR(&surfaceInfo, nullptr, &surface);
     assert(result == vk::Result::eSuccess);
 }
 
@@ -374,8 +412,8 @@ void Renderer::CreateSwapChain()
     swapchainInfo.setClipped(true);
     swapchainInfo.setOldSwapchain(nullptr);
 
-    device.createSwapchainKHR(&swapchainInfo, nullptr, &swapchain);
-    assert(swapchain);
+    result = device.createSwapchainKHR(&swapchainInfo, nullptr, &swapchain);
+    assert(result == vk::Result::eSuccess);
 
     swapChainImages = device.getSwapchainImagesKHR(swapchain);
     swapChainImageFormat = surfaceFormat.format;
