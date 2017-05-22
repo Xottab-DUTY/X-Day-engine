@@ -107,7 +107,7 @@ void Renderer::CreateVkInstance()
     i.setPApplicationInfo(&appInfo);
 
     auto extensions = getRequiredExtensions();    
-    i.setEnabledExtensionCount(extensions.size());
+    i.setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()));
     i.setPpEnabledExtensionNames(extensions.data());
 
     if (enableValidationLayers)
@@ -237,7 +237,7 @@ Renderer::SwapChainSupportDetails Renderer::querySwapChainSupport(vk::PhysicalDe
 
         if (formatCount != 0)
         {
-            details.formats.resize(formatCount);
+            details.formats.resize(static_cast<size_t>(formatCount));
             _physDevice.getSurfaceFormatsKHR(surface, &formatCount, details.formats.data());
         }
     }
@@ -248,7 +248,7 @@ Renderer::SwapChainSupportDetails Renderer::querySwapChainSupport(vk::PhysicalDe
 
         if (presentModeCount != 0)
         {
-            details.presentModes.resize(presentModeCount);
+            details.presentModes.resize(static_cast<size_t>(presentModeCount));
             _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
         }
     }
@@ -317,7 +317,7 @@ void Renderer::CreateDevice()
     deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
     deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
-    deviceCreateInfo.enabledExtensionCount = deviceExtensions.size();
+    deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
     deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     if (enableValidationLayers)
