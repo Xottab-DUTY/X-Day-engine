@@ -120,7 +120,7 @@ void Renderer::CreateVkInstance()
     assert(result == vk::Result::eSuccess);
 }
 
-bool Renderer::CheckValidationLayersSupport()
+bool Renderer::CheckValidationLayersSupport() const
 {
     std::vector<vk::LayerProperties> availableLayers = vk::enumerateInstanceLayerProperties();
 

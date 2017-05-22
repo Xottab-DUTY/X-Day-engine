@@ -34,7 +34,7 @@ public:
     void Destroy();
 
     void CreateVkInstance();
-    bool CheckValidationLayersSupport();
+    bool CheckValidationLayersSupport() const;
     std::vector<const char*> getRequiredExtensions();
     void CreateDebugCallback();
 
