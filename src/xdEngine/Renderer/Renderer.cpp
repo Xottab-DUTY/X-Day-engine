@@ -38,7 +38,7 @@ VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReport
 void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator = nullptr)
 {
     auto func = (PFN_vkDestroyDebugReportCallbackEXT)glfwGetInstanceProcAddress(instance, "vkDestroyDebugReportCallbackEXT");
-    if (func)
+    if (func && callback)
         func(instance, callback, pAllocator);
 }
 
