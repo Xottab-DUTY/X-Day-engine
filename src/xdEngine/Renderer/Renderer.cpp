@@ -53,6 +53,7 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugCallback(
     void* userData)
 {
     Msg("\nValidation layer reports: \n" \
+        "Flags: not working right now \n" \
         "Object type: {} \n" \
         "Object: {} \n" \
         "Location: {} \n" \
