@@ -206,9 +206,8 @@ Renderer::QueueFamilyIndices Renderer::findQueueFamilies(vk::PhysicalDevice _phy
         vk::Bool32 presentSupport = false;
         _physDevice.getSurfaceSupportKHR(i, surface, &presentSupport);
 
-        if (queueFamily.queueCount > 0 && presentSupport) {
+        if (queueFamily.queueCount > 0 && presentSupport)
             indices.presentFamily = i;
-        }
 
         if (indices.isComplete())
             break;
