@@ -46,7 +46,7 @@ public:
     std::vector<std::string> Params;
     std::string ParamsString;
 
-    static bool isGlobalDebug();
+    bool isGlobalDebug();
 
 public:
     xdCore();

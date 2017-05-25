@@ -21,10 +21,12 @@ static void error_callback(int error, const char* description)
 bool xdCore::isGlobalDebug()
 {
 #ifdef DEBUG
-    return true;
+    bool debug = true;
 #else
-    return false;
+    bool debug = false;
 #endif
+    debug = FindParam("-p_debug");
+    return debug;
 }
 
 xdCore::xdCore()
