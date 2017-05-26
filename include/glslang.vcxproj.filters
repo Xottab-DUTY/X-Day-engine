@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="glslang\hlsl\hlslScanContext.h" />
+    <ClInclude Include="glslang\hlsl\hlslTokens.h" />
+    <ClInclude Include="glslang\hlsl\hlslTokenStream.h" />
+    <ClInclude Include="glslang\hlsl\hlslAttributes.h" />
+    <ClInclude Include="glslang\hlsl\hlslGrammar.h" />
+    <ClInclude Include="glslang\hlsl\hlslOpMap.h" />
+    <ClInclude Include="glslang\hlsl\hlslParseables.h" />
+    <ClInclude Include="glslang\hlsl\hlslParseHelper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="glslang\hlsl\hlslTokenStream.cpp" />
+    <ClCompile Include="glslang\hlsl\hlslAttributes.cpp" />
+    <ClCompile Include="glslang\hlsl\hlslGrammar.cpp" />
+    <ClCompile Include="glslang\hlsl\hlslOpMap.cpp" />
+    <ClCompile Include="glslang\hlsl\hlslParseables.cpp" />
+    <ClCompile Include="glslang\hlsl\hlslParseHelper.cpp" />
+    <ClCompile Include="glslang\hlsl\hlslScanContext.cpp" />
+  </ItemGroup>
+</Project>
