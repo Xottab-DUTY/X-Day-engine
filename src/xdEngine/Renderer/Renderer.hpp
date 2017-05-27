@@ -48,6 +48,7 @@ public:
     vk::Extent2D chooseSwapExtent(const vk::SurfaceCapabilitiesKHR& capabilities) const;
     void CreateSwapChain();
     void CreateImageViews();
+    void CreateGraphicsPipeline();
 };
 
 extern XDAY_API Renderer Render;

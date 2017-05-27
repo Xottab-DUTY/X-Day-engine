@@ -42,6 +42,12 @@ void xdXMLResource::ParseResources() const
             else
                 Core.ModelsPath = resource->FirstChildElement("path")->GetText();
 
+        else if (strcmp(resource->Attribute("type"), "shaders") == 0)
+            if (!resource->BoolAttribute("absolute"))
+                Core.ShadersPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+            else
+                Core.ShadersPath = resource->FirstChildElement("path")->GetText();
+
         else if (strcmp(resource->Attribute("type"), "sounds") == 0)
             if (!resource->BoolAttribute("absolute"))
                 Core.SoundsPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();

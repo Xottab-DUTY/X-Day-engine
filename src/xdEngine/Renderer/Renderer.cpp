@@ -10,6 +10,7 @@
 #include "xdEngine/xdCore.hpp"
 #include "xdEngine/xdEngine.hpp"
 #include "Renderer.hpp"
+#include "Shader.hpp"
 
 XDAY_API Renderer Render;
 
@@ -81,6 +82,7 @@ void Renderer::Initialize()
     CreateDevice();
     CreateSwapChain();
     CreateImageViews();
+    CreateGraphicsPipeline();
 }
 
 void Renderer::Destroy()
@@ -433,4 +435,9 @@ void Renderer::CreateImageViews()
         result = device.createImageView(&imageViewInfo, nullptr, &swapChainImageViews[i]);
         assert(result == vk::Result::eSuccess);
     }
+}
+
+void Renderer::CreateGraphicsPipeline()
+{
+
 }

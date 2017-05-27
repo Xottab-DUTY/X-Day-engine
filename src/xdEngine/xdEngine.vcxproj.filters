@@ -25,15 +25,15 @@
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\Shader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="Console.hpp">
       <Filter>Console</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Platform.hpp">
-      <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleCommand.hpp">
       <Filter>Console\Command</Filter>
@@ -56,17 +56,11 @@
     <ClInclude Include="Renderer\VDeleter.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\Shader.hpp">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Platform\Compiler.inl">
-      <Filter>Platform</Filter>
-    </None>
-    <None Include="Platform\PlatformLinux.inl">
-      <Filter>Platform</Filter>
-    </None>
-    <None Include="Platform\PlatformWindows.inl">
-      <Filter>Platform</Filter>
-    </None>
     <None Include="xdEngine_impexp.inl" />
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +69,6 @@
     </Filter>
     <Filter Include="Console\Command">
       <UniqueIdentifier>{3a7bf758-ecff-43c3-bf23-edb0cde4d650}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform">
-      <UniqueIdentifier>{dddc8ce4-7b80-41a4-b686-cda73cb01303}</UniqueIdentifier>
     </Filter>
     <Filter Include="Debug">
       <UniqueIdentifier>{54e4b787-9183-4e3e-8506-25f8466bf931}</UniqueIdentifier>

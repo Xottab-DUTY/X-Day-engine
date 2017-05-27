@@ -63,12 +63,14 @@ void xdCore::Initialize(std::string&& _appname)
     FindParam("--p_datapath") ? DataPath = ReturnParam("--p_datapath") : DataPath = WorkPath.string() + "/appdata/";
     FindParam("--p_respath") ? ResourcesPath = ReturnParam("--p_respath") : ResourcesPath = WorkPath.string() + "/resources/";
 
+    BinaryShadersPath = DataPath.string() + "/binary_shaders/";
     LogsPath = DataPath.string() + "/logs/";
     SavesPath = DataPath.string() + "/saves/";
     
     InitializeResources();
 
     CreateDirIfNotExist(DataPath);
+    CreateDirIfNotExist(BinaryShadersPath);
     CreateDirIfNotExist(LogsPath);
     CreateDirIfNotExist(SavesPath);
 
@@ -76,6 +78,7 @@ void xdCore::Initialize(std::string&& _appname)
     CreateDirIfNotExist(ArchivesPath);
     CreateDirIfNotExist(ConfigsPath);
     CreateDirIfNotExist(ModelsPath);
+    CreateDirIfNotExist(ShadersPath);
     CreateDirIfNotExist(SoundsPath);
     CreateDirIfNotExist(TexturesPath);
 
@@ -91,6 +94,7 @@ void xdCore::InitializeResources()
     ArchivesPath = ResourcesPath.string() + "/archives/";
     ConfigsPath = ResourcesPath.string() + "/configs/";
     ModelsPath = ResourcesPath.string() + "/models/";
+    ShadersPath = ResourcesPath.string() + "/shaders/";
     SoundsPath = ResourcesPath.string() + "/sounds/";
     TexturesPath = ResourcesPath.string() + "/textures/";
 

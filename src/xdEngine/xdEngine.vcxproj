@@ -132,6 +132,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Debug\QuantMS.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="XMLDocument.cpp" />
@@ -141,9 +142,9 @@
     <ClInclude Include="Console.hpp" />
     <ClInclude Include="ConsoleCommand.hpp" />
     <ClInclude Include="Debug\Log.hpp" />
-    <ClInclude Include="Platform\Platform.hpp" />
     <ClInclude Include="Debug\QuantMS.hpp" />
     <ClInclude Include="Renderer\Renderer.hpp" />
+    <ClInclude Include="Renderer\Shader.hpp" />
     <ClInclude Include="Renderer\VDeleter.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
@@ -151,9 +152,6 @@
     <ClInclude Include="XMLResource.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Platform\Compiler.inl" />
-    <None Include="Platform\PlatformLinux.inl" />
-    <None Include="Platform\PlatformWindows.inl" />
     <None Include="xdEngine_impexp.inl" />
   </ItemGroup>
   <ItemGroup>

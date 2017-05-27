@@ -29,6 +29,7 @@ public:
     filesystem::path BinPath;
 
     filesystem::path DataPath;
+    filesystem::path BinaryShadersPath;
     filesystem::path LogsPath;
     filesystem::path SavesPath;
 
@@ -36,6 +37,7 @@ public:
     filesystem::path ArchivesPath;
     filesystem::path ConfigsPath;
     filesystem::path ModelsPath;
+    filesystem::path ShadersPath;
     filesystem::path SoundsPath;
     filesystem::path TexturesPath;
 
