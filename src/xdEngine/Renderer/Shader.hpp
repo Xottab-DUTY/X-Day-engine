@@ -4,21 +4,25 @@
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 
+#include <ShaderLang.h>
+
 class ShaderWorker // TODO: wip name; rename it, maybe.
 {
     std::string shaderName;
     vk::ShaderModule shader;
+    const TBuiltInResource& resources;
     const vk::Device& device;
 
-    std::vector<char> shaderSource;
-    std::vector<char> binaryShader;
+    char** shaderSource;
+    char** binaryShader;
 
     bool sourceFound;
     bool binaryFound;
     bool binaryIsOld;
 
 public:
-    ShaderWorker(std::string _name, const vk::Device& _device);
+    ShaderWorker(std::string _name, const vk::Device& _device, const TBuiltInResource& _resources);
+    ~ShaderWorker();
     void Initialize();
 
     bool isSourceFound() const;
@@ -30,6 +34,8 @@ private:
     void LoadBinaryShader();
     bool CheckIfShaderChanged();
     void CompileShader();
+
+    EShLanguage GetLanguage() const;
 };
 
 #endif // Shader_hpp__

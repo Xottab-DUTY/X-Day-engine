@@ -5,6 +5,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include "xdEngine_impexp.inl"
+#include <ResourceLimits.h>
 
 class XDAY_API Renderer
 {
@@ -23,30 +24,39 @@ public:
     vk::Extent2D swapChainExtent;
     std::vector<vk::ImageView> swapChainImageViews;
 
-    struct QueueFamilyIndices;
-    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
+    TBuiltInResource resources;
 
+    struct QueueFamilyIndices;
     struct SwapChainSupportDetails;
-    SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
 
     Renderer();
     void Initialize();
     void Destroy();
 
+private:
+    void InitializeResources();
     void CreateVkInstance();
     bool CheckValidationLayersSupport() const;
     std::vector<const char*> getRequiredExtensions();
     void CreateDebugCallback();
 
     void CreateVkSurface();
+    
+    
     void GetPhysDevice();
+    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
+    SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
     bool isPhysDeviceSuitable(vk::PhysicalDevice _physDevice) const;
+
     bool checkDeviceExtensionSupport(vk::PhysicalDevice _physDevice) const;
     void CreateDevice();
+
     vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) const;
     vk::PresentModeKHR chooseSwapPresentMode(const std::vector<vk::PresentModeKHR> availablePresentModes) const;
     vk::Extent2D chooseSwapExtent(const vk::SurfaceCapabilitiesKHR& capabilities) const;
     void CreateSwapChain();
+    
+
     void CreateImageViews();
     void CreateGraphicsPipeline();
 };

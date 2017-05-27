@@ -1,4 +1,5 @@
 #include <fstream>
+#include <sstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem::v1;
 
@@ -8,11 +9,18 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "Shader.hpp"
 #include "Debug/Log.hpp"
 
-ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device)
-    : shaderName(_name), device(_device),
+ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const TBuiltInResource& _resources) : shaderName(_name), device(_device), resources(_resources),
     sourceFound(false), binaryFound(false)
 {
+    shaderSource = new char*;
+    binaryShader = new char*;
     Initialize();
+}
+
+ShaderWorker::~ShaderWorker()
+{
+    delete[] shaderSource;
+    delete[] binaryShader;
 }
 
 void ShaderWorker::Initialize()
@@ -33,10 +41,13 @@ void ShaderWorker::LoadShader()
 
     if (shader_file.is_open())
     {
-        shader_file.read(shaderSource.data(), filesystem::file_size(shader_path));
+        *shaderSource = new char[filesystem::file_size(shader_path)];
+        std::vector<char> buf(filesystem::file_size(shader_path));
+        shader_file.read(buf.data(), filesystem::file_size(shader_path));
+        *shaderSource = std::move(buf.data());
         sourceFound = true;
-        shader_file.close();
     }
+    shader_file.close();
 }
 
 void ShaderWorker::LoadBinaryShader()
@@ -48,37 +59,42 @@ void ShaderWorker::LoadBinaryShader()
     {
         // Use found shader, even if it is old
         // Recompile it and only then try to use new shader
-        shader_file.read(binaryShader.data(), filesystem::file_size(shader_path));
+        *binaryShader = new char[filesystem::file_size(shader_path)];
+        shader_file.read(*binaryShader, filesystem::file_size(shader_path));
         binaryFound = true;
 
         binaryIsOld = CheckIfShaderChanged();
 
-        if (binaryIsOld)
+        if (binaryIsOld && shaderSource != nullptr)
         {
             CompileShader();
             shader_file.open(shader_path);
             if (!shader_file.is_open())
-                Msg("Failed to open shader after recompilation. Using old binary shader. Shader path: {}", shader_path.string())
+                Msg("Failed to open shader after recompilation. Using old binary shader. Shader: {}", shaderName)
             else
             {
-                shader_file.read(binaryShader.data(), filesystem::file_size(shader_path));
+                *binaryShader = new char[filesystem::file_size(shader_path)];
+                shader_file.read(*binaryShader, filesystem::file_size(shader_path));
                 binaryIsOld = false;
             }
         }
     }
-    else
+    else if (shaderSource != nullptr)
     {
-        // Shader not found? Compile it.
+        // Binary shader not found, but you have GLSL source? Try to compile it.
         CompileShader();
         shader_file.open(shader_path);
         if (!shader_file.is_open())
-            Msg("Failed to open shader after compilation. Shader path: {}", shader_path.string())
+            Msg("Failed to open shader after compilation. Shader: {}", shaderName)
         else
         {
-            shader_file.read(binaryShader.data(), filesystem::file_size(shader_path));
+            *binaryShader = new char[filesystem::file_size(shader_path)];
+            shader_file.read(*binaryShader, filesystem::file_size(shader_path));
             binaryFound = true;
         }
     }
+    else
+        Msg("Shader not found: {}", shaderName);
 
     shader_file.close();
 }
@@ -103,8 +119,13 @@ void ShaderWorker::CompileShader()
 
     // Compile shader from source
     // Put it in the binary shaders dir
-    // Get current source hash and save it 
+    // Get current source hash and save it
     // TODO: Implement
+
+    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
+    ShHandle compiler = ShConstructCompiler(GetLanguage(), 0);
+    int result = ShCompile(compiler, shaderSource, 1, nullptr, EShOptSimple, &resources, 0, 110, false, messages);
+    Msg("Shader compilation: {}", result);
 }
 
 bool ShaderWorker::isSourceFound() const
@@ -120,4 +141,20 @@ bool ShaderWorker::isBinaryFound() const
 bool ShaderWorker::isBinaryOld() const
 {
     return binaryIsOld;
+}
+
+EShLanguage ShaderWorker::GetLanguage() const
+{
+    if (shaderName.find(".vert"))
+        return EShLangVertex;
+    if (shaderName.find(".tesc"))
+        return EShLangTessControl;
+    if (shaderName.find(".tese"))
+        return EShLangTessEvaluation;
+    if (shaderName.find(".geom"))
+        return EShLangGeometry;
+    if (shaderName.find(".frag"))
+        return EShLangFragment;
+    if (shaderName.find(".comp"))
+        return EShLangCompute;
 }

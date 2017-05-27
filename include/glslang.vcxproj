@@ -18,6 +18,81 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glslang\glslang\Include\arrays.h" />
+    <ClInclude Include="glslang\glslang\Include\BaseTypes.h" />
+    <ClInclude Include="glslang\glslang\Include\Common.h" />
+    <ClInclude Include="glslang\glslang\Include\ConstantUnion.h" />
+    <ClInclude Include="glslang\glslang\Include\InfoSink.h" />
+    <ClInclude Include="glslang\glslang\Include\InitializeGlobals.h" />
+    <ClInclude Include="glslang\glslang\Include\intermediate.h" />
+    <ClInclude Include="glslang\glslang\Include\PoolAlloc.h" />
+    <ClInclude Include="glslang\glslang\Include\ResourceLimits.h" />
+    <ClInclude Include="glslang\glslang\Include\revision.h" />
+    <ClInclude Include="glslang\glslang\Include\ShHandle.h" />
+    <ClInclude Include="glslang\glslang\Include\Types.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\glslang_tab.cpp.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\gl_types.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\Initialize.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\iomapper.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\LiveTraverser.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\localintermediate.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\ParseHelper.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\parseVersions.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\preprocessor\PpContext.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\preprocessor\PpTokens.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\propagateNoContraction.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\reflection.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\RemoveTree.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\Scan.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\ScanContext.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\SymbolTable.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\Versions.h" />
+    <ClInclude Include="glslang\glslang\Public\ShaderLang.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="glslang\glslang\GenericCodeGen\CodeGen.cpp" />
+    <ClCompile Include="glslang\glslang\GenericCodeGen\Link.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\Constant.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\glslang_tab.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\InfoSink.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\Initialize.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\Intermediate.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\intermOut.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\IntermTraverse.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\iomapper.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\limits.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\linkValidate.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\parseConst.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\ParseContextBase.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\ParseHelper.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\PoolAlloc.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\Pp.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\PpAtom.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\PpContext.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\PpMemory.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\PpScanner.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\PpSymbols.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\PpTokens.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\propagateNoContraction.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\reflection.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\RemoveTree.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\Scan.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\ShaderLang.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\SymbolTable.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\Versions.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glslang\glslang\MachineIndependent\glslang.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="OGLCompiler.vcxproj">
+      <Project>{a5281109-2745-4f74-aabc-c1247d614883}</Project>
+    </ProjectReference>
+    <ProjectReference Include="OSDependent.vcxproj">
+      <Project>{d9ffd282-afe1-4fac-bb08-96bbbb8d260a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{B5C56F86-756F-4211-A456-4077A7B7E8B8}</ProjectGuid>
@@ -101,25 +176,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="glslang\hlsl\hlslAttributes.h" />
-    <ClInclude Include="glslang\hlsl\hlslGrammar.h" />
-    <ClInclude Include="glslang\hlsl\hlslOpMap.h" />
-    <ClInclude Include="glslang\hlsl\hlslParseables.h" />
-    <ClInclude Include="glslang\hlsl\hlslParseHelper.h" />
-    <ClInclude Include="glslang\hlsl\hlslScanContext.h" />
-    <ClInclude Include="glslang\hlsl\hlslTokens.h" />
-    <ClInclude Include="glslang\hlsl\hlslTokenStream.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="glslang\hlsl\hlslAttributes.cpp" />
-    <ClCompile Include="glslang\hlsl\hlslGrammar.cpp" />
-    <ClCompile Include="glslang\hlsl\hlslOpMap.cpp" />
-    <ClCompile Include="glslang\hlsl\hlslParseables.cpp" />
-    <ClCompile Include="glslang\hlsl\hlslParseHelper.cpp" />
-    <ClCompile Include="glslang\hlsl\hlslScanContext.cpp" />
-    <ClCompile Include="glslang\hlsl\hlslTokenStream.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
