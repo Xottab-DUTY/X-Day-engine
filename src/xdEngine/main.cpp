@@ -37,7 +37,8 @@ void HelpCmdArgs()
         "--p_mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
         "--p_mainlog - Specifies path and name of main log file (path/name.extension), default is \"*DataPath*/main.log\"\n"\
         "--p_nolog - Completely disables engine log. May increase performance\n"\
-        "--p_nologflush - Disables log flushing. Useless if -nolog defined\n");
+        "--p_nologflush - Disables log flushing. Useless if -nolog defined\n"\
+        "--p_debug - enables debug mode");
 
     Log("\nДоступные параметры:\n"\
         "-name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
@@ -47,7 +48,8 @@ void HelpCmdArgs()
         "-mainconfig - Задаёт путь и имя главного файла настроек (путь/имя.расширение), по умолчанию: \"*DataPath*/main.config\" \n"\
         "-mainlog - Задаёт путь и имя главного лог файла (путь/имя.расширение), по умолчанию: \"*DataPath*/main.log\"\n"\
         "-nolog - Полностью выключает лог движка. Может повысить производительность\n"\
-        "-nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n", false);
+        "-nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n"\
+        "--p_debug - включает режим отладки", false);
 }
 
 void threadedConsole()
