@@ -9,12 +9,14 @@
 class ShaderWorker // TODO: wip name; rename it, maybe.
 {
     std::string shaderName;
-    vk::ShaderModule shader;
-    const TBuiltInResource& resources;
+    std::string binaryExt;
     const vk::Device& device;
+    const TBuiltInResource& resources;
+    vk::ShaderModule shader;
 
-    char** shaderSource;
-    char** binaryShader;
+    char* pShaderSource;
+    std::vector<char> shaderSource;
+    std::vector<char> binaryShader;
 
     bool sourceFound;
     bool binaryFound;
