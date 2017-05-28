@@ -2,7 +2,7 @@
 #include <sstream>
 #include <string>
 #include <filesystem>
-#include "glslang/SPIRV/spirv.hpp"
+
 namespace filesystem = std::experimental::filesystem::v1;
 
 #include <ShaderLang.h>
@@ -43,8 +43,8 @@ void ShaderWorker::LoadShader()
 
     if (shader_file.is_open())
     {
-        shaderSource.resize(filesystem::file_size(shader_path)); // working
-        shader_file.read(shaderSource.data(), filesystem::file_size(shader_path)); // working
+        shaderSource.resize(filesystem::file_size(shader_path));
+        shader_file.read(shaderSource.data(), filesystem::file_size(shader_path));
         sourceFound = true;
     }
     shader_file.close();
@@ -69,7 +69,7 @@ void ShaderWorker::LoadBinaryShader()
         {
             // Binary shader is old, but you have GLSL source? Try to recompile it.
             CompileShader();
-            shader_file.open(shader_path);
+            shader_file.open(shader_path, std::ios::binary);
             if (!shader_file.is_open())
                 Msg("Failed to open shader after recompilation. Using old binary shader. Shader: {}", shaderName)
             else
@@ -84,7 +84,7 @@ void ShaderWorker::LoadBinaryShader()
     {
         // Binary shader not found, but you have GLSL source? Try to compile it.
         CompileShader();
-        shader_file.open(shader_path);
+        shader_file.open(shader_path, std::ios::binary);
         if (!shader_file.is_open())
             Msg("Failed to open shader after compilation. Shader: {}", shaderName)
         else
@@ -122,44 +122,56 @@ void ShaderWorker::CompileShader()
         Msg("ShaderWorker:: compiling: {}", shaderName);
 
     bool success = true;
-    char* buf = shaderSource.data();
-    char** buff = &buf; // what the hack
+    const char* sourceBytes = shaderSource.data();
 
     EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules | EShMsgAST);
 
-    glslang::TProgram& program = *new glslang::TProgram;
+    glslang::TProgram* program = new glslang::TProgram;
     glslang::TShader* shader = new glslang::TShader(GetLanguage());
-    shader->setStrings(buff, 1);
+    shader->setStrings(&sourceBytes, 1);
+    shader->setEntryPoint("main");
 
     std::string preprocessed;
     glslang::TShader::ForbidIncluder includer;
-    success = shader->preprocess(&resources, 110, ENoProfile, false, false,
+    success = shader->preprocess(&resources, 450, ENoProfile, false, false,
                                  messages, &preprocessed, includer);
 
-    success = shader->parse(&resources, 110, false, messages);
+    success = shader->parse(&resources, 450, false, messages);
 
     Msg("{}", shader->getInfoLog());
     Msg("{}", shader->getInfoDebugLog());
 
     if (success)
-        program.addShader(shader);
+        program->addShader(shader);
     else
     {
         Msg("ShaderWorker:: failed to compile: {}", shaderName);
         return;
     }
 
+    success = program->link(messages);
+    if (!success)
+    {
+        Msg("ShaderWorker:: failed to compile: {}", shaderName);
+        return;
+    }
+
+    program->mapIO();
+    program->buildReflection();
+
     std::vector<unsigned int> spirv;
     spv::SpvBuildLogger logger;
-    //if (program.getIntermediate(GetLanguage()))
-        glslang::GlslangToSpv(*program.getIntermediate(GetLanguage()), spirv, &logger);
-    Log(logger.getAllMessages());
+
+    glslang::GlslangToSpv(*program->getIntermediate(GetLanguage()), spirv, &logger);
+
+    if (Core.isGlobalDebug())
+    	Log(logger.getAllMessages());
+
     glslang::OutputSpvBin(spirv, shader_binary.string().c_str()); // string().c_str() what a nice costyl
 
     if (Core.isGlobalDebug() && success)
         Msg("ShaderWorker:: compiled: {}", shaderName);
-    // Compile the shader - almost done
-    // Put it in the binary shaders dir
+
     // Get current source hash and save it
     // TODO: Implement
 }
@@ -181,16 +193,16 @@ bool ShaderWorker::isBinaryOld() const
 
 EShLanguage ShaderWorker::GetLanguage() const
 {
-    if (shaderName.find(".vert"))
+    if (shaderName.find(".vert") != std::string::npos)
         return EShLangVertex;
-    if (shaderName.find(".tesc"))
+    if (shaderName.find(".tesc") != std::string::npos)
         return EShLangTessControl;
-    if (shaderName.find(".tese"))
+    if (shaderName.find(".tese") != std::string::npos)
         return EShLangTessEvaluation;
-    if (shaderName.find(".geom"))
+    if (shaderName.find(".geom") != std::string::npos)
         return EShLangGeometry;
-    if (shaderName.find(".frag"))
+    if (shaderName.find(".frag") != std::string::npos)
         return EShLangFragment;
-    if (shaderName.find(".comp"))
+    if (shaderName.find(".comp") != std::string::npos)
         return EShLangCompute;
 }
