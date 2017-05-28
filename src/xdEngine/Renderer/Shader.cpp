@@ -21,6 +21,7 @@ ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const T
 
 ShaderWorker::~ShaderWorker()
 {
+    device.destroyShaderModule(shaderModule);
     shaderSource.clear();
     binaryShader.clear();
 }
@@ -33,12 +34,12 @@ void ShaderWorker::Initialize()
     // Search for binary SPIR-V shader
     LoadBinaryShader();
 
-    // ...
+    CreateShaderModule();
 }
 
 void ShaderWorker::LoadShader()
 {
-    filesystem::path shader_path = Core.ShadersPath.string() + shaderName;
+    auto shader_path = Core.ShadersPath.string() + shaderName;
     std::fstream shader_file(shader_path);
 
     if (shader_file.is_open())
@@ -52,7 +53,7 @@ void ShaderWorker::LoadShader()
 
 void ShaderWorker::LoadBinaryShader()
 {
-    filesystem::path shader_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
+    auto shader_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
     std::ifstream shader_file(shader_path, std::ios::binary);
 
     if (shader_file.is_open() && filesystem::file_size(shader_path) != 0) // check if file exist and it's not empty
@@ -103,8 +104,8 @@ void ShaderWorker::LoadBinaryShader()
 bool ShaderWorker::CheckIfShaderChanged()
 {
     
-    filesystem::path shader_source = Core.ShadersPath.string() + shaderName;
-    filesystem::path saved_hash = Core.BinaryShadersPath.string() + shaderName + ".hash";
+    auto shader_source = Core.ShadersPath.string() + shaderName;
+    auto saved_hash = Core.BinaryShadersPath.string() + shaderName + ".hash";
 
     // Check the current source file hash and the saved hash
     // TODO: Implement
@@ -114,9 +115,9 @@ bool ShaderWorker::CheckIfShaderChanged()
 
 void ShaderWorker::CompileShader()
 {
-    filesystem::path shader_source = Core.ShadersPath.string() + shaderName;
-    filesystem::path shader_binary = Core.BinaryShadersPath.string() + shaderName + binaryExt;
-    filesystem::path saved_hash = Core.BinaryShadersPath.string() + shaderName + ".hash";
+    auto shader_source = Core.ShadersPath.string() + shaderName;
+    auto shader_binary = Core.BinaryShadersPath.string() + shaderName + binaryExt;
+    auto saved_hash = Core.BinaryShadersPath.string() + shaderName + ".hash";
 
     if (Core.isGlobalDebug())
         Msg("ShaderWorker:: compiling: {}", shaderName);
@@ -167,13 +168,29 @@ void ShaderWorker::CompileShader()
     if (Core.isGlobalDebug())
     	Log(logger.getAllMessages());
 
-    glslang::OutputSpvBin(spirv, shader_binary.string().c_str()); // string().c_str() what a nice costyl
+    glslang::OutputSpvBin(spirv, shader_binary.c_str());
 
     if (Core.isGlobalDebug() && success)
         Msg("ShaderWorker:: compiled: {}", shaderName);
 
     // Get current source hash and save it
     // TODO: Implement
+}
+
+void ShaderWorker::CreateShaderModule()
+{
+    auto size = binaryShader.size() / sizeof(uint32_t) + 1;
+
+    std::vector<uint32_t> codeAligned(size);
+    memcpy(codeAligned.data(), binaryShader.data(), binaryShader.size());
+    
+    vk::ShaderModuleCreateInfo smInfo({}, binaryShader.size(), codeAligned.data());
+
+    result = device.createShaderModule(&smInfo, nullptr, &shaderModule);
+
+    if (!(result == vk::Result::eSuccess))
+        Msg("ShaderWorker:: failed to create vulkan shader module for: {}", shaderName);
+
 }
 
 bool ShaderWorker::isSourceFound() const
@@ -191,6 +208,11 @@ bool ShaderWorker::isBinaryOld() const
     return binaryIsOld;
 }
 
+vk::ShaderModule ShaderWorker::GetShaderModule() const
+{
+    return shaderModule;
+}
+
 EShLanguage ShaderWorker::GetLanguage() const
 {
     if (shaderName.find(".vert") != std::string::npos)
@@ -205,4 +227,7 @@ EShLanguage ShaderWorker::GetLanguage() const
         return EShLangFragment;
     if (shaderName.find(".comp") != std::string::npos)
         return EShLangCompute;
+    Msg("ShaderWorker:: cant find stage for {}", shaderName);
 }
+
+

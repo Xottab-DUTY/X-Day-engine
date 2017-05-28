@@ -12,7 +12,8 @@ class ShaderWorker // TODO: wip name; rename it, maybe.
     std::string binaryExt;
     const vk::Device& device;
     const TBuiltInResource& resources;
-    vk::ShaderModule shader;
+    vk::ShaderModule shaderModule;
+    vk::Result result;
 
     std::vector<char> shaderSource;
     std::vector<char> binaryShader;
@@ -30,11 +31,14 @@ public:
     bool isBinaryFound() const;
     bool isBinaryOld() const;
 
+    vk::ShaderModule GetShaderModule() const;
+
 private:
     void LoadShader();
     void LoadBinaryShader();
     bool CheckIfShaderChanged();
     void CompileShader();
+    void CreateShaderModule();
 
     EShLanguage GetLanguage() const;
 };
