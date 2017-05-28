@@ -14,7 +14,6 @@ class ShaderWorker // TODO: wip name; rename it, maybe.
     const TBuiltInResource& resources;
     vk::ShaderModule shader;
 
-    char* pShaderSource;
     std::vector<char> shaderSource;
     std::vector<char> binaryShader;
 

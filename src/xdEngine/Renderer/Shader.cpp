@@ -21,7 +21,6 @@ ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const T
 
 ShaderWorker::~ShaderWorker()
 {
-    delete[] pShaderSource;
     shaderSource.clear();
     binaryShader.clear();
 }
@@ -44,10 +43,8 @@ void ShaderWorker::LoadShader()
 
     if (shader_file.is_open())
     {
-        pShaderSource = new char[filesystem::file_size(shader_path)]; // fails on ShCompile()
-        shader_file.read(pShaderSource, filesystem::file_size(shader_path)); // fails on ShCompile()
-        //shaderSource.resize(filesystem::file_size(shader_path)); // working
-        //shader_file.read(shaderSource.data(), filesystem::file_size(shader_path)); // working
+        shaderSource.resize(filesystem::file_size(shader_path)); // working
+        shader_file.read(shaderSource.data(), filesystem::file_size(shader_path)); // working
         sourceFound = true;
     }
     shader_file.close();
@@ -83,7 +80,7 @@ void ShaderWorker::LoadBinaryShader()
             }
         }
     }
-    else if (!shaderSource.empty() || pShaderSource != nullptr)
+    else if (!shaderSource.empty())
     {
         // Binary shader not found, but you have GLSL source? Try to compile it.
         CompileShader();
@@ -121,23 +118,46 @@ void ShaderWorker::CompileShader()
     filesystem::path shader_binary = Core.BinaryShadersPath.string() + shaderName + binaryExt;
     filesystem::path saved_hash = Core.BinaryShadersPath.string() + shaderName + ".hash";
 
-    char* buf = shaderSource.data();
-    char** buff = &buf; // what the hack
-
     if (Core.isGlobalDebug())
         Msg("ShaderWorker:: compiling: {}", shaderName);
 
-    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
-    ShHandle compiler = ShConstructCompiler(GetLanguage(), 0);
-    int result = ShCompile(compiler, &pShaderSource, 1, nullptr, EShOptSimple, &resources, 0, 110, false, messages); // fails
-    //int result = ShCompile(compiler, buff, 1, nullptr, EShOptSimple, &resources, 0, 110, false, messages); // working
+    bool success = true;
+    char* buf = shaderSource.data();
+    char** buff = &buf; // what the hack
 
-    if (Core.isGlobalDebug())
-        if (result)
-            Msg("ShaderWorker:: compiled: {}", shaderName)
-        else
-            Msg("ShaderWorker:: failed to compile: {}", shaderName);
+    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules | EShMsgAST);
 
+    glslang::TProgram& program = *new glslang::TProgram;
+    glslang::TShader* shader = new glslang::TShader(GetLanguage());
+    shader->setStrings(buff, 1);
+
+    std::string preprocessed;
+    glslang::TShader::ForbidIncluder includer;
+    success = shader->preprocess(&resources, 110, ENoProfile, false, false,
+                                 messages, &preprocessed, includer);
+
+    success = shader->parse(&resources, 110, false, messages);
+
+    Msg("{}", shader->getInfoLog());
+    Msg("{}", shader->getInfoDebugLog());
+
+    if (success)
+        program.addShader(shader);
+    else
+    {
+        Msg("ShaderWorker:: failed to compile: {}", shaderName);
+        return;
+    }
+
+    std::vector<unsigned int> spirv;
+    spv::SpvBuildLogger logger;
+    //if (program.getIntermediate(GetLanguage()))
+        glslang::GlslangToSpv(*program.getIntermediate(GetLanguage()), spirv, &logger);
+    Log(logger.getAllMessages());
+    glslang::OutputSpvBin(spirv, shader_binary.string().c_str()); // string().c_str() what a nice costyl
+
+    if (Core.isGlobalDebug() && success)
+        Msg("ShaderWorker:: compiled: {}", shaderName);
     // Compile the shader - almost done
     // Put it in the binary shaders dir
     // Get current source hash and save it
