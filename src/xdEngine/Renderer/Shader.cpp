@@ -56,7 +56,7 @@ void ShaderWorker::LoadBinaryShader()
     auto shader_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
     std::ifstream shader_file(shader_path, std::ios::binary);
 
-    if (shader_file.is_open() && filesystem::file_size(shader_path) != 0) // check if file exist and it's not empty
+    if (shader_file.is_open() && filesystem::file_size(shader_path) != 0 && !Core.FindParam("--p_shrec")) // check if file exist and it's not empty
     {
         // Found shader, but it is old? Use it.
         // Recompile it and only then try to use new shader.
