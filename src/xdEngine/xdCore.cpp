@@ -40,7 +40,7 @@ void xdCore::InitializeArguments(int argc, char* argv[])
         Params.push_back(argv[i]);
     }
 
-    for (auto&& str : Core.Params)
+    for (auto&& str : this->Params)
     {
         ParamsString += str + " ";
     }
@@ -95,7 +95,7 @@ void xdCore::InitializeResources()
     SoundsPath = ResourcesPath.string() + "/sounds/";
     TexturesPath = ResourcesPath.string() + "/textures/";
 
-    xdXMLResource resource_initializer(Core.ResourcesPath, "resources.xml");
+    xdXMLResource resource_initializer(this->ResourcesPath, "resources.xml");
     if (!resource_initializer.isErrored())
         resource_initializer.ParseResources();
 }
