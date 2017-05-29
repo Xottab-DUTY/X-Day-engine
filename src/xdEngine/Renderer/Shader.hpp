@@ -3,7 +3,6 @@
 #define Shader_hpp__
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
-
 #include <ShaderLang.h>
 
 class ShaderWorker // TODO: wip name; rename it, maybe.

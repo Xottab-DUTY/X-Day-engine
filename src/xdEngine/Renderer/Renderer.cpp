@@ -76,6 +76,7 @@ Renderer::Renderer(): result(vk::Result::eNotReady),
 void Renderer::Initialize()
 {
     glslang::InitializeProcess();
+
     InitializeResources();
     CreateVkInstance();
     CreateDebugCallback();
@@ -84,12 +85,26 @@ void Renderer::Initialize()
     CreateDevice();
     CreateSwapChain();
     CreateImageViews();
+    CreateRenderPass();
     CreateGraphicsPipeline();
+    CreateFramebuffers();
+    CreateCommandPool();
+    CreateCommandBuffers();
 }
 
 void Renderer::Destroy()
 {
     glslang::FinalizeProcess();
+
+    device.destroyCommandPool(commandPool);
+
+    for (size_t i = 0; i < swapChainFramebuffers.size(); ++i)
+        device.destroyFramebuffer(swapChainFramebuffers[i]);
+
+    device.destroyPipeline(graphicsPipeline);
+    device.destroyPipelineLayout(pipelineLayout);
+    device.destroyRenderPass(renderPass);
+
     for (size_t i = 0; i < swapChainImageViews.size(); ++i)
         device.destroyImageView(swapChainImageViews[i], nullptr);
 
@@ -251,7 +266,7 @@ std::vector<const char*> Renderer::getRequiredExtensions()
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-    for (uint32_t i = 0; i < glfwExtensionCount; i++)
+    for (uint32_t i = 0; i < glfwExtensionCount; ++i)
         extensions.push_back(glfwExtensions[i]);
 
     if (enableValidationLayers)
@@ -432,6 +447,10 @@ void Renderer::CreateDevice()
     device = physDevice.createDevice(deviceCreateInfo);
     assert(device);
 
+    // Another variant
+    /*result = physDevice.createDevice(&deviceCreateInfo, nullptr, &device);
+    assert(result == vk::Result::eSuccess);*/
+
     device.getQueue(indices.graphicsFamily, 0, &graphicsQueue);
     device.getQueue(indices.presentFamily, 0, &presentQueue);
 }
@@ -536,15 +555,40 @@ void Renderer::CreateImageViews()
     }
 }
 
+void Renderer::CreateRenderPass()
+{
+    vk::AttachmentDescription colorAttachment;
+    colorAttachment.setFormat(swapChainImageFormat);
+    colorAttachment.setLoadOp(vk::AttachmentLoadOp::eClear);
+    colorAttachment.setStencilLoadOp(vk::AttachmentLoadOp::eDontCare);
+    colorAttachment.setStencilStoreOp(vk::AttachmentStoreOp::eDontCare);
+    colorAttachment.setFinalLayout(vk::ImageLayout::ePresentSrcKHR);
+
+    vk::AttachmentReference colorAttachmentRef(0, vk::ImageLayout::eColorAttachmentOptimal);
+
+    vk::SubpassDescription subpass;
+    subpass.setColorAttachmentCount(1);
+    subpass.setPColorAttachments(&colorAttachmentRef);
+
+    vk::RenderPassCreateInfo renderPassInfo;
+    renderPassInfo.setAttachmentCount(1);
+    renderPassInfo.setPAttachments(&colorAttachment);
+    renderPassInfo.setSubpassCount(1);
+    renderPassInfo.setPSubpasses(&subpass);
+
+    result = device.createRenderPass(&renderPassInfo, nullptr, &renderPass);
+    assert(result == vk::Result::eSuccess);
+}
+
 void Renderer::CreateGraphicsPipeline()
 {
     ShaderWorker shader_frag("shader.frag", device, resources);
     ShaderWorker shader_vert("shader.vert", device, resources);
 
-    VkPipelineShaderStageCreateInfo shaderStages[] =
+    vk::PipelineShaderStageCreateInfo shaderStages[] =
     { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
 
-    
+    vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
     vk::PipelineInputAssemblyStateCreateInfo inputAssembly;
     inputAssembly.setTopology(vk::PrimitiveTopology::eTriangleList);
@@ -571,4 +615,125 @@ void Renderer::CreateGraphicsPipeline()
     rasterizer.setCullMode(vk::CullModeFlagBits::eBack);
     rasterizer.setFrontFace(vk::FrontFace::eClockwise);
 
+    vk::PipelineMultisampleStateCreateInfo multisampling;
+    multisampling.setMinSampleShading(1.0f); // Optional
+
+    vk::PipelineColorBlendAttachmentState colorBlendAttachment;
+    colorBlendAttachment.setColorWriteMask(vk::ColorComponentFlagBits::eR
+        | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB
+        | vk::ColorComponentFlagBits::eA);
+    colorBlendAttachment.setSrcColorBlendFactor(vk::BlendFactor::eOne);
+    colorBlendAttachment.setSrcAlphaBlendFactor(vk::BlendFactor::eOne);
+
+    vk::PipelineColorBlendStateCreateInfo colorBlending;
+    colorBlending.setLogicOp(vk::LogicOp::eCopy); // Optional
+    colorBlending.setAttachmentCount(1);
+    colorBlending.setPAttachments(&colorBlendAttachment);
+
+    vk::DynamicState dynamicStates[] =
+    {
+        vk::DynamicState::eViewport,
+        vk::DynamicState::eLineWidth
+    };
+
+    vk::PipelineDynamicStateCreateInfo dynamicState({}, 2, dynamicStates);
+
+    vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
+
+    result = device.createPipelineLayout(&pipelineLayoutInfo, nullptr, &pipelineLayout);
+    assert(result == vk::Result::eSuccess);
+
+    vk::GraphicsPipelineCreateInfo pipelineInfo;
+    pipelineInfo.setStageCount(2);
+    pipelineInfo.setPStages(shaderStages);
+    pipelineInfo.setPVertexInputState(&vertexInputInfo);
+    pipelineInfo.setPInputAssemblyState(&inputAssembly);
+    pipelineInfo.setPViewportState(&viewportState);
+    pipelineInfo.setPRasterizationState(&rasterizer);
+    pipelineInfo.setPMultisampleState(&multisampling);
+    pipelineInfo.setPColorBlendState(&colorBlending);
+    pipelineInfo.setLayout(pipelineLayout);
+    pipelineInfo.setRenderPass(renderPass);
+
+    graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo, nullptr);
+    assert(graphicsPipeline);
+
+    // Another variant
+    /*result = device.createGraphicsPipelines(nullptr, 1, &pipelineInfo, nullptr, &graphicsPipeline);
+    assert(result == vk::Result::eSuccess);*/
+}
+
+void Renderer::CreateFramebuffers()
+{
+    swapChainFramebuffers.resize(swapChainImageViews.size());
+
+    for (size_t i = 0; i < swapChainImageViews.size(); ++i)
+    {
+        vk::ImageView attachments[] =
+        {
+            swapChainImageViews[i]
+        };
+
+        vk::FramebufferCreateInfo framebufferInfo({}, renderPass, 1,
+            attachments, swapChainExtent.width, swapChainExtent.height, 1);
+
+        swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
+        assert(swapChainFramebuffers[i]);
+
+        // Another variant
+        /*result = device.createFramebuffer(&framebufferInfo, nullptr, &swapChainFramebuffers[i]);
+        assert(result == vk::Result::eSuccess);*/
+    }
+}
+
+void Renderer::CreateCommandPool()
+{
+    QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physDevice);
+
+    vk::CommandPoolCreateInfo poolInfo({}, queueFamilyIndices.graphicsFamily);
+
+    commandPool = device.createCommandPool(poolInfo);
+    assert(commandPool);
+
+    // Another variant
+    /*result = device.createCommandPool(&poolInfo, nullptr, &commandPool);
+    assert(result == vk::Result::eSuccess);*/
+}
+
+void Renderer::CreateCommandBuffers()
+{
+    commandBuffers.resize(swapChainFramebuffers.size());
+
+    vk::CommandBufferAllocateInfo allocInfo(
+        commandPool, vk::CommandBufferLevel::ePrimary,
+        static_cast<uint32_t>(commandBuffers.size()));
+
+    commandBuffers = device.allocateCommandBuffers(allocInfo);
+    assert(!commandBuffers.empty());
+
+    // Another variant
+    /*result = device.allocateCommandBuffers(&allocInfo, commandBuffers.data());
+    assert(result == vk::Result::eSuccess);*/
+
+    for (size_t i = 0; i < commandBuffers.size(); ++i)
+    {
+        vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
+
+        commandBuffers[i].begin(&beginInfo);
+
+        vk::RenderPassBeginInfo renderPassInfo;
+        renderPassInfo.setRenderPass(renderPass);
+        renderPassInfo.setFramebuffer(swapChainFramebuffers[i]);
+        renderPassInfo.renderArea.setExtent(swapChainExtent);
+
+        VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+        renderPassInfo.setClearValueCount(1);
+        renderPassInfo.setPClearValues(reinterpret_cast<vk::ClearValue*>(&clearColor));
+
+        commandBuffers[i].beginRenderPass(&renderPassInfo, vk::SubpassContents::eInline);
+        commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, graphicsPipeline);
+        commandBuffers[i].draw(3,1,0,0);
+        commandBuffers[i].endRenderPass();
+        commandBuffers[i].end();
+    }
 }

@@ -23,6 +23,12 @@ public:
     vk::Format swapChainImageFormat;
     vk::Extent2D swapChainExtent;
     std::vector<vk::ImageView> swapChainImageViews;
+    vk::RenderPass renderPass;
+    vk::PipelineLayout pipelineLayout;
+    vk::Pipeline graphicsPipeline;
+    std::vector<vk::Framebuffer> swapChainFramebuffers;
+    vk::CommandPool commandPool;
+    std::vector<vk::CommandBuffer> commandBuffers;
 
     TBuiltInResource resources;
 
@@ -41,8 +47,7 @@ private:
     void CreateDebugCallback();
 
     void CreateVkSurface();
-    
-    
+
     void GetPhysDevice();
     QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
     SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
@@ -55,10 +60,12 @@ private:
     vk::PresentModeKHR chooseSwapPresentMode(const std::vector<vk::PresentModeKHR> availablePresentModes) const;
     vk::Extent2D chooseSwapExtent(const vk::SurfaceCapabilitiesKHR& capabilities) const;
     void CreateSwapChain();
-    
-
     void CreateImageViews();
+    void CreateRenderPass();
     void CreateGraphicsPipeline();
+    void CreateFramebuffers();
+    void CreateCommandPool();
+    void CreateCommandBuffers();
 };
 
 extern XDAY_API Renderer Render;
