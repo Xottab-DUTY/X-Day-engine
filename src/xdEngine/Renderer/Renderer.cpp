@@ -90,12 +90,15 @@ void Renderer::Initialize()
     CreateFramebuffers();
     CreateCommandPool();
     CreateCommandBuffers();
+    CreateSynchronizationPrimitives();
 }
 
 void Renderer::Destroy()
 {
     glslang::FinalizeProcess();
 
+    device.destroySemaphore(renderFinishedSemaphore);
+    device.destroyFence(imageAvailableFence);
     device.destroyCommandPool(commandPool);
 
     for (size_t i = 0; i < swapChainFramebuffers.size(); ++i)
@@ -113,6 +116,32 @@ void Renderer::Destroy()
     instance.destroySurfaceKHR(surface);
     instance.destroyDebugReportCallbackEXT(vkCallback);
     instance.destroy();
+}
+
+void Renderer::DrawFrame()
+{
+    uint32_t imageIndex;
+    device.acquireNextImageKHR(swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
+
+    device.waitForFences(1, &imageAvailableFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+    device.resetFences(1, &imageAvailableFence);
+
+    vk::SubmitInfo submitInfo;
+    submitInfo.setCommandBufferCount(1);
+    submitInfo.setPCommandBuffers(&commandBuffers[imageIndex]);
+
+    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphore };
+    submitInfo.setSignalSemaphoreCount(1);
+    submitInfo.setPSignalSemaphores(signalSemaphores);
+
+    result = graphicsQueue.submit(1, &submitInfo, nullptr);
+    assert(result == vk::Result::eSuccess);
+
+    vk::SwapchainKHR swapChains[] = { swapchain };
+
+    vk::PresentInfoKHR presentInfo(1, signalSemaphores, 1, swapChains, &imageIndex);
+
+    presentQueue.presentKHR(&presentInfo);
 }
 
 void Renderer::InitializeResources()
@@ -652,6 +681,7 @@ void Renderer::CreateGraphicsPipeline()
     pipelineInfo.setPRasterizationState(&rasterizer);
     pipelineInfo.setPMultisampleState(&multisampling);
     pipelineInfo.setPColorBlendState(&colorBlending);
+    //pipelineInfo.setPDynamicState(&dynamicState); // Optional
     pipelineInfo.setLayout(pipelineLayout);
     pipelineInfo.setRenderPass(renderPass);
 
@@ -736,4 +766,23 @@ void Renderer::CreateCommandBuffers()
         commandBuffers[i].endRenderPass();
         commandBuffers[i].end();
     }
+}
+
+void Renderer::CreateSynchronizationPrimitives()
+{
+    vk::FenceCreateInfo fenceInfo;
+    imageAvailableFence = device.createFence(fenceInfo);
+    assert(imageAvailableFence);
+
+    // Another variant
+    /*result = device.createFence(&fenceInfo, nullptr, &imageAvailableFence);
+    assert(result == vk::Result::eSuccess);*/
+
+    vk::SemaphoreCreateInfo semaphoreInfo;
+    renderFinishedSemaphore = device.createSemaphore(semaphoreInfo);
+    assert(renderFinishedSemaphore);
+
+    // Another variant
+    /*result = device.createSemaphore(&semaphoreInfo, nullptr, &renderFinishedSemaphore);
+    assert(result == vk::Result::eSuccess);*/
 }

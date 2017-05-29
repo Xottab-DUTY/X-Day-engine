@@ -29,6 +29,8 @@ public:
     std::vector<vk::Framebuffer> swapChainFramebuffers;
     vk::CommandPool commandPool;
     std::vector<vk::CommandBuffer> commandBuffers;
+    vk::Fence imageAvailableFence;
+    vk::Semaphore renderFinishedSemaphore;
 
     TBuiltInResource resources;
 
@@ -38,6 +40,7 @@ public:
     Renderer();
     void Initialize();
     void Destroy();
+    void DrawFrame();
 
 private:
     void InitializeResources();
@@ -66,6 +69,7 @@ private:
     void CreateFramebuffers();
     void CreateCommandPool();
     void CreateCommandBuffers();
+    void CreateSynchronizationPrimitives();
 };
 
 extern XDAY_API Renderer Render;

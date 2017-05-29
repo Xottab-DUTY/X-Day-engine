@@ -73,7 +73,9 @@ void Startup()
     while (!glfwWindowShouldClose(Engine.window))
     {
         glfwPollEvents();
+        Render.DrawFrame();
     }
+    Render.device.waitIdle();
 }
 
 int main(int argc, char* argv[])
