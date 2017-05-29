@@ -13,6 +13,8 @@ class ShaderWorker // TODO: wip name; rename it, maybe.
     const vk::Device& device;
     const TBuiltInResource& resources;
     vk::ShaderModule shaderModule;
+    vk::PipelineShaderStageCreateInfo stageInfo;
+    vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
     vk::Result result;
 
     std::vector<char> shaderSource;
@@ -32,15 +34,17 @@ public:
     bool isBinaryOld() const;
 
     vk::ShaderModule GetShaderModule() const;
-
+    vk::PipelineShaderStageCreateInfo GetVkShaderStageInfo() const;
 private:
     void LoadShader();
     void LoadBinaryShader();
     bool CheckIfShaderChanged();
     void CompileShader();
-    void CreateShaderModule();
+    void CreateVkShaderModule();
+    void SetVkShaderStage();
 
     EShLanguage GetLanguage() const;
+    vk::ShaderStageFlagBits GetVkShaderStageFlagBits() const;
 };
 
 #endif // Shader_hpp__

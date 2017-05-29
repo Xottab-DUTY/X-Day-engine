@@ -540,4 +540,35 @@ void Renderer::CreateGraphicsPipeline()
 {
     ShaderWorker shader_frag("shader.frag", device, resources);
     ShaderWorker shader_vert("shader.vert", device, resources);
+
+    VkPipelineShaderStageCreateInfo shaderStages[] =
+    { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
+
+    
+
+    vk::PipelineInputAssemblyStateCreateInfo inputAssembly;
+    inputAssembly.setTopology(vk::PrimitiveTopology::eTriangleList);
+    inputAssembly.setPrimitiveRestartEnable(VK_FALSE);
+
+    vk::Viewport viewport;
+    viewport.setX(0.0f);
+    viewport.setY(0.0f);
+    viewport.setWidth(static_cast<float>(swapChainExtent.width));
+    viewport.setHeight(static_cast<float>(swapChainExtent.height));
+    viewport.setMinDepth(0.0f);
+    viewport.setMaxDepth(1.0f);
+
+    vk::Rect2D scissor({}, swapChainExtent);
+
+    vk::PipelineViewportStateCreateInfo viewportState;
+    viewportState.setViewportCount(1);
+    viewportState.setPViewports(&viewport);
+    viewportState.setScissorCount(1);
+    viewportState.setPScissors(&scissor);
+
+    vk::PipelineRasterizationStateCreateInfo rasterizer;
+    rasterizer.setLineWidth(1.0f);
+    rasterizer.setCullMode(vk::CullModeFlagBits::eBack);
+    rasterizer.setFrontFace(vk::FrontFace::eClockwise);
+
 }
