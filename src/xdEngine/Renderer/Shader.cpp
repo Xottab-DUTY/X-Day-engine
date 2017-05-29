@@ -55,7 +55,7 @@ void ShaderWorker::LoadBinaryShader()
     std::ifstream shader_binary_file(shader_binary_path, std::ios::binary);
 
     // check if file exist and it's not empty
-    if (!Core.FindParam("--p_shrec") && shader_binary_file.is_open() && filesystem::file_size(shader_binary_path) != 0) 
+    if (!Core.FindParam("--p_shrec") && shader_binary_file.is_open() && filesystem::file_size(shader_binary_path) != 0)
     {
         // Found shader, but it is old? Use it.
         // Recompile it and only then try to use new shader.
@@ -83,6 +83,8 @@ void ShaderWorker::LoadBinaryShader()
     }
     else if (!shaderSource.empty())
     {
+        if (shader_binary_file.is_open())
+            shader_binary_file.close();
         // Binary shader not found, but you have GLSL source? Try to compile it.
         CompileShader();
         shader_binary_file.open(shader_binary_path, std::ios::binary);
@@ -176,7 +178,10 @@ void ShaderWorker::CompileShader()
     glslang::OutputSpvBin(spirv, shader_binary_path.c_str());
 
     if (Core.isGlobalDebug() && filesystem::file_size(shader_binary_path) != 0)
-        Msg("ShaderWorker:: compiled: {}", shaderName);
+        Msg("ShaderWorker::CompileShader():: compiled: {}", shaderName);
+
+    delete program;
+    delete shader;
 
     // Get current source hash and save it
     // TODO: Implement

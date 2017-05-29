@@ -56,9 +56,6 @@
     <ClInclude Include="Renderer\Renderer.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\VDeleter.hpp">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\Shader.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
