@@ -134,12 +134,20 @@ void ShaderWorker::CompileShader()
     shader->setStrings(&source_bytes, 1);
     shader->setEntryPoint("main");
 
-    if (false && Core.isGlobalDebug())
+    if (Core.isGlobalDebug() && Core.FindParam("--p_shpre"))
     {
         std::string preprocessed;
         glslang::TShader::ForbidIncluder includer;
         success = shader->preprocess(&resources, 450, ENoProfile, false, false,
                                      messages, &preprocessed, includer);
+        if (success)
+        {
+            std::ofstream pp_source_file(shader_source_path + ".pp");
+            pp_source_file << preprocessed;
+            Msg("ShaderWorker::CompileShader():: shader preprocessed: {}", shaderName);
+        }
+        else
+            Msg("ShaderWorker::CompileShader():: failed to preprocess shader: {}", shaderName);
     }
 
     success = shader->parse(&resources, 450, false, messages);
@@ -154,6 +162,8 @@ void ShaderWorker::CompileShader()
     else
     {
         Msg("ShaderWorker::CompileShader():: failed to compile: {}", shaderName);
+        delete program;
+        delete shader;
         return;
     }
 
@@ -161,6 +171,8 @@ void ShaderWorker::CompileShader()
     if (!success)
     {
         Msg("ShaderWorker::CompileShader():: failed to compile: {}", shaderName);
+        delete program;
+        delete shader;
         return;
     }
 
