@@ -25,6 +25,10 @@ public:
 
     void xdCreateWindow();
 
+    static void onWindowResize(GLFWwindow* window, int width, int height);
+    static void onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void onWindowFocus(GLFWwindow* window, int focused);
+
     int GetMonitorsCount() const { return MonitorsCount; };
     int GetVideoModesCount() const { return VideoModesCount; };
 };

@@ -8,7 +8,7 @@
 
 XDAY_API XDayEngine Engine;
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         ConsoleCommands->Execute(&ExitCC);
@@ -21,6 +21,21 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         else
             glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.CurrentMode->width - 256, Engine.CurrentMode->height - 256, Engine.CurrentMode->refreshRate);
     }
+}
+
+void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
+{
+    if (width == 0 || height == 0) return;
+}
+
+void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
+{
+    if (focused)
+    {
+        // The window gained input focus
+    }
+    else
+        glfwWaitEvents();
 }
 
 void XDayEngine::Initialize()
@@ -45,5 +60,7 @@ void XDayEngine::xdCreateWindow()
     else
         window = glfwCreateWindow(CurrentMode->width-256, CurrentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
 
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetKeyCallback(window, onKeyPress);
+    glfwSetWindowSizeCallback(window, onWindowResize);
+    glfwSetWindowFocusCallback(window, onWindowFocus);
 }
