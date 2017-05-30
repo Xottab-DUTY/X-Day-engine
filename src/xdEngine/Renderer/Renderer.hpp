@@ -42,6 +42,9 @@ public:
     void Destroy();
     void DrawFrame();
 
+    void RecreateSwapChain();
+    void CleanupSwapChain();
+
 private:
     void InitializeResources();
     void CreateVkInstance();

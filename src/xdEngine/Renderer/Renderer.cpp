@@ -75,6 +75,7 @@ Renderer::Renderer(): result(vk::Result::eNotReady),
 
 void Renderer::Initialize()
 {
+    glfwSetWindowUserPointer(Engine.window, this);
     glslang::InitializeProcess();
 
     InitializeResources();
@@ -121,7 +122,15 @@ void Renderer::Destroy()
 void Renderer::DrawFrame()
 {
     uint32_t imageIndex;
-    device.acquireNextImageKHR(swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
+    result = device.acquireNextImageKHR(swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
+
+    assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
+
+    if (result == vk::Result::eErrorOutOfDateKHR)
+    {
+        RecreateSwapChain();
+        return;
+    }
 
     device.waitForFences(1, &imageAvailableFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
     device.resetFences(1, &imageAvailableFence);
@@ -141,7 +150,38 @@ void Renderer::DrawFrame()
 
     vk::PresentInfoKHR presentInfo(1, signalSemaphores, 1, swapChains, &imageIndex);
 
-    presentQueue.presentKHR(&presentInfo);
+    result = presentQueue.presentKHR(&presentInfo);
+    assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
+
+    if (result != vk::Result::eSuccess)
+        RecreateSwapChain();
+}
+
+void Renderer::RecreateSwapChain()
+{
+    device.waitIdle();
+
+    CleanupSwapChain();
+
+    CreateSwapChain();
+    CreateImageViews();
+    CreateRenderPass();
+    CreateGraphicsPipeline();
+    CreateFramebuffers();
+    CreateCommandBuffers();
+}
+
+void Renderer::CleanupSwapChain()
+{
+    for (size_t i = 0; i < swapChainFramebuffers.size(); ++i)
+        device.destroyFramebuffer(swapChainFramebuffers[i]);
+
+    device.destroyPipeline(graphicsPipeline);
+    device.destroyPipelineLayout(pipelineLayout);
+    device.destroyRenderPass(renderPass);
+
+    for (size_t i = 0; i < swapChainImageViews.size(); ++i)
+        device.destroyImageView(swapChainImageViews[i], nullptr);
 }
 
 void Renderer::InitializeResources()
@@ -312,8 +352,8 @@ void Renderer::CreateDebugCallback()
         ({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
         (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
 
-    result = instance.createDebugReportCallbackEXT(&callbackInfo, nullptr, &vkCallback);
-    assert(result == vk::Result::eSuccess);
+    vkCallback = instance.createDebugReportCallbackEXT(callbackInfo);
+    assert(vkCallback);
 }
 
 void Renderer::CreateVkSurface()
@@ -476,10 +516,6 @@ void Renderer::CreateDevice()
     device = physDevice.createDevice(deviceCreateInfo);
     assert(device);
 
-    // Another variant
-    /*result = physDevice.createDevice(&deviceCreateInfo, nullptr, &device);
-    assert(result == vk::Result::eSuccess);*/
-
     device.getQueue(indices.graphicsFamily, 0, &graphicsQueue);
     device.getQueue(indices.presentFamily, 0, &presentQueue);
 }
@@ -559,10 +595,13 @@ void Renderer::CreateSwapChain()
     swapchainInfo.setCompositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque);
     swapchainInfo.setPresentMode(presentMode);
     swapchainInfo.setClipped(true);
-    swapchainInfo.setOldSwapchain(nullptr);
 
-    result = device.createSwapchainKHR(&swapchainInfo, nullptr, &swapchain);
-    assert(result == vk::Result::eSuccess);
+    vk::SwapchainKHR oldSwapChain = swapchain;
+    swapchainInfo.setOldSwapchain(oldSwapChain);
+
+    vk::SwapchainKHR newSwapChain = device.createSwapchainKHR(swapchainInfo);
+    swapchain = newSwapChain;
+    assert(swapchain);
 
     swapChainImages = device.getSwapchainImagesKHR(swapchain);
     swapChainImageFormat = surfaceFormat.format;
@@ -605,8 +644,8 @@ void Renderer::CreateRenderPass()
     renderPassInfo.setSubpassCount(1);
     renderPassInfo.setPSubpasses(&subpass);
 
-    result = device.createRenderPass(&renderPassInfo, nullptr, &renderPass);
-    assert(result == vk::Result::eSuccess);
+    renderPass = device.createRenderPass(renderPassInfo);
+    assert(renderPass);
 }
 
 void Renderer::CreateGraphicsPipeline()
@@ -669,8 +708,8 @@ void Renderer::CreateGraphicsPipeline()
 
     vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
 
-    result = device.createPipelineLayout(&pipelineLayoutInfo, nullptr, &pipelineLayout);
-    assert(result == vk::Result::eSuccess);
+    pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
+    assert(pipelineLayout);
 
     vk::GraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.setStageCount(2);
@@ -687,10 +726,6 @@ void Renderer::CreateGraphicsPipeline()
 
     graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo, nullptr);
     assert(graphicsPipeline);
-
-    // Another variant
-    /*result = device.createGraphicsPipelines(nullptr, 1, &pipelineInfo, nullptr, &graphicsPipeline);
-    assert(result == vk::Result::eSuccess);*/
 }
 
 void Renderer::CreateFramebuffers()
@@ -709,10 +744,6 @@ void Renderer::CreateFramebuffers()
 
         swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
         assert(swapChainFramebuffers[i]);
-
-        // Another variant
-        /*result = device.createFramebuffer(&framebufferInfo, nullptr, &swapChainFramebuffers[i]);
-        assert(result == vk::Result::eSuccess);*/
     }
 }
 
@@ -724,14 +755,13 @@ void Renderer::CreateCommandPool()
 
     commandPool = device.createCommandPool(poolInfo);
     assert(commandPool);
-
-    // Another variant
-    /*result = device.createCommandPool(&poolInfo, nullptr, &commandPool);
-    assert(result == vk::Result::eSuccess);*/
 }
 
 void Renderer::CreateCommandBuffers()
 {
+    if (!commandBuffers.empty())
+        device.freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+
     commandBuffers.resize(swapChainFramebuffers.size());
 
     vk::CommandBufferAllocateInfo allocInfo(
@@ -740,10 +770,6 @@ void Renderer::CreateCommandBuffers()
 
     commandBuffers = device.allocateCommandBuffers(allocInfo);
     assert(!commandBuffers.empty());
-
-    // Another variant
-    /*result = device.allocateCommandBuffers(&allocInfo, commandBuffers.data());
-    assert(result == vk::Result::eSuccess);*/
 
     for (size_t i = 0; i < commandBuffers.size(); ++i)
     {
@@ -774,15 +800,7 @@ void Renderer::CreateSynchronizationPrimitives()
     imageAvailableFence = device.createFence(fenceInfo);
     assert(imageAvailableFence);
 
-    // Another variant
-    /*result = device.createFence(&fenceInfo, nullptr, &imageAvailableFence);
-    assert(result == vk::Result::eSuccess);*/
-
     vk::SemaphoreCreateInfo semaphoreInfo;
     renderFinishedSemaphore = device.createSemaphore(semaphoreInfo);
     assert(renderFinishedSemaphore);
-
-    // Another variant
-    /*result = device.createSemaphore(&semaphoreInfo, nullptr, &renderFinishedSemaphore);
-    assert(result == vk::Result::eSuccess);*/
 }

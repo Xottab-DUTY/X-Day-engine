@@ -5,6 +5,7 @@
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
+#include "Renderer/Renderer.hpp"
 
 XDAY_API XDayEngine Engine;
 
@@ -26,6 +27,9 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
 void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
 {
     if (width == 0 || height == 0) return;
+
+    Renderer* pRender = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+    pRender->RecreateSwapChain();
 }
 
 void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
