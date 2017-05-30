@@ -1,7 +1,8 @@
-#include "Common/Platform.hpp" // this must be first
-
 #include <set>
+
+#include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
+#include <glm/glm.hpp>
 
 #include <GLFW/glfw3.h>
 #include <fmt/ostream.h>
@@ -24,6 +25,13 @@ const std::vector<const char*> validationLayers =
 const std::vector<const char*> deviceExtensions =
 {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
+const std::vector<Renderer::Vertex> vertices =
+{
+    { { 0.0f, -0.5f },{ 1.0f, 0.0f, 0.0f } },
+    { { 0.5f, 0.5f },{ 0.0f, 1.0f, 0.0f } },
+    { { -0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f } }
 };
 
 VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
@@ -90,6 +98,7 @@ void Renderer::Initialize()
     CreateGraphicsPipeline();
     CreateFramebuffers();
     CreateCommandPool();
+    CreateVertexBuffer();
     CreateCommandBuffers();
     CreateSynchronizationPrimitives();
 }
@@ -97,6 +106,9 @@ void Renderer::Initialize()
 void Renderer::Destroy()
 {
     glslang::FinalizeProcess();
+
+    device.destroyBuffer(vertexBuffer);
+    device.freeMemory(vertexBufferMemory);
 
     device.destroySemaphore(renderFinishedSemaphore);
     device.destroyFence(imageAvailableFence);
@@ -378,82 +390,6 @@ void Renderer::GetPhysDevice()
     assert(physDevice);
 }
 
-struct Renderer::QueueFamilyIndices
-{
-    int graphicsFamily = -1;
-    int presentFamily = -1;
-
-    bool isComplete() const
-    {
-        return graphicsFamily >= 0 && presentFamily >= 0;
-    }
-};
-
-Renderer::QueueFamilyIndices Renderer::findQueueFamilies(vk::PhysicalDevice _physDevice) const
-{
-    QueueFamilyIndices indices;
-
-    std::vector<vk::QueueFamilyProperties> queueFamilies = _physDevice.getQueueFamilyProperties();
-
-    int i = 0;
-    for (const auto& queueFamily : queueFamilies)
-    {
-        if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
-            indices.graphicsFamily = i;
-
-        vk::Bool32 presentSupport = false;
-        _physDevice.getSurfaceSupportKHR(i, surface, &presentSupport);
-
-        if (queueFamily.queueCount > 0 && presentSupport)
-            indices.presentFamily = i;
-
-        if (indices.isComplete())
-            break;
-
-        ++i;
-    }
-
-    return indices;
-}
-
-struct Renderer::SwapChainSupportDetails
-{
-    vk::SurfaceCapabilitiesKHR capabilities;
-    std::vector<vk::SurfaceFormatKHR> formats;
-    std::vector<vk::PresentModeKHR> presentModes;
-};
-
-Renderer::SwapChainSupportDetails Renderer::querySwapChainSupport(vk::PhysicalDevice _physDevice) const
-{
-    SwapChainSupportDetails details;
-
-    _physDevice.getSurfaceCapabilitiesKHR(surface, &details.capabilities);
-
-    {
-        uint32_t formatCount;
-        _physDevice.getSurfaceFormatsKHR(surface, &formatCount, nullptr);
-
-        if (formatCount != 0)
-        {
-            details.formats.resize(static_cast<size_t>(formatCount));
-            _physDevice.getSurfaceFormatsKHR(surface, &formatCount, details.formats.data());
-        }
-    }
-
-    {
-        uint32_t presentModeCount;
-        _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, nullptr);
-
-        if (presentModeCount != 0)
-        {
-            details.presentModes.resize(static_cast<size_t>(presentModeCount));
-            _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
-        }
-    }
-
-    return details;
-}
-
 bool Renderer::isPhysDeviceSuitable(vk::PhysicalDevice _physDevice) const
 {
     QueueFamilyIndices indices = findQueueFamilies(_physDevice);
@@ -656,8 +592,11 @@ void Renderer::CreateGraphicsPipeline()
     vk::PipelineShaderStageCreateInfo shaderStages[] =
     { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
 
-    vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
-
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
+    vk::PipelineVertexInputStateCreateInfo vertexInputInfo({}, 1, &bindingDescription,
+        static_cast<uint32_t>(attributeDescriptions.size()), attributeDescriptions.data());
+    
     vk::PipelineInputAssemblyStateCreateInfo inputAssembly;
     inputAssembly.setTopology(vk::PrimitiveTopology::eTriangleList);
     inputAssembly.setPrimitiveRestartEnable(VK_FALSE);
@@ -757,6 +696,31 @@ void Renderer::CreateCommandPool()
     assert(commandPool);
 }
 
+void Renderer::CreateVertexBuffer()
+{
+    vk::BufferCreateInfo bufferInfo;
+    bufferInfo.setSize(sizeof(vertices[0]) * vertices.size());
+    bufferInfo.setUsage(vk::BufferUsageFlagBits::eVertexBuffer);
+    bufferInfo.setSharingMode(vk::SharingMode::eExclusive);
+
+    vertexBuffer = device.createBuffer(bufferInfo);
+    assert(vertexBuffer);
+
+    vk::MemoryRequirements memRequirements = device.getBufferMemoryRequirements(vertexBuffer);
+
+    vk::MemoryAllocateInfo allocInfo(memRequirements.size,
+        findMemoryType(memRequirements.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent));
+
+    vertexBufferMemory = device.allocateMemory(allocInfo);
+    assert(vertexBufferMemory);
+
+    device.bindBufferMemory(vertexBuffer, vertexBufferMemory, 0);
+
+    void* data = device.mapMemory(vertexBufferMemory, 0, bufferInfo.size);
+    memcpy(data, vertices.data(), static_cast<size_t>(bufferInfo.size));
+    device.unmapMemory(vertexBufferMemory);
+}
+
 void Renderer::CreateCommandBuffers()
 {
     if (!commandBuffers.empty())
@@ -788,6 +752,11 @@ void Renderer::CreateCommandBuffers()
 
         commandBuffers[i].beginRenderPass(&renderPassInfo, vk::SubpassContents::eInline);
         commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, graphicsPipeline);
+
+        vk::Buffer vertexBuffers[] = { vertexBuffer };
+        vk::DeviceSize offsets[] = { 0 };
+        commandBuffers[i].bindVertexBuffers(0, 1, vertexBuffers, offsets);
+
         commandBuffers[i].draw(3,1,0,0);
         commandBuffers[i].endRenderPass();
         commandBuffers[i].end();
@@ -803,4 +772,104 @@ void Renderer::CreateSynchronizationPrimitives()
     vk::SemaphoreCreateInfo semaphoreInfo;
     renderFinishedSemaphore = device.createSemaphore(semaphoreInfo);
     assert(renderFinishedSemaphore);
+}
+
+bool Renderer::QueueFamilyIndices::isComplete() const
+{
+    return graphicsFamily >= 0 && presentFamily >= 0;
+}
+
+Renderer::QueueFamilyIndices Renderer::findQueueFamilies(vk::PhysicalDevice _physDevice) const
+{
+    QueueFamilyIndices indices;
+
+    std::vector<vk::QueueFamilyProperties> queueFamilies = _physDevice.getQueueFamilyProperties();
+
+    int i = 0;
+    for (const auto& queueFamily : queueFamilies)
+    {
+        if (queueFamily.queueCount > 0 && queueFamily.queueFlags & vk::QueueFlagBits::eGraphics)
+            indices.graphicsFamily = i;
+
+        vk::Bool32 presentSupport = false;
+        _physDevice.getSurfaceSupportKHR(i, surface, &presentSupport);
+
+        if (queueFamily.queueCount > 0 && presentSupport)
+            indices.presentFamily = i;
+
+        if (indices.isComplete())
+            break;
+
+        ++i;
+    }
+
+    return indices;
+}
+
+
+
+Renderer::SwapChainSupportDetails Renderer::querySwapChainSupport(vk::PhysicalDevice _physDevice) const
+{
+    SwapChainSupportDetails details;
+
+    _physDevice.getSurfaceCapabilitiesKHR(surface, &details.capabilities);
+
+    {
+        uint32_t formatCount;
+        _physDevice.getSurfaceFormatsKHR(surface, &formatCount, nullptr);
+
+        if (formatCount != 0)
+        {
+            details.formats.resize(static_cast<size_t>(formatCount));
+            _physDevice.getSurfaceFormatsKHR(surface, &formatCount, details.formats.data());
+        }
+    }
+
+    {
+        uint32_t presentModeCount;
+        _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, nullptr);
+
+        if (presentModeCount != 0)
+        {
+            details.presentModes.resize(static_cast<size_t>(presentModeCount));
+            _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
+        }
+    }
+
+    return details;
+}
+
+
+vk::VertexInputBindingDescription Renderer::Vertex::getBindingDescription()
+{
+    vk::VertexInputBindingDescription bindingDescription(0, sizeof(Vertex), vk::VertexInputRate::eVertex);
+    return bindingDescription;
+}
+
+std::array<vk::VertexInputAttributeDescription, 2> Renderer::Vertex::getAttributeDescriptions()
+{
+    std::array<vk::VertexInputAttributeDescription, 2> attributeDescriptions;
+    attributeDescriptions[0].setBinding(0);
+    attributeDescriptions[0].setLocation(0);
+    attributeDescriptions[0].setFormat(vk::Format::eR32G32Sfloat);
+    attributeDescriptions[0].setOffset(offsetof(Vertex, pos));
+
+    attributeDescriptions[1].setBinding(0);
+    attributeDescriptions[1].setLocation(1);
+    attributeDescriptions[1].setFormat(vk::Format::eR32G32B32Sfloat);
+    attributeDescriptions[1].setOffset(offsetof(Vertex, color));
+
+    return attributeDescriptions;
+}
+
+uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const
+{
+    vk::PhysicalDeviceMemoryProperties memProperties = physDevice.getMemoryProperties();
+
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
+        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
+            return i;
+
+    Log("Renderer::findMemoryType():: failed to find suitable memory type!");
+    throw std::runtime_error("failed to find suitable memory type!");
 }

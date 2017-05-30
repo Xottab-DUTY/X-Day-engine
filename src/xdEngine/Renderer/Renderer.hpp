@@ -3,6 +3,7 @@
 #define xdRender_hpp__
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
+#include <glm/glm.hpp>
 
 #include "xdEngine_impexp.inl"
 #include <ResourceLimits.h>
@@ -28,14 +29,35 @@ public:
     vk::Pipeline graphicsPipeline;
     std::vector<vk::Framebuffer> swapChainFramebuffers;
     vk::CommandPool commandPool;
+    vk::Buffer vertexBuffer;
+    vk::DeviceMemory vertexBufferMemory;
     std::vector<vk::CommandBuffer> commandBuffers;
     vk::Fence imageAvailableFence;
     vk::Semaphore renderFinishedSemaphore;
 
     TBuiltInResource resources;
 
-    struct QueueFamilyIndices;
-    struct SwapChainSupportDetails;
+    struct QueueFamilyIndices
+    {
+        int graphicsFamily = -1;
+        int presentFamily = -1;
+
+        bool isComplete() const;
+    };
+    struct SwapChainSupportDetails
+    {
+        vk::SurfaceCapabilitiesKHR capabilities;
+        std::vector<vk::SurfaceFormatKHR> formats;
+        std::vector<vk::PresentModeKHR> presentModes;
+    };
+    struct Vertex
+    {
+        glm::vec2 pos;
+        glm::vec3 color;
+
+        static vk::VertexInputBindingDescription getBindingDescription();
+        static std::array<vk::VertexInputAttributeDescription, 2> getAttributeDescriptions();
+    };
 
     Renderer();
     void Initialize();
@@ -55,8 +77,6 @@ private:
     void CreateVkSurface();
 
     void GetPhysDevice();
-    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
-    SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
     bool isPhysDeviceSuitable(vk::PhysicalDevice _physDevice) const;
 
     bool checkDeviceExtensionSupport(vk::PhysicalDevice _physDevice) const;
@@ -71,8 +91,13 @@ private:
     void CreateGraphicsPipeline();
     void CreateFramebuffers();
     void CreateCommandPool();
+    void CreateVertexBuffer();
     void CreateCommandBuffers();
     void CreateSynchronizationPrimitives();
+
+    QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
+    SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
+    uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
 };
 
 extern XDAY_API Renderer Render;
