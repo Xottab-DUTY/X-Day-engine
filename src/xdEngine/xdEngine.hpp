@@ -8,7 +8,6 @@
 
 class XDAY_API XDayEngine
 {
-private:
     int MonitorsCount;
     int VideoModesCount;
 
