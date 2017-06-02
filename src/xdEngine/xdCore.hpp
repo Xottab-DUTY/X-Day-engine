@@ -53,7 +53,7 @@ public:
 public:
     xdCore();
     void InitializeArguments(int argc, char* argv[]);
-    void Initialize(std::string&& ApplicationName);
+    void Initialize(std::string&& ApplicationName = "X-Day Engine");
     void Destroy();
 
     auto GetBuildId() const { return buildId; }

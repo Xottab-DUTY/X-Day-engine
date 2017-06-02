@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
     InitLogger();
 
     Core.InitializeArguments(argc, argv);
-    Core.Initialize("X-Day Engine");
+    Core.Initialize();
     InitializeConsole();
 
     Log(Core.GetGLFWVersionString());
