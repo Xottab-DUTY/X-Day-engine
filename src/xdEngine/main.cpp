@@ -74,6 +74,7 @@ void Startup()
     while (!glfwWindowShouldClose(Engine.window))
     {
         glfwPollEvents();
+        Render.UpdateUniformBuffer();
         Render.DrawFrame();
     }
     Render.device.waitIdle();

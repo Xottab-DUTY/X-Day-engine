@@ -2,7 +2,10 @@
 
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
+
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <GLFW/glfw3.h>
 #include <fmt/ostream.h>
@@ -32,6 +35,11 @@ const std::vector<Renderer::Vertex> vertices =
     { { 0.0f, -0.5f },{ 1.0f, 0.0f, 0.0f } },
     { { 0.5f, 0.5f },{ 0.0f, 1.0f, 0.0f } },
     { { -0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f } }
+};
+
+const std::vector<uint16_t> indices =
+{
+    0, 1, 2, 2, 3, 0
 };
 
 VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
@@ -95,10 +103,15 @@ void Renderer::Initialize()
     CreateSwapChain();
     CreateImageViews();
     CreateRenderPass();
+    CreateDescriptorSetLayout();
     CreateGraphicsPipeline();
     CreateFramebuffers();
     CreateCommandPool();
     CreateVertexBuffer();
+    CreateIndexBuffer();
+    CreateUniformBuffer();
+    CreateDescriptorPool();
+    CreateDescriptorSet();
     CreateCommandBuffers();
     CreateSynchronizationPrimitives();
 }
@@ -106,6 +119,14 @@ void Renderer::Initialize()
 void Renderer::Destroy()
 {
     glslang::FinalizeProcess();
+
+    device.destroyDescriptorSetLayout(descriptorSetLayout);
+
+    device.destroyBuffer(uniformBuffer);
+    device.freeMemory(uniformBufferMemory);
+
+    device.destroyBuffer(indexBuffer);
+    device.freeMemory(indexBufferMemory);
 
     device.destroyBuffer(vertexBuffer);
     device.freeMemory(vertexBufferMemory);
@@ -129,6 +150,24 @@ void Renderer::Destroy()
     instance.destroySurfaceKHR(surface);
     instance.destroyDebugReportCallbackEXT(vkCallback);
     instance.destroy();
+}
+
+void Renderer::UpdateUniformBuffer()
+{
+    static auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count() / 1000.0f;
+
+    UniformBufferObject ubo;
+    ubo.model = glm::rotate(glm::mat4(), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / static_cast<float>(swapChainExtent.height), 0.1f, 10.0f);
+    ubo.proj[1][1] *= -1;
+
+    void* data = device.mapMemory(uniformBufferMemory, 0, sizeof(ubo));
+    memcpy(data, &ubo, sizeof(ubo));
+    device.unmapMemory(uniformBufferMemory);
 }
 
 void Renderer::DrawFrame()
@@ -584,6 +623,17 @@ void Renderer::CreateRenderPass()
     assert(renderPass);
 }
 
+void Renderer::CreateDescriptorSetLayout()
+{
+    vk::DescriptorSetLayoutBinding uboLayoutBinding(
+        0, vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex);
+
+    vk::DescriptorSetLayoutCreateInfo layoutInfo({}, 1, &uboLayoutBinding);
+
+    descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+    assert(descriptorSetLayout);
+}
+
 void Renderer::CreateGraphicsPipeline()
 {
     ShaderWorker shader_frag("shader.frag", device, resources);
@@ -620,7 +670,7 @@ void Renderer::CreateGraphicsPipeline()
     vk::PipelineRasterizationStateCreateInfo rasterizer;
     rasterizer.setLineWidth(1.0f);
     rasterizer.setCullMode(vk::CullModeFlagBits::eBack);
-    rasterizer.setFrontFace(vk::FrontFace::eClockwise);
+    rasterizer.setFrontFace(vk::FrontFace::eCounterClockwise);
 
     vk::PipelineMultisampleStateCreateInfo multisampling;
     multisampling.setMinSampleShading(1.0f); // Optional
@@ -645,7 +695,7 @@ void Renderer::CreateGraphicsPipeline()
 
     vk::PipelineDynamicStateCreateInfo dynamicState({}, 2, dynamicStates);
 
-    vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
+    vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 1, &descriptorSetLayout);
 
     pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
     assert(pipelineLayout);
@@ -659,7 +709,7 @@ void Renderer::CreateGraphicsPipeline()
     pipelineInfo.setPRasterizationState(&rasterizer);
     pipelineInfo.setPMultisampleState(&multisampling);
     pipelineInfo.setPColorBlendState(&colorBlending);
-    //pipelineInfo.setPDynamicState(&dynamicState); // Optional
+    pipelineInfo.setPDynamicState(&dynamicState); // Optional
     pipelineInfo.setLayout(pipelineLayout);
     pipelineInfo.setRenderPass(renderPass);
 
@@ -698,27 +748,87 @@ void Renderer::CreateCommandPool()
 
 void Renderer::CreateVertexBuffer()
 {
-    vk::BufferCreateInfo bufferInfo;
-    bufferInfo.setSize(sizeof(vertices[0]) * vertices.size());
-    bufferInfo.setUsage(vk::BufferUsageFlagBits::eVertexBuffer);
-    bufferInfo.setSharingMode(vk::SharingMode::eExclusive);
+    vk::DeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
-    vertexBuffer = device.createBuffer(bufferInfo);
-    assert(vertexBuffer);
+    vk::Buffer stagingBuffer;
+    vk::DeviceMemory stagingBufferMemory;
+    createBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc,
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        stagingBuffer, stagingBufferMemory);
 
-    vk::MemoryRequirements memRequirements = device.getBufferMemoryRequirements(vertexBuffer);
+    auto data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
+    device.unmapMemory(stagingBufferMemory);
 
-    vk::MemoryAllocateInfo allocInfo(memRequirements.size,
-        findMemoryType(memRequirements.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent));
+    createBuffer(bufferSize,
+        vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
+        vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
 
-    vertexBufferMemory = device.allocateMemory(allocInfo);
-    assert(vertexBufferMemory);
+    copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
-    device.bindBufferMemory(vertexBuffer, vertexBufferMemory, 0);
+    device.destroyBuffer(stagingBuffer);
+    device.freeMemory(stagingBufferMemory);
+}
 
-    void* data = device.mapMemory(vertexBufferMemory, 0, bufferInfo.size);
-    memcpy(data, vertices.data(), static_cast<size_t>(bufferInfo.size));
-    device.unmapMemory(vertexBufferMemory);
+void Renderer::CreateIndexBuffer()
+{
+    vk::DeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+
+    vk::Buffer stagingBuffer;
+    vk::DeviceMemory stagingBufferMemory;
+    createBuffer(bufferSize,
+        vk::BufferUsageFlagBits::eTransferSrc,
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        stagingBuffer, stagingBufferMemory);
+
+    void* data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
+    device.unmapMemory(stagingBufferMemory);
+
+    createBuffer(bufferSize,
+        vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
+        vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
+
+    copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+
+    device.destroyBuffer(stagingBuffer);
+    device.freeMemory(stagingBufferMemory);
+}
+
+void Renderer::CreateUniformBuffer()
+{
+    vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
+
+    createBuffer(bufferSize,
+        vk::BufferUsageFlagBits::eUniformBuffer,
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+        uniformBuffer, uniformBufferMemory);
+
+
+}
+
+void Renderer::CreateDescriptorPool()
+{
+    vk::DescriptorPoolSize poolSize(vk::DescriptorType::eUniformBuffer, 1);
+    vk::DescriptorPoolCreateInfo poolInfo({}, 1, 1, &poolSize);
+
+    descriptorPool = device.createDescriptorPool(poolInfo);
+    assert(descriptorPool);
+}
+
+void Renderer::CreateDescriptorSet()
+{
+    vk::DescriptorSetLayout layouts[] = { descriptorSetLayout };
+    vk::DescriptorSetAllocateInfo allocInfo(descriptorPool, 1, layouts);
+    result = device.allocateDescriptorSets(&allocInfo, &descriptorSet);
+    assert(result == vk::Result::eSuccess);
+
+    vk::DescriptorBufferInfo bufferInfo(uniformBuffer, 0, sizeof(UniformBufferObject));
+
+    vk::WriteDescriptorSet descriptorWrite(descriptorSet, 0, 0, 1,
+        vk::DescriptorType::eUniformBuffer, nullptr, &bufferInfo);
+
+    device.updateDescriptorSets(1, &descriptorWrite, 0, nullptr);
 }
 
 void Renderer::CreateCommandBuffers()
@@ -756,8 +866,11 @@ void Renderer::CreateCommandBuffers()
         vk::Buffer vertexBuffers[] = { vertexBuffer };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffers[i].bindVertexBuffers(0, 1, vertexBuffers, offsets);
+        commandBuffers[i].bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint16);
+        commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 
-        commandBuffers[i].draw(3,1,0,0);
+        commandBuffers[i].drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+
         commandBuffers[i].endRenderPass();
         commandBuffers[i].end();
     }
@@ -772,6 +885,45 @@ void Renderer::CreateSynchronizationPrimitives()
     vk::SemaphoreCreateInfo semaphoreInfo;
     renderFinishedSemaphore = device.createSemaphore(semaphoreInfo);
     assert(renderFinishedSemaphore);
+}
+
+void Renderer::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory)
+{
+    vk::BufferCreateInfo bufferInfo({}, size, usage, vk::SharingMode::eExclusive);
+
+    buffer = device.createBuffer(bufferInfo);
+
+    auto memRequirements = device.getBufferMemoryRequirements(buffer);
+
+    vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
+
+    bufferMemory = device.allocateMemory(allocInfo);
+
+    device.bindBufferMemory(buffer, bufferMemory, 0);
+}
+
+void Renderer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size) const
+{
+    vk::CommandBufferAllocateInfo allocInfo(commandPool, vk::CommandBufferLevel::ePrimary, 1);
+    vk::CommandBuffer commandBuffer;
+    device.allocateCommandBuffers(&allocInfo, &commandBuffer);
+
+    vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
+    commandBuffer.begin(beginInfo);
+
+    vk::BufferCopy copyRegion(0, 0, size);
+    commandBuffer.copyBuffer(srcBuffer, dstBuffer, 1, &copyRegion);
+
+    commandBuffer.end();
+
+    vk::SubmitInfo submitInfo;
+    submitInfo.setCommandBufferCount(1);
+    submitInfo.setPCommandBuffers(&commandBuffer);
+
+    graphicsQueue.submit(1, &submitInfo, nullptr);
+    graphicsQueue.waitIdle();
+
+    device.freeCommandBuffers(commandPool, 1, &commandBuffer);
 }
 
 bool Renderer::QueueFamilyIndices::isComplete() const
@@ -852,12 +1004,12 @@ std::array<vk::VertexInputAttributeDescription, 2> Renderer::Vertex::getAttribut
     attributeDescriptions[0].setBinding(0);
     attributeDescriptions[0].setLocation(0);
     attributeDescriptions[0].setFormat(vk::Format::eR32G32Sfloat);
-    attributeDescriptions[0].setOffset(offsetof(Vertex, pos));
+    attributeDescriptions[0].setOffset(static_cast<uint32_t>(offsetof(Vertex, pos)));
 
     attributeDescriptions[1].setBinding(0);
     attributeDescriptions[1].setLocation(1);
     attributeDescriptions[1].setFormat(vk::Format::eR32G32B32Sfloat);
-    attributeDescriptions[1].setOffset(offsetof(Vertex, color));
+    attributeDescriptions[1].setOffset(static_cast<uint32_t>(offsetof(Vertex, color)));
 
     return attributeDescriptions;
 }
