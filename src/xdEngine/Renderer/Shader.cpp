@@ -10,7 +10,7 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "Shader.hpp"
 
 ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const TBuiltInResource& _resources)
-    : shaderName(_name), device(_device), resources(_resources),
+    : shaderName(_name), device(_device), result(vk::Result::eNotReady), resources(_resources),
     binaryExt(".spv"), sourceFound(false), binaryFound(false)
 {
     Initialize();
@@ -208,9 +208,9 @@ void ShaderWorker::CreateVkShaderModule()
 
     vk::ShaderModuleCreateInfo smInfo({}, binaryShader.size(), codeAligned.data());
 
-    result = device.createShaderModule(&smInfo, nullptr, &shaderModule);
+    shaderModule = device.createShaderModule(smInfo);
 
-    if (!(result == vk::Result::eSuccess))
+    if (!shaderModule)
         Msg("ShaderWorker::CreateVkShaderModule():: failed to create vulkan shader module for: {}", shaderName);
 }
 
