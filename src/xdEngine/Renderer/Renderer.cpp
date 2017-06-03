@@ -32,9 +32,10 @@ const std::vector<const char*> deviceExtensions =
 
 const std::vector<Renderer::Vertex> vertices =
 {
-    { { 0.0f, -0.5f },{ 1.0f, 0.0f, 0.0f } },
-    { { 0.5f, 0.5f },{ 0.0f, 1.0f, 0.0f } },
-    { { -0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f } }
+    { { -0.5f, -0.5f },{ 1.0f, 0.0f, 0.0f } },
+    { { 0.5f, -0.5f },{ 0.0f, 1.0f, 0.0f } },
+    { { 0.5f, 0.5f },{ 0.0f, 0.0f, 1.0f } },
+    { { -0.5f, 0.5f },{ 1.0f, 1.0f, 1.0f } }
 };
 
 const std::vector<uint16_t> indices =
@@ -709,7 +710,7 @@ void Renderer::CreateGraphicsPipeline()
     pipelineInfo.setPRasterizationState(&rasterizer);
     pipelineInfo.setPMultisampleState(&multisampling);
     pipelineInfo.setPColorBlendState(&colorBlending);
-    pipelineInfo.setPDynamicState(&dynamicState); // Optional
+    //pipelineInfo.setPDynamicState(&dynamicState); // Optional
     pipelineInfo.setLayout(pipelineLayout);
     pipelineInfo.setRenderPass(renderPass);
 
