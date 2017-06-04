@@ -111,6 +111,7 @@ void Renderer::Initialize()
     CreateCommandPool();
     CreateTextureImage();
     CreateTextureImageView();
+    CreateTextureSampler();
     CreateVertexBuffer();
     CreateIndexBuffer();
     CreateUniformBuffer();
