@@ -149,6 +149,7 @@
     <ClInclude Include="Renderer\Renderer.hpp" />
     <ClInclude Include="Renderer\Shader.hpp" />
     <ClInclude Include="Renderer\Texture.hpp" />
+    <ClInclude Include="Renderer\VDeleter.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="XMLDocument.hpp" />
