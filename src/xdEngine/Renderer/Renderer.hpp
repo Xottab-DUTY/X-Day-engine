@@ -72,12 +72,14 @@ public:
 
         bool isComplete() const;
     };
+
     struct SwapChainSupportDetails
     {
         vk::SurfaceCapabilitiesKHR capabilities;
         std::vector<vk::SurfaceFormatKHR> formats;
         std::vector<vk::PresentModeKHR> presentModes;
     };
+
     struct Vertex
     {
         glm::vec3 pos;
@@ -86,6 +88,8 @@ public:
 
         static vk::VertexInputBindingDescription getBindingDescription();
         static std::array<vk::VertexInputAttributeDescription, 3> getAttributeDescriptions();
+
+        bool operator==(const Vertex& other) const;
     };
 
     struct UniformBufferObject
@@ -94,6 +98,9 @@ public:
         glm::mat4 view;
         glm::mat4 proj;
     };
+
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
 
     Renderer();
     void Initialize();
@@ -133,6 +140,7 @@ private:
     void CreateTextureImage();
     void CreateTextureImageView();
     void CreateTextureSampler();
+    void LoadModel();
     void CreateVertexBuffer();
     void CreateIndexBuffer();
     void CreateUniformBuffer();

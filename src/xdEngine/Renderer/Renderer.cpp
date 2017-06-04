@@ -1,4 +1,5 @@
 #include <set>
+#include <unordered_map>
 
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
@@ -7,9 +8,15 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <gli/gli.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
+
+#include <gli/gli.hpp>
 #include <GLFW/glfw3.h>
+
+#define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
 #include <fmt/ostream.h>
 
 #include "xdEngine/Debug/Log.hpp"
@@ -17,6 +24,18 @@
 #include "xdEngine/xdEngine.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
+
+namespace std
+{
+    template <>
+    struct hash<Renderer::Vertex>
+    {
+        size_t operator()(Renderer::Vertex const& vertex) const
+        {
+            return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
+        }
+    };
+}
 
 XDAY_API Renderer Render;
 
@@ -32,27 +51,8 @@ const std::vector<const char*> deviceExtensions =
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-const std::vector<Renderer::Vertex> vertices =
-{
-    {{-0.5f, -0.5f, 0.0f},{1.0f, 0.0f, 0.0f},{0.0f, 0.0f}},
-    {{0.5f, -0.5f, 0.0f},{0.0f, 1.0f, 0.0f},{1.0f, 0.0f}},
-    {{0.5f, 0.5f, 0.0f},{0.0f, 0.0f, 1.0f},{1.0f, 1.0f}},
-    {{-0.5f, 0.5f, 0.0f},{1.0f, 1.0f, 1.0f},{0.0f, 1.0f}},
-
-    {{-0.5f, -0.5f, -0.5f},{1.0f, 0.0f, 0.0f},{0.0f, 0.0f}},
-    {{0.5f, -0.5f, -0.5f},{0.0f, 1.0f, 0.0f},{1.0f, 0.0f}},
-    {{0.5f, 0.5f, -0.5f},{0.0f, 0.0f, 1.0f},{1.0f, 1.0f}},
-    {{-0.5f, 0.5f, -0.5f},{1.0f, 1.0f, 1.0f},{0.0f, 1.0f}}
-};
-
-const std::vector<uint16_t> indices =
-{
-    0, 1, 2, 2, 3, 0,
-    4, 5, 6, 6, 7, 4
-};
-
 VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
-    const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback)
+                                        const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback)
 {
     auto func = (PFN_vkCreateDebugReportCallbackEXT)glfwGetInstanceProcAddress(instance, "vkCreateDebugReportCallbackEXT");
     if (func)
@@ -96,7 +96,7 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugCallback(
 }
 
 Renderer::Renderer(): result(vk::Result::eNotReady),
-    swapChainImageFormat(vk::Format::eUndefined) {}
+                      swapChainImageFormat(vk::Format::eUndefined) {}
 
 void Renderer::Initialize()
 {
@@ -120,6 +120,7 @@ void Renderer::Initialize()
     CreateTextureImage();
     CreateTextureImageView();
     CreateTextureSampler();
+    LoadModel();
     CreateVertexBuffer();
     CreateIndexBuffer();
     CreateUniformBuffer();
@@ -421,8 +422,8 @@ void Renderer::CreateDebugCallback()
     if (!enableValidationLayers) return;
 
     vk::DebugReportCallbackCreateInfoEXT callbackInfo
-        ({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
-        (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
+    ({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
+     (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
 
     vkCallback = instance.createDebugReportCallbackEXT(callbackInfo);
     assert(vkCallback);
@@ -645,8 +646,8 @@ void Renderer::CreateRenderPass()
     subpass.setPDepthStencilAttachment(&depthAttachmentRef);
 
     vk::SubpassDependency dependency(VK_SUBPASS_EXTERNAL, 0,
-        vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
-        {}, vk::AccessFlagBits::eColorAttachmentRead | vk::AccessFlagBits::eColorAttachmentWrite);
+                                                        vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
+                                                        {}, vk::AccessFlagBits::eColorAttachmentRead | vk::AccessFlagBits::eColorAttachmentWrite);
 
     std::array<vk::AttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
 
@@ -683,12 +684,12 @@ void Renderer::CreateGraphicsPipeline()
     ShaderWorker shader_vert("shader.vert", device, resources);
 
     vk::PipelineShaderStageCreateInfo shaderStages[] =
-    { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
+        { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
 
     auto bindingDescription = Vertex::getBindingDescription();
     auto attributeDescriptions = Vertex::getAttributeDescriptions();
     vk::PipelineVertexInputStateCreateInfo vertexInputInfo({}, 1, &bindingDescription,
-        static_cast<uint32_t>(attributeDescriptions.size()), attributeDescriptions.data());
+                                                           static_cast<uint32_t>(attributeDescriptions.size()), attributeDescriptions.data());
     
     vk::PipelineInputAssemblyStateCreateInfo inputAssembly;
     inputAssembly.setTopology(vk::PrimitiveTopology::eTriangleList);
@@ -776,7 +777,7 @@ void Renderer::CreateFramebuffers()
         };
 
         vk::FramebufferCreateInfo framebufferInfo({}, renderPass, static_cast<uint32_t>(attachments.size()),
-            attachments.data(), swapChainExtent.width, swapChainExtent.height, 1);
+                                                  attachments.data(), swapChainExtent.width, swapChainExtent.height, 1);
 
         swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
         assert(swapChainFramebuffers[i]);
@@ -798,10 +799,10 @@ void Renderer::CreateDepthResources()
     vk::Format depthFormat = findDepthFormat();
 
     createImage(swapChainExtent.width, swapChainExtent.height,
-        depthFormat, vk::ImageTiling::eOptimal,
-        vk::ImageUsageFlagBits::eDepthStencilAttachment,
-        vk::MemoryPropertyFlagBits::eDeviceLocal,
-        depthImage, depthImageMemory);
+                depthFormat, vk::ImageTiling::eOptimal,
+                vk::ImageUsageFlagBits::eDepthStencilAttachment,
+                vk::MemoryPropertyFlagBits::eDeviceLocal,
+                depthImage, depthImageMemory);
 
     depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
 
@@ -810,32 +811,32 @@ void Renderer::CreateDepthResources()
 
 void Renderer::CreateTextureImage()
 {
-    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "texture.dds"));
+    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "chalet.dds"));
     vk::DeviceSize imageSize = tex2D[0].extent().x * tex2D[0].extent().y * 4;
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
     createBuffer(imageSize,
-        vk::BufferUsageFlagBits::eTransferSrc,
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        stagingBuffer, stagingBufferMemory);
+                 vk::BufferUsageFlagBits::eTransferSrc,
+                 vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+                 stagingBuffer, stagingBufferMemory);
 
     auto data = device.mapMemory(stagingBufferMemory, 0, imageSize);
     memcpy(data, tex2D[0].data(), static_cast<size_t>(imageSize));
     device.unmapMemory(stagingBufferMemory);
 
     createImage(tex2D[0].extent().x, tex2D[0].extent().y,
-        vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
-        vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
-        vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
+                vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
+                vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
+                vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
 
     transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
-        vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
+                          vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
 
     copyBufferToImage(stagingBuffer, textureImage, tex2D[0].extent().x, tex2D[0].extent().y);
 
     transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
-        vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
+                          vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);
@@ -848,8 +849,7 @@ void Renderer::CreateTextureImageView()
 
 void Renderer::CreateTextureSampler()
 {
-    vk::SamplerCreateInfo samplerInfo({},
-        vk::Filter::eLinear, vk::Filter::eLinear);
+    vk::SamplerCreateInfo samplerInfo({}, vk::Filter::eLinear, vk::Filter::eLinear);
     samplerInfo.setAddressModeU(vk::SamplerAddressMode::eRepeat);
     samplerInfo.setAddressModeV(vk::SamplerAddressMode::eRepeat);
     samplerInfo.setAddressModeW(vk::SamplerAddressMode::eRepeat);
@@ -865,6 +865,51 @@ void Renderer::CreateTextureSampler()
     assert(textureSampler);
 }
 
+void Renderer::LoadModel()
+{
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string err;
+
+    if (!LoadObj(&attrib, &shapes, &materials, &err, (Core.ModelsPath.string() + "chalet.obj").c_str()))
+    {
+        Msg("Renderer::LoadModel():: {}", err)
+        throw std::runtime_error(err);
+    }
+
+    std::unordered_map<Vertex, uint32_t> uniqueVertices;
+
+    for (const auto& shape : shapes)
+    {
+        for (const auto& index : shape.mesh.indices)
+        {
+            Vertex vertex = {};
+
+            vertex.pos = {
+                attrib.vertices[3 * index.vertex_index + 0],
+                attrib.vertices[3 * index.vertex_index + 1],
+                attrib.vertices[3 * index.vertex_index + 2]
+            };
+
+            vertex.texCoord = {
+                attrib.texcoords[2 * index.texcoord_index + 0],
+                1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
+            };
+
+            vertex.color = {1.0f, 1.0f, 1.0f};
+
+            if (uniqueVertices.count(vertex) == 0)
+            {
+                uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+                vertices.push_back(vertex);
+            }
+
+            indices.push_back(uniqueVertices[vertex]);
+        }
+    }
+}
+
 void Renderer::CreateVertexBuffer()
 {
     vk::DeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
@@ -872,16 +917,16 @@ void Renderer::CreateVertexBuffer()
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
     createBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc,
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        stagingBuffer, stagingBufferMemory);
+                 vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+                 stagingBuffer, stagingBufferMemory);
 
     auto data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
     memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
     device.unmapMemory(stagingBufferMemory);
 
     createBuffer(bufferSize,
-        vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
-        vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
+                 vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
+                 vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
 
     copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
@@ -896,17 +941,17 @@ void Renderer::CreateIndexBuffer()
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
     createBuffer(bufferSize,
-        vk::BufferUsageFlagBits::eTransferSrc,
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        stagingBuffer, stagingBufferMemory);
+                 vk::BufferUsageFlagBits::eTransferSrc,
+                 vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+                 stagingBuffer, stagingBufferMemory);
 
     auto data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
     memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
     device.unmapMemory(stagingBufferMemory);
 
     createBuffer(bufferSize,
-        vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
-        vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
+                 vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
+                 vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
 
     copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
@@ -919,9 +964,9 @@ void Renderer::CreateUniformBuffer()
     vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
 
     createBuffer(bufferSize,
-        vk::BufferUsageFlagBits::eUniformBuffer,
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-        uniformBuffer, uniformBufferMemory);
+                 vk::BufferUsageFlagBits::eUniformBuffer,
+                 vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+                 uniformBuffer, uniformBufferMemory);
 }
 
 void Renderer::CreateDescriptorPool()
@@ -1006,7 +1051,7 @@ void Renderer::CreateCommandBuffers()
         vk::Buffer vertexBuffers[] = { vertexBuffer };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffers[i].bindVertexBuffers(0, 1, vertexBuffers, offsets);
-        commandBuffers[i].bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint16);
+        commandBuffers[i].bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint32);
         commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 
         commandBuffers[i].drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
@@ -1054,7 +1099,7 @@ void Renderer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::Device
 }
 
 void Renderer::createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling,
-    vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory)
+                           vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory)
 {
     vk::ImageCreateInfo imageInfo({}, vk::ImageType::e2D, format);
     imageInfo.extent.setWidth(width);
@@ -1201,7 +1246,7 @@ vk::Format Renderer::findSupportedFormat(const std::vector<vk::Format>& candidat
 vk::Format Renderer::findDepthFormat()
 {
     return findSupportedFormat(
-    { vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint },
+        { vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint },
         vk::ImageTiling::eOptimal,
         vk::FormatFeatureFlagBits::eDepthStencilAttachment
     );
@@ -1303,6 +1348,11 @@ std::array<vk::VertexInputAttributeDescription, 3> Renderer::Vertex::getAttribut
     attributeDescriptions[2].setOffset(static_cast<uint32_t>(offsetof(Vertex, texCoord)));
 
     return attributeDescriptions;
+}
+
+bool Renderer::Vertex::operator==(const Vertex& other) const
+{
+    return pos == other.pos && color == other.color && texCoord == other.texCoord;
 }
 
 uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const
