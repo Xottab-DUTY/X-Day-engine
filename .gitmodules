@@ -22,3 +22,6 @@
 [submodule "include/gli"]
 	path = include/gli
 	url = https://github.com/g-truc/gli.git
+[submodule "include/tinyobjloader"]
+	path = include/tinyobjloader
+	url = https://github.com/syoyo/tinyobjloader.git
