@@ -767,9 +767,8 @@ void Renderer::CreateCommandPool()
 
 void Renderer::CreateTextureImage()
 {
-    int texWidth = 130, texHeight = 130;
     gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "texture.dds"));
-    vk::DeviceSize imageSize = texWidth * texHeight * 4;
+    vk::DeviceSize imageSize = tex2D[0].extent().x * tex2D[0].extent().y * 4;
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
@@ -779,10 +778,10 @@ void Renderer::CreateTextureImage()
         stagingBuffer, stagingBufferMemory);
 
     auto data = device.mapMemory(stagingBufferMemory, 0, imageSize);
-    memcpy(data, tex2D.data(), static_cast<size_t>(imageSize));
+    memcpy(data, tex2D[0].data(), static_cast<size_t>(imageSize));
     device.unmapMemory(stagingBufferMemory);
 
-    createImage(texWidth, texHeight,
+    createImage(tex2D[0].extent().x, tex2D[0].extent().y,
         vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
@@ -790,7 +789,7 @@ void Renderer::CreateTextureImage()
     transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
         vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
 
-    copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
+    copyBufferToImage(stagingBuffer, textureImage, tex2D[0].extent().x, tex2D[0].extent().y);
 
     transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
         vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -1203,7 +1202,7 @@ std::array<vk::VertexInputAttributeDescription, 3> Renderer::Vertex::getAttribut
     attributeDescriptions[2].setBinding(0);
     attributeDescriptions[2].setLocation(2);
     attributeDescriptions[2].setFormat(vk::Format::eR32G32Sfloat);
-    attributeDescriptions[2].setOffset(offsetof(Vertex, texCoord));
+    attributeDescriptions[2].setOffset(static_cast<uint32_t>(offsetof(Vertex, texCoord)));
 
     return attributeDescriptions;
 }
