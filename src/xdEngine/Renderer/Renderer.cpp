@@ -646,7 +646,7 @@ void Renderer::CreateDescriptorSetLayout()
     vk::DescriptorSetLayoutBinding samplerLayoutBinding(
         1, vk::DescriptorType::eCombinedImageSampler, 1, vk::ShaderStageFlagBits::eFragment);
 
-    std::array< vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
+    std::array<vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
     vk::DescriptorSetLayoutCreateInfo layoutInfo({}, static_cast<uint32_t>(bindings.size()), bindings.data());
 
     descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
@@ -767,14 +767,9 @@ void Renderer::CreateCommandPool()
 
 void Renderer::CreateTextureImage()
 {
-    int texWidth = 130, texHeight = 130, texChannels;
-
-    //gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "texture.dds"));
-    //stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    int texWidth = 130, texHeight = 130;
+    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "texture.dds"));
     vk::DeviceSize imageSize = texWidth * texHeight * 4;
-
-    //if (!pixels)
-        //throw std::runtime_error("failed to load texture image!");
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
@@ -787,19 +782,17 @@ void Renderer::CreateTextureImage()
     memcpy(data, tex2D.data(), static_cast<size_t>(imageSize));
     device.unmapMemory(stagingBufferMemory);
 
-    //stbi_image_free(pixels);
-
     createImage(texWidth, texHeight,
-        vk::Format::eR8G8B8A8Unorm, vk::ImageTiling::eOptimal,
+        vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
 
-    transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Unorm,
+    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
         vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
 
     copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
 
-    transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Unorm,
+    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
         vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     device.destroyBuffer(stagingBuffer);
@@ -808,7 +801,7 @@ void Renderer::CreateTextureImage()
 
 void Renderer::CreateTextureImageView()
 {
-    textureImageView = createImageView(textureImage, vk::Format::eR8G8B8A8Unorm);
+    textureImageView = createImageView(textureImage, vk::Format::eA8B8G8R8UnormPack32);
 }
 
 void Renderer::CreateTextureSampler()
@@ -887,8 +880,6 @@ void Renderer::CreateUniformBuffer()
         vk::BufferUsageFlagBits::eUniformBuffer,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
         uniformBuffer, uniformBufferMemory);
-
-
 }
 
 void Renderer::CreateDescriptorPool()
@@ -916,7 +907,7 @@ void Renderer::CreateDescriptorSet()
 
     vk::DescriptorImageInfo imageInfo(textureSampler, textureImageView, vk::ImageLayout::eShaderReadOnlyOptimal);
 
-    std::array<vk::WriteDescriptorSet, 2> descriptorWrites = {};
+    std::array<vk::WriteDescriptorSet, 2> descriptorWrites;
 
     descriptorWrites[0].setDstSet(descriptorSet);
     descriptorWrites[0].setDstBinding(0);
