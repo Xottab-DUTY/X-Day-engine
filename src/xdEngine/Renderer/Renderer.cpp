@@ -37,6 +37,8 @@ namespace std
     };
 }
 
+using namespace XDay;
+
 XDAY_API Renderer Render;
 
 const bool enableValidationLayers = Core.isGlobalDebug();

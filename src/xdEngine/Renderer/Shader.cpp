@@ -9,6 +9,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "xdEngine/xdCore.hpp"
 #include "Shader.hpp"
 
+using namespace XDay;
+
 ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const TBuiltInResource& _resources)
     : shaderName(_name), device(_device), result(vk::Result::eNotReady), resources(_resources),
     binaryExt(".spv"), sourceFound(false), binaryFound(false)

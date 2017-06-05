@@ -5,7 +5,9 @@
 #include <vulkan/vulkan.hpp>
 #include <ShaderLang.h>
 
-class ShaderWorker // TODO: wip name; rename it, maybe.
+namespace XDay
+{
+class ShaderWorker
 {
     std::string shaderName;
     std::string binaryExt;
@@ -45,5 +47,6 @@ private:
     EShLanguage GetLanguage() const;
     vk::ShaderStageFlagBits GetVkShaderStageFlagBits() const;
 };
+}
 
 #endif // Shader_hpp__
