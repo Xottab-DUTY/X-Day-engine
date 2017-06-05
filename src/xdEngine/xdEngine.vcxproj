@@ -131,6 +131,7 @@
     <ClCompile Include="Debug\Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Debug\QuantMS.cpp" />
+    <ClCompile Include="Renderer\VkHelper.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\Texture.cpp">
@@ -146,6 +147,7 @@
     <ClInclude Include="ConsoleCommand.hpp" />
     <ClInclude Include="Debug\Log.hpp" />
     <ClInclude Include="Debug\QuantMS.hpp" />
+    <ClInclude Include="Renderer\VkHelper.hpp" />
     <ClInclude Include="Renderer\Renderer.hpp" />
     <ClInclude Include="Renderer\Shader.hpp" />
     <ClInclude Include="Renderer\Texture.hpp" />

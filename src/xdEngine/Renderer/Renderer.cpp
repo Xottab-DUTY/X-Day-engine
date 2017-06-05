@@ -24,6 +24,7 @@
 #include "xdEngine/xdEngine.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
+#include "VkHelper.hpp"
 
 namespace std
 {
@@ -119,9 +120,6 @@ void Renderer::Initialize()
     CreateCommandPool();
     CreateDepthResources();
     CreateFramebuffers();
-    CreateTextureImage();
-    CreateTextureImageView();
-    CreateTextureSampler();
     LoadModel();
     CreateVertexBuffer();
     CreateIndexBuffer();
@@ -137,12 +135,6 @@ void Renderer::Destroy()
     glslang::FinalizeProcess();
 
     CleanupSwapChain();
-
-    device.destroySampler(textureSampler);
-    device.destroyImageView(textureImageView);
-
-    device.destroyImage(textureImage);
-    device.freeMemory(textureImageMemory);
 
     device.destroyDescriptorPool(descriptorPool);
     device.destroyDescriptorSetLayout(descriptorSetLayout);
@@ -444,11 +436,14 @@ void Renderer::GetPhysDevice()
 {
     std::vector<vk::PhysicalDevice> physDevices = instance.enumeratePhysicalDevices();
     for (const auto& _device : physDevices)
+    {
         if (isPhysDeviceSuitable(_device))
         {
             physDevice = _device;
+            VkHelper.SetPhysicalDevice(_device);
             break;
         }
+    }
 
     assert(physDevice);
 }
@@ -517,9 +512,10 @@ void Renderer::CreateDevice()
 
     device = physDevice.createDevice(deviceCreateInfo);
     assert(device);
+    VkHelper.SetDevice(device);
 
-    device.getQueue(indices.graphicsFamily, 0, &graphicsQueue);
-    device.getQueue(indices.presentFamily, 0, &presentQueue);
+    graphicsQueue = device.getQueue(indices.graphicsFamily, 0);
+    presentQueue = device.getQueue(indices.presentFamily, 0);
 }
 
 vk::SurfaceFormatKHR Renderer::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) const
@@ -615,7 +611,7 @@ void Renderer::CreateImageViews()
     swapChainImageViews.resize(swapChainImages.size());
 
     for (uint32_t i = 0; i < swapChainImages.size(); i++)
-        swapChainImageViews[i] = createImageView(swapChainImages[i], swapChainImageFormat, vk::ImageAspectFlagBits::eColor);
+        swapChainImageViews[i] = VkHelper.createImageView(swapChainImages[i], swapChainImageFormat, vk::ImageAspectFlagBits::eColor);
 }
 
 void Renderer::CreateRenderPass()
@@ -794,6 +790,7 @@ void Renderer::CreateCommandPool()
 
     commandPool = device.createCommandPool(poolInfo);
     assert(commandPool);
+    VkHelper.SetCommandPool(commandPool);
 }
 
 void Renderer::CreateDepthResources()
@@ -806,65 +803,9 @@ void Renderer::CreateDepthResources()
                 vk::MemoryPropertyFlagBits::eDeviceLocal,
                 depthImage, depthImageMemory);
 
-    depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
+    depthImageView = VkHelper.createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
 
     transitionImageLayout(depthImage, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
-}
-
-void Renderer::CreateTextureImage()
-{
-    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "chalet.dds"));
-    vk::DeviceSize imageSize = tex2D[0].extent().x * tex2D[0].extent().y * 4;
-
-    vk::Buffer stagingBuffer;
-    vk::DeviceMemory stagingBufferMemory;
-    createBuffer(imageSize,
-                 vk::BufferUsageFlagBits::eTransferSrc,
-                 vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-                 stagingBuffer, stagingBufferMemory);
-
-    auto data = device.mapMemory(stagingBufferMemory, 0, imageSize);
-    memcpy(data, tex2D[0].data(), static_cast<size_t>(imageSize));
-    device.unmapMemory(stagingBufferMemory);
-
-    createImage(tex2D[0].extent().x, tex2D[0].extent().y,
-                vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
-                vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
-                vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
-
-    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
-                          vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
-
-    copyBufferToImage(stagingBuffer, textureImage, tex2D[0].extent().x, tex2D[0].extent().y);
-
-    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
-                          vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
-
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
-}
-
-void Renderer::CreateTextureImageView()
-{
-    textureImageView = createImageView(textureImage, vk::Format::eA8B8G8R8UnormPack32, vk::ImageAspectFlagBits::eColor);
-}
-
-void Renderer::CreateTextureSampler()
-{
-    vk::SamplerCreateInfo samplerInfo({}, vk::Filter::eLinear, vk::Filter::eLinear);
-    samplerInfo.setAddressModeU(vk::SamplerAddressMode::eRepeat);
-    samplerInfo.setAddressModeV(vk::SamplerAddressMode::eRepeat);
-    samplerInfo.setAddressModeW(vk::SamplerAddressMode::eRepeat);
-    samplerInfo.setAnisotropyEnable(VK_TRUE);
-    samplerInfo.setMaxAnisotropy(16);
-    samplerInfo.setBorderColor(vk::BorderColor::eIntOpaqueBlack);
-    samplerInfo.setUnnormalizedCoordinates(VK_FALSE);
-    samplerInfo.setCompareEnable(VK_FALSE);
-    samplerInfo.setCompareOp(vk::CompareOp::eAlways);
-    samplerInfo.setMipmapMode(vk::SamplerMipmapMode::eLinear);
-
-    textureSampler = device.createSampler(samplerInfo);
-    assert(textureSampler);
 }
 
 void Renderer::LoadModel()
@@ -1074,32 +1015,6 @@ void Renderer::CreateSynchronizationPrimitives()
     assert(renderFinishedSemaphore);
 }
 
-void Renderer::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory)
-{
-    vk::BufferCreateInfo bufferInfo({}, size, usage, vk::SharingMode::eExclusive);
-
-    buffer = device.createBuffer(bufferInfo);
-
-    auto memRequirements = device.getBufferMemoryRequirements(buffer);
-
-    vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
-
-    bufferMemory = device.allocateMemory(allocInfo);
-
-    device.bindBufferMemory(buffer, bufferMemory, 0);
-}
-
-void Renderer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size)
-{
-    vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
-
-    vk::BufferCopy copyRegion(0, 0, size);
-
-    commandBuffer.copyBuffer(srcBuffer, dstBuffer, 1, &copyRegion);
-
-    endSingleTimeCommands(commandBuffer);
-}
-
 void Renderer::createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling,
                            vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory)
 {
@@ -1127,108 +1042,6 @@ void Renderer::createImage(uint32_t width, uint32_t height, vk::Format format, v
     device.bindImageMemory(image, imageMemory, 0);
 }
 
-vk::CommandBuffer Renderer::beginSingleTimeCommands()
-{
-    vk::CommandBufferAllocateInfo allocInfo(commandPool, vk::CommandBufferLevel::ePrimary, 1);
-
-    vk::CommandBuffer commandBuffer;
-    device.allocateCommandBuffers(&allocInfo, &commandBuffer);
-
-    vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
-    commandBuffer.begin(beginInfo);
-
-    return commandBuffer;
-}
-
-void Renderer::endSingleTimeCommands(vk::CommandBuffer commandBuffer)
-{
-    commandBuffer.end();
-
-    vk::SubmitInfo submitInfo;
-    submitInfo.setCommandBufferCount(1);
-    submitInfo.setPCommandBuffers(&commandBuffer);
-
-    graphicsQueue.submit(1, &submitInfo, nullptr);
-    graphicsQueue.waitIdle();
-    device.freeCommandBuffers(commandPool, 1, &commandBuffer);
-}
-
-void Renderer::transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout)
-{
-    vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
-
-    vk::ImageSubresourceRange range(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
-
-    if (newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
-    {
-        range.setAspectMask(vk::ImageAspectFlagBits::eDepth);
-
-        if (hasStencilComponent(format))
-            range.aspectMask |= vk::ImageAspectFlagBits::eStencil;
-    }
-
-    vk::ImageMemoryBarrier barrier({}, {}, oldLayout, newLayout, VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, image, range);
-
-    if (oldLayout == vk::ImageLayout::ePreinitialized && newLayout == vk::ImageLayout::eTransferSrcOptimal)
-    {
-        barrier.setSrcAccessMask(vk::AccessFlagBits::eHostWrite);
-        barrier.setDstAccessMask(vk::AccessFlagBits::eTransferRead);
-    }
-    else if (oldLayout == vk::ImageLayout::ePreinitialized && newLayout == vk::ImageLayout::eTransferDstOptimal)
-    {
-        barrier.setSrcAccessMask(vk::AccessFlagBits::eHostWrite);
-        barrier.setDstAccessMask(vk::AccessFlagBits::eTransferWrite);
-    }
-    else if (oldLayout == vk::ImageLayout::eTransferDstOptimal && newLayout == vk::ImageLayout::eShaderReadOnlyOptimal)
-    {
-        barrier.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite);
-        barrier.setDstAccessMask(vk::AccessFlagBits::eShaderRead);
-    }
-    else if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
-    {
-        barrier.setSrcAccessMask({});
-        barrier.setDstAccessMask(vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite);
-    }
-    else
-    {
-        Log("Renderer::transitionImageLayout():: unsupported layout transition!");
-        throw std::invalid_argument("unsupported layout transition!");
-    }
-        
-
-    commandBuffer.pipelineBarrier(
-        vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTopOfPipe,
-        {},
-        0, nullptr,
-        0, nullptr,
-        1, &barrier);
-
-    endSingleTimeCommands(commandBuffer);
-}
-
-void Renderer::copyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width, uint32_t height)
-{
-    vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
-
-    vk::ImageSubresourceLayers subres(vk::ImageAspectFlagBits::eColor, 0, 0, 1);
-    vk::BufferImageCopy region(0, 0, 0, subres, {0, 0, 0}, {width, height, 1});
-
-    commandBuffer.copyBufferToImage(buffer, image, vk::ImageLayout::eTransferDstOptimal, 1, &region);
-
-    endSingleTimeCommands(commandBuffer);
-}
-
-vk::ImageView Renderer::createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags)
-{
-    vk::ImageSubresourceRange range(aspectFlags, 0, 1, 0, 1);
-    vk::ImageViewCreateInfo viewInfo({}, image, vk::ImageViewType::e2D, format);
-    viewInfo.setSubresourceRange(range);
-
-    auto imageView = device.createImageView(viewInfo);
-
-    return imageView;
-}
-
 vk::Format Renderer::findSupportedFormat(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features)
 {
     for (auto format : candidates)
@@ -1252,11 +1065,6 @@ vk::Format Renderer::findDepthFormat()
         vk::ImageTiling::eOptimal,
         vk::FormatFeatureFlagBits::eDepthStencilAttachment
     );
-}
-
-bool Renderer::hasStencilComponent(vk::Format format) const
-{
-    return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
 }
 
 bool Renderer::QueueFamilyIndices::isComplete() const
