@@ -74,6 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="xdEngine_impexp.inl" />
+    <None Include="..\..\resources\shaders\shader.frag">
+      <Filter>Renderer\Shaders</Filter>
+    </None>
+    <None Include="..\..\resources\shaders\shader.vert">
+      <Filter>Renderer\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Console">
@@ -90,6 +96,9 @@
     </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{d1c3ea44-023b-4755-8103-574b49b69a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Shaders">
+      <UniqueIdentifier>{ca9f8b26-25b8-4d49-8a24-2832ed71b3bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
