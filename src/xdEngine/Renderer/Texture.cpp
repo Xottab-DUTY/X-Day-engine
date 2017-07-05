@@ -3,14 +3,8 @@
 
 #include "Debug/Log.hpp"
 #include "xdCore.hpp"
-#include "Renderer.hpp"
 #include "Texture.hpp"
 #include "VkHelper.hpp"
-
-
-using namespace XDay;
-
-TextureWorker TextureHelper(Render.device);
 
 TextureWorker::TextureWorker(const vk::Device& _device) : device(_device), result(vk::Result::eNotReady)
 {
@@ -53,7 +47,7 @@ void TextureWorker::CreateTextureImage()
 
 void TextureWorker::CreateTextureImageView()
 {
-    textureImageView = VkHelper.createImageView(textureImage, vk::Format::eR8G8B8A8Unorm, vk::ImageAspectFlagBits::eColor);
+    textureImageView = VkHelper.createImageView(textureImage, vk::Format::eR8G8B8A8Unorm);
 }
 
 void TextureWorker::CreateTextureSampler()

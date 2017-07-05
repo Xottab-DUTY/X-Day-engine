@@ -6,8 +6,6 @@
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 
-namespace XDay
-{
 
 class TextureWorker
 {
@@ -16,14 +14,12 @@ class TextureWorker
 
     vk::Image textureImage;
     vk::DeviceMemory textureImageMemory;
-    
+    vk::ImageView textureImageView;
+    vk::Sampler textureSampler;
 
     vk::Result result;
 
 public:
-    vk::ImageView textureImageView;
-    vk::Sampler textureSampler;
-
     TextureWorker(const vk::Device& _device);
 
     void CreateTextureImage();
@@ -37,7 +33,5 @@ public:
 
     bool hasStencilComponent(vk::Format format) const;
 };
-}
 
-extern XDay::TextureWorker TextureHelper;
 #endif // Texture_hpp__

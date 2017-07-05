@@ -25,7 +25,6 @@
 #include "Renderer.hpp"
 #include "Shader.hpp"
 #include "VkHelper.hpp"
-#include "Texture.hpp"
 
 namespace std
 {
@@ -806,7 +805,7 @@ void Renderer::CreateDepthResources()
 
     depthImageView = VkHelper.createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
 
-    TextureHelper.transitionImageLayout(depthImage, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+    transitionImageLayout(depthImage, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
 }
 
 void Renderer::LoadModel()
@@ -860,7 +859,7 @@ void Renderer::CreateVertexBuffer()
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
-    VkHelper.createBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc,
+    createBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc,
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  stagingBuffer, stagingBufferMemory);
 
@@ -868,11 +867,11 @@ void Renderer::CreateVertexBuffer()
     memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
     device.unmapMemory(stagingBufferMemory);
 
-    VkHelper.createBuffer(bufferSize,
+    createBuffer(bufferSize,
                  vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
                  vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
 
-    VkHelper.copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+    copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);
@@ -884,7 +883,7 @@ void Renderer::CreateIndexBuffer()
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
-    VkHelper.createBuffer(bufferSize,
+    createBuffer(bufferSize,
                  vk::BufferUsageFlagBits::eTransferSrc,
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  stagingBuffer, stagingBufferMemory);
@@ -893,11 +892,11 @@ void Renderer::CreateIndexBuffer()
     memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
     device.unmapMemory(stagingBufferMemory);
 
-    VkHelper.createBuffer(bufferSize,
+    createBuffer(bufferSize,
                  vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
                  vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
 
-    VkHelper.copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+    copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
     device.destroyBuffer(stagingBuffer);
     device.freeMemory(stagingBufferMemory);
@@ -907,7 +906,7 @@ void Renderer::CreateUniformBuffer()
 {
     vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
 
-    VkHelper.createBuffer(bufferSize,
+    createBuffer(bufferSize,
                  vk::BufferUsageFlagBits::eUniformBuffer,
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  uniformBuffer, uniformBufferMemory);
@@ -936,7 +935,7 @@ void Renderer::CreateDescriptorSet()
 
     vk::DescriptorBufferInfo bufferInfo(uniformBuffer, 0, sizeof(UniformBufferObject));
 
-    vk::DescriptorImageInfo imageInfo(TextureHelper.textureSampler, TextureHelper.textureImageView, vk::ImageLayout::eShaderReadOnlyOptimal);
+    vk::DescriptorImageInfo imageInfo(textureSampler, textureImageView, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     std::array<vk::WriteDescriptorSet, 2> descriptorWrites;
 

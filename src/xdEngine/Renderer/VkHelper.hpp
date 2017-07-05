@@ -8,18 +8,16 @@ namespace XDay
 
 class vk_helper
 {
-    vk::PhysicalDevice physDevice = nullptr;
-    vk::Device device = nullptr;
-    vk::CommandPool commandPool = nullptr;
-    vk::Queue graphicsQueue = nullptr;
+    vk::PhysicalDevice& physDevice;
+    vk::Device& device;
+    vk::CommandPool& commandPool;
+    vk::Queue& graphicsQueue;
 
 public:
-    vk_helper();
-
-    void SetPhysicalDevice(vk::PhysicalDevice _physDevice);
-    void SetDevice(vk::Device _device);
-    void SetCommandPool(vk::CommandPool _commandPool);
-    void SetGraphicsQueue(vk::Queue _graphicsQueue);
+    void SetPhysicalDevice(const vk::PhysicalDevice& _physDevice) const;
+    void SetDevice(const vk::Device& _device) const;
+    void SetCommandPool(const vk::CommandPool& _commandPool) const;
+    void SetGraphicsQueue(const vk::Queue& _graphicsQueue) const;
 
     vk::ImageView createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
 

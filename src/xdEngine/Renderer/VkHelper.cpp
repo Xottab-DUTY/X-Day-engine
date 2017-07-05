@@ -1,4 +1,3 @@
-#include "Renderer.hpp"
 #include "VkHelper.hpp"
 #include "Debug/Log.hpp"
 
@@ -6,30 +5,22 @@ using namespace XDay;
 
 vk_helper VkHelper;
 
-vk_helper::vk_helper()
-{
-    physDevice = Render.physDevice;
-    device = Render.device;
-    commandPool = Render.commandPool;
-    graphicsQueue = Render.graphicsQueue;
-}
-
-void vk_helper::SetPhysicalDevice(vk::PhysicalDevice _physDevice)
+void vk_helper::SetPhysicalDevice(const vk::PhysicalDevice& _physDevice) const
 {
     physDevice = _physDevice;
 }
 
-void vk_helper::SetDevice(vk::Device _device)
+void vk_helper::SetDevice(const vk::Device& _device) const
 {
     device = _device;
 }
 
-void vk_helper::SetCommandPool(vk::CommandPool _commandPool)
+void vk_helper::SetCommandPool(const vk::CommandPool& _commandPool) const
 {
     commandPool = _commandPool;
 }
 
-void vk_helper::SetGraphicsQueue(vk::Queue _graphicsQueue)
+void vk_helper::SetGraphicsQueue(const vk::Queue& _graphicsQueue) const
 {
     graphicsQueue = _graphicsQueue;
 }
