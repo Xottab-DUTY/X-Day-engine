@@ -813,7 +813,13 @@ void Renderer::CreateDepthResources()
 
 void Renderer::CreateTextureImage()
 {
-    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "chalet.dds"));
+    auto _path = Core.TexturesPath.string() + "texture.dds";
+
+    if (Core.FindParam("--p_texture"))
+        _path = Core.TexturesPath.string() + Core.ReturnParam("--p_texture");
+
+    gli::texture2d tex2D(gli::load(_path));
+
     vk::DeviceSize imageSize = tex2D[0].extent().x * tex2D[0].extent().y * 4;
 
     vk::Buffer stagingBuffer;
@@ -874,7 +880,12 @@ void Renderer::LoadModel()
     std::vector<tinyobj::material_t> materials;
     std::string err;
 
-    if (!LoadObj(&attrib, &shapes, &materials, &err, (Core.ModelsPath.string() + "chalet.obj").c_str()))
+    auto _path = Core.ModelsPath.string() + "model.obj";
+
+    if (Core.FindParam("--p_model"))
+        _path = Core.ModelsPath.string() + Core.ReturnParam("--p_model");
+
+    if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {
         Msg("Renderer::LoadModel():: {}", err)
         throw std::runtime_error(err);

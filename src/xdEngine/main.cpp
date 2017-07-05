@@ -40,7 +40,9 @@ void HelpCmdArgs()
         "--p_nologflush - Disables log flushing. Useless if -nolog defined\n"\
         "--p_debug - Enables debug mode\n"
         "--p_shrec - Compile shaders even if they already compiled\n"\
-        "--p_shpre - Outputs preprocessed shaders to the shader sources dir. Works only in debug mode\n");
+        "--p_shpre - Outputs preprocessed shaders to the shader sources dir. Works only in debug mode\n"\
+        "--p_texture - Specifies path to texture file to load, default is \"texture.dds\"\n"\
+        "--p_model - Specifies path to model file to model, default is \"model.dds\"\n");
 
     Log("\nДоступные параметры:\n"\
         "-name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
@@ -53,7 +55,9 @@ void HelpCmdArgs()
         "-nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n"\
         "--p_debug - Включает режим отладки\n"
         "--p_shrec - Сборка шейдеров даже если они уже собраны\n"\
-        "--p_shpre - Сохраняет обработанные шейдеры в папку исходников шейдеров. Работает только в режиме отладки\n", false);
+        "--p_shpre - Сохраняет обработанные шейдеры в папку исходников шейдеров. Работает только в режиме отладки\n"\
+        "--p_texture - Задаёт путь до текстуры для загрузки, по умолчанию: \"texture.dds\"\n"\
+        "--p_model - Задаёт путь до модели для загрузки, по умолчанию: \"model.dds\"\n", false);
 }
 
 void threadedConsole()
