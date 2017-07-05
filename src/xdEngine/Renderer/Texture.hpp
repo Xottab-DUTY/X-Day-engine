@@ -20,18 +20,14 @@ class TextureWorker
     vk::Result result;
 
 public:
-    TextureWorker(const vk::Device& _device);
+    TextureWorker();
 
     void CreateTextureImage();
     void CreateTextureImageView();
     void CreateTextureSampler();
 
     void createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
-
-    void transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout);
-    void copyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width, uint32_t height);
-
-    bool hasStencilComponent(vk::Format format) const;
+    vk::ImageView createImageView(vk::Image image, vk::Format format);
 };
 
 #endif // Texture_hpp__

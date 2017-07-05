@@ -1,44 +1,50 @@
-#include <vulkan/vulkan.hpp>
 #include <gli/gli.hpp>
 
-#include "Debug/Log.hpp"
-#include "xdCore.hpp"
 #include "Texture.hpp"
-#include "VkHelper.hpp"
+#include "xdCore.hpp"
 
-TextureWorker::TextureWorker(const vk::Device& _device) : device(_device), result(vk::Result::eNotReady)
+
+TextureWorker::TextureWorker() : device(nullptr), result(vk::Result::eNotReady)
 {
 
 }
 
 void TextureWorker::CreateTextureImage()
 {
-    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "chalet.dds"));
-    vk::DeviceSize imageSize = tex2D[0].extent().x * tex2D[0].extent().y * 4;
+    int texWidth = 130, texHeight = 130, texChannels;
+
+    gli::texture2d tex2D(gli::load(Core.TexturesPath.string() + "texture.dds"));
+    //stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    vk::DeviceSize imageSize = texWidth * texHeight * 4;
+
+    //if (!pixels)
+    //throw std::runtime_error("failed to load texture image!");
 
     vk::Buffer stagingBuffer;
     vk::DeviceMemory stagingBufferMemory;
 
-    VkHelper.createBuffer(imageSize,
+    createBuffer(imageSize,
         vk::BufferUsageFlagBits::eTransferSrc,
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
         stagingBuffer, stagingBufferMemory);
 
     auto data = device.mapMemory(stagingBufferMemory, 0, imageSize);
-    memcpy(data, tex2D[0].data(), static_cast<size_t>(imageSize));
+    memcpy(data, tex2D.data(), static_cast<size_t>(imageSize));
     device.unmapMemory(stagingBufferMemory);
 
-    createImage(tex2D[0].extent().x, tex2D[0].extent().y,
-        vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
+    //stbi_image_free(pixels);
+
+    createImage(texWidth, texHeight,
+        vk::Format::eR8G8B8A8Unorm, vk::ImageTiling::eOptimal,
         vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
         vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
 
-    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
+    transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Unorm,
         vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
 
-    copyBufferToImage(stagingBuffer, textureImage, tex2D[0].extent().x, tex2D[0].extent().y);
+    copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
 
-    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
+    transitionImageLayout(textureImage, vk::Format::eR8G8B8A8Unorm,
         vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     device.destroyBuffer(stagingBuffer);
@@ -47,7 +53,7 @@ void TextureWorker::CreateTextureImage()
 
 void TextureWorker::CreateTextureImageView()
 {
-    textureImageView = VkHelper.createImageView(textureImage, vk::Format::eR8G8B8A8Unorm);
+    textureImageView = createImageView(textureImage, vk::Format::eR8G8B8A8Unorm);
 }
 
 void TextureWorker::CreateTextureSampler()
@@ -88,7 +94,7 @@ void TextureWorker::createImage(uint32_t width, uint32_t height, vk::Format form
     assert(image);
 
     auto memRequirements = device.getImageMemoryRequirements(image);
-    vk::MemoryAllocateInfo allocInfo(memRequirements.size, VkHelper.findMemoryType(memRequirements.memoryTypeBits, properties));
+    vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
 
     imageMemory = device.allocateMemory(allocInfo);
     assert(imageMemory);
@@ -96,72 +102,14 @@ void TextureWorker::createImage(uint32_t width, uint32_t height, vk::Format form
     device.bindImageMemory(image, imageMemory, 0);
 }
 
-void TextureWorker::transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout)
+vk::ImageView TextureWorker::createImageView(vk::Image image, vk::Format format)
 {
-    vk::CommandBuffer commandBuffer = VkHelper.beginSingleTimeCommands();
+    vk::ImageViewCreateInfo viewInfo({}, image, vk::ImageViewType::e2D, format);
+    viewInfo.subresourceRange.setAspectMask(vk::ImageAspectFlagBits::eColor);
+    viewInfo.subresourceRange.setLevelCount(1);
+    viewInfo.subresourceRange.setLayerCount(1);
 
-    vk::ImageSubresourceRange range(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1);
+    auto imageView = device.createImageView(viewInfo);
 
-    if (newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
-    {
-        range.setAspectMask(vk::ImageAspectFlagBits::eDepth);
-
-        if (hasStencilComponent(format))
-            range.aspectMask |= vk::ImageAspectFlagBits::eStencil;
-    }
-
-    vk::ImageMemoryBarrier barrier({}, {}, oldLayout, newLayout, VK_QUEUE_FAMILY_IGNORED, VK_QUEUE_FAMILY_IGNORED, image, range);
-
-    if (oldLayout == vk::ImageLayout::ePreinitialized && newLayout == vk::ImageLayout::eTransferSrcOptimal)
-    {
-        barrier.setSrcAccessMask(vk::AccessFlagBits::eHostWrite);
-        barrier.setDstAccessMask(vk::AccessFlagBits::eTransferRead);
-    }
-    else if (oldLayout == vk::ImageLayout::ePreinitialized && newLayout == vk::ImageLayout::eTransferDstOptimal)
-    {
-        barrier.setSrcAccessMask(vk::AccessFlagBits::eHostWrite);
-        barrier.setDstAccessMask(vk::AccessFlagBits::eTransferWrite);
-    }
-    else if (oldLayout == vk::ImageLayout::eTransferDstOptimal && newLayout == vk::ImageLayout::eShaderReadOnlyOptimal)
-    {
-        barrier.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite);
-        barrier.setDstAccessMask(vk::AccessFlagBits::eShaderRead);
-    }
-    else if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
-    {
-        barrier.setSrcAccessMask({});
-        barrier.setDstAccessMask(vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite);
-    }
-    else
-    {
-        Log("Renderer::transitionImageLayout():: unsupported layout transition!");
-        throw std::invalid_argument("unsupported layout transition!");
-    }
-
-
-    commandBuffer.pipelineBarrier(
-        vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTopOfPipe,
-        {},
-        0, nullptr,
-        0, nullptr,
-        1, &barrier);
-
-    VkHelper.endSingleTimeCommands(commandBuffer);
-}
-
-void TextureWorker::copyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width, uint32_t height)
-{
-    vk::CommandBuffer commandBuffer = VkHelper.beginSingleTimeCommands();
-
-    vk::ImageSubresourceLayers subres(vk::ImageAspectFlagBits::eColor, 0, 0, 1);
-    vk::BufferImageCopy region(0, 0, 0, subres, { 0, 0, 0 }, { width, height, 1 });
-
-    commandBuffer.copyBufferToImage(buffer, image, vk::ImageLayout::eTransferDstOptimal, 1, &region);
-
-    VkHelper.endSingleTimeCommands(commandBuffer);
-}
-
-bool TextureWorker::hasStencilComponent(vk::Format format) const
-{
-    return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
+    return imageView;
 }

@@ -40,6 +40,11 @@ public:
     vk::DeviceMemory depthImageMemory;
     vk::ImageView depthImageView;
 
+    vk::Image textureImage;
+    vk::DeviceMemory textureImageMemory;
+    vk::ImageView textureImageView;
+    vk::Sampler textureSampler;
+
     vk::Buffer vertexBuffer;
     vk::DeviceMemory vertexBufferMemory;
 
@@ -132,6 +137,9 @@ private:
     void CreateFramebuffers();
     void CreateCommandPool();
     void CreateDepthResources();
+    void CreateTextureImage();
+    void CreateTextureImageView();
+    void CreateTextureSampler();
     void LoadModel();
     void CreateVertexBuffer();
     void CreateIndexBuffer();
@@ -141,11 +149,17 @@ private:
     void CreateCommandBuffers();
     void CreateSynchronizationPrimitives();
 
+    void createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);
+    void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size);
     void createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
-
+    vk::CommandBuffer beginSingleTimeCommands();
+    void endSingleTimeCommands(vk::CommandBuffer commandBuffer);
+    void transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout);
+    void copyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width, uint32_t height);
+    vk::ImageView createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
     vk::Format findSupportedFormat(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features);
     vk::Format findDepthFormat();
-
+    bool hasStencilComponent(vk::Format format) const;
     QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
     SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
     uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
