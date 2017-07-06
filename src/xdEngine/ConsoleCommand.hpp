@@ -23,6 +23,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 #define CMD5(cls, ccname, p1, p2, p3, p4, p5)   { static cls ccname(p1,p2,p3,p4,p5);    ConsoleCommands->AddCommand(&ccname); }
 #pragma endregion ConsoleCommand Adding Macros
 
+namespace XDay
+{
 #pragma region Basic ConsoleCommand
 class XDAY_API ConsoleCommand
 {
@@ -122,7 +124,7 @@ protected:
 #pragma endregion ConsoleCommand String
 
 #pragma region ConsoleCommand Value Template
-template<class T>
+template <class T>
 class XDAY_API CC_Value : public ConsoleCommand
 {
     using super = ConsoleCommand;
@@ -190,7 +192,7 @@ class XDAY_API CC_FunctionCall : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_FunctionCall(std::string _name, void(*_func)(std::string), bool _AllowEmptyArgs, bool _enabled = true);
+    CC_FunctionCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs, bool _enabled = true);
     void Execute(std::string args) override;
 
     std::string Info() override;
@@ -223,8 +225,9 @@ public:
     void Destroy();
 };
 #pragma endregion ConsoleCommand Container
+}
 
-XDAY_API extern CC_Container* ConsoleCommands;
+XDAY_API extern XDay::CC_Container* ConsoleCommands;
 
 extern bool GlobalFullscreen;
 
@@ -261,17 +264,17 @@ namespace cc_functions
 	void CC_FlushLog(std::string args);
 }
 
-static CC_FunctionCall ExitCC("exit", cc_functions::CC_Exit, true);
-static CC_FunctionCall QuitCC("quit", cc_functions::CC_Exit, true);
-static CC_FunctionCall HelpCC("help", cc_functions::CC_Help, true);
-static CC_FunctionCall SystemCommandCC("system", cc_functions::CC_SystemCommand, false, Core.isGlobalDebug());
+static XDay::CC_FunctionCall ExitCC("exit", cc_functions::CC_Exit, true);
+static XDay::CC_FunctionCall QuitCC("quit", cc_functions::CC_Exit, true);
+static XDay::CC_FunctionCall HelpCC("help", cc_functions::CC_Help, true);
+static XDay::CC_FunctionCall SystemCommandCC("system", cc_functions::CC_SystemCommand, false, Core.isGlobalDebug());
 
-static CC_FunctionCall FlushLogCC("flush", cc_functions::CC_FlushLog, true);
+static XDay::CC_FunctionCall FlushLogCC("flush", cc_functions::CC_FlushLog, true);
 
-static CC_FunctionCall ConfigLoadCC("config_load", cc_functions::CC_ConfigLoad, true);
-static CC_FunctionCall ConfigSaveCC("config_save", cc_functions::CC_ConfigSave, true);
+static XDay::CC_FunctionCall ConfigLoadCC("config_load", cc_functions::CC_ConfigLoad, true);
+static XDay::CC_FunctionCall ConfigSaveCC("config_save", cc_functions::CC_ConfigSave, true);
 
-static CC_Bool FullscreenCC("r_fullscreen", GlobalFullscreen);
+static XDay::CC_Bool FullscreenCC("r_fullscreen", GlobalFullscreen);
 
 void RegisterConsoleCommands();
 #pragma endregion Console commands

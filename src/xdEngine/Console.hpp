@@ -7,6 +7,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine_impexp.inl"
 
+namespace XDay
+{
 class XDAY_API xdConsole
 {
 public:
@@ -18,7 +20,8 @@ public:
     void Show();
     void Hide();
 };
+}
 
-extern XDAY_API xdConsole* Console;
+extern XDAY_API XDay::xdConsole* Console;
 
 #endif // Console_hpp__

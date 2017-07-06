@@ -7,6 +7,8 @@
 #include "ConsoleCommand.hpp"
 #include "Renderer/Renderer.hpp"
 
+using namespace XDay;
+
 XDAY_API XDayEngine Engine;
 
 void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)

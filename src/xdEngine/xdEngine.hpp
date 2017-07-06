@@ -6,6 +6,8 @@
 
 #include "xdEngine_impexp.inl"
 
+namespace XDay
+{
 class XDAY_API XDayEngine
 {
     int MonitorsCount;
@@ -31,7 +33,8 @@ public:
     int GetMonitorsCount() const { return MonitorsCount; };
     int GetVideoModesCount() const { return VideoModesCount; };
 };
+}
 
-extern XDAY_API XDayEngine Engine;
+extern XDAY_API XDay::XDayEngine Engine;
 
 #endif // xdEngine_hpp__

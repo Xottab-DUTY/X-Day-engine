@@ -3,6 +3,7 @@
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
 
+using namespace XDay;
 XDAY_API xdConsole* Console = nullptr;
 XDAY_API CC_Container* ConsoleCommands = nullptr;
 

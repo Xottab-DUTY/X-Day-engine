@@ -14,8 +14,8 @@
 
 void InitializeConsole()
 {
-    ConsoleCommands = new CC_Container;
-    Console = new xdConsole;
+    ConsoleCommands = new XDay::CC_Container;
+    Console = new XDay::xdConsole;
     Console->Initialize();
 }
 

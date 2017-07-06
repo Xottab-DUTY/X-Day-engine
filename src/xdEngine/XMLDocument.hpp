@@ -8,6 +8,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 #include "xdEngine_impexp.inl"
 
+namespace XDay
+{
 class XDAY_API xdXMLDocument
 {
 public:
@@ -29,4 +31,5 @@ protected:
     tinyxml2::XMLNode* root_node;
     tinyxml2::XMLDocument xml_document;
 };
+}
 #endif // XMLDocument_hpp__

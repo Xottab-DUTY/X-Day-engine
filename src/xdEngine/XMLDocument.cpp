@@ -6,6 +6,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "Debug/Log.hpp"
 #include "XMLDocument.hpp"
 
+using namespace XDay;
+
 xdXMLDocument::xdXMLDocument()
 {
     root_node = nullptr;

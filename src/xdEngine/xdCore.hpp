@@ -9,9 +9,10 @@ namespace filesystem = std::experimental::filesystem::v1;
 
 using FunctionPointer = void(*)();
 
+namespace XDay
+{
 class XDAY_API xdCore
 {
-private:
     double buildId = 0;
     const std::string buildDate = __DATE__;
     const std::string buildTime = __TIME__;
@@ -42,7 +43,7 @@ public:
     filesystem::path TexturesPath;
 
     std::string GameModule;
-    
+
     std::string UserName = "X-Day User";
     std::string CompName = "X-Day Computer";
     std::vector<std::string> Params;
@@ -72,7 +73,8 @@ private:
     void InitializeResources();
     void CalculateBuildId();
 };
+}
 
-extern XDAY_API xdCore Core;
+extern XDAY_API XDay::xdCore Core;
 
 #endif // xdCore_hpp__

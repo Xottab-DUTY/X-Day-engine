@@ -10,6 +10,7 @@
 #include "ConsoleCommand.hpp"
 #include "XMLResource.hpp"
 
+using namespace XDay;
 
 #pragma region ConsoleCommand Container
 bool CC_Container::Execute(std::string cmd) const

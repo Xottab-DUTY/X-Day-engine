@@ -11,6 +11,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "xdCore.hpp"
 #include "XMLResource.hpp"
 
+using namespace XDay;
+
 XDAY_API xdCore Core;
 
 static void error_callback(int error, const char* description)

@@ -6,6 +6,8 @@ namespace filesystem = std::experimental::filesystem::v1;
 #include "XMLResource.hpp"
 #include "xdCore.hpp"
 
+using namespace XDay;
+
 xdXMLResource::xdXMLResource()
     : super() {}
 
