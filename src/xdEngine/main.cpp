@@ -112,13 +112,14 @@ int main(int argc, char* argv[])
 
     Engine.Initialize();
     Engine.xdCreateWindow();
-    Render.Initialize();
 
     std::thread WatchConsole(threadedConsole);
     WatchConsole.detach();
-    Startup();
-    WatchConsole.~thread();
+    Render.Initialize();
 
+    Startup();
+
+    WatchConsole.~thread();
     Render.Destroy();
 
     glfwTerminate();
