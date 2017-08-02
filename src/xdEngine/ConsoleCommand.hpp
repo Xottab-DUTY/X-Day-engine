@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem::v1;
+namespace filesystem = std::experimental::filesystem;
 
 #include <fmt/format.h>
 

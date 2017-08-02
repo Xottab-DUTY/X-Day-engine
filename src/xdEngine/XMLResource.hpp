@@ -2,7 +2,7 @@
 #ifndef XMLResource_hpp__
 #define XMLResource_hpp__
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem::v1;
+namespace filesystem = std::experimental::filesystem;
 
 #include "tinyxml2/tinyxml2.h"
 

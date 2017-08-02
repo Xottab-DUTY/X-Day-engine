@@ -1,6 +1,6 @@
 #include <fstream>
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem::v1;
+namespace filesystem = std::experimental::filesystem;
 
 #include <ShaderLang.h>
 #include <glslang/SPIRV/GlslangToSpv.h>

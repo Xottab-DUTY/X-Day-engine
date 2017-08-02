@@ -1,7 +1,7 @@
 #include <ctime>
 #include <sstream>
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem::v1;
+namespace filesystem = std::experimental::filesystem;
 
 #include <fmt/format.h>
 #include <GLFW/glfw3.h>

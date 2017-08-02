@@ -3,7 +3,7 @@
 #define xdCore_hpp__
 #include <string>
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem::v1;
+namespace filesystem = std::experimental::filesystem;
 
 #include "xdEngine_impexp.inl"
 
