@@ -25,3 +25,6 @@
 [submodule "include/tinyobjloader"]
 	path = include/tinyobjloader
 	url = https://github.com/syoyo/tinyobjloader.git
+[submodule "include/pugixml"]
+	path = include/pugixml
+	url = https://github.com/zeux/pugixml.git
