@@ -133,9 +133,6 @@
     <ClCompile Include="Debug\QuantMS.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
-    <ClCompile Include="Renderer\Texture.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="XMLDocument.cpp" />
@@ -148,8 +145,6 @@
     <ClInclude Include="Debug\QuantMS.hpp" />
     <ClInclude Include="Renderer\Renderer.hpp" />
     <ClInclude Include="Renderer\Shader.hpp" />
-    <ClInclude Include="Renderer\Texture.hpp" />
-    <ClInclude Include="Renderer\VDeleter.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="XMLDocument.hpp" />
