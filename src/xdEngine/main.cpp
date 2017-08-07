@@ -31,7 +31,7 @@ void HelpCmdArgs()
 {
     Log("\nAvailable parameters:\n"\
         "--p_name - Specifies AppName, default is \"X-Day Engine\" \n"\
-        "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"
+        "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"\
         "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
         "--p_respath - Specifies path of resources folder, default is \"*WorkingDirectory*/resources\"\n"\
         "--p_mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
@@ -86,10 +86,6 @@ void Startup()
 
 int main(int argc, char* argv[])
 {
-#ifdef WINDOWS
-    //system("chcp 65001");
-#endif
-    //setlocale(LC_ALL, "");
     InitLogger();
 
     Core.InitializeArguments(argc, argv);
@@ -104,11 +100,7 @@ int main(int argc, char* argv[])
     HelpCmdArgs();
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile.string());
-
-    if (glfwInit())
-        Log("GLFW initialized.");
-    else
-        Log("GLFW not initialized.");
+    Log(glfwInit() ? "GLFW initialized." : "GLFW not initialized.");
 
     Engine.Initialize();
     Engine.xdCreateWindow();
