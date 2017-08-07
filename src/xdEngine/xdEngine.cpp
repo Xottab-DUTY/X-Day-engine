@@ -13,35 +13,40 @@ XDAY_API XDayEngine Engine;
 
 void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        ConsoleCommands->Execute(&ExitCC);
-    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+    if(action == GLFW_PRESS)
     {
-        ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
+        switch(key)
+        {
+            case GLFW_KEY_ESCAPE: ConsoleCommands->Execute(&ExitCC);
+            case GLFW_KEY_ENTER:
+                {
+                    ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
 
-        if (ConsoleCommands->GetBool(&FullscreenCC))
-            glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
-        else
-            glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.CurrentMode->width - 256, Engine.CurrentMode->height - 256, Engine.CurrentMode->refreshRate);
-    }
+                    if (ConsoleCommands->GetBool(&FullscreenCC))
+                        glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
+                    else
+                        glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.CurrentMode->width - 256, Engine.CurrentMode->height - 256, Engine.CurrentMode->refreshRate);
+                }
+            default: return;
+        }
 }
 
 void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
 {
-    if (width == 0 || height == 0) return;
-
-    Renderer* pRender = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
-    pRender->RecreateSwapChain();
+    if (width || height) 
+    {
+        Renderer* pRender = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+        pRender->RecreateSwapChain();
+    }
 }
 
 void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
 {
-    if (focused)
+    if (!focused)
     {
-        // The window gained input focus
-    }
-    else
         glfwWaitEvents();
+    }
+    //else //TODO: The window gained input focus
 }
 
 void XDayEngine::Initialize()
