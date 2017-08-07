@@ -31,7 +31,9 @@ void Logger::InitLog()
     if (Core.FindParam("--p_nologflush")) nologflush = true;
     if (!nolog)
     {
-        Core.FindParam("--p_mainlog") ? LogFile = Core.LogsPath.string() + Core.ReturnParam("--p_mainlog") : LogFile = Core.LogsPath.string() + "main.log";
+        Core.FindParam("--p_mainlog")
+            ? LogFile = Core.LogsPath.string() + Core.ReturnParam("--p_mainlog")
+            : LogFile = Core.LogsPath.string() + "main.log";
         this->Logger::Logger();
     }
 }
