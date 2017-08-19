@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleCommand.cpp" />
+    <ClCompile Include="ConsoleCommands.cpp" />
     <ClCompile Include="Debug\Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Debug\QuantMS.cpp" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="Console.hpp" />
     <ClInclude Include="ConsoleCommand.hpp" />
+    <ClInclude Include="ConsoleCommands.hpp" />
     <ClInclude Include="Debug\Log.hpp" />
     <ClInclude Include="Debug\QuantMS.hpp" />
     <ClInclude Include="Renderer\VkDemoRenderer.hpp" />

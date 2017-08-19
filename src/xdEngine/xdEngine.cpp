@@ -5,6 +5,7 @@
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
+#include "ConsoleCommands.hpp"
 #include "Renderer/VkDemoRenderer.hpp"
 
 using namespace XDay;

@@ -28,6 +28,9 @@
     <ClCompile Include="Renderer\VkDemoRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleCommands.cpp">
+      <Filter>Console\Command</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdEngine.hpp" />
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="Renderer\VkDemoRenderer.hpp">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleCommands.hpp">
+      <Filter>Console\Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

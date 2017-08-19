@@ -9,6 +9,7 @@
 #include "Debug/Log.hpp"
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
+#include "ConsoleCommands.hpp"
 #include "xdEngine.hpp"
 #include "Renderer/VkDemoRenderer.hpp"
 
