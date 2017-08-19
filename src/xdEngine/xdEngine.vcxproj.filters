@@ -22,10 +22,10 @@
     <ClCompile Include="Debug\Log.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Renderer.cpp">
+    <ClCompile Include="Renderer\Shader.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Shader.cpp">
+    <ClCompile Include="Renderer\VkDemoRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,10 +50,10 @@
     <ClInclude Include="Debug\Log.hpp">
       <Filter>Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Renderer.hpp">
+    <ClInclude Include="Renderer\Shader.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\Shader.hpp">
+    <ClInclude Include="Renderer\VkDemoRenderer.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>

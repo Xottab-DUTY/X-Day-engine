@@ -5,7 +5,7 @@
 #include "xdEngine.hpp"
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
-#include "Renderer/Renderer.hpp"
+#include "Renderer/VkDemoRenderer.hpp"
 
 using namespace XDay;
 
@@ -34,7 +34,7 @@ void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
 {
     if (width || height) 
     {
-        Renderer* pRender = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+        VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
         pRender->RecreateSwapChain();
     }
 }

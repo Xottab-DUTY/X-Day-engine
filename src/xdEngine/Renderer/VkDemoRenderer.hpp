@@ -8,7 +8,7 @@
 #include "xdEngine_impexp.inl"
 #include <ResourceLimits.h>
 
-class XDAY_API Renderer
+class XDAY_API VkDemoRenderer
 {
 public:
     vk::Instance instance;
@@ -102,7 +102,7 @@ public:
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
 
-    Renderer();
+    VkDemoRenderer();
     void Initialize();
     void Destroy();
     void UpdateUniformBuffer();
@@ -162,9 +162,9 @@ private:
     bool hasStencilComponent(vk::Format format) const;
     QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
     SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
-    uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
+    uint32_t VkDemoRenderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
 };
 
-extern XDAY_API Renderer Render;
+extern XDAY_API VkDemoRenderer VkDemoRender;
 
 #endif // xdRender_hpp__

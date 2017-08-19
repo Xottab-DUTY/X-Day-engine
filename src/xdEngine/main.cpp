@@ -10,7 +10,7 @@
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
-#include "Renderer/Renderer.hpp"
+#include "Renderer/VkDemoRenderer.hpp"
 
 void InitializeConsole()
 {
@@ -78,10 +78,10 @@ void Startup()
     while (!glfwWindowShouldClose(Engine.window))
     {
         glfwPollEvents();
-        Render.UpdateUniformBuffer();
-        Render.DrawFrame();
+        VkDemoRender.UpdateUniformBuffer();
+        VkDemoRender.DrawFrame();
     }
-    Render.device.waitIdle();
+    VkDemoRender.device.waitIdle();
 }
 
 int main(int argc, char* argv[])
@@ -111,12 +111,12 @@ int main(int argc, char* argv[])
 
     std::thread WatchConsole(threadedConsole);
     WatchConsole.detach();
-    Render.Initialize();
+    VkDemoRender.Initialize();
 
     Startup();
 
     WatchConsole.~thread();
-    Render.Destroy();
+    VkDemoRender.Destroy();
 
     glfwTerminate();
     Log("GLFW terminated.");
