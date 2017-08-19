@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
     Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
     HelpCmdArgs();
 
-    ConsoleCommands->ExecuteConfig(Console->ConfigFile.string());
+    ConsoleCommands->ExecuteConfig(Console->ConfigFile);
     Log(glfwInit() ? "GLFW initialized." : "GLFW not initialized.");
 
     Engine.Initialize();

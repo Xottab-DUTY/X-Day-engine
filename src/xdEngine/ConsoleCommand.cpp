@@ -134,18 +134,16 @@ bool CC_Container::ExecuteBool(CC_Bool* cmd, bool value) const
     return true;
 }
 
-void CC_Container::ExecuteConfig(std::string filename) const
+void CC_Container::ExecuteConfig(filesystem::path filename) const
 {
-    Execute(&ConfigLoadCC, filename);
+    Execute(&ConfigLoadCC, filename.string());
 }
 
 ConsoleCommand* CC_Container::GetCommand(std::string cmd) const
 {
     auto e = CommandsContainer.find(cmd);
     if (e != CommandsContainer.end())
-    {
         return e->second;
-    }
     return nullptr;
 }
 

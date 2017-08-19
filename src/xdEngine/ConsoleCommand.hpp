@@ -213,7 +213,7 @@ public:
 
     bool ExecuteBool(CC_Bool* cmd, bool value) const;
 
-    void ExecuteConfig(std::string filename) const;
+    void ExecuteConfig(filesystem::path filename) const;
 
     ConsoleCommand* GetCommand(std::string cmd) const;
     bool GetBool(std::string cmd) const;
