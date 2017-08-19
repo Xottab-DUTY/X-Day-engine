@@ -48,11 +48,11 @@ public:
 
     virtual void Execute(const std::string& args) = 0;
 
-    std::string GetName();
-    bool isEnabled();
-    bool isLowerCaseArgs();
-    bool isEmptyArgsAllowed();
-    bool isSavingAllowed();
+    std::string GetName() const;
+    bool isEnabled() const;
+    bool isLowerCaseArgs() const;
+    bool isEmptyArgsAllowed() const;
+    bool isSavingAllowed() const;
 
     virtual std::string Status();
     virtual std::string Info();
@@ -80,7 +80,7 @@ public:
     std::string Syntax() override;
     std::string Status() override;
 
-    const bool GetValue() const;
+    bool GetValue() const;
 
 protected:
     bool& value;
@@ -218,7 +218,7 @@ public:
 
     ConsoleCommand* GetCommand(const std::string& cmd) const;
     bool GetBool(const std::string& cmd) const;
-    bool GetBool(CC_Bool* cmd) const;
+    static bool GetBool(CC_Bool* cmd);
 
     void AddCommand(ConsoleCommand* cc);
     void RemoveCommand(ConsoleCommand* cc);

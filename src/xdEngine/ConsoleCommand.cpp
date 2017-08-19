@@ -156,7 +156,7 @@ bool CC_Container::GetBool(const std::string& cmd) const
     return false;
 }
 
-bool CC_Container::GetBool(CC_Bool* cmd) const
+bool CC_Container::GetBool(CC_Bool* cmd)
 {
     if (cmd)
         return cmd->GetValue();
@@ -194,27 +194,27 @@ ConsoleCommand::~ConsoleCommand()
         ConsoleCommands->RemoveCommand(this);
 }
 
-std::string ConsoleCommand::GetName()
+std::string ConsoleCommand::GetName() const
 {
     return Name;
 }
 
-bool ConsoleCommand::isEnabled()
+bool ConsoleCommand::isEnabled() const
 {
     return Enabled;
 }
 
-bool ConsoleCommand::isLowerCaseArgs()
+bool ConsoleCommand::isLowerCaseArgs() const
 {
     return LowerCaseArgs;
 }
 
-bool ConsoleCommand::isEmptyArgsAllowed()
+bool ConsoleCommand::isEmptyArgsAllowed() const
 {
     return AllowEmptyArgs;
 }
 
-bool ConsoleCommand::isSavingAllowed()
+bool ConsoleCommand::isSavingAllowed() const
 {
     return AllowSaving;
 }
@@ -307,7 +307,7 @@ std::string CC_Bool::Status()
     return value ? "on" : "off";
 }
 
-const bool CC_Bool::GetValue() const
+bool CC_Bool::GetValue() const
 {
     return value;
 }
