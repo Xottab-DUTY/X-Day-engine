@@ -815,8 +815,8 @@ void Renderer::CreateTextureImage()
 {
     auto _path = Core.TexturesPath.string() + "texture.dds";
 
-    if (Core.FindParam("--p_texture"))
-        _path = Core.TexturesPath.string() + Core.ReturnParam("--p_texture");
+    if (Core.FindParam(eParamTexture))
+        _path = Core.TexturesPath.string() + Core.ReturnParam(eParamTexture);
 
     gli::texture2d tex2D(gli::load(_path));
 
@@ -882,8 +882,8 @@ void Renderer::LoadModel()
 
     auto _path = Core.ModelsPath.string() + "model.obj";
 
-    if (Core.FindParam("--p_model"))
-        _path = Core.ModelsPath.string() + Core.ReturnParam("--p_model");
+    if (Core.FindParam(eParamModel))
+        _path = Core.ModelsPath.string() + Core.ReturnParam(eParamModel);
 
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {

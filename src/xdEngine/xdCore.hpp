@@ -11,6 +11,26 @@ using FunctionPointer = void(*)();
 
 namespace XDay
 {
+enum eCoreParams
+{
+    eParamPrefix,
+    eParamDebug,
+    eParamNoLog,
+    eParamNoLogFlush,
+    eParamResPath,
+    eParamDataPath,
+    eParamMainConfig,
+    eParamMainLog,
+    eParamName,
+    eParamGame,
+
+    eParamShaderForceRecompilation,
+    eParamShaderPreprocess,
+
+    eParamTexture,
+    eParamModel
+};
+
 class XDAY_API xdCore
 {
     double buildId = 0;
@@ -64,8 +84,10 @@ public:
     auto GetGLFWVersionString() const { return GLFWVersionString; }
 
     void CreateDirIfNotExist(const filesystem::path& p) const;
-    bool FindParam(std::string&& Param) const;
-    std::string ReturnParam(std::string&& Param) const;
+
+    bool FindParam(eCoreParams param) const;
+    std::string ReturnParam(eCoreParams param) const;
+    std::string RecognizeParam(eCoreParams param) const;
 
     static const std::string GetModuleName(std::string&& xdModule);
 

@@ -25,7 +25,7 @@ bool xdCore::isGlobalDebug()
 #ifdef DEBUG
     return true;
 #endif
-    return FindParam("--p_debug");
+    return FindParam(eParamDebug);
 }
 
 xdCore::xdCore()
@@ -38,14 +38,11 @@ xdCore::xdCore()
 void xdCore::InitializeArguments(int argc, char* argv[])
 {
     for (int i = 0; i < argc; ++i)
-    {
         Params.push_back(argv[i]);
-    }
 
-    for (auto&& str : this->Params)
-    {
+    for (auto&& str : Params)
         ParamsString += str + " ";
-    }
+
     ParamsString.pop_back(); // remove the last " "
 }
 
@@ -54,13 +51,13 @@ void xdCore::Initialize(std::string&& _appname)
     Msg("{} {} (build {})", EngineName, EngineVersion, buildId);
     Log("Core: Initializing", false);
     AppVersion = "1.0";
-    FindParam("--p_name") ? AppName = ReturnParam("--p_name") : AppName = _appname;
-    FindParam("--p_game") ? GameModule = ReturnParam("--p_game") : GameModule = "xdGame";
+    FindParam(eParamName) ? AppName = ReturnParam(eParamName) : AppName = _appname;
+    FindParam(eParamGame) ? GameModule = ReturnParam(eParamGame) : GameModule = "xdGame";
     AppPath = filesystem::absolute(Params.front());
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
-    FindParam("--p_datapath") ? DataPath = ReturnParam("--p_datapath") : DataPath = WorkPath.string() + "/appdata/";
-    FindParam("--p_respath") ? ResourcesPath = ReturnParam("--p_respath") : ResourcesPath = WorkPath.string() + "/resources/";
+    FindParam(eParamDataPath) ? DataPath = ReturnParam(eParamDataPath) : DataPath = WorkPath.string() + "/appdata/";
+    FindParam(eParamResPath) ? ResourcesPath = ReturnParam(eParamResPath) : ResourcesPath = WorkPath.string() + "/resources/";
 
     BinaryShadersPath = DataPath.string() + "/binary_shaders/";
     LogsPath = DataPath.string() + "/logs/";
@@ -97,15 +94,15 @@ void xdCore::InitializeResources()
     SoundsPath = ResourcesPath.string() + "/sounds/";
     TexturesPath = ResourcesPath.string() + "/textures/";
 
-    xdXMLResource resource_initializer(this->ResourcesPath, "resources.xml");
+    xdXMLResource resource_initializer(ResourcesPath, "resources.xml");
     if (!resource_initializer.isErrored())
         resource_initializer.ParseResources();
 }
 
 // Finds command line parameters and returns true if param exists
-bool xdCore::FindParam(std::string&& Param) const
+bool xdCore::FindParam(eCoreParams param) const
 {
-    if (ParamsString.find(Param) != std::string::npos)
+    if (ParamsString.find(RecognizeParam(param)) != std::string::npos)
         return true;
     return false;
 }
@@ -114,24 +111,64 @@ bool xdCore::FindParam(std::string&& Param) const
 // If parameter isn't found it returns empty string.
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
-std::string xdCore::ReturnParam(std::string&& Param) const
+std::string xdCore::ReturnParam(eCoreParams param) const
 {
     bool found = false;
+    auto p = RecognizeParam(param);
     for (auto i : Params)
     {
-        if (found && i.find("--p_") != std::string::npos)
+        if (found && i.find(RecognizeParam(eParamPrefix)) != std::string::npos)
         {
-            Msg("xdCore::ReturnParam: wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", Param, i);
+            Msg("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
             break;
         }
         if (found)
             return i;
-        if (i.find(Param) == std::string::npos)
+        if (i.find(p) == std::string::npos)
             continue;
         found = true;
     }
-    Msg("xdCore::ReturnParam: returning empty string for param {}", Param);
+
+    Msg("xdCore::ReturnParam(): returning empty string for param {}", p);
     return "";
+}
+
+std::string xdCore::RecognizeParam(eCoreParams param) const
+{
+    switch (param)
+    {
+    case eParamPrefix:
+        return "--p_";
+    case eParamDebug:
+        return "--p_debug";
+    case eParamNoLog:
+        return "--p_nolog";
+    case eParamNoLogFlush:
+        return "--p_nologflush";
+    case eParamResPath:
+        return "--p_respath";
+    case eParamDataPath:
+        return "--p_datapath";
+    case eParamMainConfig:
+        return "--p_mainconfig";
+    case eParamMainLog:
+        return "--p_mainlog";
+    case eParamName:
+        return "--p_name";
+    case eParamGame:
+        return "--p_game";
+    case eParamShaderForceRecompilation:
+        return "--p_shrec";
+    case eParamShaderPreprocess:
+        return "--p_shpre";
+    case eParamTexture:
+        return "--p_texture";
+    case eParamModel:
+        return "--p_model";
+    default:
+        Log("xdCore::RecognizeParam():: How this happend? Passing empty string");
+        return "";
+    }
 }
 
 void xdCore::CreateDirIfNotExist(const filesystem::path& p) const
@@ -161,7 +198,8 @@ void xdCore::CalculateBuildId()
 {
     // All started in ~01.01.2017
     std::tm startDate_tm;
-    { // Start date and time
+    {
+        // Start date and time
         startDate_tm.tm_mday = 1;
         startDate_tm.tm_mon = 0;
         startDate_tm.tm_year = 2017 - 1900;
@@ -171,7 +209,8 @@ void xdCore::CalculateBuildId()
     }
 
     std::tm buildDate_tm;
-    { // Build date
+    {
+        // Build date
         std::string stringMonth;
         std::istringstream buffer(buildDate);
         buffer >> stringMonth >> buildDate_tm.tm_mday >> buildDate_tm.tm_year;
@@ -185,9 +224,11 @@ void xdCore::CalculateBuildId()
             break;
         }
     }
-    { // Build time
+
+    {
+        // Build time
         std::string timeBuffer(buildTime);
-        std::replace(timeBuffer.begin(), timeBuffer.end(), ':', ' '); // Costyl (TM)
+        replace(timeBuffer.begin(), timeBuffer.end(), ':', ' '); // Costyl (TM)
         std::istringstream buffer2(timeBuffer);
         buffer2 >> buildDate_tm.tm_hour >> buildDate_tm.tm_min >> buildDate_tm.tm_sec;
     }

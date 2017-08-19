@@ -27,12 +27,12 @@ void Logger::InitLog()
     if (!Core.LogsPath.empty())
         LogFile = Core.LogsPath.string() + "init.log";
     if (LogContainer) CloseLog();
-    if (Core.FindParam("--p_nolog")) nolog = true;
-    if (Core.FindParam("--p_nologflush")) nologflush = true;
+    if (Core.FindParam(eParamNoLog)) nolog = true;
+    if (Core.FindParam(eParamNoLogFlush)) nologflush = true;
     if (!nolog)
     {
-        Core.FindParam("--p_mainlog")
-            ? LogFile = Core.LogsPath.string() + Core.ReturnParam("--p_mainlog")
+        Core.FindParam(eParamMainLog)
+            ? LogFile = Core.LogsPath.string() + Core.ReturnParam(eParamMainLog)
             : LogFile = Core.LogsPath.string() + "main.log";
         this->Logger::Logger();
     }
