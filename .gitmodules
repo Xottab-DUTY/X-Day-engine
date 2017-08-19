@@ -28,3 +28,6 @@
 [submodule "include/pugixml"]
 	path = include/pugixml
 	url = https://github.com/zeux/pugixml.git
+[submodule "include/tbb"]
+	path = include/tbb
+	url = https://github.com/01org/tbb.git
