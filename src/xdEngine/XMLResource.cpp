@@ -11,13 +11,13 @@ using namespace XDay;
 xdXMLResource::xdXMLResource()
     : super() {}
 
-xdXMLResource::xdXMLResource(filesystem::path resources_type, filesystem::path _path, std::string xml_filename)
+xdXMLResource::xdXMLResource(const filesystem::path& resources_type, const filesystem::path& _path, const std::string& xml_filename)
     : super(resources_type, _path, xml_filename) {}
 
-xdXMLResource::xdXMLResource(filesystem::path resources_type, std::string xml_filename)
+xdXMLResource::xdXMLResource(const filesystem::path& resources_type, const std::string& xml_filename)
     : super(resources_type, xml_filename) {}
 
-xdXMLResource::xdXMLResource(filesystem::path full_path)
+xdXMLResource::xdXMLResource(const filesystem::path& full_path)
     : super(full_path) {}
 
 void xdXMLResource::ParseResources() const

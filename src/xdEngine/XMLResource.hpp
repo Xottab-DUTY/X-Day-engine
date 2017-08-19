@@ -17,9 +17,9 @@ class XDAY_API xdXMLResource : public xdXMLDocument
 
 public:
     xdXMLResource();
-    xdXMLResource(filesystem::path resources_type, filesystem::path _path, std::string xml_filename);
-    xdXMLResource(filesystem::path resources_type, std::string xml_filename);
-    xdXMLResource(filesystem::path full_path);
+    xdXMLResource(const filesystem::path& resources_type, const filesystem::path& _path, const std::string& xml_filename);
+    xdXMLResource(const filesystem::path& resources_type, const std::string& xml_filename);
+    xdXMLResource(const filesystem::path& full_path);
 
     void ParseResources() const;
 };

@@ -30,6 +30,7 @@ class XDAY_API ConsoleCommand
 {
 public:
     friend class xdConsole;
+
 protected:
     std::string Name;
     bool Enabled;
@@ -45,7 +46,7 @@ public:
     ConsoleCommand(std::string _name);
     virtual ~ConsoleCommand();
 
-    virtual void Execute(std::string args) = 0;
+    virtual void Execute(const std::string& args) = 0;
 
     std::string GetName();
     bool isEnabled();
@@ -70,9 +71,9 @@ class XDAY_API CC_Bool : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_Bool(std::string _name, bool& _value, bool _enabled = true);
+    CC_Bool(std::string _name, bool _value, bool _enabled = true);
 
-    void Execute(std::string args) override;
+    void Execute(const std::string& args) override;
     void Execute(bool _value) const;
 
     std::string Info() override;
@@ -92,9 +93,9 @@ class XDAY_API CC_Toggle : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_Toggle(std::string _name, bool& _value, bool _enabled = true);
+    CC_Toggle(std::string _name, bool _value, bool _enabled = true);
 
-    void Execute(std::string args) override;
+    void Execute(const std::string& args) override;
 
     std::string Info() override;
     std::string Status() override;
@@ -111,7 +112,7 @@ class XDAY_API CC_String : public ConsoleCommand
 public:
     CC_String(std::string _name, std::string _value, unsigned _size, bool _enabled = true);
 
-    void Execute(std::string args) override;
+    void Execute(const std::string& args) override;
 
     std::string Info() override;
     std::string Syntax() override;
@@ -149,7 +150,7 @@ class XDAY_API CC_Integer : public CC_Value<int>
 public:
     CC_Integer(std::string _name, int& _value, int const _min, int const _max, bool _enabled = true);
 
-    void Execute(std::string args) override;
+    void Execute(const std::string& args) override;
 
     std::string Info() override;
     std::string Status() override;
@@ -164,7 +165,7 @@ class XDAY_API CC_Float : public CC_Value<float>
 public:
     CC_Float(std::string _name, float& _value, float const _min, float const _max, bool _enabled = true);
 
-    void Execute(std::string args) override;
+    void Execute(const std::string& args) override;
 
     std::string Info() override;
     std::string Status() override;
@@ -179,7 +180,7 @@ class XDAY_API CC_Double : public CC_Value<double>
 public:
     CC_Double(std::string _name, double& _value, double const _min, double const _max, bool _enabled = true);
 
-    void Execute(std::string args) override;
+    void Execute(const std::string& args) override;
 
     std::string Info() override;
     std::string Status() override;
@@ -192,12 +193,12 @@ class XDAY_API CC_FunctionCall : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_FunctionCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs, bool _enabled = true);
-    void Execute(std::string args) override;
+    CC_FunctionCall(std::string _name, void (*_func)(const std::string&), bool _AllowEmptyArgs, bool _enabled = true);
+    void Execute(const std::string& args) override;
 
     std::string Info() override;
 protected:
-    void (*function)(std::string args);
+    void (*function)(const std::string& args);
 };
 #pragma endregion ConsoleCommand Function Call
 
@@ -213,10 +214,10 @@ public:
 
     bool ExecuteBool(CC_Bool* cmd, bool value) const;
 
-    void ExecuteConfig(filesystem::path filename) const;
+    void ExecuteConfig(const filesystem::path& filename) const;
 
-    ConsoleCommand* GetCommand(std::string cmd) const;
-    bool GetBool(std::string cmd) const;
+    ConsoleCommand* GetCommand(const std::string& cmd) const;
+    bool GetBool(const std::string& cmd) const;
     bool GetBool(CC_Bool* cmd) const;
 
     void AddCommand(ConsoleCommand* cc);
@@ -254,14 +255,14 @@ CC_String       ("command_name_in_console", variable_to_change, max_string_size)
 
 namespace cc_functions
 {
-	void CC_Exit(std::string args);
-	void CC_Help(std::string args);
-	void CC_SystemCommand(std::string args);
+	void CC_Exit(const std::string& args);
+	void CC_Help(const std::string& args);
+	void CC_SystemCommand(const std::string& args);
 	
-	void CC_ConfigLoad(std::string args);
-	void CC_ConfigSave(std::string args);
+	void CC_ConfigLoad(const std::string& args);
+	void CC_ConfigSave(const std::string& args);
 	
-	void CC_FlushLog(std::string args);
+	void CC_FlushLog(const std::string& args);
 }
 
 static XDay::CC_FunctionCall ExitCC("exit", cc_functions::CC_Exit, true);

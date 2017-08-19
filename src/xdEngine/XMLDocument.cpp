@@ -31,7 +31,7 @@ xdXMLDocument::xdXMLDocument(filesystem::path full_path)
     Load(full_path);
 }
 
-void xdXMLDocument::operator=(filesystem::path full_path)
+void xdXMLDocument::operator=(const filesystem::path& full_path)
 {
     Load(full_path);
 }
@@ -41,7 +41,7 @@ xdXMLDocument::~xdXMLDocument()
 
 }
 
-void xdXMLDocument::Load(filesystem::path resources_type, filesystem::path _path, std::string xml_filename)
+void xdXMLDocument::Load(const filesystem::path& resources_type, const filesystem::path& _path, const std::string& xml_filename)
 {
     std::string buffer(resources_type.string() + _path.string() + xml_filename);
 
@@ -51,7 +51,7 @@ void xdXMLDocument::Load(filesystem::path resources_type, filesystem::path _path
     root_node = xml_document.FirstChild();
 }
 
-void xdXMLDocument::Load(filesystem::path resources_type, std::string xml_filename)
+void xdXMLDocument::Load(const filesystem::path& resources_type, const std::string& xml_filename)
 {
     std::string buffer(resources_type.string() + xml_filename);
 
@@ -61,7 +61,7 @@ void xdXMLDocument::Load(filesystem::path resources_type, std::string xml_filena
     root_node = xml_document.FirstChild();
 }
 
-void xdXMLDocument::Load(filesystem::path full_path)
+void xdXMLDocument::Load(const filesystem::path& full_path)
 {
     if (!xml_document.LoadFile(full_path.string().c_str())) // string().c_str() what a nice costyl
         Msg("XML failed to load file: {}", full_path.string());

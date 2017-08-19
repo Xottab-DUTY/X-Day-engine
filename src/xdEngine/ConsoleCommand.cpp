@@ -134,12 +134,12 @@ bool CC_Container::ExecuteBool(CC_Bool* cmd, bool value) const
     return true;
 }
 
-void CC_Container::ExecuteConfig(filesystem::path filename) const
+void CC_Container::ExecuteConfig(const filesystem::path& filename) const
 {
     Execute(&ConfigLoadCC, filename.string());
 }
 
-ConsoleCommand* CC_Container::GetCommand(std::string cmd) const
+ConsoleCommand* CC_Container::GetCommand(const std::string& cmd) const
 {
     auto e = CommandsContainer.find(cmd);
     if (e != CommandsContainer.end())
@@ -147,7 +147,7 @@ ConsoleCommand* CC_Container::GetCommand(std::string cmd) const
     return nullptr;
 }
 
-bool CC_Container::GetBool(std::string cmd) const
+bool CC_Container::GetBool(const std::string& cmd) const
 {
     ConsoleCommand* command = GetCommand(cmd);
     CC_Bool* b = dynamic_cast<CC_Bool*>(command);
@@ -264,12 +264,12 @@ void ConsoleCommand::AddCommandToCache(std::string&& cmd)
 #pragma endregion Basic ConsoleCommand
 
 #pragma region ConsoleCommand Boolean
-CC_Bool::CC_Bool(std::string _name, bool& _value, bool _enabled) : super(_name), value(_value)
+CC_Bool::CC_Bool(std::string _name, bool _value, bool _enabled) : super(_name), value(_value)
 {
     Enabled = _enabled;
 }
 
-void CC_Bool::Execute(std::string args)
+void CC_Bool::Execute(const std::string& args)
 {
     bool v;
     if (args.compare("on") == 0 || args.compare("true") == 0 || args.compare("1") == 0)
@@ -315,14 +315,14 @@ const bool CC_Bool::GetValue() const
 #pragma endregion ConsoleCommand Boolean
 
 #pragma region ConsoleCommand Toggle
-CC_Toggle::CC_Toggle(std::string _name, bool& _value, bool _enabled) : super(_name), value(_value)
+XDay::CC_Toggle::CC_Toggle(std::string _name, bool _value, bool _enabled /*= true*/) : super(_name), value(_value)
 {
     AllowEmptyArgs = true;
     AllowSaving = false;
     Enabled = _enabled;
 }
 
-void CC_Toggle::Execute(std::string args)
+void CC_Toggle::Execute(const std::string& args)
 {
     value = !value;
 }
@@ -347,7 +347,7 @@ CC_String::CC_String(std::string _name, std::string _value, unsigned _size, bool
     Enabled = _enabled;
 }
 
-void CC_String::Execute(std::string args)
+void CC_String::Execute(const std::string& args)
 {
     if (args.length() > size)
     {
@@ -393,7 +393,7 @@ CC_Integer::CC_Integer(std::string _name, int& _value, int const _min, int const
     Enabled = _enabled;
 }
 
-void CC_Integer::Execute(std::string args)
+void CC_Integer::Execute(const std::string& args)
 {
     int v;
     if (1 != sscanf_s(args.c_str(), "%d", &v) || v < min || v > max)
@@ -423,7 +423,7 @@ CC_Float::CC_Float(std::string _name, float& _value, float const _min, float con
     Enabled = _enabled;
 }
 
-void CC_Float::Execute(std::string args)
+void CC_Float::Execute(const std::string& args)
 {
     float v = min;
     if (sscanf_s(args.c_str(), "%f", &v) == 0 || v < min || v > max)
@@ -452,7 +452,7 @@ CC_Double::CC_Double(std::string _name, double& _value, double const _min, doubl
     Enabled = _enabled;
 }
 
-void CC_Double::Execute(std::string args)
+void CC_Double::Execute(const std::string& args)
 {
     double v = min;
     if (sscanf_s(args.c_str(), "%lf", &v) == 0 || v < min || v > max)
@@ -475,7 +475,7 @@ std::string CC_Double::Status()
 #pragma endregion ConsoleCommand Double
 
 #pragma region ConsoleCommand Function Call
-CC_FunctionCall::CC_FunctionCall(std::string _name, void (*_func)(std::string), bool _AllowEmptyArgs, bool _enabled) : super(_name)
+CC_FunctionCall::CC_FunctionCall(std::string _name, void (*_func)(const std::string&), bool _AllowEmptyArgs, bool _enabled) : super(_name)
 {
     AllowEmptyArgs = _AllowEmptyArgs;
     AllowSaving = false;
@@ -483,7 +483,7 @@ CC_FunctionCall::CC_FunctionCall(std::string _name, void (*_func)(std::string), 
     function = _func;
 }
 
-void CC_FunctionCall::Execute(std::string args)
+void CC_FunctionCall::Execute(const std::string& args)
 {
     if (function)
         function(args);
@@ -498,7 +498,7 @@ std::string CC_FunctionCall::Info()
 
 namespace cc_functions
 {
-	void CC_ConfigLoad(std::string args)
+	void CC_ConfigLoad(const std::string& args)
 	{
 	    Msg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
 	    std::ifstream config_file(args.empty() ? Console->ConfigFile : args);
@@ -516,7 +516,7 @@ namespace cc_functions
 	    config_file.close();
 	}
 	
-	void CC_ConfigSave(std::string args)
+	void CC_ConfigSave(const std::string& args)
 	{
 	    Msg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
 	    std::ofstream f(args.empty() ? Console->ConfigFile : args);
@@ -530,7 +530,7 @@ namespace cc_functions
 	    Msg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
 	}
 	
-	void CC_Help(std::string args)
+	void CC_Help(const std::string& args)
 	{
 	    ConsoleCommand* CommandToHelp;
 	    if (!args.empty())
@@ -552,28 +552,28 @@ namespace cc_functions
 	    }
 	}
 	
-	void CC_Exit(std::string args)
+	void CC_Exit(const std::string& args)
 	{
 	    glfwSetWindowShouldClose(Engine.window, GLFW_TRUE);
 	}
 	
-	void CC_FlushLog(std::string args)
+	void CC_FlushLog(const std::string& args)
 	{
 	    FlushLog();
 	}
 	
-	void CC_SystemCommand(std::string args)
+	void CC_SystemCommand(const std::string& args)
 	{
 	    system(args.c_str());
 	}
 }
 
-void CC_FCallTest(std::string args)
+void CC_FCallTest(const std::string& args)
 {
     Msg("Function call test {}", args);
 }
 
-void CC_XMLTest(std::string args)
+void CC_XMLTest(const std::string& args)
 {
     Log("XML test");
 
