@@ -60,6 +60,7 @@
       <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
     </Link>
@@ -78,6 +79,7 @@
       <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
     </Link>
@@ -98,6 +100,7 @@
       <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -117,6 +120,7 @@
       <PreprocessorDefinitions>XDAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
