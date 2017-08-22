@@ -9,3 +9,9 @@
 #endif
 
 #define UNUSED(...) (void)(__VA_ARGS__)
+
+#if defined(_MSC_VER)
+#define XD_NOVTABLE __declspec(novtable)
+#else
+#define XD_NOVTABLE
+#endif
