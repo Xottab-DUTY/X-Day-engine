@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 14.0.25420.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdEngine", "src\xdEngine\xdEngine.vcxproj", "{C164222D-A92B-4C30-90CE-BD2927E7EB6D}"
 EndProject
@@ -25,6 +25,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPIR-V", "include\SPIR-V.vcxproj", "{FA7FC3AF-9333-40D8-9138-B637F1AD8369}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xdRenderer", "src\xdRenderer\xdRenderer.vcxproj", "{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui", "include\imgui.vcxproj", "{C3160892-FAA8-4011-8870-0E73C808C833}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,6 +116,14 @@ Global
 		{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}.Release|x64.Build.0 = Release|x64
 		{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}.Release|x86.ActiveCfg = Release|Win32
 		{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}.Release|x86.Build.0 = Release|Win32
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Debug|x64.ActiveCfg = Debug|x64
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Debug|x64.Build.0 = Debug|x64
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Debug|x86.ActiveCfg = Debug|Win32
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Debug|x86.Build.0 = Debug|Win32
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Release|x64.ActiveCfg = Release|x64
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Release|x64.Build.0 = Release|x64
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Release|x86.ActiveCfg = Release|Win32
+		{C3160892-FAA8-4011-8870-0E73C808C833}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,5 +137,9 @@ Global
 		{D9FFD282-AFE1-4FAC-BB08-96BBBB8D260A} = {AD9128C2-7444-4240-AE91-08F9093F7D08}
 		{A5281109-2745-4F74-AABC-C1247D614883} = {AD9128C2-7444-4240-AE91-08F9093F7D08}
 		{FA7FC3AF-9333-40D8-9138-B637F1AD8369} = {AD9128C2-7444-4240-AE91-08F9093F7D08}
+		{C3160892-FAA8-4011-8870-0E73C808C833} = {5FBE068F-5316-4080-8EAA-7D31C9E0848E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1ADE41DB-0E81-4500-813D-BEFE7C5D2D62}
 	EndGlobalSection
 EndGlobal
