@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C164222D-A92B-4C30-90CE-BD2927E7EB6D}</ProjectGuid>
     <RootNamespace>xdEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
@@ -61,6 +62,7 @@
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
     </Link>
@@ -80,6 +82,7 @@
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
     </Link>
@@ -101,6 +104,7 @@
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -121,6 +125,7 @@
       <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
