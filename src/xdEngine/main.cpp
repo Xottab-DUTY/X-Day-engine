@@ -85,6 +85,7 @@ void Startup()
 
 int main(int argc, char* argv[])
 {
+    system("chcp 65001");
     // TODO: enable Windows console window hiding once game console drawing in main window is done
 #if 0//ndef DEBUG
     FreeConsole();
