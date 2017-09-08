@@ -151,8 +151,6 @@ std::string xdCore::RecognizeParam(eCoreParams param) const
         return "--p_datapath";
     case eParamMainConfig:
         return "--p_mainconfig";
-    case eParamMainLog:
-        return "--p_mainlog";
     case eParamName:
         return "--p_name";
     case eParamGame:

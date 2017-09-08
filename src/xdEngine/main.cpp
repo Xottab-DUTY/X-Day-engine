@@ -36,7 +36,6 @@ void HelpCmdArgs()
         "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
         "--p_respath - Specifies path of resources folder, default is \"*WorkingDirectory*/resources\"\n"\
         "--p_mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
-        "--p_mainlog - Specifies path and name of main log file (path/name.extension), default is \"*DataPath*/main.log\"\n"\
         "--p_nolog - Completely disables engine log. May increase performance\n"\
         "--p_nologflush - Disables log flushing. Useless if -nolog defined\n"\
         "--p_debug - Enables debug mode\n"
@@ -51,7 +50,6 @@ void HelpCmdArgs()
         "--p_datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\
         "--p_respath - Задаёт путь до папки с ресурсами, по умолчанию: \"*WorkingDirectory*/resources\"\n"\
         "--p_mainconfig - Задаёт путь и имя главного файла настроек (путь/имя.расширение), по умолчанию: \"*DataPath*/main.config\" \n"\
-        "--p_mainlog - Задаёт путь и имя главного лог файла (путь/имя.расширение), по умолчанию: \"*DataPath*/main.log\"\n"\
         "--p_nolog - Полностью выключает лог движка. Может повысить производительность\n"\
         "--p_nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n"\
         "--p_debug - Включает режим отладки\n"

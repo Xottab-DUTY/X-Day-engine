@@ -20,7 +20,6 @@ enum eCoreParams
     eParamResPath,
     eParamDataPath,
     eParamMainConfig,
-    eParamMainLog,
     eParamName,
     eParamGame,
 
