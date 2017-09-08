@@ -89,7 +89,6 @@ int main(int argc, char* argv[])
 #if 0//ndef DEBUG
     FreeConsole();
 #endif
-    InitLogger();
 
     Core.InitializeArguments(argc, argv);
     Core.Initialize();

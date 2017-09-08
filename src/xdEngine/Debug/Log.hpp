@@ -33,8 +33,6 @@ public:
 
 extern XDAY_API XDay::Logger* GlobalLog;
 
-void XDAY_API InitLogger();
-
 #define Msg(log, ...) { Log(fmt::format(log, __VA_ARGS__)); }
 void XDAY_API Log(std::string&& log, bool log_to_stdout = true);
 

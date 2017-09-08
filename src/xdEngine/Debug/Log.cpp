@@ -6,7 +6,7 @@
 
 using namespace XDay;
 
-XDAY_API Logger* GlobalLog = nullptr;
+XDAY_API Logger* GlobalLog = new Logger;
 
 Logger::Logger()
 {
@@ -78,9 +78,4 @@ void Log(std::string&& log, bool log_to_stdout)
 void FlushLog()
 {
     GlobalLog->FlushLog();
-}
-
-void InitLogger()
-{
-    GlobalLog = new Logger;
 }
