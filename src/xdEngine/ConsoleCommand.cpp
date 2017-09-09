@@ -171,9 +171,12 @@ void CC_Container::AddCommand(ConsoleCommand* cc)
 
 void CC_Container::RemoveCommand(ConsoleCommand* cc)
 {
-    auto e = CommandsContainer.find(cc->GetName());
-    if (e != CommandsContainer.end())
-        CommandsContainer.erase(e);
+    if (!CommandsContainer.empty())
+    {
+        auto e = CommandsContainer.find(cc->GetName());
+        if (e != CommandsContainer.end())
+            CommandsContainer.erase(e);
+    }
 }
 
 void CC_Container::Destroy()
