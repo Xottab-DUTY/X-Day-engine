@@ -23,6 +23,7 @@ void InitializeConsole()
 void destroyConsole()
 {
     ConsoleCommands->Execute(&ConfigSaveCC);
+    ConsoleCommands->Execute(&FlushLogCC);
     ConsoleCommands->Destroy();
     delete ConsoleCommands;
     delete Console;
