@@ -80,7 +80,7 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugCallback(
     const char* msg,
     void* userData)
 {
-    Msg("\nValidation layer reports: \n" \
+    Warning("\nValidation layer reports: \n" \
         "Flags: not working right now \n" \
         "Object type: {} \n" \
         "Object: {} \n" \
@@ -358,7 +358,7 @@ void VkDemoRenderer::InitializeResources()
 void VkDemoRenderer::CreateVkInstance()
 {
     if (enableValidationLayers && !CheckValidationLayersSupport())
-        Log("Vulkan: not all validation layers supported.");
+        Warning("Vulkan: not all validation layers supported.");
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion), 
@@ -887,7 +887,7 @@ void VkDemoRenderer::LoadModel()
 
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {
-        Msg("VkDemoRenderer::LoadModel():: {}", err)
+        Error("VkDemoRenderer::LoadModel():: {}", err);
         throw std::runtime_error(err);
     }
 
@@ -1202,7 +1202,7 @@ void VkDemoRenderer::transitionImageLayout(vk::Image image, vk::Format format, v
     }
     else
     {
-        Log("VkDemoRenderer::transitionImageLayout():: unsupported layout transition!");
+        Error("VkDemoRenderer::transitionImageLayout():: unsupported layout transition!");
         throw std::invalid_argument("unsupported layout transition!");
     }
         
@@ -1252,7 +1252,7 @@ vk::Format VkDemoRenderer::findSupportedFormat(const std::vector<vk::Format>& ca
         if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features)
             return format;
     }
-    Log("VkDemoRenderer::findSupportedFormat():: failed to find supported format!");
+    Error("VkDemoRenderer::findSupportedFormat():: failed to find supported format!");
     return vk::Format::eUndefined;
 }
 
@@ -1376,6 +1376,6 @@ uint32_t VkDemoRenderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyF
         if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
             return i;
 
-    Log("VkDemoRenderer::findMemoryType():: failed to find suitable memory type!");
+    Error("VkDemoRenderer::findMemoryType():: failed to find suitable memory type!");
     throw std::runtime_error("failed to find suitable memory type!");
 }

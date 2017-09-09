@@ -1,81 +1,79 @@
 #include <fstream>
-#include <iostream>
+
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/msvc_sink.h>
 
 #include "xdCore.hpp"
 #include "Log.hpp"
 
 using namespace XDay;
 
-XDAY_API Logger* GlobalLog = new Logger;
+XDAY_API Logger GlobalLog("init.log", false);
 
-Logger::Logger()
+Logger::Logger(const std::string& _logfile, bool coreInitialized) : LogFile(_logfile)
 {
-    LogContainer = new std::vector<std::string>();
-    LogContainer->reserve(1000);
+    if (Core.FindParam(eParamNoLog))
+    {
+        nolog = true;
+        return;
+    }
+        
+    if (Core.FindParam(eParamNoLogFlush))
+        nologflush = true;
+
+    std::vector<spdlog::sink_ptr> sinks;
+    sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
+
+    if (!nologflush && coreInitialized)
+    {
+        std::ofstream f(Core.LogsPath.string() + LogFile);
+        f << ""; // Create the file or clear it if it's not empty
+        f.close();
+        sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>((Core.LogsPath.string() + LogFile)));
+    }
+
+#if defined(DEBUG) && defined(_MSC_VER)
+    sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
+#endif
+
+    spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
+    spdlogger->set_pattern("[%T] [%l] %v");
+    spdlog::register_logger(spdlogger);
 }
 
-
-
-Logger::Logger(std::string&& _logfile) :  Logger()
+Logger::~Logger()
 {
-    LogFile = _logfile;
+    if (nolog)
+        return;
+
+    CloseLog();
 }
 
 // Used only in GlobalLog
-void Logger::InitLog()
+void Logger::onCoreInitialized()
 {
-    if (!Core.LogsPath.empty())
-        LogFile = Core.LogsPath.string() + "init.log";
-    if (LogContainer) CloseLog();
-    if (Core.FindParam(eParamNoLog)) nolog = true;
-    if (Core.FindParam(eParamNoLogFlush)) nologflush = true;
-    if (!nolog)
-    {
-        LogFile = Core.LogsPath.string() + "main.log";
-        this->Logger::Logger();
-    }
+    if (nolog || nologflush)
+        return;
+
+    CloseLog();
+    this->Logger::Logger("main.log", true);
 }
 
 void Logger::CloseLog()
 {
-    if (LogContainer)
-    {
+    if (nolog)
+        return;
+
+    if (!nologflush)
         FlushLog();
-        LogContainer->clear();
-        delete LogContainer;
-    }
+
+    spdlog::drop_all();
 }
 
 void Logger::FlushLog()
 {
-    if (LogContainer)
-    {
-        if (!nologflush)
-        {
-            Log("Flushing log..");
-            std::ofstream f(LogFile);
-            for (auto&& str : *LogContainer)
-            {
-                f << str << std::endl;
-            }
-            f.close();
-        }
-    }
-}
+    if (nologflush)
+        return;
 
-void Logger::Log(std::string&& log)
-{
-    if (LogContainer)
-        LogContainer->push_back(log);
-}
-
-void Log(std::string&& log, bool log_to_stdout)
-{
-    GlobalLog->Log(move(log));
-    if (log_to_stdout) std::cout << log << std::endl;
-}
-
-void FlushLog()
-{
-    GlobalLog->FlushLog();
+    spdlogger->flush();
 }

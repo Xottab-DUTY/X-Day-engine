@@ -73,8 +73,8 @@ void ShaderWorker::LoadBinaryShader()
             CompileShader();
             shader_binary_file.open(shader_binary_path, std::ios::binary);
             if (!shader_binary_file.is_open())
-                Msg("ShaderWorker::LoadBinaryShader():: Failed to open shader after recompilation."\
-                    "Using old binary shader. Shader: {}", shaderName)
+                Warning("ShaderWorker::LoadBinaryShader():: Failed to open shader after recompilation."\
+                        "Using old binary shader. Shader: {}", shaderName);
             else
             {
                 binaryShader.resize(filesystem::file_size(shader_binary_path));
@@ -91,7 +91,7 @@ void ShaderWorker::LoadBinaryShader()
         CompileShader();
         shader_binary_file.open(shader_binary_path, std::ios::binary);
         if (!shader_binary_file.is_open())
-            Msg("ShaderWorker::LoadBinaryShader():: Failed to open shader after compilation. Shader: {}", shaderName)
+            Error("ShaderWorker::LoadBinaryShader():: Failed to open shader after compilation. Shader: {}", shaderName);
         else
         {
             binaryShader.resize(filesystem::file_size(shader_binary_path));
@@ -100,7 +100,7 @@ void ShaderWorker::LoadBinaryShader()
         }
     }
     else
-        Msg("ShaderWorker::LoadBinaryShader():: Shader not found: {}", shaderName);
+        Error("ShaderWorker::LoadBinaryShader():: Shader not found: {}", shaderName);
 
     shader_binary_file.close();
 }
@@ -124,7 +124,7 @@ void ShaderWorker::CompileShader()
     auto shader_hash_path = Core.BinaryShadersPath.string() + shaderName + ".hash";
 
     if (Core.isGlobalDebug())
-        Msg("ShaderWorker::CompileShader():: compiling: {}", shaderName);
+        DebugMsg("ShaderWorker::CompileShader():: compiling: {}", shaderName);
 
     bool success = true;
     const char* source_bytes = shaderSource.data();
@@ -146,24 +146,24 @@ void ShaderWorker::CompileShader()
         {
             std::ofstream pp_source_file(shader_source_path + ".pp");
             pp_source_file << preprocessed;
-            Msg("ShaderWorker::CompileShader():: shader preprocessed: {}", shaderName);
+            DebugMsg("ShaderWorker::CompileShader():: shader preprocessed: {}", shaderName);
         }
         else
-            Msg("ShaderWorker::CompileShader():: failed to preprocess shader: {}", shaderName);
+            Error("ShaderWorker::CompileShader():: failed to preprocess shader: {}", shaderName);
     }
 
     success = shader->parse(&resources, 450, false, messages);
 
     if (!success)
-        Msg("ShaderWorker::CompileShader():: info: {}", shader->getInfoLog());
+        Error("ShaderWorker::CompileShader():: info: {}", shader->getInfoLog());
     if (false && Core.isGlobalDebug())
-        Msg("ShaderWorker::CompileShader():: debug info: {}", shader->getInfoDebugLog());
+        DebugMsg("ShaderWorker::CompileShader():: debug info: {}", shader->getInfoDebugLog());
 
     if (success)
         program->addShader(shader);
     else
     {
-        Msg("ShaderWorker::CompileShader():: failed to compile: {}", shaderName);
+        Error("ShaderWorker::CompileShader():: failed to compile: {}", shaderName);
         delete program;
         delete shader;
         return;
@@ -172,7 +172,7 @@ void ShaderWorker::CompileShader()
     success = program->link(messages);
     if (!success)
     {
-        Msg("ShaderWorker::CompileShader():: failed to compile: {}", shaderName);
+        Error("ShaderWorker::CompileShader():: failed to compile: {}", shaderName);
         delete program;
         delete shader;
         return;
@@ -187,12 +187,12 @@ void ShaderWorker::CompileShader()
     glslang::GlslangToSpv(*program->getIntermediate(GetLanguage()), spirv, &logger);
 
     if (Core.isGlobalDebug() && !logger.getAllMessages().empty())
-    	Msg("ShaderWorker::CompileShader()::GlslangToSpv():: {}", logger.getAllMessages());
+    	Warning("ShaderWorker::CompileShader()::GlslangToSpv():: {}", logger.getAllMessages());
 
     glslang::OutputSpvBin(spirv, shader_binary_path.c_str());
 
     if (Core.isGlobalDebug() && filesystem::file_size(shader_binary_path) != 0)
-        Msg("ShaderWorker::CompileShader():: compiled: {}", shaderName);
+        DebugMsg("ShaderWorker::CompileShader():: compiled: {}", shaderName);
 
     delete program;
     delete shader;
@@ -213,7 +213,7 @@ void ShaderWorker::CreateVkShaderModule()
     shaderModule = device.createShaderModule(smInfo);
 
     if (!shaderModule)
-        Msg("ShaderWorker::CreateVkShaderModule():: failed to create vulkan shader module for: {}", shaderName);
+        Error("ShaderWorker::CreateVkShaderModule():: failed to create vulkan shader module for: {}", shaderName);
 }
 
 void ShaderWorker::SetVkShaderStage()
@@ -264,7 +264,7 @@ EShLanguage ShaderWorker::GetLanguage() const
         return EShLangFragment;
     if (shaderName.find(".comp") != std::string::npos)
         return EShLangCompute;
-    Msg("ShaderWorker::GetLanguage():: cant find stage for {}", shaderName);
+    Error("ShaderWorker::GetLanguage():: cant find stage for {}", shaderName);
 }
 
 vk::ShaderStageFlagBits ShaderWorker::GetVkShaderStageFlagBits() const
@@ -281,6 +281,6 @@ vk::ShaderStageFlagBits ShaderWorker::GetVkShaderStageFlagBits() const
         return vk::ShaderStageFlagBits::eFragment;
     if (shaderName.find(".comp") != std::string::npos)
         return vk::ShaderStageFlagBits::eCompute;
-    Msg("ShaderWorker::GetVkShaderStageBits():: cant find stage for {}", shaderName);
+    Error("ShaderWorker::GetVkShaderStageBits():: cant find stage for {}", shaderName);
     return vk::ShaderStageFlagBits::eAll;
 }

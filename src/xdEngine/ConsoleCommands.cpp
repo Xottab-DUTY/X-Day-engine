@@ -22,7 +22,7 @@ namespace cc_functions
 {
     void CC_ConfigLoad(const std::string& args)
     {
-        Msg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
+        DebugMsg("Loading config file {}...", args.empty() ? Console->ConfigFile.string() : args);
         std::ifstream config_file(args.empty() ? Console->ConfigFile : args);
         std::string line;
 
@@ -30,17 +30,17 @@ namespace cc_functions
         {
             while (std::getline(config_file, line))
                 ConsoleCommands->Execute(line);
-            Msg("Loaded config file {}", args.empty() ? Console->ConfigFile.string() : args);
+            Info("Loaded config file {}", args.empty() ? Console->ConfigFile.string() : args);
         }
         else
-            Msg("Failed to open config file {}", args.empty() ? Console->ConfigFile.string() : args);
+            Error("Failed to open config file {}", args.empty() ? Console->ConfigFile.string() : args);
 
         config_file.close();
     }
 
     void CC_ConfigSave(const std::string& args)
     {
-        Msg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
+        DebugMsg("Saving config file {}...", args.empty() ? Console->ConfigFile.string() : args);
         std::ofstream f(args.empty() ? Console->ConfigFile : args);
         for (auto str : ConsoleCommands->CommandsContainer)
         {
@@ -49,7 +49,7 @@ namespace cc_functions
                 f << CommandToSave->Save() << std::endl;
         }
         f.close();
-        Msg("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
+        Info("Saved config file {}", args.empty() ? Console->ConfigFile.string() : args);
     }
 
     void CC_Help(const std::string& args)
@@ -59,7 +59,7 @@ namespace cc_functions
         {
             CommandToHelp = ConsoleCommands->GetCommand(args);
             if (CommandToHelp)
-                Msg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax())
+                Info("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
             else
                 Log("Command not found.");
         }
@@ -69,7 +69,7 @@ namespace cc_functions
             for (auto str : ConsoleCommands->CommandsContainer)
             {
                 CommandToHelp = str.second;
-                Msg("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
+                Info("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
             }
         }
     }
@@ -92,7 +92,7 @@ namespace cc_functions
 
 void CC_FCallTest(const std::string& args)
 {
-    Msg("Function call test {}", args);
+    Info("Function call test {}", args);
 }
 
 void CC_XMLTest(const std::string& args)

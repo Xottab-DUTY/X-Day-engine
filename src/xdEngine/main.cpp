@@ -30,7 +30,7 @@ void destroyConsole()
 
 void HelpCmdArgs()
 {
-    Log("\nAvailable parameters:\n"\
+    Info("\nAvailable parameters:\n"\
         "--p_name - Specifies AppName, default is \"X-Day Engine\" \n"\
         "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"\
         "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
@@ -44,7 +44,7 @@ void HelpCmdArgs()
         "--p_texture - Specifies path to texture file to load, default is \"texture.dds\"\n"\
         "--p_model - Specifies path to model file to model, default is \"model.dds\"\n");
 
-    Log("\nДоступные параметры:\n"\
+    Info("\nДоступные параметры:\n"\
         "--p_name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
         "--p_game - Задаёт игровую библиотеку для подключения, по умолчанию: \"xdGame\";\n"
         "--p_datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\
@@ -56,7 +56,7 @@ void HelpCmdArgs()
         "--p_shrec - Сборка шейдеров даже если они уже собраны\n"\
         "--p_shpre - Сохраняет обработанные шейдеры в папку исходников шейдеров. Работает только в режиме отладки\n"\
         "--p_texture - Задаёт путь до текстуры для загрузки, по умолчанию: \"texture.dds\"\n"\
-        "--p_model - Задаёт путь до модели для загрузки, по умолчанию: \"model.dds\"\n", false);
+        "--p_model - Задаёт путь до модели для загрузки, по умолчанию: \"model.dds\"\n");
 }
 
 void threadedConsole()
@@ -95,15 +95,15 @@ int main(int argc, char* argv[])
     Core.Initialize();
     InitializeConsole();
 
-    Log(Core.GetGLFWVersionString());
-    Log(Core.GetBuildString());
-    Log("Core.Params: " + Core.ParamsString);
-    Log("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.", false);
-    Log("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
+    DebugMsg(Core.GetGLFWVersionString());
+    Info(Core.GetBuildString());
+    Info("Core.Params: " + Core.ParamsString);
+    Info("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.");
+    Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
     HelpCmdArgs();
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile);
-    Log(glfwInit() ? "GLFW initialized." : "GLFW not initialized.");
+    Warning(glfwInit() ? "GLFW initialized." : "GLFW not initialized.");
 
     Engine.Initialize();
     Engine.xdCreateWindow();
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     VkDemoRender.Destroy();
 
     glfwTerminate();
-    Log("GLFW terminated.");
+    Info("GLFW terminated.");
 
     destroyConsole();
 

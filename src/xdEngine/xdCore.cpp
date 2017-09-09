@@ -17,7 +17,7 @@ XDAY_API xdCore Core;
 
 static void error_callback(int error, const char* description)
 {
-    Msg("GLFW Error: Code: {}, Means: {}", error, description);
+    Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
 }
 
 bool xdCore::isGlobalDebug()
@@ -48,8 +48,8 @@ void xdCore::InitializeArguments(int argc, char* argv[])
 
 void xdCore::Initialize(std::string&& _appname)
 {
-    Msg("{} {} (build {})", EngineName, EngineVersion, buildId);
-    Log("Core: Initializing", false);
+    Info("{} {} (build {})", EngineName, EngineVersion, buildId);
+    DebugMsg("Core: Initializing");
     AppVersion = "1.0";
     FindParam(eParamName) ? AppName = ReturnParam(eParamName) : AppName = _appname;
     FindParam(eParamGame) ? GameModule = ReturnParam(eParamGame) : GameModule = "xdGame";
@@ -81,8 +81,8 @@ void xdCore::Initialize(std::string&& _appname)
     buildString = fmt::format("{} build {}, {}, {}", GetModuleName("xdCore"), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
-    Log("Core: Initialized", false);
-    GlobalLog->InitLog();
+    DebugMsg("Core: Initialized");
+    GlobalLog.onCoreInitialized();
 }
 
 void xdCore::InitializeResources()
@@ -119,7 +119,7 @@ std::string xdCore::ReturnParam(eCoreParams param) const
     {
         if (found && i.find(RecognizeParam(eParamPrefix)) != std::string::npos)
         {
-            Msg("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
+            Error("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
             break;
         }
         if (found)
@@ -129,7 +129,7 @@ std::string xdCore::ReturnParam(eCoreParams param) const
         found = true;
     }
 
-    Msg("xdCore::ReturnParam(): returning empty string for param {}", p);
+    Error("xdCore::ReturnParam(): returning empty string for param {}", p);
     return "";
 }
 
