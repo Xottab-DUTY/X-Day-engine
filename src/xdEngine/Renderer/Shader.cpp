@@ -265,6 +265,7 @@ EShLanguage ShaderWorker::GetLanguage() const
     if (shaderName.find(".comp") != std::string::npos)
         return EShLangCompute;
     Error("ShaderWorker::GetLanguage():: cant find stage for {}", shaderName);
+    return EShLanguage();
 }
 
 vk::ShaderStageFlagBits ShaderWorker::GetVkShaderStageFlagBits() const

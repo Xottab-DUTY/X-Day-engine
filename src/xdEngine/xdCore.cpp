@@ -164,8 +164,7 @@ std::string xdCore::RecognizeParam(eCoreParams param) const
     case eParamModel:
         return "--p_model";
     default:
-        Log("xdCore::RecognizeParam():: How this happend? Passing empty string");
-        return "";
+        throw "Create the case for the param here!";
     }
 }
 
