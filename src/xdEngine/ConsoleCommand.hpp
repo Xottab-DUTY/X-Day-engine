@@ -218,7 +218,7 @@ public:
 
     ConsoleCommand* GetCommand(const std::string& cmd) const;
     bool GetBool(const std::string& cmd) const;
-    static bool GetBool(CC_Bool* cmd);
+    bool GetBool(CC_Bool* cmd);
 
     void AddCommand(ConsoleCommand* cc);
     void RemoveCommand(ConsoleCommand* cc);
