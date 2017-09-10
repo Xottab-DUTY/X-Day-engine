@@ -119,7 +119,6 @@ int main(int argc, char* argv[])
     VkDemoRender.Destroy();
 
     glfwTerminate();
-    Info("GLFW terminated.");
 
     destroyConsole();
 

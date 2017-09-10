@@ -1,4 +1,3 @@
-#include <fstream>
 
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/sinks/msvc_sink.h>
@@ -25,12 +24,7 @@ Logger::Logger(const std::string& _logfile, bool coreInitialized) : LogFile(_log
     sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 
     if (!nologflush && coreInitialized)
-    {
-        std::ofstream f(Core.LogsPath.string() + LogFile);
-        f << ""; // Create the file or clear it if it's not empty
-        f.close();
-        sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>((Core.LogsPath.string() + LogFile)));
-    }
+        sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(Core.LogsPath.string() + LogFile, true));
 
 #if defined(DEBUG) && defined(_MSC_VER)
     sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
