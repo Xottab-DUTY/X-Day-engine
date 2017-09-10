@@ -32,17 +32,26 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
 
 void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
 {
-    if (width || height) 
+    VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
+    if (width < 108 || height < 108)
     {
-        VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
-        pRender->RecreateSwapChain();
+        pRender->renderPaused = true;
+        return;
     }
+    else
+        pRender->renderPaused = false;
+
+    pRender->RecreateSwapChain();
 }
 
 void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
 {
     VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
-    if (focused)
+
+    int currentWidth, currentHeight;
+    glfwGetWindowSize(window, &currentWidth, &currentHeight);
+
+    if (focused && !(currentWidth < 108 || currentHeight < 108))
         pRender->renderPaused = false;
     else
         pRender->renderPaused = true;

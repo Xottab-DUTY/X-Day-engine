@@ -924,6 +924,7 @@ void VkDemoRenderer::LoadModel()
             indices.push_back(uniqueVertices[vertex]);
         }
     }
+    DebugMsg("VkDemoRenderer::LoadModel():: loaded model: {}", _path);
 }
 
 void VkDemoRenderer::CreateVertexBuffer()
