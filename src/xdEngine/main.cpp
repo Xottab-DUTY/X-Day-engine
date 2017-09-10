@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
     HelpCmdArgs();
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile);
-    Warning(glfwInit() ? "GLFW initialized." : "GLFW not initialized.");
+    ErrorIf(!glfwInit(), "GLFW not initialized.");
 
     Engine.Initialize();
     Engine.xdCreateWindow();
