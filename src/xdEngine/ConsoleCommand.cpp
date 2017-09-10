@@ -268,7 +268,7 @@ void ConsoleCommand::AddCommandToCache(std::string&& cmd)
 #pragma endregion Basic ConsoleCommand
 
 #pragma region ConsoleCommand Boolean
-CC_Bool::CC_Bool(std::string _name, bool _value, bool _enabled) : super(_name), value(_value)
+CC_Bool::CC_Bool(std::string _name, bool& _value, bool _enabled) : super(_name), value(_value)
 {
     Enabled = _enabled;
 }

@@ -71,7 +71,7 @@ class XDAY_API CC_Bool : public ConsoleCommand
     using super = ConsoleCommand;
 
 public:
-    CC_Bool(std::string _name, bool _value, bool _enabled = true);
+    CC_Bool(std::string _name, bool& _value, bool _enabled = true);
 
     void Execute(const std::string& args) override;
     void Execute(bool _value) const;

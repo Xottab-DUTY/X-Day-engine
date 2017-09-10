@@ -47,7 +47,7 @@ static XDay::CC_FunctionCall FlushLogCC("flush", cc_functions::CC_FlushLog, true
 static XDay::CC_FunctionCall ConfigLoadCC("config_load", cc_functions::CC_ConfigLoad, true);
 static XDay::CC_FunctionCall ConfigSaveCC("config_save", cc_functions::CC_ConfigSave, true);
 
-static XDay::CC_Bool FullscreenCC("r_fullscreen", Engine.windowMainFullscreen);
+static XDay::CC_Bool FullscreenCC("r_fullscreen", *&Engine.windowMainFullscreen);
 
 void RegisterConsoleCommands();
 #pragma endregion Console commands
