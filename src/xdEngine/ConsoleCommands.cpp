@@ -61,11 +61,11 @@ namespace cc_functions
             if (CommandToHelp)
                 Info("{} : {}. Current value: {}. Syntax: {}", CommandToHelp->GetName(), CommandToHelp->Info(), CommandToHelp->Status(), CommandToHelp->Syntax());
             else
-                Log("Command not found.");
+                Info("Command not found.");
         }
         else
         {
-            Log("Available commands:");
+            Info("Available commands:");
             for (auto str : ConsoleCommands->CommandsContainer)
             {
                 CommandToHelp = str.second;
@@ -97,9 +97,9 @@ void CC_FCallTest(const std::string& args)
 
 void CC_XMLTest(const std::string& args)
 {
-    Log("XML test");
+    Info("XML test");
 
-    Log("XML tested");
+    Info("XML tested");
 }
 
 int int_test = 1;

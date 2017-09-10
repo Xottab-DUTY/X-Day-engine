@@ -62,7 +62,7 @@ public:
 extern XDAY_API XDay::Logger GlobalLog;
 
 template <typename... Args>
-inline void Log(std::string log, spdlog::level::level_enum level = spdlog::level::info, const Args&... args)
+inline void Log(std::string log, spdlog::level::level_enum level, const Args&... args)
 {
     GlobalLog.Log(log, level, std::forward<Args>((Args)args)...);
 }
