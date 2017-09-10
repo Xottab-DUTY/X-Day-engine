@@ -21,6 +21,7 @@ public:
     const GLFWvidmode* CurrentMode;
 
     GLFWwindow* window;
+    bool windowMainFullscreen;
 
     void Initialize();
 
@@ -29,9 +30,12 @@ public:
     static void onWindowResize(GLFWwindow* window, int width, int height);
     static void onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void onWindowFocus(GLFWwindow* window, int focused);
+    
+    int GetMonitorsCount() const { return MonitorsCount; }
+    int GetVideoModesCount() const { return VideoModesCount; }
 
-    int GetMonitorsCount() const { return MonitorsCount; };
-    int GetVideoModesCount() const { return VideoModesCount; };
+    bool isWindowMainFullscreen() const { return windowMainFullscreen; }
+    void setWindowMainFullscreen(bool fullscreen) { windowMainFullscreen = fullscreen; }
 };
 }
 
