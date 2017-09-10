@@ -102,6 +102,8 @@ public:
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
 
+    bool renderPaused;
+
     VkDemoRenderer();
     void Initialize();
     void Destroy();

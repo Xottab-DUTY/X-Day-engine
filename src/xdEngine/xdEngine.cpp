@@ -41,12 +41,33 @@ void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
 
 void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
 {
-    if (!focused)
-    {
-        glfwWaitEvents();
-    }
-    //else //TODO: The window gained input focus
+    VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
+    if (focused)
+        pRender->renderPaused = false;
+    else
+        pRender->renderPaused = true;
 }
+
+void XDayEngine::onMouseButton(GLFWwindow* window, int button, int action, int mods)
+{
+
+}
+
+void XDayEngine::onCursorPosition(GLFWwindow* window, double xpos, double ypos)
+{
+
+}
+
+void XDayEngine::onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
+{
+
+}
+
+void XDayEngine::onMouseEnter(GLFWwindow* window, int entered)
+{
+
+}
+
 
 void XDayEngine::Initialize()
 {
@@ -73,4 +94,7 @@ void XDayEngine::xdCreateWindow()
     glfwSetKeyCallback(window, onKeyPress);
     glfwSetWindowSizeCallback(window, onWindowResize);
     glfwSetWindowFocusCallback(window, onWindowFocus);
+    glfwSetMouseButtonCallback(window, onMouseButton);
+    glfwSetCursorPosCallback(window, onCursorPosition);
+    glfwSetScrollCallback(window, onMouseScroll);
 }

@@ -29,8 +29,12 @@ public:
 
     static void onWindowResize(GLFWwindow* window, int width, int height);
     static void onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void onMouseButton(GLFWwindow* window, int button, int action, int mods);
+    static void onCursorPosition(GLFWwindow* window, double xpos, double ypos);
     static void onWindowFocus(GLFWwindow* window, int focused);
-    
+    static void onMouseScroll(GLFWwindow* window, double xoffset, double yoffset);
+    static void onMouseEnter(GLFWwindow* window, int entered);
+
     int GetMonitorsCount() const { return MonitorsCount; }
     int GetVideoModesCount() const { return VideoModesCount; }
 
