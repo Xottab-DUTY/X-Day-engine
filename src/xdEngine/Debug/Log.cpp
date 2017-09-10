@@ -32,6 +32,10 @@ Logger::Logger(const std::string& _logfile, bool coreInitialized) : LogFile(_log
 
     spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
     spdlogger->set_pattern("[%T] [%l] %v");
+
+    if (Core.isGlobalDebug())
+        spdlogger->set_level(spdlog::level::trace);
+
     spdlog::register_logger(spdlogger);
 }
 
