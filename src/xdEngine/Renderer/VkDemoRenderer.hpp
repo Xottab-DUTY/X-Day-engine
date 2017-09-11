@@ -31,7 +31,7 @@ public:
     vk::RenderPass renderPass;
     vk::DescriptorSetLayout descriptorSetLayout;
     vk::PipelineLayout pipelineLayout;
-    vk::Pipeline graphicsPipeline;
+    vk::UniquePipeline graphicsPipeline;
 
     vk::CommandPool commandPool;
 

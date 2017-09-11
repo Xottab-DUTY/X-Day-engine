@@ -247,7 +247,6 @@ void VkDemoRenderer::CleanupSwapChain()
 
     device->freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 
-    device->destroyPipeline(graphicsPipeline);
     device->destroyPipelineLayout(pipelineLayout);
     device->destroyRenderPass(renderPass);
 
@@ -756,7 +755,7 @@ void VkDemoRenderer::CreateGraphicsPipeline()
     pipelineInfo.setLayout(pipelineLayout);
     pipelineInfo.setRenderPass(renderPass);
 
-    graphicsPipeline = device->createGraphicsPipeline(nullptr, pipelineInfo, nullptr);
+    graphicsPipeline = device->createGraphicsPipelineUnique(nullptr, pipelineInfo, nullptr);
     assert(graphicsPipeline);
 }
 
@@ -1054,7 +1053,7 @@ void VkDemoRenderer::CreateCommandBuffers()
         renderPassInfo.setPClearValues(reinterpret_cast<vk::ClearValue*>(clearValues.data()));
 
         commandBuffers[i].beginRenderPass(&renderPassInfo, vk::SubpassContents::eInline);
-        commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, graphicsPipeline);
+        commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
 
         vk::Buffer vertexBuffers[] = { vertexBuffer };
         vk::DeviceSize offsets[] = { 0 };
