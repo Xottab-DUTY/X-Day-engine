@@ -11,9 +11,9 @@ class ShaderWorker
 {
     std::string shaderName;
     std::string binaryExt;
-    const vk::Device& device;
+    const vk::UniqueDevice& device;
     const TBuiltInResource& resources;
-    vk::ShaderModule shaderModule;
+    vk::UniqueShaderModule shaderModule;
     vk::PipelineShaderStageCreateInfo stageInfo;
     vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
     vk::Result result;
@@ -26,7 +26,7 @@ class ShaderWorker
     bool binaryIsOld;
 
 public:
-    ShaderWorker(std::string _name, const vk::Device& _device, const TBuiltInResource& _resources);
+    ShaderWorker(std::string _name, const vk::UniqueDevice& _device, const TBuiltInResource& _resources);
     ~ShaderWorker();
     void Initialize();
 
@@ -36,6 +36,7 @@ public:
 
     vk::ShaderModule GetShaderModule() const;
     vk::PipelineShaderStageCreateInfo GetVkShaderStageInfo() const;
+
 private:
     void LoadShader();
     void LoadBinaryShader();

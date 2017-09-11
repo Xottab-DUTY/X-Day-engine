@@ -11,7 +11,7 @@ namespace filesystem = std::experimental::filesystem;
 
 using namespace XDay;
 
-ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const TBuiltInResource& _resources)
+ShaderWorker::ShaderWorker(std::string _name, const vk::UniqueDevice& _device, const TBuiltInResource& _resources)
     : shaderName(_name), device(_device), result(vk::Result::eNotReady), resources(_resources),
     binaryExt(".spv"), sourceFound(false), binaryFound(false)
 {
@@ -20,7 +20,6 @@ ShaderWorker::ShaderWorker(std::string _name, const vk::Device& _device, const T
 
 ShaderWorker::~ShaderWorker()
 {
-    device.destroyShaderModule(shaderModule);
     shaderSource.clear();
     binaryShader.clear();
 }
@@ -210,7 +209,7 @@ void ShaderWorker::CreateVkShaderModule()
 
     vk::ShaderModuleCreateInfo smInfo({}, binaryShader.size(), codeAligned.data());
 
-    shaderModule = device.createShaderModule(smInfo);
+    shaderModule = device->createShaderModuleUnique(smInfo);
 
     if (!shaderModule)
         Error("ShaderWorker::CreateVkShaderModule():: failed to create vulkan shader module for: {}", shaderName);
@@ -219,7 +218,7 @@ void ShaderWorker::CreateVkShaderModule()
 void ShaderWorker::SetVkShaderStage()
 {
     stageInfo.setStage(GetVkShaderStageFlagBits());
-    stageInfo.setModule(shaderModule);
+    stageInfo.setModule(*shaderModule);
     stageInfo.setPName("main");
 }
 
@@ -240,9 +239,8 @@ bool ShaderWorker::isBinaryOld() const
 
 vk::ShaderModule ShaderWorker::GetShaderModule() const
 {
-    return shaderModule;
+    return *shaderModule;
 }
-
 
 vk::PipelineShaderStageCreateInfo ShaderWorker::GetVkShaderStageInfo() const
 {
@@ -264,6 +262,7 @@ EShLanguage ShaderWorker::GetLanguage() const
         return EShLangFragment;
     if (shaderName.find(".comp") != std::string::npos)
         return EShLangCompute;
+
     Error("ShaderWorker::GetLanguage():: cant find stage for {}", shaderName);
     return EShLanguage();
 }
@@ -282,6 +281,7 @@ vk::ShaderStageFlagBits ShaderWorker::GetVkShaderStageFlagBits() const
         return vk::ShaderStageFlagBits::eFragment;
     if (shaderName.find(".comp") != std::string::npos)
         return vk::ShaderStageFlagBits::eCompute;
+
     Error("ShaderWorker::GetVkShaderStageBits():: cant find stage for {}", shaderName);
     return vk::ShaderStageFlagBits::eAll;
 }

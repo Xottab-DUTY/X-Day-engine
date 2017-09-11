@@ -627,8 +627,8 @@ void VkDemoRenderer::CreateDescriptorSetLayout()
 
 void VkDemoRenderer::CreateGraphicsPipeline()
 {
-    ShaderWorker shader_frag("shader.frag", *device, resources);
-    ShaderWorker shader_vert("shader.vert", *device, resources);
+    ShaderWorker shader_frag("shader.frag", device, resources);
+    ShaderWorker shader_vert("shader.vert", device, resources);
 
     vk::PipelineShaderStageCreateInfo shaderStages[] =
         { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
