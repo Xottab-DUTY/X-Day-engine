@@ -57,8 +57,8 @@ public:
     vk::DescriptorSet descriptorSet;
 
     std::vector<vk::CommandBuffer> commandBuffers;
-    vk::Fence imageAvailableFence;
-    vk::Semaphore renderFinishedSemaphore;
+    vk::UniqueFence imageAvailableFence;
+    vk::UniqueSemaphore renderFinishedSemaphore;
 
     vk::Result result;
 

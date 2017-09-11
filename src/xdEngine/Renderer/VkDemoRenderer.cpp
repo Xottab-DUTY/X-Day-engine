@@ -137,9 +137,6 @@ void VkDemoRenderer::Destroy()
     glslang::FinalizeProcess();
 
     CleanupSwapChain();
-
-    device->destroySemaphore(renderFinishedSemaphore);
-    device->destroyFence(imageAvailableFence);
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -166,7 +163,7 @@ void VkDemoRenderer::DrawFrame()
         return;
 
     uint32_t imageIndex;
-    result = device->acquireNextImageKHR(*swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
+    result = device->acquireNextImageKHR(*swapchain, std::numeric_limits<uint64_t>::max(), nullptr, *imageAvailableFence, &imageIndex);
 
     assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
 
@@ -176,14 +173,14 @@ void VkDemoRenderer::DrawFrame()
         return;
     }
 
-    device->waitForFences(1, &imageAvailableFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
-    device->resetFences(1, &imageAvailableFence);
+    device->waitForFences(1, &*imageAvailableFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+    device->resetFences(1, &*imageAvailableFence);
 
     vk::SubmitInfo submitInfo;
     submitInfo.setCommandBufferCount(1);
     submitInfo.setPCommandBuffers(&commandBuffers[imageIndex]);
 
-    vk::Semaphore signalSemaphores[] = { renderFinishedSemaphore };
+    vk::Semaphore signalSemaphores[] = { *renderFinishedSemaphore };
     submitInfo.setSignalSemaphoreCount(1);
     submitInfo.setPSignalSemaphores(signalSemaphores);
 
@@ -1039,11 +1036,11 @@ void VkDemoRenderer::CreateCommandBuffers()
 void VkDemoRenderer::CreateSynchronizationPrimitives()
 {
     vk::FenceCreateInfo fenceInfo;
-    imageAvailableFence = device->createFence(fenceInfo);
+    imageAvailableFence = device->createFenceUnique(fenceInfo);
     assert(imageAvailableFence);
 
     vk::SemaphoreCreateInfo semaphoreInfo;
-    renderFinishedSemaphore = device->createSemaphore(semaphoreInfo);
+    renderFinishedSemaphore = device->createSemaphoreUnique(semaphoreInfo);
     assert(renderFinishedSemaphore);
 }
 
