@@ -20,9 +20,8 @@ public:
 
     vk::Queue graphicsQueue;
     vk::Queue presentQueue;
-    
-    
-    vk::SwapchainKHR swapchain;
+
+    vk::UniqueSwapchainKHR swapchain;
     std::vector<vk::Image> swapChainImages;
     vk::Format swapChainImageFormat;
     vk::Extent2D swapChainExtent;

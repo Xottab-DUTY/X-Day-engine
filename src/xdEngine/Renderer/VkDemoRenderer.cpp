@@ -186,7 +186,7 @@ void VkDemoRenderer::DrawFrame()
         return;
 
     uint32_t imageIndex;
-    result = device->acquireNextImageKHR(swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
+    result = device->acquireNextImageKHR(*swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
 
     assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
 
@@ -210,7 +210,7 @@ void VkDemoRenderer::DrawFrame()
     result = graphicsQueue.submit(1, &submitInfo, nullptr);
     assert(result == vk::Result::eSuccess);
 
-    vk::SwapchainKHR swapChains[] = { swapchain };
+    vk::SwapchainKHR swapChains[] = { *swapchain };
 
     vk::PresentInfoKHR presentInfo(1, signalSemaphores, 1, swapChains, &imageIndex);
 
@@ -253,8 +253,6 @@ void VkDemoRenderer::CleanupSwapChain()
 
     for (size_t i = 0; i < swapChainImageViews.size(); ++i)
         device->destroyImageView(swapChainImageViews[i], nullptr);
-
-    device->destroySwapchainKHR(swapchain);
 }
 
 void VkDemoRenderer::InitializeResources()
@@ -595,14 +593,13 @@ void VkDemoRenderer::CreateSwapChain()
     swapchainInfo.setPresentMode(presentMode);
     swapchainInfo.setClipped(true);
 
-    vk::SwapchainKHR oldSwapChain = swapchain;
-    swapchainInfo.setOldSwapchain(oldSwapChain);
+    if (swapchain)
+        swapchainInfo.setOldSwapchain(*swapchain);
 
-    vk::SwapchainKHR newSwapChain = device->createSwapchainKHR(swapchainInfo);
-    swapchain = newSwapChain;
+    swapchain = device->createSwapchainKHRUnique(swapchainInfo);
     assert(swapchain);
 
-    swapChainImages = device->getSwapchainImagesKHR(swapchain);
+    swapChainImages = device->getSwapchainImagesKHR(*swapchain);
     swapChainImageFormat = surfaceFormat.format;
     swapChainExtent = extent;
 }
