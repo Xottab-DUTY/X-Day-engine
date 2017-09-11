@@ -163,7 +163,6 @@ void VkDemoRenderer::Destroy()
     
     device.destroy();
     vkInstance->destroySurfaceKHR(surface);
-    vkInstance->destroyDebugReportCallbackEXT(vkCallback);
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -424,11 +423,11 @@ void VkDemoRenderer::CreateDebugCallback()
 {
     if (!enableValidationLayers) return;
 
-    vk::DebugReportCallbackCreateInfoEXT callbackInfo
-    ({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
-     (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
+    vk::DebugReportCallbackCreateInfoEXT callbackInfo(
+        {vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
+        (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
 
-    vkCallback = vkInstance->createDebugReportCallbackEXT(callbackInfo);
+    vkCallback = vkInstance->createDebugReportCallbackEXTUnique(callbackInfo);
     assert(vkCallback);
 }
 
