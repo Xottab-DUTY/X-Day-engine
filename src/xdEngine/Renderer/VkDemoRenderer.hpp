@@ -25,35 +25,35 @@ public:
     std::vector<vk::Image> swapChainImages;
     vk::Format swapChainImageFormat;
     vk::Extent2D swapChainExtent;
-    std::vector<vk::ImageView> swapChainImageViews;
-    std::vector<vk::Framebuffer> swapChainFramebuffers;
+    std::vector<vk::UniqueImageView> swapChainImageViews;
+    std::vector<vk::UniqueFramebuffer> swapChainFramebuffers;
 
-    vk::RenderPass renderPass;
-    vk::DescriptorSetLayout descriptorSetLayout;
-    vk::PipelineLayout pipelineLayout;
+    vk::UniqueRenderPass renderPass;
+    vk::UniqueDescriptorSetLayout descriptorSetLayout;
+    vk::UniquePipelineLayout pipelineLayout;
     vk::UniquePipeline graphicsPipeline;
 
-    vk::CommandPool commandPool;
+    vk::UniqueCommandPool commandPool;
 
-    vk::Image depthImage;
-    vk::DeviceMemory depthImageMemory;
-    vk::ImageView depthImageView;
+    vk::UniqueImage depthImage;
+    vk::UniqueDeviceMemory depthImageMemory;
+    vk::UniqueImageView depthImageView;
 
-    vk::Image textureImage;
-    vk::DeviceMemory textureImageMemory;
-    vk::ImageView textureImageView;
-    vk::Sampler textureSampler;
+    vk::UniqueImage textureImage;
+    vk::UniqueDeviceMemory textureImageMemory;
+    vk::UniqueImageView textureImageView;
+    vk::UniqueSampler textureSampler;
 
-    vk::Buffer vertexBuffer;
-    vk::DeviceMemory vertexBufferMemory;
+    vk::UniqueBuffer vertexBuffer;
+    vk::UniqueDeviceMemory vertexBufferMemory;
 
-    vk::Buffer indexBuffer;
-    vk::DeviceMemory indexBufferMemory;
+    vk::UniqueBuffer indexBuffer;
+    vk::UniqueDeviceMemory indexBufferMemory;
 
-    vk::Buffer uniformBuffer;
-    vk::DeviceMemory uniformBufferMemory;
+    vk::UniqueBuffer uniformBuffer;
+    vk::UniqueDeviceMemory uniformBufferMemory;
 
-    vk::DescriptorPool descriptorPool;
+    vk::UniqueDescriptorPool descriptorPool;
     vk::DescriptorSet descriptorSet;
 
     std::vector<vk::CommandBuffer> commandBuffers;
@@ -151,13 +151,29 @@ private:
     void CreateSynchronizationPrimitives();
 
     void createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);
+    void createBufferUnique(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::UniqueBuffer& buffer, vk::UniqueDeviceMemory& bufferMemory);
+
     void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size);
-    void createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory);
+
+    void createImage(uint32_t width, uint32_t height, vk::Format format,
+                     vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                     vk::MemoryPropertyFlags properties,
+                     vk::Image& image, vk::DeviceMemory& imageMemory);
+
+    void createImageUnique(uint32_t width, uint32_t height, vk::Format format,
+                     vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                     vk::MemoryPropertyFlags properties,
+                     vk::UniqueImage& image, vk::UniqueDeviceMemory& imageMemory);
+
     vk::CommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(vk::CommandBuffer commandBuffer);
+
     void transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout);
+
     void copyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width, uint32_t height);
-    vk::ImageView createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
+
+    vk::UniqueImageView createImageViewUnique(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
+
     vk::Format findSupportedFormat(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features);
     vk::Format findDepthFormat();
     bool hasStencilComponent(vk::Format format) const;

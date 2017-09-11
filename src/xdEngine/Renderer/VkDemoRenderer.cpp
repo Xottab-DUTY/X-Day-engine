@@ -138,28 +138,8 @@ void VkDemoRenderer::Destroy()
 
     CleanupSwapChain();
 
-    device->destroySampler(textureSampler);
-    device->destroyImageView(textureImageView);
-
-    device->destroyImage(textureImage);
-    device->freeMemory(textureImageMemory);
-
-    device->destroyDescriptorPool(descriptorPool);
-    device->destroyDescriptorSetLayout(descriptorSetLayout);
-
-    device->destroyBuffer(uniformBuffer);
-    device->freeMemory(uniformBufferMemory);
-
-    device->destroyBuffer(indexBuffer);
-    device->freeMemory(indexBufferMemory);
-
-    device->destroyBuffer(vertexBuffer);
-    device->freeMemory(vertexBufferMemory);
-
     device->destroySemaphore(renderFinishedSemaphore);
     device->destroyFence(imageAvailableFence);
-
-    device->destroyCommandPool(commandPool);
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -175,9 +155,9 @@ void VkDemoRenderer::UpdateUniformBuffer()
     ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / static_cast<float>(swapChainExtent.height), 0.1f, 10.0f);
     ubo.proj[1][1] *= -1;
 
-    void* data = device->mapMemory(uniformBufferMemory, 0, sizeof(ubo));
+    void* data = device->mapMemory(*uniformBufferMemory, 0, sizeof(ubo));
     memcpy(data, &ubo, sizeof(ubo));
-    device->unmapMemory(uniformBufferMemory);
+    device->unmapMemory(*uniformBufferMemory);
 }
 
 void VkDemoRenderer::DrawFrame()
@@ -238,20 +218,7 @@ void VkDemoRenderer::RecreateSwapChain()
 
 void VkDemoRenderer::CleanupSwapChain()
 {
-    device->destroyImageView(depthImageView);
-    device->destroyImage(depthImage);
-    device->freeMemory(depthImageMemory);
-
-    for (size_t i = 0; i < swapChainFramebuffers.size(); ++i)
-        device->destroyFramebuffer(swapChainFramebuffers[i]);
-
-    device->freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
-
-    device->destroyPipelineLayout(pipelineLayout);
-    device->destroyRenderPass(renderPass);
-
-    for (size_t i = 0; i < swapChainImageViews.size(); ++i)
-        device->destroyImageView(swapChainImageViews[i], nullptr);
+    device->freeCommandBuffers(*commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 }
 
 void VkDemoRenderer::InitializeResources()
@@ -608,7 +575,7 @@ void VkDemoRenderer::CreateImageViews()
     swapChainImageViews.resize(swapChainImages.size());
 
     for (uint32_t i = 0; i < swapChainImages.size(); i++)
-        swapChainImageViews[i] = createImageView(swapChainImages[i], swapChainImageFormat, vk::ImageAspectFlagBits::eColor);
+        swapChainImageViews[i] = createImageViewUnique(swapChainImages[i], swapChainImageFormat, vk::ImageAspectFlagBits::eColor);
 }
 
 void VkDemoRenderer::CreateRenderPass()
@@ -654,7 +621,7 @@ void VkDemoRenderer::CreateRenderPass()
     renderPassInfo.setDependencyCount(1);
     renderPassInfo.setPDependencies(&dependency);
 
-    renderPass = device->createRenderPass(renderPassInfo);
+    renderPass = device->createRenderPassUnique(renderPassInfo);
     assert(renderPass);
 }
 
@@ -669,7 +636,7 @@ void VkDemoRenderer::CreateDescriptorSetLayout()
     std::array<vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
     vk::DescriptorSetLayoutCreateInfo layoutInfo({}, static_cast<uint32_t>(bindings.size()), bindings.data());
 
-    descriptorSetLayout = device->createDescriptorSetLayout(layoutInfo);
+    descriptorSetLayout = device->createDescriptorSetLayoutUnique(layoutInfo);
     assert(descriptorSetLayout);
 }
 
@@ -736,9 +703,9 @@ void VkDemoRenderer::CreateGraphicsPipeline()
 
     vk::PipelineDynamicStateCreateInfo dynamicState({}, 2, dynamicStates);
 
-    vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 1, &descriptorSetLayout);
+    vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 1, &*descriptorSetLayout);
 
-    pipelineLayout = device->createPipelineLayout(pipelineLayoutInfo);
+    pipelineLayout = device->createPipelineLayoutUnique(pipelineLayoutInfo);
     assert(pipelineLayout);
 
     vk::GraphicsPipelineCreateInfo pipelineInfo;
@@ -752,8 +719,8 @@ void VkDemoRenderer::CreateGraphicsPipeline()
     pipelineInfo.setPDepthStencilState(&depthStencil);
     pipelineInfo.setPColorBlendState(&colorBlending);
     //pipelineInfo.setPDynamicState(&dynamicState); // Optional
-    pipelineInfo.setLayout(pipelineLayout);
-    pipelineInfo.setRenderPass(renderPass);
+    pipelineInfo.setLayout(*pipelineLayout);
+    pipelineInfo.setRenderPass(*renderPass);
 
     graphicsPipeline = device->createGraphicsPipelineUnique(nullptr, pipelineInfo, nullptr);
     assert(graphicsPipeline);
@@ -767,14 +734,14 @@ void VkDemoRenderer::CreateFramebuffers()
     {
         std::array<vk::ImageView, 2> attachments =
         {
-            swapChainImageViews[i],
-            depthImageView
+            *swapChainImageViews[i],
+            *depthImageView
         };
 
-        vk::FramebufferCreateInfo framebufferInfo({}, renderPass, static_cast<uint32_t>(attachments.size()),
+        vk::FramebufferCreateInfo framebufferInfo({}, *renderPass, static_cast<uint32_t>(attachments.size()),
                                                   attachments.data(), swapChainExtent.width, swapChainExtent.height, 1);
 
-        swapChainFramebuffers[i] = device->createFramebuffer(framebufferInfo);
+        swapChainFramebuffers[i] = device->createFramebufferUnique(framebufferInfo);
         assert(swapChainFramebuffers[i]);
     }
 }
@@ -785,7 +752,7 @@ void VkDemoRenderer::CreateCommandPool()
 
     vk::CommandPoolCreateInfo poolInfo({}, queueFamilyIndices.graphicsFamily);
 
-    commandPool = device->createCommandPool(poolInfo);
+    commandPool = device->createCommandPoolUnique(poolInfo);
     assert(commandPool);
 }
 
@@ -793,15 +760,15 @@ void VkDemoRenderer::CreateDepthResources()
 {
     vk::Format depthFormat = findDepthFormat();
 
-    createImage(swapChainExtent.width, swapChainExtent.height,
+    createImageUnique(swapChainExtent.width, swapChainExtent.height,
                 depthFormat, vk::ImageTiling::eOptimal,
                 vk::ImageUsageFlagBits::eDepthStencilAttachment,
                 vk::MemoryPropertyFlagBits::eDeviceLocal,
                 depthImage, depthImageMemory);
 
-    depthImageView = createImageView(depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
+    depthImageView = createImageViewUnique(*depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
 
-    transitionImageLayout(depthImage, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+    transitionImageLayout(*depthImage, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal);
 }
 
 void VkDemoRenderer::CreateTextureImage()
@@ -826,17 +793,17 @@ void VkDemoRenderer::CreateTextureImage()
     memcpy(data, tex2D[0].data(), static_cast<size_t>(imageSize));
     device->unmapMemory(stagingBufferMemory);
 
-    createImage(tex2D[0].extent().x, tex2D[0].extent().y,
+    createImageUnique(tex2D[0].extent().x, tex2D[0].extent().y,
                 vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
                 vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled,
                 vk::MemoryPropertyFlagBits::eDeviceLocal, textureImage, textureImageMemory);
 
-    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
+    transitionImageLayout(*textureImage, vk::Format::eA8B8G8R8UnormPack32,
                           vk::ImageLayout::ePreinitialized, vk::ImageLayout::eTransferDstOptimal);
 
-    copyBufferToImage(stagingBuffer, textureImage, tex2D[0].extent().x, tex2D[0].extent().y);
+    copyBufferToImage(stagingBuffer, *textureImage, tex2D[0].extent().x, tex2D[0].extent().y);
 
-    transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
+    transitionImageLayout(*textureImage, vk::Format::eA8B8G8R8UnormPack32,
                           vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     device->destroyBuffer(stagingBuffer);
@@ -845,7 +812,8 @@ void VkDemoRenderer::CreateTextureImage()
 
 void VkDemoRenderer::CreateTextureImageView()
 {
-    textureImageView = createImageView(textureImage, vk::Format::eA8B8G8R8UnormPack32, vk::ImageAspectFlagBits::eColor);
+    textureImageView = createImageViewUnique(*textureImage, vk::Format::eA8B8G8R8UnormPack32, vk::ImageAspectFlagBits::eColor);
+
 }
 
 void VkDemoRenderer::CreateTextureSampler()
@@ -862,7 +830,7 @@ void VkDemoRenderer::CreateTextureSampler()
     samplerInfo.setCompareOp(vk::CompareOp::eAlways);
     samplerInfo.setMipmapMode(vk::SamplerMipmapMode::eLinear);
 
-    textureSampler = device->createSampler(samplerInfo);
+    textureSampler = device->createSamplerUnique(samplerInfo);
     assert(textureSampler);
 }
 
@@ -931,11 +899,11 @@ void VkDemoRenderer::CreateVertexBuffer()
     memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
     device->unmapMemory(stagingBufferMemory);
 
-    createBuffer(bufferSize,
+    createBufferUnique(bufferSize,
                  vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
                  vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
 
-    copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+    copyBuffer(stagingBuffer, *vertexBuffer, bufferSize);
 
     device->destroyBuffer(stagingBuffer);
     device->freeMemory(stagingBufferMemory);
@@ -956,11 +924,11 @@ void VkDemoRenderer::CreateIndexBuffer()
     memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
     device->unmapMemory(stagingBufferMemory);
 
-    createBuffer(bufferSize,
+    createBufferUnique(bufferSize,
                  vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
                  vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
 
-    copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+    copyBuffer(stagingBuffer, *indexBuffer, bufferSize);
 
     device->destroyBuffer(stagingBuffer);
     device->freeMemory(stagingBufferMemory);
@@ -970,7 +938,7 @@ void VkDemoRenderer::CreateUniformBuffer()
 {
     vk::DeviceSize bufferSize = sizeof(UniformBufferObject);
 
-    createBuffer(bufferSize,
+    createBufferUnique(bufferSize,
                  vk::BufferUsageFlagBits::eUniformBuffer,
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  uniformBuffer, uniformBufferMemory);
@@ -986,20 +954,20 @@ void VkDemoRenderer::CreateDescriptorPool()
 
     vk::DescriptorPoolCreateInfo poolInfo({}, 1, static_cast<uint32_t>(poolSizes.size()), poolSizes.data());
 
-    descriptorPool = device->createDescriptorPool(poolInfo);
+    descriptorPool = device->createDescriptorPoolUnique(poolInfo);
     assert(descriptorPool);
 }
 
 void VkDemoRenderer::CreateDescriptorSet()
 {
-    vk::DescriptorSetLayout layouts[] = { descriptorSetLayout };
-    vk::DescriptorSetAllocateInfo allocInfo(descriptorPool, 1, layouts);
+    vk::DescriptorSetLayout layouts[] = { *descriptorSetLayout };
+    vk::DescriptorSetAllocateInfo allocInfo(*descriptorPool, 1, layouts);
     result = device->allocateDescriptorSets(&allocInfo, &descriptorSet);
     assert(result == vk::Result::eSuccess);
 
-    vk::DescriptorBufferInfo bufferInfo(uniformBuffer, 0, sizeof(UniformBufferObject));
+    vk::DescriptorBufferInfo bufferInfo(*uniformBuffer, 0, sizeof(UniformBufferObject));
 
-    vk::DescriptorImageInfo imageInfo(textureSampler, textureImageView, vk::ImageLayout::eShaderReadOnlyOptimal);
+    vk::DescriptorImageInfo imageInfo(*textureSampler, *textureImageView, vk::ImageLayout::eShaderReadOnlyOptimal);
 
     std::array<vk::WriteDescriptorSet, 2> descriptorWrites;
 
@@ -1023,12 +991,12 @@ void VkDemoRenderer::CreateDescriptorSet()
 void VkDemoRenderer::CreateCommandBuffers()
 {
     if (!commandBuffers.empty())
-        device->freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+        device->freeCommandBuffers(*commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 
     commandBuffers.resize(swapChainFramebuffers.size());
 
     vk::CommandBufferAllocateInfo allocInfo(
-        commandPool, vk::CommandBufferLevel::ePrimary,
+        *commandPool, vk::CommandBufferLevel::ePrimary,
         static_cast<uint32_t>(commandBuffers.size()));
 
     commandBuffers = device->allocateCommandBuffers(allocInfo);
@@ -1041,8 +1009,8 @@ void VkDemoRenderer::CreateCommandBuffers()
         commandBuffers[i].begin(&beginInfo);
 
         vk::RenderPassBeginInfo renderPassInfo;
-        renderPassInfo.setRenderPass(renderPass);
-        renderPassInfo.setFramebuffer(swapChainFramebuffers[i]);
+        renderPassInfo.setRenderPass(*renderPass);
+        renderPassInfo.setFramebuffer(*swapChainFramebuffers[i]);
         renderPassInfo.renderArea.setExtent(swapChainExtent);
 
         std::array<VkClearValue, 2> clearValues = {};
@@ -1055,11 +1023,11 @@ void VkDemoRenderer::CreateCommandBuffers()
         commandBuffers[i].beginRenderPass(&renderPassInfo, vk::SubpassContents::eInline);
         commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
 
-        vk::Buffer vertexBuffers[] = { vertexBuffer };
+        vk::Buffer vertexBuffers[] = { *vertexBuffer };
         vk::DeviceSize offsets[] = { 0 };
         commandBuffers[i].bindVertexBuffers(0, 1, vertexBuffers, offsets);
-        commandBuffers[i].bindIndexBuffer(indexBuffer, 0, vk::IndexType::eUint32);
-        commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+        commandBuffers[i].bindIndexBuffer(*indexBuffer, 0, vk::IndexType::eUint32);
+        commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, *pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 
         commandBuffers[i].drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
@@ -1094,6 +1062,21 @@ void VkDemoRenderer::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usag
     device->bindBufferMemory(buffer, bufferMemory, 0);
 }
 
+void VkDemoRenderer::createBufferUnique(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::UniqueBuffer& buffer, vk::UniqueDeviceMemory& bufferMemory)
+{
+    vk::BufferCreateInfo bufferInfo({}, size, usage, vk::SharingMode::eExclusive);
+
+    buffer = device->createBufferUnique(bufferInfo);
+
+    auto memRequirements = device->getBufferMemoryRequirements(*buffer);
+
+    vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
+
+    bufferMemory = device->allocateMemoryUnique(allocInfo);
+
+    device->bindBufferMemory(*buffer, *bufferMemory, 0);
+}
+
 void VkDemoRenderer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size)
 {
     vk::CommandBuffer commandBuffer = beginSingleTimeCommands();
@@ -1105,8 +1088,10 @@ void VkDemoRenderer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::
     endSingleTimeCommands(commandBuffer);
 }
 
-void VkDemoRenderer::createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling,
-                           vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Image& image, vk::DeviceMemory& imageMemory)
+void VkDemoRenderer::createImage(uint32_t width, uint32_t height, vk::Format format,
+                                 vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                                 vk::MemoryPropertyFlags properties,
+                                 vk::Image& image, vk::DeviceMemory& imageMemory)
 {
     vk::ImageCreateInfo imageInfo({}, vk::ImageType::e2D, format);
     imageInfo.extent.setWidth(width);
@@ -1132,9 +1117,39 @@ void VkDemoRenderer::createImage(uint32_t width, uint32_t height, vk::Format for
     device->bindImageMemory(image, imageMemory, 0);
 }
 
+void VkDemoRenderer::createImageUnique(uint32_t width, uint32_t height, vk::Format format,
+                                 vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                                 vk::MemoryPropertyFlags properties,
+                                 vk::UniqueImage& image, vk::UniqueDeviceMemory& imageMemory)
+{
+    vk::ImageCreateInfo imageInfo({}, vk::ImageType::e2D, format);
+    imageInfo.extent.setWidth(width);
+    imageInfo.extent.setHeight(height);
+    imageInfo.extent.setDepth(1);
+    imageInfo.setMipLevels(1);
+    imageInfo.setArrayLayers(1);
+    imageInfo.setTiling(tiling);
+    imageInfo.setInitialLayout(vk::ImageLayout::ePreinitialized);
+    imageInfo.setUsage(usage);
+    imageInfo.setSamples(vk::SampleCountFlagBits::e1);
+    imageInfo.setSharingMode(vk::SharingMode::eExclusive);
+
+    image = device->createImageUnique(imageInfo);
+    assert(image);
+
+    auto memRequirements = device->getImageMemoryRequirements(*image);
+
+    vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
+    imageMemory = device->allocateMemoryUnique(allocInfo);
+
+    assert(imageMemory);
+
+    device->bindImageMemory(*image, *imageMemory, 0);
+}
+
 vk::CommandBuffer VkDemoRenderer::beginSingleTimeCommands()
 {
-    vk::CommandBufferAllocateInfo allocInfo(commandPool, vk::CommandBufferLevel::ePrimary, 1);
+    vk::CommandBufferAllocateInfo allocInfo(*commandPool, vk::CommandBufferLevel::ePrimary, 1);
 
     vk::CommandBuffer commandBuffer;
     device->allocateCommandBuffers(&allocInfo, &commandBuffer);
@@ -1155,7 +1170,7 @@ void VkDemoRenderer::endSingleTimeCommands(vk::CommandBuffer commandBuffer)
 
     graphicsQueue.submit(1, &submitInfo, nullptr);
     graphicsQueue.waitIdle();
-    device->freeCommandBuffers(commandPool, 1, &commandBuffer);
+    device->freeCommandBuffers(*commandPool, 1, &commandBuffer);
 }
 
 void VkDemoRenderer::transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout)
@@ -1223,15 +1238,13 @@ void VkDemoRenderer::copyBufferToImage(vk::Buffer buffer, vk::Image image, uint3
     endSingleTimeCommands(commandBuffer);
 }
 
-vk::ImageView VkDemoRenderer::createImageView(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags)
+vk::UniqueImageView VkDemoRenderer::createImageViewUnique(vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags)
 {
     vk::ImageSubresourceRange range(aspectFlags, 0, 1, 0, 1);
     vk::ImageViewCreateInfo viewInfo({}, image, vk::ImageViewType::e2D, format);
     viewInfo.setSubresourceRange(range);
 
-    auto imageView = device->createImageView(viewInfo);
-
-    return imageView;
+    return device->createImageViewUnique(viewInfo);
 }
 
 vk::Format VkDemoRenderer::findSupportedFormat(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features)
