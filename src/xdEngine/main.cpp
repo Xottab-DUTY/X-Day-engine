@@ -123,7 +123,6 @@ int main(int argc, char* argv[])
     Startup();
 
     WatchConsole.~thread();
-    VkDemoRender.Destroy();
 
     glfwTerminate();
 

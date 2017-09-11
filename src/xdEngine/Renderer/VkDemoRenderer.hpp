@@ -104,8 +104,8 @@ public:
     bool renderPaused;
 
     VkDemoRenderer();
+
     void Initialize();
-    void Destroy();
     void UpdateUniformBuffer();
     void DrawFrame();
 

@@ -118,6 +118,8 @@ bool ShaderWorker::CheckIfShaderChanged()
 
 void ShaderWorker::CompileShader()
 {
+    glslang::InitializeProcess();
+
     auto shader_source_path = Core.ShadersPath.string() + shaderName;
     auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
     auto shader_hash_path = Core.BinaryShadersPath.string() + shaderName + ".hash";
@@ -195,6 +197,8 @@ void ShaderWorker::CompileShader()
 
     delete program;
     delete shader;
+
+    glslang::FinalizeProcess();
 
     // Get current source hash and save it
     // TODO: Implement

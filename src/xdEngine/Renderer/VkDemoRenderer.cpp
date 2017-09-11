@@ -103,7 +103,6 @@ VkDemoRenderer::VkDemoRenderer(): result(vk::Result::eNotReady),
 void VkDemoRenderer::Initialize()
 {
     glfwSetWindowUserPointer(Engine.window, this);
-    glslang::InitializeProcess();
 
     InitializeResources();
     CreateVkInstance();
@@ -130,11 +129,6 @@ void VkDemoRenderer::Initialize()
     CreateDescriptorSet();
     CreateCommandBuffers();
     CreateSynchronizationPrimitives();
-}
-
-void VkDemoRenderer::Destroy()
-{
-    glslang::FinalizeProcess();
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
