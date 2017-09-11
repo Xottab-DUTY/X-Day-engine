@@ -78,6 +78,13 @@ void Startup()
     while (!glfwWindowShouldClose(Engine.window))
     {
         glfwPollEvents();
+
+        if (VkDemoRender.renderPaused == true)
+        {
+            glfwWaitEvents();
+            continue;
+        }
+
         VkDemoRender.UpdateUniformBuffer();
         VkDemoRender.DrawFrame();
     }

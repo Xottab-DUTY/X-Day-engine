@@ -157,9 +157,6 @@ void VkDemoRenderer::UpdateUniformBuffer()
 
 void VkDemoRenderer::DrawFrame()
 {
-    if (renderPaused)
-        return;
-
     uint32_t imageIndex;
     result = device->acquireNextImageKHR(*swapchain, std::numeric_limits<uint64_t>::max(), nullptr, *imageAvailableFence, &imageIndex);
 
