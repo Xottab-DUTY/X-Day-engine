@@ -13,7 +13,7 @@ class XDAY_API VkDemoRenderer
 public:
     vk::UniqueInstance vkInstance;
     vk::UniqueDebugReportCallbackEXT vkCallback;
-    vk::SurfaceKHR surface;
+    vk::UniqueSurfaceKHR surface;
 
     vk::PhysicalDevice physDevice;
     vk::Device device;

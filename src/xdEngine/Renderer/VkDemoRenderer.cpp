@@ -162,7 +162,6 @@ void VkDemoRenderer::Destroy()
     device.destroyCommandPool(commandPool);
     
     device.destroy();
-    vkInstance->destroySurfaceKHR(surface);
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -569,7 +568,7 @@ void VkDemoRenderer::CreateSwapChain()
         imageCount = swapChainSupport.capabilities.maxImageCount;
 
     vk::SwapchainCreateInfoKHR swapchainInfo = {};
-    swapchainInfo.setSurface(surface);
+    swapchainInfo.setSurface(*surface);
     swapchainInfo.setMinImageCount(imageCount);
     swapchainInfo.setImageFormat(surfaceFormat.format);
     swapchainInfo.setImageColorSpace(surfaceFormat.colorSpace);
@@ -1289,7 +1288,7 @@ VkDemoRenderer::QueueFamilyIndices VkDemoRenderer::findQueueFamilies(vk::Physica
             indices.graphicsFamily = i;
 
         vk::Bool32 presentSupport = false;
-        _physDevice.getSurfaceSupportKHR(i, surface, &presentSupport);
+        _physDevice.getSurfaceSupportKHR(i, *surface, &presentSupport);
 
         if (queueFamily.queueCount > 0 && presentSupport)
             indices.presentFamily = i;
@@ -1309,27 +1308,27 @@ VkDemoRenderer::SwapChainSupportDetails VkDemoRenderer::querySwapChainSupport(vk
 {
     SwapChainSupportDetails details;
 
-    _physDevice.getSurfaceCapabilitiesKHR(surface, &details.capabilities);
+    _physDevice.getSurfaceCapabilitiesKHR(*surface, &details.capabilities);
 
     {
         uint32_t formatCount;
-        _physDevice.getSurfaceFormatsKHR(surface, &formatCount, nullptr);
+        _physDevice.getSurfaceFormatsKHR(*surface, &formatCount, nullptr);
 
         if (formatCount != 0)
         {
             details.formats.resize(static_cast<size_t>(formatCount));
-            _physDevice.getSurfaceFormatsKHR(surface, &formatCount, details.formats.data());
+            _physDevice.getSurfaceFormatsKHR(*surface, &formatCount, details.formats.data());
         }
     }
 
     {
         uint32_t presentModeCount;
-        _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, nullptr);
+        _physDevice.getSurfacePresentModesKHR(*surface, &presentModeCount, nullptr);
 
         if (presentModeCount != 0)
         {
             details.presentModes.resize(static_cast<size_t>(presentModeCount));
-            _physDevice.getSurfacePresentModesKHR(surface, &presentModeCount, details.presentModes.data());
+            _physDevice.getSurfacePresentModesKHR(*surface, &presentModeCount, details.presentModes.data());
         }
     }
 
