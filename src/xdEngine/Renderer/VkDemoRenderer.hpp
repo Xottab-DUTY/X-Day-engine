@@ -56,7 +56,7 @@ public:
     vk::UniqueDescriptorPool descriptorPool;
     vk::DescriptorSet descriptorSet;
 
-    std::vector<vk::CommandBuffer> commandBuffers;
+    std::vector<vk::UniqueCommandBuffer> commandBuffers;
     vk::UniqueFence imageAvailableFence;
     vk::UniqueSemaphore renderFinishedSemaphore;
 
@@ -110,7 +110,6 @@ public:
     void DrawFrame();
 
     void RecreateSwapChain();
-    void CleanupSwapChain();
 
 private:
     void InitializeResources();

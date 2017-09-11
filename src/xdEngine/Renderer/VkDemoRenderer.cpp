@@ -135,8 +135,6 @@ void VkDemoRenderer::Initialize()
 void VkDemoRenderer::Destroy()
 {
     glslang::FinalizeProcess();
-
-    CleanupSwapChain();
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -178,7 +176,7 @@ void VkDemoRenderer::DrawFrame()
 
     vk::SubmitInfo submitInfo;
     submitInfo.setCommandBufferCount(1);
-    submitInfo.setPCommandBuffers(&commandBuffers[imageIndex]);
+    submitInfo.setPCommandBuffers(&*commandBuffers[imageIndex]);
 
     vk::Semaphore signalSemaphores[] = { *renderFinishedSemaphore };
     submitInfo.setSignalSemaphoreCount(1);
@@ -202,8 +200,6 @@ void VkDemoRenderer::RecreateSwapChain()
 {
     device->waitIdle();
 
-    CleanupSwapChain();
-
     CreateSwapChain();
     CreateImageViews();
     CreateRenderPass();
@@ -211,11 +207,6 @@ void VkDemoRenderer::RecreateSwapChain()
     CreateDepthResources();
     CreateFramebuffers();
     CreateCommandBuffers();
-}
-
-void VkDemoRenderer::CleanupSwapChain()
-{
-    device->freeCommandBuffers(*commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 }
 
 void VkDemoRenderer::InitializeResources()
@@ -987,23 +978,20 @@ void VkDemoRenderer::CreateDescriptorSet()
 
 void VkDemoRenderer::CreateCommandBuffers()
 {
-    if (!commandBuffers.empty())
-        device->freeCommandBuffers(*commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
-
     commandBuffers.resize(swapChainFramebuffers.size());
 
     vk::CommandBufferAllocateInfo allocInfo(
         *commandPool, vk::CommandBufferLevel::ePrimary,
         static_cast<uint32_t>(commandBuffers.size()));
 
-    commandBuffers = device->allocateCommandBuffers(allocInfo);
+    commandBuffers = device->allocateCommandBuffersUnique(allocInfo);
     assert(!commandBuffers.empty());
 
     for (size_t i = 0; i < commandBuffers.size(); ++i)
     {
         vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
 
-        commandBuffers[i].begin(&beginInfo);
+        commandBuffers[i]->begin(&beginInfo);
 
         vk::RenderPassBeginInfo renderPassInfo;
         renderPassInfo.setRenderPass(*renderPass);
@@ -1017,19 +1005,19 @@ void VkDemoRenderer::CreateCommandBuffers()
         renderPassInfo.setClearValueCount(static_cast<uint32_t>(clearValues.size()));
         renderPassInfo.setPClearValues(reinterpret_cast<vk::ClearValue*>(clearValues.data()));
 
-        commandBuffers[i].beginRenderPass(&renderPassInfo, vk::SubpassContents::eInline);
-        commandBuffers[i].bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
+        commandBuffers[i]->beginRenderPass(&renderPassInfo, vk::SubpassContents::eInline);
+        commandBuffers[i]->bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
 
         vk::Buffer vertexBuffers[] = { *vertexBuffer };
         vk::DeviceSize offsets[] = { 0 };
-        commandBuffers[i].bindVertexBuffers(0, 1, vertexBuffers, offsets);
-        commandBuffers[i].bindIndexBuffer(*indexBuffer, 0, vk::IndexType::eUint32);
-        commandBuffers[i].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, *pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+        commandBuffers[i]->bindVertexBuffers(0, 1, vertexBuffers, offsets);
+        commandBuffers[i]->bindIndexBuffer(*indexBuffer, 0, vk::IndexType::eUint32);
+        commandBuffers[i]->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, *pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 
-        commandBuffers[i].drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+        commandBuffers[i]->drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
-        commandBuffers[i].endRenderPass();
-        commandBuffers[i].end();
+        commandBuffers[i]->endRenderPass();
+        commandBuffers[i]->end();
     }
 }
 
