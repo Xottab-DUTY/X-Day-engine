@@ -89,6 +89,7 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugCallback(
         "Layer prefix: {} \n" \
         "Message: {} \n" \
         "User data: {}\n",
+        //vk::to_string(flags),
         vk::to_string(objType),
         obj, location,
         code, layerPrefix,
