@@ -16,7 +16,7 @@ public:
     vk::UniqueSurfaceKHR surface;
 
     vk::PhysicalDevice physDevice;
-    vk::Device device;
+    vk::UniqueDevice device;
 
     vk::Queue graphicsQueue;
     vk::Queue presentQueue;

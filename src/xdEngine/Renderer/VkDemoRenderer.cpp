@@ -138,30 +138,28 @@ void VkDemoRenderer::Destroy()
 
     CleanupSwapChain();
 
-    device.destroySampler(textureSampler);
-    device.destroyImageView(textureImageView);
+    device->destroySampler(textureSampler);
+    device->destroyImageView(textureImageView);
 
-    device.destroyImage(textureImage);
-    device.freeMemory(textureImageMemory);
+    device->destroyImage(textureImage);
+    device->freeMemory(textureImageMemory);
 
-    device.destroyDescriptorPool(descriptorPool);
-    device.destroyDescriptorSetLayout(descriptorSetLayout);
+    device->destroyDescriptorPool(descriptorPool);
+    device->destroyDescriptorSetLayout(descriptorSetLayout);
 
-    device.destroyBuffer(uniformBuffer);
-    device.freeMemory(uniformBufferMemory);
+    device->destroyBuffer(uniformBuffer);
+    device->freeMemory(uniformBufferMemory);
 
-    device.destroyBuffer(indexBuffer);
-    device.freeMemory(indexBufferMemory);
+    device->destroyBuffer(indexBuffer);
+    device->freeMemory(indexBufferMemory);
 
-    device.destroyBuffer(vertexBuffer);
-    device.freeMemory(vertexBufferMemory);
+    device->destroyBuffer(vertexBuffer);
+    device->freeMemory(vertexBufferMemory);
 
-    device.destroySemaphore(renderFinishedSemaphore);
-    device.destroyFence(imageAvailableFence);
+    device->destroySemaphore(renderFinishedSemaphore);
+    device->destroyFence(imageAvailableFence);
 
-    device.destroyCommandPool(commandPool);
-    
-    device.destroy();
+    device->destroyCommandPool(commandPool);
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -177,9 +175,9 @@ void VkDemoRenderer::UpdateUniformBuffer()
     ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / static_cast<float>(swapChainExtent.height), 0.1f, 10.0f);
     ubo.proj[1][1] *= -1;
 
-    void* data = device.mapMemory(uniformBufferMemory, 0, sizeof(ubo));
+    void* data = device->mapMemory(uniformBufferMemory, 0, sizeof(ubo));
     memcpy(data, &ubo, sizeof(ubo));
-    device.unmapMemory(uniformBufferMemory);
+    device->unmapMemory(uniformBufferMemory);
 }
 
 void VkDemoRenderer::DrawFrame()
@@ -188,7 +186,7 @@ void VkDemoRenderer::DrawFrame()
         return;
 
     uint32_t imageIndex;
-    result = device.acquireNextImageKHR(swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
+    result = device->acquireNextImageKHR(swapchain, std::numeric_limits<uint64_t>::max(), nullptr, imageAvailableFence, &imageIndex);
 
     assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
 
@@ -198,8 +196,8 @@ void VkDemoRenderer::DrawFrame()
         return;
     }
 
-    device.waitForFences(1, &imageAvailableFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
-    device.resetFences(1, &imageAvailableFence);
+    device->waitForFences(1, &imageAvailableFence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+    device->resetFences(1, &imageAvailableFence);
 
     vk::SubmitInfo submitInfo;
     submitInfo.setCommandBufferCount(1);
@@ -225,7 +223,7 @@ void VkDemoRenderer::DrawFrame()
 
 void VkDemoRenderer::RecreateSwapChain()
 {
-    device.waitIdle();
+    device->waitIdle();
 
     CleanupSwapChain();
 
@@ -240,23 +238,23 @@ void VkDemoRenderer::RecreateSwapChain()
 
 void VkDemoRenderer::CleanupSwapChain()
 {
-    device.destroyImageView(depthImageView);
-    device.destroyImage(depthImage);
-    device.freeMemory(depthImageMemory);
+    device->destroyImageView(depthImageView);
+    device->destroyImage(depthImage);
+    device->freeMemory(depthImageMemory);
 
     for (size_t i = 0; i < swapChainFramebuffers.size(); ++i)
-        device.destroyFramebuffer(swapChainFramebuffers[i]);
+        device->destroyFramebuffer(swapChainFramebuffers[i]);
 
-    device.freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+    device->freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 
-    device.destroyPipeline(graphicsPipeline);
-    device.destroyPipelineLayout(pipelineLayout);
-    device.destroyRenderPass(renderPass);
+    device->destroyPipeline(graphicsPipeline);
+    device->destroyPipelineLayout(pipelineLayout);
+    device->destroyRenderPass(renderPass);
 
     for (size_t i = 0; i < swapChainImageViews.size(); ++i)
-        device.destroyImageView(swapChainImageViews[i], nullptr);
+        device->destroyImageView(swapChainImageViews[i], nullptr);
 
-    device.destroySwapchainKHR(swapchain);
+    device->destroySwapchainKHR(swapchain);
 }
 
 void VkDemoRenderer::InitializeResources()
@@ -514,11 +512,11 @@ void VkDemoRenderer::CreateDevice()
     else
         deviceCreateInfo.enabledLayerCount = 0;
 
-    device = physDevice.createDevice(deviceCreateInfo);
+    device = physDevice.createDeviceUnique(deviceCreateInfo);
     assert(device);
 
-    device.getQueue(indices.graphicsFamily, 0, &graphicsQueue);
-    device.getQueue(indices.presentFamily, 0, &presentQueue);
+    device->getQueue(indices.graphicsFamily, 0, &graphicsQueue);
+    device->getQueue(indices.presentFamily, 0, &presentQueue);
 }
 
 vk::SurfaceFormatKHR VkDemoRenderer::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) const
@@ -600,11 +598,11 @@ void VkDemoRenderer::CreateSwapChain()
     vk::SwapchainKHR oldSwapChain = swapchain;
     swapchainInfo.setOldSwapchain(oldSwapChain);
 
-    vk::SwapchainKHR newSwapChain = device.createSwapchainKHR(swapchainInfo);
+    vk::SwapchainKHR newSwapChain = device->createSwapchainKHR(swapchainInfo);
     swapchain = newSwapChain;
     assert(swapchain);
 
-    swapChainImages = device.getSwapchainImagesKHR(swapchain);
+    swapChainImages = device->getSwapchainImagesKHR(swapchain);
     swapChainImageFormat = surfaceFormat.format;
     swapChainExtent = extent;
 }
@@ -660,7 +658,7 @@ void VkDemoRenderer::CreateRenderPass()
     renderPassInfo.setDependencyCount(1);
     renderPassInfo.setPDependencies(&dependency);
 
-    renderPass = device.createRenderPass(renderPassInfo);
+    renderPass = device->createRenderPass(renderPassInfo);
     assert(renderPass);
 }
 
@@ -675,14 +673,14 @@ void VkDemoRenderer::CreateDescriptorSetLayout()
     std::array<vk::DescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
     vk::DescriptorSetLayoutCreateInfo layoutInfo({}, static_cast<uint32_t>(bindings.size()), bindings.data());
 
-    descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+    descriptorSetLayout = device->createDescriptorSetLayout(layoutInfo);
     assert(descriptorSetLayout);
 }
 
 void VkDemoRenderer::CreateGraphicsPipeline()
 {
-    ShaderWorker shader_frag("shader.frag", device, resources);
-    ShaderWorker shader_vert("shader.vert", device, resources);
+    ShaderWorker shader_frag("shader.frag", *device, resources);
+    ShaderWorker shader_vert("shader.vert", *device, resources);
 
     vk::PipelineShaderStageCreateInfo shaderStages[] =
         { shader_frag.GetVkShaderStageInfo(), shader_vert.GetVkShaderStageInfo() };
@@ -744,7 +742,7 @@ void VkDemoRenderer::CreateGraphicsPipeline()
 
     vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 1, &descriptorSetLayout);
 
-    pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
+    pipelineLayout = device->createPipelineLayout(pipelineLayoutInfo);
     assert(pipelineLayout);
 
     vk::GraphicsPipelineCreateInfo pipelineInfo;
@@ -761,7 +759,7 @@ void VkDemoRenderer::CreateGraphicsPipeline()
     pipelineInfo.setLayout(pipelineLayout);
     pipelineInfo.setRenderPass(renderPass);
 
-    graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo, nullptr);
+    graphicsPipeline = device->createGraphicsPipeline(nullptr, pipelineInfo, nullptr);
     assert(graphicsPipeline);
 }
 
@@ -780,7 +778,7 @@ void VkDemoRenderer::CreateFramebuffers()
         vk::FramebufferCreateInfo framebufferInfo({}, renderPass, static_cast<uint32_t>(attachments.size()),
                                                   attachments.data(), swapChainExtent.width, swapChainExtent.height, 1);
 
-        swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
+        swapChainFramebuffers[i] = device->createFramebuffer(framebufferInfo);
         assert(swapChainFramebuffers[i]);
     }
 }
@@ -791,7 +789,7 @@ void VkDemoRenderer::CreateCommandPool()
 
     vk::CommandPoolCreateInfo poolInfo({}, queueFamilyIndices.graphicsFamily);
 
-    commandPool = device.createCommandPool(poolInfo);
+    commandPool = device->createCommandPool(poolInfo);
     assert(commandPool);
 }
 
@@ -828,9 +826,9 @@ void VkDemoRenderer::CreateTextureImage()
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  stagingBuffer, stagingBufferMemory);
 
-    auto data = device.mapMemory(stagingBufferMemory, 0, imageSize);
+    auto data = device->mapMemory(stagingBufferMemory, 0, imageSize);
     memcpy(data, tex2D[0].data(), static_cast<size_t>(imageSize));
-    device.unmapMemory(stagingBufferMemory);
+    device->unmapMemory(stagingBufferMemory);
 
     createImage(tex2D[0].extent().x, tex2D[0].extent().y,
                 vk::Format::eA8B8G8R8UnormPack32, vk::ImageTiling::eOptimal,
@@ -845,8 +843,8 @@ void VkDemoRenderer::CreateTextureImage()
     transitionImageLayout(textureImage, vk::Format::eA8B8G8R8UnormPack32,
                           vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eShaderReadOnlyOptimal);
 
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
+    device->destroyBuffer(stagingBuffer);
+    device->freeMemory(stagingBufferMemory);
 }
 
 void VkDemoRenderer::CreateTextureImageView()
@@ -868,7 +866,7 @@ void VkDemoRenderer::CreateTextureSampler()
     samplerInfo.setCompareOp(vk::CompareOp::eAlways);
     samplerInfo.setMipmapMode(vk::SamplerMipmapMode::eLinear);
 
-    textureSampler = device.createSampler(samplerInfo);
+    textureSampler = device->createSampler(samplerInfo);
     assert(textureSampler);
 }
 
@@ -933,9 +931,9 @@ void VkDemoRenderer::CreateVertexBuffer()
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  stagingBuffer, stagingBufferMemory);
 
-    auto data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    auto data = device->mapMemory(stagingBufferMemory, 0, bufferSize);
     memcpy(data, vertices.data(), static_cast<size_t>(bufferSize));
-    device.unmapMemory(stagingBufferMemory);
+    device->unmapMemory(stagingBufferMemory);
 
     createBuffer(bufferSize,
                  vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer,
@@ -943,8 +941,8 @@ void VkDemoRenderer::CreateVertexBuffer()
 
     copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
 
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
+    device->destroyBuffer(stagingBuffer);
+    device->freeMemory(stagingBufferMemory);
 }
 
 void VkDemoRenderer::CreateIndexBuffer()
@@ -958,9 +956,9 @@ void VkDemoRenderer::CreateIndexBuffer()
                  vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
                  stagingBuffer, stagingBufferMemory);
 
-    auto data = device.mapMemory(stagingBufferMemory, 0, bufferSize);
+    auto data = device->mapMemory(stagingBufferMemory, 0, bufferSize);
     memcpy(data, indices.data(), static_cast<size_t>(bufferSize));
-    device.unmapMemory(stagingBufferMemory);
+    device->unmapMemory(stagingBufferMemory);
 
     createBuffer(bufferSize,
                  vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer,
@@ -968,8 +966,8 @@ void VkDemoRenderer::CreateIndexBuffer()
 
     copyBuffer(stagingBuffer, indexBuffer, bufferSize);
 
-    device.destroyBuffer(stagingBuffer);
-    device.freeMemory(stagingBufferMemory);
+    device->destroyBuffer(stagingBuffer);
+    device->freeMemory(stagingBufferMemory);
 }
 
 void VkDemoRenderer::CreateUniformBuffer()
@@ -992,7 +990,7 @@ void VkDemoRenderer::CreateDescriptorPool()
 
     vk::DescriptorPoolCreateInfo poolInfo({}, 1, static_cast<uint32_t>(poolSizes.size()), poolSizes.data());
 
-    descriptorPool = device.createDescriptorPool(poolInfo);
+    descriptorPool = device->createDescriptorPool(poolInfo);
     assert(descriptorPool);
 }
 
@@ -1000,7 +998,7 @@ void VkDemoRenderer::CreateDescriptorSet()
 {
     vk::DescriptorSetLayout layouts[] = { descriptorSetLayout };
     vk::DescriptorSetAllocateInfo allocInfo(descriptorPool, 1, layouts);
-    result = device.allocateDescriptorSets(&allocInfo, &descriptorSet);
+    result = device->allocateDescriptorSets(&allocInfo, &descriptorSet);
     assert(result == vk::Result::eSuccess);
 
     vk::DescriptorBufferInfo bufferInfo(uniformBuffer, 0, sizeof(UniformBufferObject));
@@ -1023,13 +1021,13 @@ void VkDemoRenderer::CreateDescriptorSet()
     descriptorWrites[1].setDescriptorCount(1);
     descriptorWrites[1].setPImageInfo(&imageInfo);
 
-    device.updateDescriptorSets(static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+    device->updateDescriptorSets(static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 }
 
 void VkDemoRenderer::CreateCommandBuffers()
 {
     if (!commandBuffers.empty())
-        device.freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+        device->freeCommandBuffers(commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 
     commandBuffers.resize(swapChainFramebuffers.size());
 
@@ -1037,7 +1035,7 @@ void VkDemoRenderer::CreateCommandBuffers()
         commandPool, vk::CommandBufferLevel::ePrimary,
         static_cast<uint32_t>(commandBuffers.size()));
 
-    commandBuffers = device.allocateCommandBuffers(allocInfo);
+    commandBuffers = device->allocateCommandBuffers(allocInfo);
     assert(!commandBuffers.empty());
 
     for (size_t i = 0; i < commandBuffers.size(); ++i)
@@ -1077,11 +1075,11 @@ void VkDemoRenderer::CreateCommandBuffers()
 void VkDemoRenderer::CreateSynchronizationPrimitives()
 {
     vk::FenceCreateInfo fenceInfo;
-    imageAvailableFence = device.createFence(fenceInfo);
+    imageAvailableFence = device->createFence(fenceInfo);
     assert(imageAvailableFence);
 
     vk::SemaphoreCreateInfo semaphoreInfo;
-    renderFinishedSemaphore = device.createSemaphore(semaphoreInfo);
+    renderFinishedSemaphore = device->createSemaphore(semaphoreInfo);
     assert(renderFinishedSemaphore);
 }
 
@@ -1089,15 +1087,15 @@ void VkDemoRenderer::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usag
 {
     vk::BufferCreateInfo bufferInfo({}, size, usage, vk::SharingMode::eExclusive);
 
-    buffer = device.createBuffer(bufferInfo);
+    buffer = device->createBuffer(bufferInfo);
 
-    auto memRequirements = device.getBufferMemoryRequirements(buffer);
+    auto memRequirements = device->getBufferMemoryRequirements(buffer);
 
     vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
 
-    bufferMemory = device.allocateMemory(allocInfo);
+    bufferMemory = device->allocateMemory(allocInfo);
 
-    device.bindBufferMemory(buffer, bufferMemory, 0);
+    device->bindBufferMemory(buffer, bufferMemory, 0);
 }
 
 void VkDemoRenderer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size)
@@ -1126,16 +1124,16 @@ void VkDemoRenderer::createImage(uint32_t width, uint32_t height, vk::Format for
     imageInfo.setSamples(vk::SampleCountFlagBits::e1);
     imageInfo.setSharingMode(vk::SharingMode::eExclusive);
 
-    image = device.createImage(imageInfo);
+    image = device->createImage(imageInfo);
     assert(image);
 
-    auto memRequirements = device.getImageMemoryRequirements(image);
+    auto memRequirements = device->getImageMemoryRequirements(image);
     vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
 
-    imageMemory = device.allocateMemory(allocInfo);
+    imageMemory = device->allocateMemory(allocInfo);
     assert(imageMemory);
 
-    device.bindImageMemory(image, imageMemory, 0);
+    device->bindImageMemory(image, imageMemory, 0);
 }
 
 vk::CommandBuffer VkDemoRenderer::beginSingleTimeCommands()
@@ -1143,7 +1141,7 @@ vk::CommandBuffer VkDemoRenderer::beginSingleTimeCommands()
     vk::CommandBufferAllocateInfo allocInfo(commandPool, vk::CommandBufferLevel::ePrimary, 1);
 
     vk::CommandBuffer commandBuffer;
-    device.allocateCommandBuffers(&allocInfo, &commandBuffer);
+    device->allocateCommandBuffers(&allocInfo, &commandBuffer);
 
     vk::CommandBufferBeginInfo beginInfo(vk::CommandBufferUsageFlagBits::eOneTimeSubmit);
     commandBuffer.begin(beginInfo);
@@ -1161,7 +1159,7 @@ void VkDemoRenderer::endSingleTimeCommands(vk::CommandBuffer commandBuffer)
 
     graphicsQueue.submit(1, &submitInfo, nullptr);
     graphicsQueue.waitIdle();
-    device.freeCommandBuffers(commandPool, 1, &commandBuffer);
+    device->freeCommandBuffers(commandPool, 1, &commandBuffer);
 }
 
 void VkDemoRenderer::transitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout)
@@ -1235,7 +1233,7 @@ vk::ImageView VkDemoRenderer::createImageView(vk::Image image, vk::Format format
     vk::ImageViewCreateInfo viewInfo({}, image, vk::ImageViewType::e2D, format);
     viewInfo.setSubresourceRange(range);
 
-    auto imageView = device.createImageView(viewInfo);
+    auto imageView = device->createImageView(viewInfo);
 
     return imageView;
 }

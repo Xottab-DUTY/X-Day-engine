@@ -81,7 +81,7 @@ void Startup()
         VkDemoRender.UpdateUniformBuffer();
         VkDemoRender.DrawFrame();
     }
-    VkDemoRender.device.waitIdle();
+    VkDemoRender.device->waitIdle();
 }
 
 int main(int argc, char* argv[])
