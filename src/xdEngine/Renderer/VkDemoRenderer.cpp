@@ -162,9 +162,8 @@ void VkDemoRenderer::Destroy()
     device.destroyCommandPool(commandPool);
     
     device.destroy();
-    instance.destroySurfaceKHR(surface);
-    instance.destroyDebugReportCallbackEXT(vkCallback);
-    instance.destroy();
+    vkInstance->destroySurfaceKHR(surface);
+    vkInstance->destroyDebugReportCallbackEXT(vkCallback);
 }
 
 void VkDemoRenderer::UpdateUniformBuffer()
@@ -365,14 +364,13 @@ void VkDemoRenderer::CreateVkInstance()
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion), 
-                                VK_MAKE_VERSION(1, 0, 42));
+                                VK_API_VERSION_1_0);
 
-    vk::InstanceCreateInfo i;
-    i.setPApplicationInfo(&appInfo);
+    auto extensions = getRequiredExtensions();
 
-    auto extensions = getRequiredExtensions();    
-    i.setEnabledExtensionCount(static_cast<uint32_t>(extensions.size()));
-    i.setPpEnabledExtensionNames(extensions.data());
+    vk::InstanceCreateInfo i({}, &appInfo, 0, nullptr,
+                             static_cast<uint32_t>(extensions.size()),
+                             extensions.data());
 
     if (enableValidationLayers)
     {
@@ -380,8 +378,8 @@ void VkDemoRenderer::CreateVkInstance()
         i.setPpEnabledLayerNames(validationLayers.data());
     }
 
-    result = vk::createInstance(&i, nullptr, &instance);
-    assert(result == vk::Result::eSuccess);
+    vkInstance = vk::createInstanceUnique(i);
+    assert(vkInstance);
 }
 
 bool VkDemoRenderer::CheckValidationLayersSupport() const
@@ -430,14 +428,14 @@ void VkDemoRenderer::CreateDebugCallback()
     ({vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
      (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
 
-    vkCallback = instance.createDebugReportCallbackEXT(callbackInfo);
+    vkCallback = vkInstance->createDebugReportCallbackEXT(callbackInfo);
     assert(vkCallback);
 }
 
 void VkDemoRenderer::CreateVkSurface()
 {
     result = (vk::Result)glfwCreateWindowSurface(
-        (VkInstance)instance, Engine.window,
+        (VkInstance&)vkInstance, Engine.window,
         nullptr, (VkSurfaceKHR*)&surface);
 
     assert(result == vk::Result::eSuccess);
@@ -445,7 +443,7 @@ void VkDemoRenderer::CreateVkSurface()
 
 void VkDemoRenderer::GetPhysDevice()
 {
-    std::vector<vk::PhysicalDevice> physDevices = instance.enumeratePhysicalDevices();
+    std::vector<vk::PhysicalDevice> physDevices = vkInstance->enumeratePhysicalDevices();
     for (const auto& _device : physDevices)
         if (isPhysDeviceSuitable(_device))
         {

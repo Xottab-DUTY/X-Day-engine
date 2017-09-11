@@ -11,7 +11,7 @@
 class XDAY_API VkDemoRenderer
 {
 public:
-    vk::Instance instance;
+    vk::UniqueInstance vkInstance;
     vk::DebugReportCallbackEXT vkCallback;
     vk::SurfaceKHR surface;
 
