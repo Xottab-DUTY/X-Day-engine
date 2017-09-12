@@ -5,7 +5,7 @@
 #define SPDLOG_WCHAR_TO_UTF8_SUPPORT
 #include <spdlog/spdlog.h>
 
-#include "xdEngine_impexp.inl"
+#include "Common/import_export_macros.hpp"
 
 namespace XDay
 {

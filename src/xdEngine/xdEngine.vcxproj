@@ -168,7 +168,6 @@
   <ItemGroup>
     <None Include="..\..\resources\shaders\shader.frag" />
     <None Include="..\..\resources\shaders\shader.vert" />
-    <None Include="xdEngine_impexp.inl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\include\dynlib.vcxproj">

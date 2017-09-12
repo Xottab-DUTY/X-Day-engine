@@ -4,7 +4,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "xdEngine_impexp.inl"
+#include "Common/import_export_macros.hpp"
 
 namespace XDay
 {

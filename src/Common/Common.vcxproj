@@ -29,7 +29,7 @@
     <Import Project="..\..\Common.props" />
   </ImportGroup>
   <ItemGroup>
-    <None Include="import_export_macros.inl" />
+    <None Include="import_export_macros.hpp" />
     <None Include="Compiler.inl" />
     <None Include="Platform.hpp" />
     <None Include="PlatformLinux.inl" />

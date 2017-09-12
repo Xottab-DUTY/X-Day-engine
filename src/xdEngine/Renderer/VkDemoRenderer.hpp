@@ -5,7 +5,7 @@
 #include <vulkan/vulkan.hpp>
 #include <glm/glm.hpp>
 
-#include "xdEngine_impexp.inl"
+#include "Common/import_export_macros.hpp"
 #include <ResourceLimits.h>
 
 class XDAY_API VkDemoRenderer

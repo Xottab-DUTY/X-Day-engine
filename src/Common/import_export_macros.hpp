@@ -1,6 +1,4 @@
 #pragma once
-#ifndef import_export_macros_inl__
-#define import_export_macros_inl__
 
 #if defined(__GNUC__)
 #define XD_EXPORT __attribute__ ((visibility("default")))
@@ -10,4 +8,14 @@
 #define XD_IMPORT __declspec(dllimport)
 #endif
 
-#endif // import_export_macros_inl__
+#ifdef XDAY_EXPORTS
+#define XDAY_API XD_EXPORT
+#else
+#define XDAY_API XD_IMPORT
+#endif
+
+#ifdef XDRENDERER_EXPORTS
+#define XDRENDERER_API XD_EXPORT
+#else
+#define XDRENDERER_API XD_IMPORT
+#endif

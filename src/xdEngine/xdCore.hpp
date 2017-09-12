@@ -5,7 +5,7 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
-#include "xdEngine_impexp.inl"
+#include "Common/import_export_macros.hpp"
 
 using FunctionPointer = void(*)();
 

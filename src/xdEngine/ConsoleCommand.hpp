@@ -9,7 +9,7 @@ namespace filesystem = std::experimental::filesystem;
 
 #include <fmt/format.h>
 
-#include "xdEngine_impexp.inl"
+#include "Common/import_export_macros.hpp"
 #include "Console.hpp"
 
 #pragma region ConsoleCommand Adding Macros

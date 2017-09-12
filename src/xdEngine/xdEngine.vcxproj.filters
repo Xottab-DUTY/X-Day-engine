@@ -64,7 +64,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="xdEngine_impexp.inl" />
     <None Include="..\..\resources\shaders\shader.frag">
       <Filter>Renderer\Shaders</Filter>
     </None>
