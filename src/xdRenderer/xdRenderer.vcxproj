@@ -127,13 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="level.hpp" />
-    <ClInclude Include="model.hpp" />
     <ClInclude Include="renderer.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="level.cpp" />
-    <ClCompile Include="model.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
