@@ -7,6 +7,7 @@ res/
 *.PVS-Studio.*
 *.i
 *.tss
+.idea
 
 # User-specific files
 *.suo
