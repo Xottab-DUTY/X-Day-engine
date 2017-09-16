@@ -1,15 +1,14 @@
 #pragma once
 
+#include "r_vulkanbase.hpp"
+
 namespace XDay
 {
 namespace Renderer
 {
-struct XD_NOVTABLE Rocket
+class Renderer : VulkanBase
 {
-    virtual void launch() = 0;
-    virtual void landing() = 0;
-
-    virtual void orbit() = 0;
+    
 };
 }
 }
