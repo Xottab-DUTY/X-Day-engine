@@ -19,3 +19,9 @@
 #else
 #define XDRENDERER_API XD_IMPORT
 #endif
+
+#ifdef XDAPI_EXPORTS
+#define XDAPI_API XD_EXPORT
+#else
+#define XDAPI_API XD_IMPORT
+#endif

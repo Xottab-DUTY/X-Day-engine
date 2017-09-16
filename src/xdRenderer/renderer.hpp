@@ -1,5 +1,6 @@
 #pragma once
 
+#include "xdAPI/xdAPI.hpp"
 #include "r_vulkanbase.hpp"
 
 namespace XDay
