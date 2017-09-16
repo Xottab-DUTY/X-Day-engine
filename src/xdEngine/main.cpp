@@ -93,9 +93,13 @@ void Startup()
 int main(int argc, char* argv[])
 {
     system("chcp 65001");
-    // TODO: enable Windows console window hiding once game console drawing in main window is done
-#if 0//ndef DEBUG
-    FreeConsole();
+
+#if 0//def WINDOWS
+    // TODO: enable system console window hiding once game console drawing in main window is done
+    if (!Core.FindParam(XDay::eParamDontHideSystemConsole))
+    {
+        FreeConsole();
+    }
 #endif
 
     Core.InitializeArguments(argc, argv);

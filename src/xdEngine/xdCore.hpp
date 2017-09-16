@@ -22,6 +22,7 @@ enum eCoreParams
     eParamMainConfig,
     eParamName,
     eParamGame,
+    eParamDontHideSystemConsole,
 
     eParamShaderForceRecompilation,
     eParamShaderPreprocess,

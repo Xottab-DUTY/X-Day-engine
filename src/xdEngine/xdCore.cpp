@@ -155,6 +155,8 @@ std::string xdCore::RecognizeParam(eCoreParams param) const
         return "--p_name";
     case eParamGame:
         return "--p_game";
+    case eParamDontHideSystemConsole:
+        return "--p_syscmd";
     case eParamShaderForceRecompilation:
         return "--p_shrec";
     case eParamShaderPreprocess:
