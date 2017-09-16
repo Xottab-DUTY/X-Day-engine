@@ -79,10 +79,9 @@ void Startup()
     {
         glfwPollEvents();
 
-        if (VkDemoRender.renderPaused == true)
+        while (VkDemoRender.renderPaused == true)
         {
             glfwWaitEvents();
-            continue;
         }
 
         VkDemoRender.UpdateUniformBuffer();
