@@ -3,9 +3,11 @@
   <ItemGroup>
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="r_vulkan_base.cpp" />
+    <ClCompile Include="r_vulkan_debug_callback.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.hpp" />
     <ClInclude Include="r_vulkan_base.hpp" />
+    <ClInclude Include="r_vulkan_debug_callback.hpp" />
   </ItemGroup>
 </Project>

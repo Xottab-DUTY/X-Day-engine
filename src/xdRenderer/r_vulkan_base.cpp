@@ -13,23 +13,7 @@
 #include "xdEngine/Debug/Log.hpp"
 #include "xdEngine/xdCore.hpp"
 #include "r_vulkan_base.hpp"
-
-VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
-                                        const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback)
-{
-    auto func = (PFN_vkCreateDebugReportCallbackEXT)glfwGetInstanceProcAddress(instance, "vkCreateDebugReportCallbackEXT");
-    if (func)
-        return func(instance, pCreateInfo, pAllocator, pCallback);
-
-    return VK_ERROR_EXTENSION_NOT_PRESENT;
-}
-
-void vkDestroyDebugReportCallbackEXT(VkInstance instance, VkDebugReportCallbackEXT callback, const VkAllocationCallbacks* pAllocator = nullptr)
-{
-    auto func = (PFN_vkDestroyDebugReportCallbackEXT)glfwGetInstanceProcAddress(instance, "vkDestroyDebugReportCallbackEXT");
-    if (func && callback)
-        func(instance, callback, pAllocator);
-}
+#include "r_vulkan_debug_callback.hpp"
 
 const bool enableValidationLayers = Core.isGlobalDebug();
 
@@ -93,6 +77,12 @@ bool r_vulkan_base::check_validation_layers_support() const
     return true;
 }
 
+void r_vulkan_base::initialize()
+{
+    create_instance();
+    create_debug_callback();
+}
+
 void r_vulkan_base::create_instance()
 {
     if (enableValidationLayers && !check_validation_layers_support())
@@ -116,6 +106,18 @@ void r_vulkan_base::create_instance()
 
     instance = vk::createInstanceUnique(i);
     assert(instance);
+}
+
+void r_vulkan_base::create_debug_callback()
+{
+    if (!enableValidationLayers) return;
+
+    const vk::DebugReportCallbackCreateInfoEXT callbackInfo(
+    { vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning },
+        PFN_vkDebugReportCallbackEXT(vkDebugReportCallback));
+
+    callback = instance->createDebugReportCallbackEXTUnique(callbackInfo);
+    assert(callback);
 }
 }
 }

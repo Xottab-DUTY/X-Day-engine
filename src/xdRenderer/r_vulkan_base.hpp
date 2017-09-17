@@ -27,7 +27,10 @@ public:
     vk::UniqueDevice device;
 
 //public:
+    void initialize();
+
     void create_instance();
+    void create_debug_callback();
 
 //private:
     std::vector<const char*> get_validation_layers() const;
