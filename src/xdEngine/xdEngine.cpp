@@ -7,6 +7,7 @@
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "Renderer/VkDemoRenderer.hpp"
+#include "Debug/Log.hpp"
 
 using namespace XDay;
 
@@ -19,7 +20,10 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
         switch (key)
         {
         case GLFW_KEY_ESCAPE:
+        {
             ConsoleCommands->Execute(&ExitCC);
+            break;
+        }
         case GLFW_KEY_ENTER:
         {
             ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
@@ -27,8 +31,13 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
                 glfwSetWindowMonitor(Engine.window, Engine.currentMonitor, 0, 0, Engine.currentMode->width, Engine.currentMode->height, Engine.currentMode->refreshRate);
             else
                 glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.currentMode->width-256, Engine.currentMode->height-256, Engine.currentMode->refreshRate);
+            break;
         }
-        default: return;
+        default:
+        {
+            DebugMsg("Key pressed: {}", glfwGetKeyName(key, scancode));
+            break;
+        }
         }
     }
         
