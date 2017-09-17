@@ -2,8 +2,6 @@
 
 #include "Common/import_export_macros.hpp"
 
-class VkDemoRenderer;
-
 namespace XDay
 {
 namespace Renderer

@@ -6,6 +6,8 @@
 #include "xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
+#include "xdAPI/xdAPI.hpp"
+#include "xdRenderer/renderer.hpp"
 #include "Renderer/VkDemoRenderer.hpp"
 #include "Debug/Log.hpp"
 
@@ -122,6 +124,7 @@ void XDayEngine::createMainWindow()
 
 void XDayEngine::InitRender()
 {
+    GEnv.Render->initialize();
     VkDemoRender.Initialize();
 }
 

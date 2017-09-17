@@ -2,5 +2,5 @@
 
 namespace XDay
 {
-XDAPI_API Global::Environment GEnv;
+XDAPI_API Global::Environment GEnv = {};
 }

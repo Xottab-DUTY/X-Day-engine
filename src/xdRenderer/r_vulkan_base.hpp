@@ -27,7 +27,7 @@ public:
     vk::UniqueDevice device;
 
 //public:
-    void initialize();
+    virtual void initialize();
 
     void create_instance();
     void create_debug_callback();
