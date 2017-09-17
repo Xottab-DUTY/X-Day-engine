@@ -40,6 +40,7 @@ void HelpCmdArgs()
         "--p_nolog - Completely disables engine log. May increase performance\n"\
         "--p_nologflush - Disables log flushing. Useless if -nolog defined\n"\
         "--p_debug - Enables debug mode\n"
+        "--p_syscmd - Disables system console hiding\n"
         "--p_shrec - Compile shaders even if they already compiled\n"\
         "--p_shpre - Outputs preprocessed shaders to the shader sources dir. Works only in debug mode\n"\
         "--p_texture - Specifies path to texture file to load, default is \"texture.dds\"\n"\
@@ -54,6 +55,7 @@ void HelpCmdArgs()
         "--p_nolog - Полностью выключает лог движка. Может повысить производительность\n"\
         "--p_nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n"\
         "--p_debug - Включает режим отладки\n"
+        "--p_syscmd - Отключает скрытие системной консоли\n"
         "--p_shrec - Сборка шейдеров даже если они уже собраны\n"\
         "--p_shpre - Сохраняет обработанные шейдеры в папку исходников шейдеров. Работает только в режиме отладки\n"\
         "--p_texture - Задаёт путь до текстуры для загрузки, по умолчанию: \"texture.dds\"\n"\
@@ -94,15 +96,13 @@ int main(int argc, char* argv[])
 {
     system("chcp 65001");
 
-#if 0//def WINDOWS
-    // TODO: enable system console window hiding once game console drawing in main window is done
+    Core.InitializeArguments(argc, argv);
+
+#ifdef WINDOWS
     if (!Core.FindParam(XDay::eParamDontHideSystemConsole))
-    {
         FreeConsole();
-    }
 #endif
 
-    Core.InitializeArguments(argc, argv);
     Core.Initialize();
     InitializeConsole();
 
@@ -120,7 +120,9 @@ int main(int argc, char* argv[])
     Engine.xdCreateWindow();
 
     std::thread WatchConsole(threadedConsole);
-    WatchConsole.detach();
+    if (Core.FindParam(XDay::eParamDontHideSystemConsole))
+        WatchConsole.detach();
+
     VkDemoRender.Initialize();
 
     Startup();
