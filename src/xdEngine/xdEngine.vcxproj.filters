@@ -1,15 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="xdEngine.cpp" />
-    <ClCompile Include="xdCore.cpp" />
+    <Filter Include="Console">
+      <UniqueIdentifier>{f08a9e8f-73a8-4d92-b09b-03ecf3ee055a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console\Commands">
+      <UniqueIdentifier>{28b0e815-c2df-49b4-bf71-0d3f813c3018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{0ff46511-08bd-4350-9ee5-36a03d0ec6bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{2fb3d029-d6d8-403c-a2bf-0efe3f2af47c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{db930a8c-e7c8-4a74-92d7-e0c35d2c8e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Shaders">
+      <UniqueIdentifier>{1a1892ee-0853-475b-bf1f-9d7cdfba897f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Console.cpp">
       <Filter>Console</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleCommand.cpp">
-      <Filter>Console\Command</Filter>
+      <Filter>Console\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ConsoleCommands.cpp">
+      <Filter>Console\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\Log.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
     <ClCompile Include="Debug\QuantMS.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
@@ -19,27 +42,28 @@
     <ClCompile Include="XMLResource.cpp">
       <Filter>XML</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\Log.cpp">
-      <Filter>Debug</Filter>
-    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="xdCore.cpp" />
+    <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="Renderer\Shader.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\VkDemoRenderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleCommands.cpp">
-      <Filter>Console\Command</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="xdEngine.hpp" />
-    <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="Console.hpp">
       <Filter>Console</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleCommand.hpp">
-      <Filter>Console\Command</Filter>
+      <Filter>Console\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleCommands.hpp">
+      <Filter>Console\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\Log.hpp">
+      <Filter>Debug</Filter>
     </ClInclude>
     <ClInclude Include="Debug\QuantMS.hpp">
       <Filter>Debug</Filter>
@@ -50,17 +74,13 @@
     <ClInclude Include="XMLResource.hpp">
       <Filter>XML</Filter>
     </ClInclude>
-    <ClInclude Include="Debug\Log.hpp">
-      <Filter>Debug</Filter>
-    </ClInclude>
+    <ClInclude Include="xdCore.hpp" />
+    <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="Renderer\Shader.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\VkDemoRenderer.hpp">
       <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleCommands.hpp">
-      <Filter>Console\Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,25 +90,5 @@
     <None Include="..\..\resources\shaders\shader.vert">
       <Filter>Renderer\Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Console">
-      <UniqueIdentifier>{22694ec5-1a51-425c-8c87-04418a61c660}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Console\Command">
-      <UniqueIdentifier>{3a7bf758-ecff-43c3-bf23-edb0cde4d650}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Debug">
-      <UniqueIdentifier>{54e4b787-9183-4e3e-8506-25f8466bf931}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="XML">
-      <UniqueIdentifier>{a4cd1e03-cc1d-4238-953a-70946d9e02df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renderer">
-      <UniqueIdentifier>{d1c3ea44-023b-4755-8103-574b49b69a73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renderer\Shaders">
-      <UniqueIdentifier>{ca9f8b26-25b8-4d49-8a24-2832ed71b3bf}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

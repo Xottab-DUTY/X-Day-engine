@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,29 +19,37 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C164222D-A92B-4C30-90CE-BD2927E7EB6D}</ProjectGuid>
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{CD78FECA-F990-4EF5-A497-399E8B2CC08E}</ProjectGuid>
     <RootNamespace>xdEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <UseDebugLibraries>true</UseDebugLibraries>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -52,49 +60,40 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\Common.props" />
   </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments>--p_syscmd</LocalDebuggerCommandArguments>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros" />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <BrowseInformation>true</BrowseInformation>
-      <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-    </ClCompile>
-    <Link>
-    </Link>
-    <Link>
-      <LargeAddressAware>true</LargeAddressAware>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AssemblyDebug>true</AssemblyDebug>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <BrowseInformation>true</BrowseInformation>
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-    </Link>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
       <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AssemblyDebug>true</AssemblyDebug>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>glfw3$(xdNameCA).lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,12 +103,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <BrowseInformation>false</BrowseInformation>
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,12 +123,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <BrowseInformation>false</BrowseInformation>
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -144,10 +141,10 @@
     <ClCompile Include="ConsoleCommand.cpp" />
     <ClCompile Include="ConsoleCommands.cpp" />
     <ClCompile Include="Debug\Log.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Debug\QuantMS.cpp" />
-    <ClCompile Include="Renderer\VkDemoRenderer.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
+    <ClCompile Include="Renderer\VkDemoRenderer.cpp" />
     <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="XMLDocument.cpp" />
@@ -159,8 +156,8 @@
     <ClInclude Include="ConsoleCommands.hpp" />
     <ClInclude Include="Debug\Log.hpp" />
     <ClInclude Include="Debug\QuantMS.hpp" />
-    <ClInclude Include="Renderer\VkDemoRenderer.hpp" />
     <ClInclude Include="Renderer\Shader.hpp" />
+    <ClInclude Include="Renderer\VkDemoRenderer.hpp" />
     <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="XMLDocument.hpp" />
@@ -171,23 +168,20 @@
     <None Include="..\..\resources\shaders\shader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\include\dynlib.vcxproj">
-      <Project>{0624a030-bc85-46ae-a529-a2ee1e656e2c}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\include\fmt.vcxproj">
       <Project>{f3a00ed5-79b7-43c7-8d9c-58874dc61845}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\include\glslang.vcxproj">
       <Project>{b5c56f86-756f-4211-a456-4077a7b7e8b8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\include\imgui.vcxproj">
-      <Project>{c3160892-faa8-4011-8870-0e73c808c833}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\include\SPIR-V.vcxproj">
       <Project>{fa7fc3af-9333-40d8-9138-b637f1ad8369}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\include\tinyxml2.vcxproj">
       <Project>{d1c528b6-aa02-4d29-9d61-dc08e317a70d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\xdAPI\xdAPI.vcxproj">
+      <Project>{969a8669-130b-47e9-9eb6-e0c70d2a2a6a}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

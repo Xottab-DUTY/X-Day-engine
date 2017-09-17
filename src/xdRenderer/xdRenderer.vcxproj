@@ -147,8 +147,14 @@
     <ClCompile Include="r_vulkanbase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\include\glslang.vcxproj">
+      <Project>{b5c56f86-756f-4211-a456-4077a7b7e8b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\include\SPIR-V.vcxproj">
+      <Project>{fa7fc3af-9333-40d8-9138-b637f1ad8369}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\xdEngine\xdEngine.vcxproj">
-      <Project>{c164222d-a92b-4c30-90ce-bd2927e7eb6d}</Project>
+      <Project>{cd78feca-f990-4ef5-a497-399e8b2cc08e}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
