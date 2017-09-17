@@ -11,7 +11,6 @@
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "xdEngine.hpp"
-#include "Renderer/VkDemoRenderer.hpp"
 
 void InitializeConsole()
 {
@@ -75,23 +74,6 @@ void threadedConsole()
     }
 }
 
-void Startup()
-{
-    while (!glfwWindowShouldClose(Engine.window))
-    {
-        glfwPollEvents();
-
-        while (VkDemoRender.renderPaused == true)
-        {
-            glfwWaitEvents();
-        }
-
-        VkDemoRender.UpdateUniformBuffer();
-        VkDemoRender.DrawFrame();
-    }
-    VkDemoRender.device->waitIdle();
-}
-
 int main(int argc, char* argv[])
 {
     system("chcp 65001");
@@ -123,9 +105,9 @@ int main(int argc, char* argv[])
     if (Core.FindParam(XDay::eParamDontHideSystemConsole))
         WatchConsole.detach();
 
-    VkDemoRender.Initialize();
+    Engine.InitRender();
 
-    Startup();
+    Engine.mainLoop();
 
     WatchConsole.~thread();
 

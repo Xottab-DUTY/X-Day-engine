@@ -119,3 +119,23 @@ void XDayEngine::createMainWindow()
     glfwSetCursorPosCallback(window, onCursorPosition);
     glfwSetScrollCallback(window, onMouseScroll);
 }
+
+void XDayEngine::InitRender()
+{
+    VkDemoRender.Initialize();
+}
+
+void XDayEngine::mainLoop()
+{
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
+
+        while (VkDemoRender.renderPaused == true)
+            glfwWaitEvents();
+
+        VkDemoRender.UpdateUniformBuffer();
+        VkDemoRender.DrawFrame();
+    }
+    VkDemoRender.device->waitIdle();
+}

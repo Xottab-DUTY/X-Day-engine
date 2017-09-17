@@ -24,8 +24,11 @@ public:
     bool windowMainFullscreen;
 
     void Initialize();
-
     void createMainWindow();
+
+    void InitRender();
+
+    void mainLoop();
 
     static void onWindowResize(GLFWwindow* window, int width, int height);
     static void onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods);
