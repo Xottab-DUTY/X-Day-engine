@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.8)
+
+#find_package(fmt)
+#find_package(glfw)
+#find_package(gli)
+#find_package(glm)
+#find_package(glslang)
+#find_package(tinyxml2)
+
+#add_subdirectory(fmt)
+#add_subdirectory(glfw)
+#add_subdirectory(gli)
+#add_subdirectory(glm)
+#add_subdirectory(glslang)
+#add_subdirectory(tinyxml2)
