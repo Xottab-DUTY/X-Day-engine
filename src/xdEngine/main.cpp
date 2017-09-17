@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
     ErrorIf(!glfwInit(), "GLFW not initialized.");
 
     Engine.Initialize();
-    Engine.xdCreateWindow();
+    Engine.createMainWindow();
 
     std::thread WatchConsole(threadedConsole);
     if (Core.FindParam(XDay::eParamDontHideSystemConsole))

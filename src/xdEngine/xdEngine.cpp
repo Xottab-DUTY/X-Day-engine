@@ -15,19 +15,23 @@ XDAY_API XDayEngine Engine;
 void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if(action == GLFW_PRESS)
-        switch(key)
+    {
+        switch (key)
         {
-            case GLFW_KEY_ESCAPE: ConsoleCommands->Execute(&ExitCC);
-            case GLFW_KEY_ENTER:
-            {
-                ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
-                if (ConsoleCommands->GetBool(&FullscreenCC))
-                    glfwSetWindowMonitor(Engine.window, Engine.CurrentMonitor, 0, 0, Engine.CurrentMode->width, Engine.CurrentMode->height, Engine.CurrentMode->refreshRate);
-                else
-                    glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.CurrentMode->width-256, Engine.CurrentMode->height-256, Engine.CurrentMode->refreshRate);
-            }
-            default: return;
+        case GLFW_KEY_ESCAPE:
+            ConsoleCommands->Execute(&ExitCC);
+        case GLFW_KEY_ENTER:
+        {
+            ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
+            if (ConsoleCommands->GetBool(&FullscreenCC))
+                glfwSetWindowMonitor(Engine.window, Engine.currentMonitor, 0, 0, Engine.currentMode->width, Engine.currentMode->height, Engine.currentMode->refreshRate);
+            else
+                glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.currentMode->width-256, Engine.currentMode->height-256, Engine.currentMode->refreshRate);
         }
+        default: return;
+        }
+    }
+        
 }
 
 void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
@@ -38,8 +42,7 @@ void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
         pRender->renderPaused = true;
         return;
     }
-    else
-        pRender->renderPaused = false;
+    pRender->renderPaused = false;
 
     pRender->RecreateSwapChain();
 }
@@ -81,24 +84,24 @@ void XDayEngine::onMouseEnter(GLFWwindow* window, int entered)
 void XDayEngine::Initialize()
 {
     monitors = glfwGetMonitors(&MonitorsCount);
-    CurrentMonitor = glfwGetPrimaryMonitor();
+    currentMonitor = glfwGetPrimaryMonitor();
 
-    VideoModes = glfwGetVideoModes(CurrentMonitor, &VideoModesCount);
-    CurrentMode = glfwGetVideoMode(CurrentMonitor);
+    videoModes = glfwGetVideoModes(currentMonitor, &VideoModesCount);
+    currentMode = glfwGetVideoMode(currentMonitor);
 
-    glfwWindowHint(GLFW_RED_BITS, CurrentMode->redBits);
-    glfwWindowHint(GLFW_GREEN_BITS, CurrentMode->greenBits);
-    glfwWindowHint(GLFW_BLUE_BITS, CurrentMode->blueBits);
-    glfwWindowHint(GLFW_REFRESH_RATE, CurrentMode->refreshRate);
+    glfwWindowHint(GLFW_RED_BITS, currentMode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, currentMode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, currentMode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, currentMode->refreshRate);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 }
 
-void XDayEngine::xdCreateWindow()
+void XDayEngine::createMainWindow()
 {
     if (ConsoleCommands->GetBool(&FullscreenCC))
-        window = glfwCreateWindow(CurrentMode->width, CurrentMode->height, Core.AppName.c_str(), CurrentMonitor, nullptr);
+        window = glfwCreateWindow(currentMode->width, currentMode->height, Core.AppName.c_str(), currentMonitor, nullptr);
     else
-        window = glfwCreateWindow(CurrentMode->width-256, CurrentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
+        window = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
 
     glfwSetKeyCallback(window, onKeyPress);
     glfwSetWindowSizeCallback(window, onWindowResize);

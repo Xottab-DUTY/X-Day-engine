@@ -15,17 +15,17 @@ class XDAY_API XDayEngine
 
 public:
     GLFWmonitor** monitors;
-    GLFWmonitor* CurrentMonitor;
+    GLFWmonitor* currentMonitor;
 
-    const GLFWvidmode* VideoModes;
-    const GLFWvidmode* CurrentMode;
+    const GLFWvidmode* videoModes;
+    const GLFWvidmode* currentMode;
 
     GLFWwindow* window;
     bool windowMainFullscreen;
 
     void Initialize();
 
-    void xdCreateWindow();
+    void createMainWindow();
 
     static void onWindowResize(GLFWwindow* window, int width, int height);
     static void onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -35,8 +35,8 @@ public:
     static void onMouseScroll(GLFWwindow* window, double xoffset, double yoffset);
     static void onMouseEnter(GLFWwindow* window, int entered);
 
-    int GetMonitorsCount() const { return MonitorsCount; }
-    int GetVideoModesCount() const { return VideoModesCount; }
+    int getMonitorsCount() const { return MonitorsCount; }
+    int getVideoModesCount() const { return VideoModesCount; }
 
     bool isWindowMainFullscreen() const { return windowMainFullscreen; }
     void setWindowMainFullscreen(bool fullscreen) { windowMainFullscreen = fullscreen; }

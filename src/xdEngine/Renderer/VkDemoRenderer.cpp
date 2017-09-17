@@ -489,7 +489,7 @@ vk::Extent2D VkDemoRenderer::chooseSwapExtent(const vk::SurfaceCapabilitiesKHR& 
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
         return capabilities.currentExtent;
 
-    vk::Extent2D actualExtent = { static_cast<uint32_t>(Engine.CurrentMode->width), static_cast<uint32_t>(Engine.CurrentMode->height) };
+    vk::Extent2D actualExtent = { static_cast<uint32_t>(Engine.currentMode->width), static_cast<uint32_t>(Engine.currentMode->height) };
 
     actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
     actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
