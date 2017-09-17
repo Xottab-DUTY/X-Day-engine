@@ -140,11 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="renderer.hpp" />
-    <ClInclude Include="r_vulkanbase.hpp" />
+    <ClInclude Include="r_vulkan_base.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer.cpp" />
-    <ClCompile Include="r_vulkanbase.cpp" />
+    <ClCompile Include="r_vulkan_base.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\include\glslang.vcxproj">

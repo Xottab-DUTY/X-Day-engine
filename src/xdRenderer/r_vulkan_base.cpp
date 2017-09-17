@@ -12,7 +12,7 @@
 
 #include "xdEngine/Debug/Log.hpp"
 #include "xdEngine/xdCore.hpp"
-#include "r_vulkanbase.hpp"
+#include "r_vulkan_base.hpp"
 
 VkResult vkCreateDebugReportCallbackEXT(VkInstance instance, const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
                                         const VkAllocationCallbacks* pAllocator, VkDebugReportCallbackEXT* pCallback)
@@ -37,7 +37,7 @@ namespace XDay
 {
 namespace Renderer
 {
-std::vector<const char*> VulkanBase::get_validation_layers() const
+std::vector<const char*> r_vulkan_base::get_validation_layers() const
 {
     std::vector<const char*> validation_layers =
     {
@@ -46,7 +46,7 @@ std::vector<const char*> VulkanBase::get_validation_layers() const
     return validation_layers;
 }
 
-std::vector<const char*> VulkanBase::get_device_extensions() const
+std::vector<const char*> r_vulkan_base::get_device_extensions() const
 {
     const std::vector<const char*> device_extensions =
     {
@@ -55,7 +55,7 @@ std::vector<const char*> VulkanBase::get_device_extensions() const
     return device_extensions;
 }
 
-std::vector<const char*> VulkanBase::get_required_extensions() const
+std::vector<const char*> r_vulkan_base::get_required_extensions() const
 {
     std::vector<const char*> extensions;
 
@@ -71,7 +71,7 @@ std::vector<const char*> VulkanBase::get_required_extensions() const
     return extensions;
 }
 
-bool VulkanBase::check_validation_layers_support() const
+bool r_vulkan_base::check_validation_layers_support() const
 {
     auto available_layers = vk::enumerateInstanceLayerProperties();
 
@@ -93,7 +93,7 @@ bool VulkanBase::check_validation_layers_support() const
     return true;
 }
 
-void VulkanBase::create_instance()
+void r_vulkan_base::create_instance()
 {
     if (enableValidationLayers && !check_validation_layers_support())
         Warning("Vulkan: not all validation layers supported.");

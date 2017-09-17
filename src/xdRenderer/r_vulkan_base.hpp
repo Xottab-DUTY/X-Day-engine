@@ -16,7 +16,7 @@ namespace XDay
 {
 namespace Renderer
 {
-class XDRENDERER_API VulkanBase
+class XDRENDERER_API r_vulkan_base
 {
 public:
     vk::UniqueInstance instance;

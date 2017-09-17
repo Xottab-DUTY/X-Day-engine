@@ -1,13 +1,13 @@
 #pragma once
 
 #include "xdAPI/xdAPI.hpp"
-#include "r_vulkanbase.hpp"
+#include "r_vulkan_base.hpp"
 
 namespace XDay
 {
 namespace Renderer
 {
-class Renderer : VulkanBase
+class Renderer : r_vulkan_base
 {
     
 };
