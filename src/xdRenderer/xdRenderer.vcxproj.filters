@@ -4,6 +4,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="r_vulkan_base.cpp" />
     <ClCompile Include="r_vulkan_debug_callback.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.hpp" />

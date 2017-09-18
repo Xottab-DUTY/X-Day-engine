@@ -7,12 +7,13 @@ namespace XDay
 {
 namespace Renderer
 {
-class Renderer : r_vulkan_base
+class XDRENDERER_API Renderer : r_vulkan_base
 {
     using r_base = r_vulkan_base;
 
 public:
     void initialize() override;
 };
+extern XDRENDERER_API Renderer r_impl;
 }
 }

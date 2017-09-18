@@ -168,6 +168,9 @@
     <None Include="..\..\resources\shaders\shader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\include\dynlib.vcxproj">
+      <Project>{0624a030-bc85-46ae-a529-a2ee1e656e2c}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\include\fmt.vcxproj">
       <Project>{f3a00ed5-79b7-43c7-8d9c-58874dc61845}</Project>
     </ProjectReference>

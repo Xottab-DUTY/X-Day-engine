@@ -4,6 +4,7 @@
 #include <thread>
 
 #include <GLFW/glfw3.h>
+#include "dynlib/Dynlib.hpp"
 
 #include "Common/Platform.hpp"
 #include "Debug/Log.hpp"
@@ -74,6 +75,17 @@ void threadedConsole()
     }
 }
 
+void AttachRenderer()
+{
+    const auto handle = Dynlib::open(Core.GetModuleName("xdRenderer").c_str());
+
+    const auto func = (FunctionPointer)Dynlib::load(handle, "InitializeRenderer");
+    if (func)
+        func();
+    else
+        Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName("xdRenderer"));
+}
+
 int main(int argc, char* argv[])
 {
     system("chcp 65001");
@@ -97,6 +109,8 @@ int main(int argc, char* argv[])
 
     ConsoleCommands->ExecuteConfig(Console->ConfigFile);
     ErrorIf(!glfwInit(), "GLFW not initialized.");
+
+    AttachRenderer();
 
     Engine.Initialize();
     Engine.createMainWindow();

@@ -144,6 +144,7 @@
     <ClInclude Include="r_vulkan_debug_callback.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="r_vulkan_base.cpp" />
     <ClCompile Include="r_vulkan_debug_callback.cpp" />
@@ -154,6 +155,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\include\SPIR-V.vcxproj">
       <Project>{fa7fc3af-9333-40d8-9138-b637f1ad8369}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\xdAPI\xdAPI.vcxproj">
+      <Project>{969a8669-130b-47e9-9eb6-e0c70d2a2a6a}</Project>
     </ProjectReference>
     <ProjectReference Include="..\xdEngine\xdEngine.vcxproj">
       <Project>{cd78feca-f990-4ef5-a497-399e8b2cc08e}</Project>

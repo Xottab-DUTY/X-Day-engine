@@ -6,7 +6,7 @@ namespace XDay
 {
 namespace Renderer
 {
-class Renderer;
+class XDRENDERER_API Renderer;
 }
 
 namespace Global
