@@ -12,7 +12,7 @@
 #include "r_vulkan_debug_callback.hpp"
 #include "xdEngine/Debug/Log.hpp"
 
-VkResult vkCreateDebugReportCallbackEXT(VkInstance instance,
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateDebugReportCallbackEXT(VkInstance instance,
                                         const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
                                         const VkAllocationCallbacks* pAllocator,
                                         VkDebugReportCallbackEXT* pCallback)
@@ -24,7 +24,7 @@ VkResult vkCreateDebugReportCallbackEXT(VkInstance instance,
     return VK_ERROR_EXTENSION_NOT_PRESENT;
 }
 
-void vkDestroyDebugReportCallbackEXT(VkInstance instance,
+VKAPI_ATTR void VKAPI_CALL vkDestroyDebugReportCallbackEXT(VkInstance instance,
                                      VkDebugReportCallbackEXT callback,
                                      const VkAllocationCallbacks* pAllocator)
 {

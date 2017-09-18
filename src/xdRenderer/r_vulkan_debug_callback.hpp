@@ -9,14 +9,14 @@
 #include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 
-VkResult vkCreateDebugReportCallbackEXT(VkInstance instance,
-                                        const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
-                                        const VkAllocationCallbacks* pAllocator,
-                                        VkDebugReportCallbackEXT* pCallback);
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateDebugReportCallbackEXT(VkInstance instance,
+                                                              const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,
+                                                              const VkAllocationCallbacks* pAllocator,
+                                                              VkDebugReportCallbackEXT* pCallback);
 
-void vkDestroyDebugReportCallbackEXT(VkInstance instance,
-                                     VkDebugReportCallbackEXT callback,
-                                     const VkAllocationCallbacks* pAllocator = nullptr);
+VKAPI_ATTR void VKAPI_CALL vkDestroyDebugReportCallbackEXT(VkInstance instance,
+                                                           VkDebugReportCallbackEXT callback,
+                                                           const VkAllocationCallbacks* pAllocator = nullptr);
 
 VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugReportCallback(
     vk::DebugReportFlagsEXT flags,
