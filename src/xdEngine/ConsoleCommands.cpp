@@ -76,7 +76,7 @@ namespace cc_functions
 
     void CC_Exit(const std::string& args)
     {
-        glfwSetWindowShouldClose(Engine.window, true);
+        glfwSetWindowShouldClose(Engine.windowMain, true);
     }
 
     void CC_FlushLog(const std::string& args)

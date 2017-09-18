@@ -64,11 +64,11 @@ void HelpCmdArgs()
 
 void threadedConsole()
 {
-    while (!glfwWindowShouldClose(Engine.window))
+    while (!glfwWindowShouldClose(Engine.windowMain))
     {
         std::string input;
         std::getline(std::cin, input);
-        if (Console && ConsoleCommands && !glfwWindowShouldClose(Engine.window))
+        if (Console && ConsoleCommands && !glfwWindowShouldClose(Engine.windowMain))
             ConsoleCommands->Execute(input);
         else
             break;

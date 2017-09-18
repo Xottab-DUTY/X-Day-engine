@@ -30,9 +30,9 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
         {
             ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
             if (ConsoleCommands->GetBool(&FullscreenCC))
-                glfwSetWindowMonitor(Engine.window, Engine.currentMonitor, 0, 0, Engine.currentMode->width, Engine.currentMode->height, Engine.currentMode->refreshRate);
+                glfwSetWindowMonitor(Engine.windowMain, Engine.currentMonitor, 0, 0, Engine.currentMode->width, Engine.currentMode->height, Engine.currentMode->refreshRate);
             else
-                glfwSetWindowMonitor(Engine.window, nullptr, 32, 64, Engine.currentMode->width-256, Engine.currentMode->height-256, Engine.currentMode->refreshRate);
+                glfwSetWindowMonitor(Engine.windowMain, nullptr, 32, 64, Engine.currentMode->width-256, Engine.currentMode->height-256, Engine.currentMode->refreshRate);
             break;
         }
         default:
@@ -110,16 +110,16 @@ void XDayEngine::Initialize()
 void XDayEngine::createMainWindow()
 {
     if (ConsoleCommands->GetBool(&FullscreenCC))
-        window = glfwCreateWindow(currentMode->width, currentMode->height, Core.AppName.c_str(), currentMonitor, nullptr);
+        windowMain = glfwCreateWindow(currentMode->width, currentMode->height, Core.AppName.c_str(), currentMonitor, nullptr);
     else
-        window = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
+        windowMain = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
 
-    glfwSetKeyCallback(window, onKeyPress);
-    glfwSetWindowSizeCallback(window, onWindowResize);
-    glfwSetWindowFocusCallback(window, onWindowFocus);
-    glfwSetMouseButtonCallback(window, onMouseButton);
-    glfwSetCursorPosCallback(window, onCursorPosition);
-    glfwSetScrollCallback(window, onMouseScroll);
+    glfwSetKeyCallback(windowMain, onKeyPress);
+    glfwSetWindowSizeCallback(windowMain, onWindowResize);
+    glfwSetWindowFocusCallback(windowMain, onWindowFocus);
+    glfwSetMouseButtonCallback(windowMain, onMouseButton);
+    glfwSetCursorPosCallback(windowMain, onCursorPosition);
+    glfwSetScrollCallback(windowMain, onMouseScroll);
 }
 
 void XDayEngine::InitRender()
@@ -130,7 +130,7 @@ void XDayEngine::InitRender()
 
 void XDayEngine::mainLoop()
 {
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(windowMain))
     {
         glfwPollEvents();
 

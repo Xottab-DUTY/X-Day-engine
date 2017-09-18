@@ -103,7 +103,7 @@ VkDemoRenderer::VkDemoRenderer(): result(vk::Result::eNotReady),
 
 void VkDemoRenderer::Initialize()
 {
-    glfwSetWindowUserPointer(Engine.window, this);
+    glfwSetWindowUserPointer(Engine.windowMain, this);
 
     InitializeResources();
     CreateVkInstance();
@@ -375,7 +375,7 @@ void VkDemoRenderer::CreateDebugCallback()
 void VkDemoRenderer::CreateVkSurface()
 {
     result = (vk::Result)glfwCreateWindowSurface(
-        (VkInstance&)vkInstance, Engine.window,
+        (VkInstance&)vkInstance, Engine.windowMain,
         nullptr, (VkSurfaceKHR*)&surface);
 
     assert(result == vk::Result::eSuccess);

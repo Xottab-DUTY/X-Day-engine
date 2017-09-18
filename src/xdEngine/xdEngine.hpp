@@ -20,7 +20,7 @@ public:
     const GLFWvidmode* videoModes;
     const GLFWvidmode* currentMode;
 
-    GLFWwindow* window;
+    GLFWwindow* windowMain;
     bool windowMainFullscreen;
 
     void Initialize();
