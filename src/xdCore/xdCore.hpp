@@ -11,6 +11,14 @@ using FunctionPointer = void(*)();
 
 namespace XDay
 {
+enum eEngineModules
+{
+    eEngineModule,
+    eCoreModule,
+    eAPIModule,
+    eRendererModule
+};
+
 enum eCoreParams
 {
     eParamPrefix,
@@ -89,9 +97,12 @@ public:
     std::string ReturnParam(eCoreParams param) const;
     std::string RecognizeParam(eCoreParams param) const;
 
-    static const std::string GetModuleName(std::string&& xdModule);
+    static std::string GetModuleName(eEngineModules xdModule, bool needExt = true);
 
 private:
+    static std::string GetModuleName(std::string&& xdModule, bool needExt, bool isExecutable = false);
+    static std::string GetModuleExtension(std::string&& xdModule, bool isExecutable = false);
+
     void InitializeResources();
     void CalculateBuildId();
 };

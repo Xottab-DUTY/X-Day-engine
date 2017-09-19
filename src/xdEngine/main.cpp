@@ -77,13 +77,13 @@ void threadedConsole()
 
 void AttachRenderer()
 {
-    const auto handle = Dynlib::open(Core.GetModuleName("X-Day.Renderer").c_str());
+    const auto handle = Dynlib::open(Core.GetModuleName(XDay::eRendererModule).c_str());
 
     const auto func = (FunctionPointer)Dynlib::load(handle, "InitializeRenderer");
     if (func)
         func();
     else
-        Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName("X-Day.Renderer"));
+        Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName(XDay::eRendererModule));
 }
 
 int main(int argc, char* argv[])
