@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(xdSrcDir);$(xdIncludeDir);$(xdIncludeDir)fmt;$(VULKAN_SDK)\include;(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(xdSrcDir);$(xdIncludeDir);$(xdIncludeDir)fmt;$(xdIncludeDir)glfw\include;$(VULKAN_SDK)\include;(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>

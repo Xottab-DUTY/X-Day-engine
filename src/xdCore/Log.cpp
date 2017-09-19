@@ -7,7 +7,7 @@
 
 using namespace XDay;
 
-XDAY_API Logger GlobalLog("init.log", false);
+XDCORE_API Logger GlobalLog("init.log", false);
 
 Logger::Logger(const std::string& _logfile, bool coreInitialized) : LogFile(_logfile)
 {

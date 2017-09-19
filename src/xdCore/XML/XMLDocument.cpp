@@ -3,7 +3,7 @@ namespace filesystem = std::experimental::filesystem;
 
 #include "tinyxml2/tinyxml2.h"
 
-#include "Debug/Log.hpp"
+#include "Log.hpp"
 #include "XMLDocument.hpp"
 
 using namespace XDay;

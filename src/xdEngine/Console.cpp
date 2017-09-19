@@ -1,5 +1,5 @@
 #include "xdEngine.hpp"
-#include "xdCore.hpp"
+#include "xdCore/xdCore.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"

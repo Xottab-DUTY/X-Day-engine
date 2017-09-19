@@ -19,8 +19,8 @@
 #include <tiny_obj_loader.h>
 #include <fmt/ostream.h>
 
-#include "xdEngine/Debug/Log.hpp"
-#include "xdEngine/xdCore.hpp"
+#include "xdCore/Log.hpp"
+#include "xdCore/xdCore.hpp"
 #include "xdEngine/xdEngine.hpp"
 #include "VkDemoRenderer.hpp"
 #include "Shader.hpp"

@@ -10,7 +10,7 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace XDay
 {
-class XDAY_API xdXMLDocument
+class XDCORE_API xdXMLDocument
 {
 public:
     xdXMLDocument();

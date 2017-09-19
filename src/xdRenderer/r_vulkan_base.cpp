@@ -10,8 +10,8 @@
 
 #include <GLFW/glfw3.h>
 
-#include "xdEngine/Debug/Log.hpp"
-#include "xdEngine/xdCore.hpp"
+#include "xdCore//Log.hpp"
+#include "xdCore/xdCore.hpp"
 #include "r_vulkan_base.hpp"
 #include "r_vulkan_debug_callback.hpp"
 
@@ -44,7 +44,7 @@ std::vector<const char*> r_vulkan_base::get_required_extensions() const
     std::vector<const char*> extensions;
 
     uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+    const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     for (uint32_t i = 0; i < glfwExtensionCount; ++i)
         extensions.push_back(glfwExtensions[i]);

@@ -4,11 +4,11 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Debug/Log.hpp"
-#include "xdCore.hpp"
+#include "xdCore/Log.hpp"
+#include "xdCore/xdCore.hpp"
 #include "xdEngine.hpp"
 #include "ConsoleCommand.hpp"
-#include "XMLResource.hpp"
+#include "xdCore/XML/XMLResource.hpp"
 
 using namespace XDay;
 

@@ -3,13 +3,13 @@
 #include <GLFW/glfw3.h>
 
 #include "xdEngine.hpp"
-#include "xdCore.hpp"
+#include "xdCore/xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "xdAPI/xdAPI.hpp"
 #include "xdRenderer/renderer.hpp"
 #include "Renderer/VkDemoRenderer.hpp"
-#include "Debug/Log.hpp"
+#include "xdCore/Log.hpp"
 
 using namespace XDay;
 

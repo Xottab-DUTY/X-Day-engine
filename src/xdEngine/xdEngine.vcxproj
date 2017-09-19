@@ -23,6 +23,7 @@
     <ProjectGuid>{CD78FECA-F990-4EF5-A497-399E8B2CC08E}</ProjectGuid>
     <RootNamespace>xdEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectName>X-Day</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -74,7 +75,7 @@
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -89,7 +90,7 @@
       <PreprocessorDefinitions>XDAY_EXPORTS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -107,7 +108,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -127,7 +128,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glfw\include;$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)tinyobjloader;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -140,28 +141,18 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="ConsoleCommand.cpp" />
     <ClCompile Include="ConsoleCommands.cpp" />
-    <ClCompile Include="Debug\Log.cpp" />
-    <ClCompile Include="Debug\QuantMS.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\VkDemoRenderer.cpp" />
-    <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
-    <ClCompile Include="XMLDocument.cpp" />
-    <ClCompile Include="XMLResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.hpp" />
     <ClInclude Include="ConsoleCommand.hpp" />
     <ClInclude Include="ConsoleCommands.hpp" />
-    <ClInclude Include="Debug\Log.hpp" />
-    <ClInclude Include="Debug\QuantMS.hpp" />
     <ClInclude Include="Renderer\Shader.hpp" />
     <ClInclude Include="Renderer\VkDemoRenderer.hpp" />
-    <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
-    <ClInclude Include="XMLDocument.hpp" />
-    <ClInclude Include="XMLResource.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\shaders\shader.frag" />
@@ -185,6 +176,9 @@
     </ProjectReference>
     <ProjectReference Include="..\xdAPI\xdAPI.vcxproj">
       <Project>{969a8669-130b-47e9-9eb6-e0c70d2a2a6a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\xdCore\xdCore.vcxproj">
+      <Project>{71090322-39a3-40b9-85d9-55a363670b5d}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

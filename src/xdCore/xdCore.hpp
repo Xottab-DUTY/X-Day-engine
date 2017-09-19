@@ -31,7 +31,7 @@ enum eCoreParams
     eParamModel
 };
 
-class XDAY_API xdCore
+class XDCORE_API xdCore
 {
     double buildId = 0;
     const std::string buildDate = __DATE__;
@@ -97,6 +97,6 @@ private:
 };
 }
 
-extern XDAY_API XDay::xdCore Core;
+extern XDCORE_API XDay::xdCore Core;
 
 #endif // xdCore_hpp__

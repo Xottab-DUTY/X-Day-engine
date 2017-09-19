@@ -1,6 +1,6 @@
 #pragma once
 
-#include "xdCore.hpp"
+#include "xdCore/xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "xdEngine.hpp"
 

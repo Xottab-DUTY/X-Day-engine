@@ -7,8 +7,8 @@
 #include "dynlib/Dynlib.hpp"
 
 #include "Common/Platform.hpp"
-#include "Debug/Log.hpp"
-#include "xdCore.hpp"
+#include "xdCore/Log.hpp"
+#include "xdCore/xdCore.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "xdEngine.hpp"
@@ -77,13 +77,13 @@ void threadedConsole()
 
 void AttachRenderer()
 {
-    const auto handle = Dynlib::open(Core.GetModuleName("xdRenderer").c_str());
+    const auto handle = Dynlib::open(Core.GetModuleName("X-Day.Renderer").c_str());
 
     const auto func = (FunctionPointer)Dynlib::load(handle, "InitializeRenderer");
     if (func)
         func();
     else
-        Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName("xdRenderer"));
+        Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName("X-Day.Renderer"));
 }
 
 int main(int argc, char* argv[])

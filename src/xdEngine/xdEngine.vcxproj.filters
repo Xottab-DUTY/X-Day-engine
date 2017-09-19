@@ -7,12 +7,6 @@
     <Filter Include="Console\Commands">
       <UniqueIdentifier>{28b0e815-c2df-49b4-bf71-0d3f813c3018}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Debug">
-      <UniqueIdentifier>{0ff46511-08bd-4350-9ee5-36a03d0ec6bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="XML">
-      <UniqueIdentifier>{2fb3d029-d6d8-403c-a2bf-0efe3f2af47c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{db930a8c-e7c8-4a74-92d7-e0c35d2c8e04}</UniqueIdentifier>
     </Filter>
@@ -30,20 +24,7 @@
     <ClCompile Include="ConsoleCommands.cpp">
       <Filter>Console\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\Log.cpp">
-      <Filter>Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\QuantMS.cpp">
-      <Filter>Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="XMLDocument.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
-    <ClCompile Include="XMLResource.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="xdCore.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="Renderer\Shader.cpp">
       <Filter>Renderer</Filter>
@@ -62,19 +43,6 @@
     <ClInclude Include="ConsoleCommands.hpp">
       <Filter>Console\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Debug\Log.hpp">
-      <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug\QuantMS.hpp">
-      <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLDocument.hpp">
-      <Filter>XML</Filter>
-    </ClInclude>
-    <ClInclude Include="XMLResource.hpp">
-      <Filter>XML</Filter>
-    </ClInclude>
-    <ClInclude Include="xdCore.hpp" />
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="Renderer\Shader.hpp">
       <Filter>Renderer</Filter>

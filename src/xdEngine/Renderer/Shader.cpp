@@ -5,8 +5,8 @@ namespace filesystem = std::experimental::filesystem;
 #include <ShaderLang.h>
 #include <glslang/SPIRV/GlslangToSpv.h>
 
-#include "Debug/Log.hpp"
-#include "xdEngine/xdCore.hpp"
+#include "xdCore/Log.hpp"
+#include "xdCore/xdCore.hpp"
 #include "Shader.hpp"
 
 using namespace XDay;

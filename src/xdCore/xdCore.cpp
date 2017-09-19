@@ -7,13 +7,13 @@ namespace filesystem = std::experimental::filesystem;
 #include <GLFW/glfw3.h>
 
 #include "Common/Platform.hpp"
-#include "Debug/Log.hpp"
+#include "Log.hpp"
 #include "xdCore.hpp"
-#include "XMLResource.hpp"
+#include "XML/XMLResource.hpp"
 
 using namespace XDay;
 
-XDAY_API xdCore Core;
+XDCORE_API xdCore Core;
 
 static void error_callback(int error, const char* description)
 {
@@ -180,15 +180,15 @@ const std::string xdCore::GetModuleName(std::string&& xdModule)
 {
 #ifdef DEBUG
 #ifdef XD_X64
-    return xdModule + "_Dx64";
+    return xdModule + ".Dx64";
 #else
-    return xdModule + "_Dx86";
+    return xdModule + ".Dx86";
 #endif
 #elif NDEBUG
 #ifdef XD_X64
-    return xdModule + "_Rx64";
+    return xdModule + ".Rx64";
 #else
-    return xdModule + "_Rx86";
+    return xdModule + ".Rx86";
 #endif
 #endif
 }

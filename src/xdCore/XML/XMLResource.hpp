@@ -11,7 +11,7 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace XDay
 {
-class XDAY_API xdXMLResource : public xdXMLDocument
+class XDCORE_API xdXMLResource : public xdXMLDocument
 {
     using super = xdXMLDocument;
 

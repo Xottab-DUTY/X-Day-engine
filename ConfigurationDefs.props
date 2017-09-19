@@ -13,16 +13,16 @@
   </ItemDefinitionGroup>
 
   <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <xdNameCA>_Dx64</xdNameCA>
+    <xdNameCA>.Dx64</xdNameCA>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <xdNameCA>_Dx86</xdNameCA>
+    <xdNameCA>.Dx86</xdNameCA>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <xdNameCA>_Rx64</xdNameCA>
+    <xdNameCA>.Rx64</xdNameCA>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <xdNameCA>_Rx86</xdNameCA>
+    <xdNameCA>.Rx86</xdNameCA>
   </PropertyGroup>
 
   <PropertyGroup>
