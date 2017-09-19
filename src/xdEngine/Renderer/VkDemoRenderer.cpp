@@ -335,11 +335,14 @@ bool VkDemoRenderer::CheckValidationLayersSupport() const
         bool layerFound = false;
 
         for (const auto& layerProperties : availableLayers)
-            if (layerName.compare(layerProperties.layerName))
+        {
+            if (layerName.compare(layerProperties.layerName) == 0)
             {
                 layerFound = true;
                 break;
             }
+
+        }
 
         if (!layerFound)
             return false;

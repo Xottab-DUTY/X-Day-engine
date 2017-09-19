@@ -2,8 +2,6 @@
 
 #include "xdRenderer/renderer.hpp"
 
-using namespace XDay;
-
 namespace XDay
 {
 namespace Renderer

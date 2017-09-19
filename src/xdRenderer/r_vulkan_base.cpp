@@ -64,11 +64,13 @@ bool r_vulkan_base::check_validation_layers_support() const
         bool found = false;
 
         for (const auto& layer : available_layers)
-            if (needed_layer.compare(layer.layerName))
+        {
+            if (needed_layer.compare(layer.layerName) == 0)
             {
                 found = true;
                 break;
             }
+        }
 
         if (!found)
             return false;
@@ -86,7 +88,7 @@ void r_vulkan_base::initialize()
 void r_vulkan_base::create_instance()
 {
     if (enableValidationLayers && !check_validation_layers_support())
-        Warning("Vulkan: not all validation layers supported.");
+        Error("Vulkan: not all validation layers supported.");
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion),
