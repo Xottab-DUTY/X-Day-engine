@@ -107,8 +107,6 @@ VkDemoRenderer::VkDemoRenderer(): result(vk::Result::eNotReady),
 
 void VkDemoRenderer::Initialize()
 {
-    glfwSetWindowUserPointer(Engine.windowMain, this);
-
     InitializeResources();
     CreateVkInstance();
     CreateDebugCallback();

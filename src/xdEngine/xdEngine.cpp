@@ -47,28 +47,20 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
 
 void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
 {
-    VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
-    if (width < 108 || height < 108)
-    {
-        pRender->renderPaused = true;
-        return;
-    }
-    pRender->renderPaused = false;
-
-    pRender->RecreateSwapChain();
+    
 }
 
 void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
 {
-    VkDemoRenderer* pRender = static_cast<VkDemoRenderer*>(glfwGetWindowUserPointer(window));
-
-    int currentWidth, currentHeight;
-    glfwGetWindowSize(window, &currentWidth, &currentHeight);
-
-    if (focused && !(currentWidth < 108 || currentHeight < 108))
-        pRender->renderPaused = false;
+    if (focused)
+        VkDemoRender.renderPaused = false;
     else
-        pRender->renderPaused = true;
+        VkDemoRender.renderPaused = true;
+}
+
+void XDayEngine::onWindowRefresh(GLFWwindow* window)
+{
+    VkDemoRender.RecreateSwapChain();
 }
 
 void XDayEngine::onMouseButton(GLFWwindow* window, int button, int action, int mods)
@@ -76,21 +68,20 @@ void XDayEngine::onMouseButton(GLFWwindow* window, int button, int action, int m
 
 }
 
+void XDayEngine::onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
+{
+    
+}
+
+void XDayEngine::onCursorEnter(GLFWwindow* window, int entered)
+{
+    
+}
+
 void XDayEngine::onCursorPosition(GLFWwindow* window, double xpos, double ypos)
 {
 
 }
-
-void XDayEngine::onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
-{
-
-}
-
-void XDayEngine::onMouseEnter(GLFWwindow* window, int entered)
-{
-
-}
-
 
 void XDayEngine::Initialize()
 {
@@ -114,12 +105,19 @@ void XDayEngine::createMainWindow()
     else
         windowMain = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
 
-    glfwSetKeyCallback(windowMain, onKeyPress);
-    glfwSetWindowSizeCallback(windowMain, onWindowResize);
+    glfwSetWindowSizeLimits(windowMain, 256, 256, GLFW_DONT_CARE, GLFW_DONT_CARE);
+
+    //glfwSetWindowSizeCallback(windowMain, onWindowResize);
     glfwSetWindowFocusCallback(windowMain, onWindowFocus);
-    glfwSetMouseButtonCallback(windowMain, onMouseButton);
-    glfwSetCursorPosCallback(windowMain, onCursorPosition);
-    glfwSetScrollCallback(windowMain, onMouseScroll);
+    glfwSetWindowRefreshCallback(windowMain, onWindowRefresh);
+
+    glfwSetKeyCallback(windowMain, onKeyPress);
+
+    //glfwSetMouseButtonCallback(windowMain, onMouseButton);
+    //glfwSetScrollCallback(windowMain, onMouseScroll);
+
+    //glfwSetCursorEnterCallback(windowMain, onCursorEnter);
+    //glfwSetCursorPosCallback(windowMain, onCursorPosition);
 }
 
 void XDayEngine::InitRender()
