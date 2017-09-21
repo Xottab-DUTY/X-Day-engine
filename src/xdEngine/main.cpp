@@ -62,9 +62,15 @@ void HelpCmdArgs()
         "--p_model - Задаёт путь до модели для загрузки, по умолчанию: \"model.dds\"\n");
 }
 
-void threadedConsole()
+void watch_console()
 {
-    while (!glfwWindowShouldClose(Engine.windowMain))
+#ifdef DEBUG
+    const bool allowed = true;
+#else
+    const bool allowed = Core.FindParam(XDay::eParamDontHideSystemConsole);
+#endif
+
+    while (allowed && !glfwWindowShouldClose(Engine.windowMain))
     {
         std::string input;
         std::getline(std::cin, input);
@@ -115,9 +121,7 @@ int main(int argc, char* argv[])
     Engine.Initialize();
     Engine.createMainWindow();
 
-    std::thread WatchConsole(threadedConsole);
-    if (Core.FindParam(XDay::eParamDontHideSystemConsole))
-        WatchConsole.detach();
+    std::thread WatchConsole(watch_console);
 
     Engine.InitRender();
 
