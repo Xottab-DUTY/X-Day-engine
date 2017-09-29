@@ -40,3 +40,6 @@
 [submodule "include/spdlog"]
 	path = include/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "include/ClanLib"]
+	path = include/ClanLib
+	url = https://github.com/Xottab-DUTY/ClanLib.git
