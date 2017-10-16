@@ -4,9 +4,8 @@
 //  Author: Xottab_DUTY
 //
 ////////////////////////////////
-
 #pragma once
-#include "Common/Platform.hpp" // this must be first
+
 #include <vulkan/vulkan.hpp>
 
 VKAPI_ATTR VkResult VKAPI_CALL vkCreateDebugReportCallbackEXT(VkInstance instance,

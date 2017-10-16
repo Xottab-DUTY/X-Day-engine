@@ -1,5 +1,7 @@
 // 01.01.2017 Султан Xottab_DUTY Урамаев
 // Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.
+#include "pch.hpp"
+
 #include <GLFW/glfw3.h>
 
 #include "xdEngine.hpp"

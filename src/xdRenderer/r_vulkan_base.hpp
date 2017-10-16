@@ -4,10 +4,8 @@
 //  Author: Xottab_DUTY
 //
 ////////////////////////////////
-
 #pragma once
 
-#include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 
 #include "Common/import_export_macros.hpp"

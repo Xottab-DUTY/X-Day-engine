@@ -1,7 +1,6 @@
 #pragma once
 #ifndef xdRender_hpp__
 #define xdRender_hpp__
-#include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 #include <glm/glm.hpp>
 

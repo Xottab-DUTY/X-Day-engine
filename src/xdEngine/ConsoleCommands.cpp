@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include <sstream>
 #include <fstream>
 #include <locale>

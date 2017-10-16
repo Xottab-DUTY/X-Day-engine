@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include <fstream>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;

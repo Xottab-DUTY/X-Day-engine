@@ -1,4 +1,4 @@
-
+#include "pch.hpp"
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/sinks/msvc_sink.h>
 
