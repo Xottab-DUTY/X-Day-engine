@@ -10,7 +10,6 @@
 #include "ConsoleCommands.hpp"
 #include "xdAPI/xdAPI.hpp"
 #include "xdRenderer/renderer.hpp"
-#include "Renderer/VkDemoRenderer.hpp"
 #include "xdCore/Log.hpp"
 
 using namespace XDay;
@@ -44,46 +43,29 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
         }
         }
     }
-        
 }
 
 void XDayEngine::onWindowResize(GLFWwindow* window, int width, int height)
-{
-    
-}
+{}
 
 void XDayEngine::onWindowFocus(GLFWwindow* window, int focused)
-{
-    if (focused)
-        VkDemoRender.renderPaused = false;
-    else
-        VkDemoRender.renderPaused = true;
-}
+{}
 
 void XDayEngine::onWindowRefresh(GLFWwindow* window)
-{
-    VkDemoRender.RecreateSwapChain();
-}
+{}
 
 void XDayEngine::onMouseButton(GLFWwindow* window, int button, int action, int mods)
-{
-
-}
+{}
 
 void XDayEngine::onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
-{
-    
-}
+{}
 
 void XDayEngine::onCursorEnter(GLFWwindow* window, int entered)
-{
-    
-}
+{}
 
 void XDayEngine::onCursorPosition(GLFWwindow* window, double xpos, double ypos)
-{
+{}
 
-}
 
 void XDayEngine::Initialize()
 {
@@ -125,20 +107,12 @@ void XDayEngine::createMainWindow()
 void XDayEngine::InitRender()
 {
     GEnv.Render->initialize();
-    VkDemoRender.Initialize();
 }
 
 void XDayEngine::mainLoop()
 {
     while (!glfwWindowShouldClose(windowMain))
     {
-        glfwPollEvents();
-
-        while (VkDemoRender.renderPaused == true)
-            glfwWaitEvents();
-
-        VkDemoRender.UpdateUniformBuffer();
-        VkDemoRender.DrawFrame();
+        glfwWaitEvents();
     }
-    VkDemoRender.device->waitIdle();
 }

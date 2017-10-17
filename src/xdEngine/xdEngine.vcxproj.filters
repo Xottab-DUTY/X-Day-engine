@@ -7,12 +7,6 @@
     <Filter Include="Console\Commands">
       <UniqueIdentifier>{28b0e815-c2df-49b4-bf71-0d3f813c3018}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer">
-      <UniqueIdentifier>{db930a8c-e7c8-4a74-92d7-e0c35d2c8e04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Renderer\Shaders">
-      <UniqueIdentifier>{1a1892ee-0853-475b-bf1f-9d7cdfba897f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp">
@@ -26,12 +20,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="xdEngine.cpp" />
-    <ClCompile Include="Renderer\Shader.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\VkDemoRenderer.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -45,20 +33,6 @@
       <Filter>Console\Commands</Filter>
     </ClInclude>
     <ClInclude Include="xdEngine.hpp" />
-    <ClInclude Include="Renderer\Shader.hpp">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\VkDemoRenderer.hpp">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="pch.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\resources\shaders\shader.frag">
-      <Filter>Renderer\Shaders</Filter>
-    </None>
-    <None Include="..\..\resources\shaders\shader.vert">
-      <Filter>Renderer\Shaders</Filter>
-    </None>
   </ItemGroup>
 </Project>

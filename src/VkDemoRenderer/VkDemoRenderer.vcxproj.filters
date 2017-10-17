@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{8b92f05a-d395-45e1-8bfc-c4cbef3b4fb3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\resources\shaders\shader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\resources\shaders\shader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="VkDemoRenderer.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="VkDemoEngine.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader.hpp" />
+    <ClInclude Include="VkDemoRenderer.hpp" />
+    <ClInclude Include="pch.hpp" />
+    <ClInclude Include="VkDemoEngine.hpp" />
+  </ItemGroup>
+</Project>

@@ -3,7 +3,6 @@
 #include <set>
 #include <unordered_map>
 
-#include "Common/Platform.hpp" // this must be first
 #include <vulkan/vulkan.hpp>
 
 #define GLM_FORCE_RADIANS
@@ -23,7 +22,7 @@
 
 #include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
-#include "xdEngine/xdEngine.hpp"
+#include "VkDemoEngine.hpp"
 #include "VkDemoRenderer.hpp"
 #include "Shader.hpp"
 
@@ -41,7 +40,7 @@ namespace std
 
 using namespace XDay;
 
-XDAY_API VkDemoRenderer VkDemoRender;
+VkDemoRenderer VkDemoRender;
 
 const bool enableValidationLayers = Core.isGlobalDebug();
 
@@ -382,7 +381,7 @@ void VkDemoRenderer::CreateDebugCallback()
 void VkDemoRenderer::CreateVkSurface()
 {
     result = (vk::Result)glfwCreateWindowSurface(
-        (VkInstance&)vkInstance, Engine.windowMain,
+        (VkInstance&)vkInstance, VkDemo.windowDemo,
         nullptr, (VkSurfaceKHR*)&surface);
 
     assert(result == vk::Result::eSuccess);
@@ -496,7 +495,7 @@ vk::Extent2D VkDemoRenderer::chooseSwapExtent(const vk::SurfaceCapabilitiesKHR& 
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
         return capabilities.currentExtent;
 
-    vk::Extent2D actualExtent = { static_cast<uint32_t>(Engine.currentMode->width), static_cast<uint32_t>(Engine.currentMode->height) };
+    vk::Extent2D actualExtent = { static_cast<uint32_t>(VkDemo.currentMode->width), static_cast<uint32_t>(VkDemo.currentMode->height) };
 
     actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
     actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));

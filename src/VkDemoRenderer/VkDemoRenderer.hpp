@@ -7,7 +7,7 @@
 #include "Common/import_export_macros.hpp"
 #include <ResourceLimits.h>
 
-class XDAY_API VkDemoRenderer
+class VkDemoRenderer
 {
 public:
     vk::UniqueInstance vkInstance;
@@ -180,6 +180,6 @@ private:
     uint32_t VkDemoRenderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
 };
 
-extern XDAY_API VkDemoRenderer VkDemoRender;
+extern VkDemoRenderer VkDemoRender;
 
 #endif // xdRender_hpp__

@@ -61,6 +61,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClanLib.GL", "include\ClanL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClanLib.D3D", "include\ClanLib\Projects\clanD3D.vcxproj", "{376B3278-A1BD-44D3-B37E-12CB75047BC3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VkDemoRenderer", "src\VkDemoRenderer\VkDemoRenderer.vcxproj", "{6A3523F0-057F-48D0-83F2-EF018157C9C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -269,6 +271,14 @@ Global
 		{376B3278-A1BD-44D3-B37E-12CB75047BC3}.Release|x86.ActiveCfg = Release|Win32
 		{376B3278-A1BD-44D3-B37E-12CB75047BC3}.Release|x86.Build.0 = Release|Win32
 		{376B3278-A1BD-44D3-B37E-12CB75047BC3}.Release|x86.Deploy.0 = Release|Win32
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Debug|x64.ActiveCfg = Debug|x64
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Debug|x64.Build.0 = Debug|x64
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Debug|x86.ActiveCfg = Debug|Win32
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Debug|x86.Build.0 = Debug|Win32
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Release|x64.ActiveCfg = Release|x64
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Release|x64.Build.0 = Release|x64
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Release|x86.ActiveCfg = Release|Win32
+		{6A3523F0-057F-48D0-83F2-EF018157C9C6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
