@@ -56,7 +56,8 @@ void VkDemoEngine::onWindowFocus(GLFWwindow* window, int focused)
 
 void VkDemoEngine::onWindowRefresh(GLFWwindow* window)
 {
-    VkDemoRender.RecreateSwapChain();
+    if (glfwGetWindowAttrib(window, GLFW_FOCUSED))
+        VkDemoRender.RecreateSwapChain();
 }
 
 void VkDemoEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)

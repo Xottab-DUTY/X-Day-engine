@@ -3,9 +3,9 @@
 
 #include "pch.hpp"
 
+#include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
 #include "VkDemoEngine.hpp"
-#include "xdCore/Log.hpp"
 
 int main(int argc, char* argv[])
 {

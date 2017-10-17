@@ -59,6 +59,7 @@ void AttachRenderer()
         func();
     else
         Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName(XDay::eRendererModule));
+    Dynlib::close(handle);
 }
 
 int main(int argc, char* argv[])
