@@ -63,11 +63,11 @@ void AttachRenderer()
 
 int main(int argc, char* argv[])
 {
-    system("chcp 65001");
-
     Core.InitializeArguments(argc, argv);
 
 #ifdef WINDOWS
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
     if (!Core.FindParam(XDay::eParamDontHideSystemConsole))
         FreeConsole();
 #endif
