@@ -95,7 +95,7 @@ public:
 
     bool FindParam(eCoreParams param) const;
     std::string ReturnParam(eCoreParams param) const;
-    std::string RecognizeParam(eCoreParams param) const;
+    static std::string RecognizeParam(eCoreParams param);
 
     static std::string GetModuleName(eEngineModules xdModule, bool needExt = true);
 

@@ -135,7 +135,7 @@ std::string xdCore::ReturnParam(eCoreParams param) const
     return "";
 }
 
-std::string xdCore::RecognizeParam(eCoreParams param) const
+std::string xdCore::RecognizeParam(eCoreParams param)
 {
     switch (param)
     {
