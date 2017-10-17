@@ -77,13 +77,15 @@ public:
     std::vector<std::string> Params;
     std::string ParamsString;
 
-    bool isGlobalDebug();
+    bool isGlobalDebug() const;
 
 public:
     xdCore();
     void InitializeArguments(int argc, char* argv[]);
     void Initialize(std::string&& ApplicationName = "X-Day Engine");
     void Destroy();
+
+    static void GetParamsHelp();
 
     auto GetBuildId() const { return buildId; }
     auto GetBuildDate() const { return buildDate; }

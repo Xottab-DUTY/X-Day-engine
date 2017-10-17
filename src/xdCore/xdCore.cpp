@@ -22,7 +22,7 @@ static void error_callback(int error, const char* description)
     Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
 }
 
-bool xdCore::isGlobalDebug()
+bool xdCore::isGlobalDebug() const
 {
 #ifdef DEBUG
     return true;
@@ -116,7 +116,7 @@ bool xdCore::FindParam(eCoreParams param) const
 std::string xdCore::ReturnParam(eCoreParams param) const
 {
     bool found = false;
-    auto p = RecognizeParam(param);
+    const auto p = RecognizeParam(param);
     for (auto i : Params)
     {
         if (found && i.find(RecognizeParam(eParamPrefix)) != std::string::npos)
@@ -170,6 +170,39 @@ std::string xdCore::RecognizeParam(eCoreParams param)
     default:
         throw "Create the case for the param here!";
     }
+}
+
+void xdCore::GetParamsHelp()
+{
+    Info("\nAvailable parameters:\n"\
+         "--p_name - Specifies AppName, default is \"X-Day Engine\" \n"\
+         "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"\
+         "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
+         "--p_respath - Specifies path of resources folder, default is \"*WorkingDirectory*/resources\"\n"\
+         "--p_mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
+         "--p_nolog - Completely disables engine log. May increase performance\n"\
+         "--p_nologflush - Disables log flushing. Useless if -nolog defined\n"\
+         "--p_debug - Enables debug mode\n"
+         "--p_syscmd - Disables system console hiding\n"
+         "--p_shrec - Compile shaders even if they already compiled\n"\
+         "--p_shpre - Outputs preprocessed shaders to the shader sources dir. Works only in debug mode\n"\
+         "--p_texture - Specifies path to texture file to load, default is \"texture.dds\"\n"\
+         "--p_model - Specifies path to model file to model, default is \"model.dds\"\n");
+
+    Info("\nДоступные параметры:\n"\
+         "--p_name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
+         "--p_game - Задаёт игровую библиотеку для подключения, по умолчанию: \"xdGame\";\n"
+         "--p_datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\
+         "--p_respath - Задаёт путь до папки с ресурсами, по умолчанию: \"*WorkingDirectory*/resources\"\n"\
+         "--p_mainconfig - Задаёт путь и имя главного файла настроек (путь/имя.расширение), по умолчанию: \"*DataPath*/main.config\" \n"\
+         "--p_nolog - Полностью выключает лог движка. Может повысить производительность\n"\
+         "--p_nologflush - Выключает сброс лога в файл. Не имеет смысла если задан -nolog\n"\
+         "--p_debug - Включает режим отладки\n"
+         "--p_syscmd - Отключает скрытие системной консоли\n"
+         "--p_shrec - Сборка шейдеров даже если они уже собраны\n"\
+         "--p_shpre - Сохраняет обработанные шейдеры в папку исходников шейдеров. Работает только в режиме отладки\n"\
+         "--p_texture - Задаёт путь до текстуры для загрузки, по умолчанию: \"texture.dds\"\n"\
+         "--p_model - Задаёт путь до модели для загрузки, по умолчанию: \"model.dds\"\n");
 }
 
 void xdCore::CreateDirIfNotExist(const filesystem::path& p) const
