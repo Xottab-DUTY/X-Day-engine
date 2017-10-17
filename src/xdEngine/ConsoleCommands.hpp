@@ -29,7 +29,6 @@ namespace cc_functions
 {
     void CC_Exit(const std::string& args);
     void CC_Help(const std::string& args);
-    void CC_SystemCommand(const std::string& args);
 
     void CC_ConfigLoad(const std::string& args);
     void CC_ConfigSave(const std::string& args);
@@ -40,7 +39,6 @@ namespace cc_functions
 static XDay::CC_FunctionCall ExitCC("exit", cc_functions::CC_Exit, true);
 static XDay::CC_FunctionCall QuitCC("quit", cc_functions::CC_Exit, true);
 static XDay::CC_FunctionCall HelpCC("help", cc_functions::CC_Help, true);
-static XDay::CC_FunctionCall SystemCommandCC("system", cc_functions::CC_SystemCommand, false, Core.isGlobalDebug());
 
 static XDay::CC_FunctionCall FlushLogCC("flush", cc_functions::CC_FlushLog, true);
 

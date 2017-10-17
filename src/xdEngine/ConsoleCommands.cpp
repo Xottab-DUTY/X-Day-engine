@@ -85,11 +85,6 @@ namespace cc_functions
     {
         FlushLog();
     }
-
-    void CC_SystemCommand(const std::string& args)
-    {
-        system(args.c_str());
-    }
 }
 
 void CC_FCallTest(const std::string& args)
@@ -134,7 +129,6 @@ void RegisterConsoleCommands()
     CMDA(ExitCC);
     CMDA(QuitCC);
     CMDA(HelpCC);
-    CMDA(SystemCommandCC);
 
     CMDA(FlushLogCC);
 
