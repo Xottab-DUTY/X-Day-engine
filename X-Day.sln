@@ -62,6 +62,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClanLib.D3D", "include\ClanLib\Projects\clanD3D.vcxproj", "{376B3278-A1BD-44D3-B37E-12CB75047BC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VkDemoRenderer", "src\VkDemoRenderer\VkDemoRenderer.vcxproj", "{6A3523F0-057F-48D0-83F2-EF018157C9C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{75E90AF7-38C1-4ACA-9193-D9C47085601C} = {75E90AF7-38C1-4ACA-9193-D9C47085601C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
