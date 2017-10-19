@@ -6,8 +6,7 @@
 
 #include "xdEngine.hpp"
 #include "xdCore/xdCore.hpp"
-#include "ConsoleCommand.hpp"
-#include "ConsoleCommands.hpp"
+#include "Console/Console.hpp"
 #include "xdAPI/xdAPI.hpp"
 #include "xdRenderer/renderer.hpp"
 #include "xdCore/Log.hpp"
@@ -24,13 +23,13 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
         {
         case GLFW_KEY_ESCAPE:
         {
-            ConsoleCommands->Execute(&ExitCC);
+            Console.Execute(&Command::QuitCC);
             break;
         }
         case GLFW_KEY_ENTER:
         {
-            ConsoleCommands->ExecuteBool(&FullscreenCC, !ConsoleCommands->GetBool(&FullscreenCC));
-            if (ConsoleCommands->GetBool(&FullscreenCC))
+            Console.ExecuteBool(&Command::FullscreenCC, !Console.GetBool(&Command::FullscreenCC));
+            if (Console.GetBool(&Command::FullscreenCC))
                 glfwSetWindowMonitor(Engine.windowMain, Engine.currentMonitor, 0, 0, Engine.currentMode->width, Engine.currentMode->height, Engine.currentMode->refreshRate);
             else
                 glfwSetWindowMonitor(Engine.windowMain, nullptr, 32, 64, Engine.currentMode->width-256, Engine.currentMode->height-256, Engine.currentMode->refreshRate);
@@ -66,7 +65,6 @@ void XDayEngine::onCursorEnter(GLFWwindow* window, int entered)
 void XDayEngine::onCursorPosition(GLFWwindow* window, double xpos, double ypos)
 {}
 
-
 void XDayEngine::Initialize()
 {
     monitors = glfwGetMonitors(&MonitorsCount);
@@ -84,7 +82,7 @@ void XDayEngine::Initialize()
 
 void XDayEngine::createMainWindow()
 {
-    if (ConsoleCommands->GetBool(&FullscreenCC))
+    if (Console.GetBool(&Command::FullscreenCC))
         windowMain = glfwCreateWindow(currentMode->width, currentMode->height, Core.AppName.c_str(), currentMonitor, nullptr);
     else
         windowMain = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);

@@ -1,38 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Console">
-      <UniqueIdentifier>{f08a9e8f-73a8-4d92-b09b-03ecf3ee055a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Console\Commands">
-      <UniqueIdentifier>{28b0e815-c2df-49b4-bf71-0d3f813c3018}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Console.cpp">
-      <Filter>Console</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleCommand.cpp">
-      <Filter>Console\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleCommands.cpp">
-      <Filter>Console\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="xdEngine.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Console\ConsoleCommand.cpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\ConsoleCommandBool.cpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\ConsoleCommandCall.cpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\ConsoleCommandString.cpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\ConsoleCommandValue.cpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\Console.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\ConsoleCommands.cpp">
+      <Filter>Console\Command</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Console.hpp">
-      <Filter>Console</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleCommand.hpp">
-      <Filter>Console\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleCommands.hpp">
-      <Filter>Console\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="xdEngine.hpp" />
     <ClInclude Include="pch.hpp" />
+    <ClInclude Include="Console\ConsoleCommand.hpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\ConsoleCommandBool.hpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\ConsoleCommandCall.hpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\ConsoleCommandString.hpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\ConsoleCommandValue.hpp">
+      <Filter>Console\Command\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\Console.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\ConsoleCommands.hpp">
+      <Filter>Console\Command</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Console">
+      <UniqueIdentifier>{ad9e0ed9-e857-4daa-a790-f3d574bc5f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console\Command">
+      <UniqueIdentifier>{67b7b07d-e66f-4075-8ab8-03a1578f513f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console\Command\Types">
+      <UniqueIdentifier>{8c3d31d3-67bf-4700-bafd-ffd00272cd9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

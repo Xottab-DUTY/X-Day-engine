@@ -11,25 +11,8 @@
 #include "Common/Platform.hpp"
 #include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
-#include "ConsoleCommand.hpp"
-#include "ConsoleCommands.hpp"
+#include "Console/Console.hpp"
 #include "xdEngine.hpp"
-
-void InitializeConsole()
-{
-    ConsoleCommands = new XDay::CC_Container;
-    Console = new XDay::xdConsole;
-    Console->Initialize();
-}
-
-void destroyConsole()
-{
-    ConsoleCommands->Execute(&ConfigSaveCC);
-    ConsoleCommands->Execute(&FlushLogCC);
-    ConsoleCommands->Destroy();
-    delete ConsoleCommands;
-    delete Console;
-}
 
 void watch_console()
 {
@@ -43,8 +26,8 @@ void watch_console()
     {
         std::string input;
         std::getline(std::cin, input);
-        if (Console && ConsoleCommands && !glfwWindowShouldClose(Engine.windowMain))
-            ConsoleCommands->Execute(input);
+        if (!glfwWindowShouldClose(Engine.windowMain))
+            Console.Execute(input);
         else
             break;
     }
@@ -74,7 +57,7 @@ int main(int argc, char* argv[])
 #endif
 
     Core.Initialize();
-    InitializeConsole();
+    Console.Initialize();
 
     DebugMsg(Core.GetGLFWVersionString());
     Info(Core.GetBuildString());
@@ -83,7 +66,7 @@ int main(int argc, char* argv[])
     Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
     Core.GetParamsHelp();
 
-    ConsoleCommands->ExecuteConfig(Console->ConfigFile);
+    Console.ExecuteConfig();
     ErrorIf(!glfwInit(), "GLFW not initialized.");
 
     AttachRenderer();
@@ -100,8 +83,6 @@ int main(int argc, char* argv[])
     WatchConsole.~thread();
 
     glfwTerminate();
-
-    destroyConsole();
 
     return 0;
 }
