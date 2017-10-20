@@ -1,6 +1,4 @@
 #pragma once
-#ifndef ConsoleCoreCommands_hpp__
-#define ConsoleCoreCommands_hpp__
 
 #include "Common/import_export_macros.hpp"
 
@@ -38,5 +36,3 @@ static Bool FullscreenCC("fullscreen", "Switch fullscreen", *&Engine.windowMainF
 XDAY_API void RegisterConsoleCommands();
 } // namespace Command
 } // namespace XDay
-
-#endif // ConsoleCoreCommands_hpp__

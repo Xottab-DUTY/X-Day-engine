@@ -1,6 +1,5 @@
 #pragma once
-#ifndef XMLDocument_hpp__
-#define XMLDocument_hpp__
+
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
@@ -32,4 +31,3 @@ protected:
     tinyxml2::XMLDocument xml_document;
 };
 }
-#endif // XMLDocument_hpp__

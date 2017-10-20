@@ -1,6 +1,4 @@
 #pragma once
-#ifndef Log_hpp__
-#define Log_hpp__
 
 #define SPDLOG_WCHAR_TO_UTF8_SUPPORT
 #include <spdlog/spdlog.h>
@@ -124,5 +122,3 @@ template <typename... Args>
 void CriticalIf(bool flag, std::string critical, const Args&... args) { LogIf(flag, critical, spdlog::level::critical, std::forward<Args>((Args)args)...); }
 
 inline void FlushLog() { GlobalLog.FlushLog(); }
-
-#endif // Log_hpp__

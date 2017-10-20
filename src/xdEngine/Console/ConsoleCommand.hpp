@@ -1,6 +1,4 @@
 #pragma once
-#ifndef ConsoleCommand_hpp__
-#define ConsoleCommand_hpp__
 
 #include "Common/import_export_macros.hpp"
 
@@ -41,5 +39,3 @@ public:
 };
 } // namespace Command
 } // namespace XDay
-
-#endif // ConsoleCommand_h__

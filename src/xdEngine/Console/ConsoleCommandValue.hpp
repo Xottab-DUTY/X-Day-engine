@@ -1,6 +1,4 @@
 #pragma once
-#ifndef ConsoleCommandValue_hpp__
-#define ConsoleCommandValue_hpp__
 
 #include <string>
 
@@ -88,5 +86,3 @@ protected:
 };
 } // namespace Command
 } // namespace XDay
-
-#endif // ConsoleCommandValue_h__

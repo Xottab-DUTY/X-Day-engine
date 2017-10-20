@@ -1,6 +1,4 @@
 #pragma once
-#ifndef Console_hpp__
-#define Console_hpp__
 
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
@@ -52,4 +50,3 @@ public:
 } // namespace XDay
 
 extern XDAY_API XDay::console Console;
-#endif // Console_hpp__

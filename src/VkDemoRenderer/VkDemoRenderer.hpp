@@ -1,6 +1,4 @@
 #pragma once
-#ifndef xdRender_hpp__
-#define xdRender_hpp__
 #include <vulkan/vulkan.hpp>
 #include <glm/glm.hpp>
 
@@ -181,5 +179,3 @@ private:
 };
 
 extern VkDemoRenderer VkDemoRender;
-
-#endif // xdRender_hpp__

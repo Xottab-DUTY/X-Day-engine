@@ -1,6 +1,5 @@
 #pragma once
-#ifndef xdCore_hpp__
-#define xdCore_hpp__
+
 #include <string>
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
@@ -111,5 +110,3 @@ private:
 }
 
 extern XDCORE_API XDay::xdCore Core;
-
-#endif // xdCore_hpp__

@@ -1,7 +1,5 @@
 // thanks to hoggy on http://www.cyberforum.ru/cpp-beginners/thread1533454.html
 #pragma once
-#ifndef QuantMS_hpp__
-#define QuantMS_hpp__
 
 #include <cstdint>
 
@@ -19,5 +17,3 @@ QuantMS_Timer = QuantMS();
 Console->Log(fmt::format("Time elapsed {}", QuantMS_Timer)); // Don't use this when Console is not initialized
 */
 MicroSeconds QuantMS();
-
-#endif // QuantMS_h__

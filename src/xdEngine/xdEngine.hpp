@@ -1,6 +1,4 @@
 #pragma once
-#ifndef xdEngine_hpp__
-#define xdEngine_hpp__
 
 #include <GLFW/glfw3.h>
 
@@ -51,5 +49,3 @@ public:
 }
 
 extern XDAY_API XDay::XDayEngine Engine;
-
-#endif // xdEngine_hpp__

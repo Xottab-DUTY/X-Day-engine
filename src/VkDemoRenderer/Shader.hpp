@@ -1,7 +1,5 @@
 #pragma once
-#ifndef Shader_hpp__
-#define Shader_hpp__
-#include "Common/Platform.hpp" // this must be first
+
 #include <vulkan/vulkan.hpp>
 #include <ShaderLang.h>
 
@@ -49,5 +47,3 @@ private:
     vk::ShaderStageFlagBits GetVkShaderStageFlagBits() const;
 };
 }
-
-#endif // Shader_hpp__

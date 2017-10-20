@@ -1,6 +1,5 @@
 #pragma once
-#ifndef XMLResource_hpp__
-#define XMLResource_hpp__
+
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
@@ -24,4 +23,3 @@ public:
     void ParseResources() const;
 };
 }
-#endif // XMLResource_hpp__
