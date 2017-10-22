@@ -11,7 +11,6 @@
     <ClCompile Include="XML\XMLResource.cpp">
       <Filter>XML</Filter>
     </ClCompile>
-    <ClCompile Include="QuantMS.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,7 +24,6 @@
     <ClInclude Include="XML\XMLResource.hpp">
       <Filter>XML</Filter>
     </ClInclude>
-    <ClInclude Include="QuantMS.hpp" />
     <ClInclude Include="pch.hpp" />
   </ItemGroup>
   <ItemGroup>
