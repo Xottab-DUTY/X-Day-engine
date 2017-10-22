@@ -21,14 +21,13 @@ Logger::Logger(const std::string& _logfile, bool coreInitialized) : LogFile(_log
         nologflush = true;
 
     std::vector<spdlog::sink_ptr> sinks;
-    sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
+    sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 
     if (!nologflush && coreInitialized)
-        sinks.push_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(Core.LogsPath.string() + LogFile, true));
+        sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(Core.LogsPath.string() + LogFile, true));
 
-#if defined(DEBUG) && defined(_MSC_VER)
-    sinks.push_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
-#endif
+    if (Core.isGlobalDebug())
+        sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 
     spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
     spdlogger->set_pattern("[%T] [%l] %v");
