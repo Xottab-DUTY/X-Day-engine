@@ -30,29 +30,29 @@ public:
         if (typeid(value) == typeid(int) /*|| typeid(value) == typeid(unsigned int)*/)
             Assign(stoi(args));
 
-        if (typeid(value) == typeid(long))
+        else if (typeid(value) == typeid(long))
             Assign(stol(args));
 
-        if (typeid(value) == typeid(unsigned long))
+        else if (typeid(value) == typeid(unsigned long))
             Assign(stoul(args));
 
-        if (typeid(value) == typeid(long long))
+        else if (typeid(value) == typeid(long long))
             Assign(stoll(args));
 
-        if (typeid(value) == typeid(unsigned long long))
+        else if (typeid(value) == typeid(unsigned long long))
             Assign(stoull(args));
 
-        if (typeid(value) == typeid(float))
+        else if (typeid(value) == typeid(float))
             Assign(stof(args));
 
-        if (typeid(value) == typeid(double))
+        else if (typeid(value) == typeid(double))
             Assign(stod(args));
 
-        if (typeid(value) == typeid(long double))
+        else if (typeid(value) == typeid(long double))
             Assign(stold(args));
 
         else
-            throw "";
+            InvalidSyntax(args);
     }
 
     std::string Info() const override
@@ -71,7 +71,7 @@ public:
     }
 
 private:
-    void Assign(T _value)
+    void Assign(const T& _value)
     {
         if (_value < min || _value > max)
             InvalidSyntax(std::to_string(_value));
