@@ -16,11 +16,7 @@
 
 void watch_console()
 {
-#ifdef DEBUG
-    constexpr bool allowed = true;
-#else
     const bool allowed = Core.FindParam(XDay::eParamDontHideSystemConsole);
-#endif
 
     while (allowed && !glfwWindowShouldClose(Engine.windowMain))
     {
