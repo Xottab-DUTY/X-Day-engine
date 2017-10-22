@@ -13,7 +13,7 @@ namespace XDay
 namespace Command
 {
 template <typename T>
-class XDAY_API Value : public command
+class XDENGINE_API Value : public command
 {
 public:
     Value(std::string _name, std::string _description, T& _value, T const _min, T const _max,

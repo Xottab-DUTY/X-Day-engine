@@ -10,7 +10,7 @@ namespace XDay
 {
 namespace Command
 {
-class XDAY_API String : public command
+class XDENGINE_API String : public command
 {
 public:
     String(std::string _name, std::string _description, std::string _value, size_t _size = 0, bool _save_allowed = true, bool _enabled = true);

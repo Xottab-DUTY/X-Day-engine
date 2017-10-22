@@ -8,7 +8,7 @@
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 
-XDAY_API XDay::console Console;
+XDENGINE_API XDay::console Console;
 
 namespace XDay
 {

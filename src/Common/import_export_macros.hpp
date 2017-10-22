@@ -9,9 +9,9 @@
 #endif
 
 #ifdef XDAY_EXPORTS
-#define XDAY_API XD_EXPORT
+#define XDENGINE_API XD_EXPORT
 #else
-#define XDAY_API XD_IMPORT
+#define XDENGINE_API XD_IMPORT
 #endif
 
 #ifdef XDCORE_EXPORTS

@@ -10,7 +10,7 @@ namespace XDay
 {
 namespace Command
 {
-class XDAY_API Bool : public command
+class XDENGINE_API Bool : public command
 {
 public:
     Bool(std::string _name, std::string _description, bool& _value, bool _save_allowed = true, bool _enabled = true);

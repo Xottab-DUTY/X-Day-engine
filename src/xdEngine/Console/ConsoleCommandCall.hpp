@@ -10,7 +10,7 @@ namespace XDay
 {
 namespace Command
 {
-class XDAY_API Call : public command
+class XDENGINE_API Call : public command
 {
 public:
     Call(std::string _name, std::string _description, void(*_function)(const std::string&), bool _AllowEmptyArgs = false, bool _enabled = true);

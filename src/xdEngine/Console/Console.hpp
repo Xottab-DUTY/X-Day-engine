@@ -10,7 +10,7 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace XDay
 {
-class XDAY_API console
+class XDENGINE_API console
 {
     std::vector<Command::command*> commands;
 
@@ -49,4 +49,4 @@ public:
 };
 } // namespace XDay
 
-extern XDAY_API XDay::console Console;
+extern XDENGINE_API XDay::console Console;

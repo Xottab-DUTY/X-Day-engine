@@ -13,7 +13,7 @@
 
 using namespace XDay;
 
-XDAY_API XDayEngine Engine;
+XDENGINE_API XDayEngine Engine;
 
 void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)
 {

@@ -2,7 +2,7 @@
 
 #include "Common/import_export_macros.hpp"
 
-#include "xdEngine.hpp"
+#include "xdEngine/xdEngine.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommandBool.hpp"
 #include "ConsoleCommandCall.hpp"
@@ -14,11 +14,11 @@ namespace Command
 {
 namespace Functions
 {
-void quit();
-void help(const std::string& args);
-void config_save(const std::string& args);
-void config_load(const std::string& args);
-void flush_log();
+XDENGINE_API void quit();
+XDENGINE_API void help(const std::string& args);
+XDENGINE_API void config_save(const std::string& args);
+XDENGINE_API void config_load(const std::string& args);
+XDENGINE_API void flush_log();
 } // namespace Functions
 
 constexpr const char* no_description = "no description";
@@ -33,6 +33,6 @@ static Call ConfigSaveCC("config_save", "Save the config", Functions::config_sav
 static Call ConfigLoadCC("config_load", "Load the config", Functions::config_load, true);
 static Bool FullscreenCC("fullscreen", "Switch fullscreen", *&Engine.windowMainFullscreen);
 
-XDAY_API void RegisterConsoleCommands();
+XDENGINE_API void RegisterConsoleCommands();
 } // namespace Command
 } // namespace XDay

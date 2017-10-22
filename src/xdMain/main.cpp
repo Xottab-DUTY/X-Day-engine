@@ -11,13 +11,13 @@
 #include "Common/Platform.hpp"
 #include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
-#include "Console/Console.hpp"
-#include "xdEngine.hpp"
+#include "xdEngine/Console/Console.hpp"
+#include "xdEngine/xdEngine.hpp"
 
 void watch_console()
 {
 #ifdef DEBUG
-    const bool allowed = true;
+    constexpr bool allowed = true;
 #else
     const bool allowed = Core.FindParam(XDay::eParamDontHideSystemConsole);
 #endif

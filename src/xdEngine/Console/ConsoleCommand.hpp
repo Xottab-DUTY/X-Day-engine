@@ -6,7 +6,7 @@ namespace XDay
 {
 namespace Command
 {
-class XDAY_API command
+class XDENGINE_API command
 {
 protected:
     std::string name;

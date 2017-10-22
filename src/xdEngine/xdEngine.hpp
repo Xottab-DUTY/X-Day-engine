@@ -6,7 +6,7 @@
 
 namespace XDay
 {
-class XDAY_API XDayEngine
+class XDENGINE_API XDayEngine
 {
     int MonitorsCount;
     int VideoModesCount;
@@ -48,4 +48,4 @@ public:
 };
 }
 
-extern XDAY_API XDay::XDayEngine Engine;
+extern XDENGINE_API XDay::XDayEngine Engine;

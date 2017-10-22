@@ -106,7 +106,7 @@ Value<int> TestIntCC("test_int", test_description, tint, 0, 10);
 Value<float> TestFloatCC("test_float", test_description, fint, 0, 10);
 Value<double> TestDoubleCC("test_double", test_description, dint, 0, 10);
 
-XDAY_API void RegisterConsoleCommands()
+XDENGINE_API void RegisterConsoleCommands()
 {
     CMDA(QuitCC);
     CMDA(ExitCC);
