@@ -6,9 +6,9 @@ namespace XDay
 {
 namespace Renderer
 {
-void Renderer::initialize()
+void Renderer::Initialize()
 {
-    r_base::initialize();
+    r_base::Initialize();
 }
 XDRENDERER_API Renderer r_impl;
 }

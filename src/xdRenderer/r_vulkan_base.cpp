@@ -6,40 +6,45 @@
 ////////////////////////////////
 #include "pch.hpp"
 
-#include <vulkan/vulkan.hpp>
+#include <set>
 
+#include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 
 #include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
+#include "xdEngine/xdEngine.hpp"
 #include "r_vulkan_base.hpp"
 #include "r_vulkan_debug_callback.hpp"
 
 bool enableValidationLayers = false;
+bool validationLayersAvailable = true;
 
 namespace XDay
 {
 namespace Renderer
 {
-std::vector<const char*> r_vulkan_base::get_validation_layers() const
+const std::vector<const char*> validationLayers =
 {
-    std::vector<const char*> validation_layers =
-    {
-        "VK_LAYER_LUNARG_standard_validation"
-    };
-    return validation_layers;
+    "VK_LAYER_LUNARG_standard_validation"
+};
+
+const std::vector<const char*> deviceExtensions =
+{
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
+std::vector<const char*> r_vulkan_base::getValidationLayers()
+{
+    return validationLayers;
 }
 
-std::vector<const char*> r_vulkan_base::get_device_extensions() const
+std::vector<const char*> r_vulkan_base::getDeviceExtensions()
 {
-    const std::vector<const char*> device_extensions =
-    {
-        VK_KHR_SWAPCHAIN_EXTENSION_NAME
-    };
-    return device_extensions;
+    return deviceExtensions;
 }
 
-std::vector<const char*> r_vulkan_base::get_required_extensions() const
+std::vector<const char*> r_vulkan_base::getRequiredExtensions()
 {
     std::vector<const char*> extensions;
 
@@ -47,25 +52,25 @@ std::vector<const char*> r_vulkan_base::get_required_extensions() const
     const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     for (uint32_t i = 0; i < glfwExtensionCount; ++i)
-        extensions.push_back(glfwExtensions[i]);
+        extensions.emplace_back(glfwExtensions[i]);
 
     if (enableValidationLayers)
-        extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+        extensions.emplace_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
 
     return extensions;
 }
 
-bool r_vulkan_base::check_validation_layers_support() const
+bool r_vulkan_base::checkValidationLayersSupport() const
 {
-    auto available_layers = vk::enumerateInstanceLayerProperties();
+    auto availableLayers = vk::enumerateInstanceLayerProperties();
 
-    for (std::string needed_layer : get_validation_layers())
+    for (std::string neededLayer : validationLayers)
     {
         bool found = false;
 
-        for (const auto& layer : available_layers)
+        for (const auto& layer : availableLayers)
         {
-            if (needed_layer.compare(layer.layerName) == 0)
+            if (neededLayer.compare(layer.layerName) == 0)
             {
                 found = true;
                 break;
@@ -79,50 +84,111 @@ bool r_vulkan_base::check_validation_layers_support() const
     return true;
 }
 
-void r_vulkan_base::initialize()
+void r_vulkan_base::Initialize()
 {
     enableValidationLayers = Core.isGlobalDebug();
-    create_instance();
-    create_debug_callback();
+    createInstance();
+    createDebugCallback();
 }
 
-void r_vulkan_base::create_instance()
+void r_vulkan_base::createInstance()
 {
-    if (enableValidationLayers && !check_validation_layers_support())
+    if (enableValidationLayers && !checkValidationLayersSupport())
+    {
         Error("Vulkan: not all validation layers supported.");
+        validationLayersAvailable = false;
+    }
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion),
                                 VK_API_VERSION_1_0);
 
-    auto extensions = get_required_extensions();
+    auto extensions = getRequiredExtensions();
 
     vk::InstanceCreateInfo i({}, &appInfo, 0, nullptr,
                              static_cast<uint32_t>(extensions.size()),
                              extensions.data());
 
-    if (enableValidationLayers)
+    if (enableValidationLayers && validationLayersAvailable)
     {
-        i.setEnabledLayerCount(static_cast<uint32_t>(get_validation_layers().size()));
-        i.setPpEnabledLayerNames(get_validation_layers().data());
+        i.setEnabledLayerCount(static_cast<uint32_t>(validationLayers.size()));
+        i.setPpEnabledLayerNames(validationLayers.data());
     }
 
-    instance = vk::createInstanceUnique(i);
+    instance = createInstanceUnique(i);
     assert(instance);
 }
 
-void r_vulkan_base::create_debug_callback()
+void r_vulkan_base::createDebugCallback()
 {
-    if (!enableValidationLayers) return;
+    if (!enableValidationLayers || !validationLayersAvailable) return;
 
     const vk::DebugReportCallbackCreateInfoEXT callbackInfo(
-    { vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning },
+        {vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning},
         PFN_vkDebugReportCallbackEXT(vkDebugReportCallback));
 
     callback = instance->createDebugReportCallbackEXTUnique(callbackInfo);
     assert(callback);
 }
-}
+
+void r_vulkan_base::createSurface()
+{
+    auto result = static_cast<vk::Result>(glfwCreateWindowSurface(
+        reinterpret_cast<VkInstance&>(instance), Engine.windowMain,
+        nullptr, reinterpret_cast<VkSurfaceKHR*>(&surface)));
+
+    assert(result == vk::Result::eSuccess);
 }
 
+void r_vulkan_base::getPhysicalDevice()
+{
+    std::vector<vk::PhysicalDevice> physicalDevices = instance->enumeratePhysicalDevices();
+    for (const auto& device : physicalDevices)
+        if (isPhysicalDeviceSuitable(device, surface, deviceExtensions))
+        {
+            physicalDevice = device;
+            break;
+        }
 
+    assert(physicalDevice);
+}
+
+void r_vulkan_base::createDevice()
+{
+    const auto indices = findQueueFamilies(physicalDevice, surface);
+
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
+    std::set<int> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
+
+    float queue_priority = 1.0f;
+    for (int queueFamily : uniqueQueueFamilies)
+    {
+        const vk::DeviceQueueCreateInfo queueCreateInfo({}, queueFamily, 1, &queue_priority);
+        queueCreateInfos.emplace_back(queueCreateInfo);
+    }
+
+    vk::PhysicalDeviceFeatures deviceFeatures;
+    deviceFeatures.setSamplerAnisotropy(VK_TRUE);
+
+    vk::DeviceCreateInfo i{
+        {},
+        static_cast<uint32_t>(queueCreateInfos.size()), queueCreateInfos.data(),
+        0, nullptr,
+        static_cast<uint32_t>(deviceExtensions.size()), deviceExtensions.data(),
+        &deviceFeatures
+    };
+
+    if (enableValidationLayers && validationLayersAvailable)
+    {
+        i.setEnabledLayerCount(static_cast<uint32_t>(validationLayers.size()));
+        i.setPpEnabledLayerNames(validationLayers.data());
+    }
+
+    device = physicalDevice.createDeviceUnique(i);
+    assert(device);
+
+    //device->getQueue(indices.graphicsFamily, 0, &graphicsQueue);
+    //device->getQueue(indices.presentFamily, 0, &presentQueue);
+}
+} // namespace Renderer
+} // namespace XDay

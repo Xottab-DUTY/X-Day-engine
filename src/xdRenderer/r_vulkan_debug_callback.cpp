@@ -34,25 +34,25 @@ VKAPI_ATTR void VKAPI_CALL vkDestroyDebugReportCallbackEXT(VkInstance instance,
 }
 
 VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugReportCallback(vk::DebugReportFlagsEXT flags,
-                                            vk::DebugReportObjectTypeEXT objType,
-                                            uint64_t obj,
-                                            size_t location,
-                                            int32_t code,
-                                            const char* layerPrefix,
-                                            const char* msg,
-                                            void* userData)
+                                                       vk::DebugReportObjectTypeEXT objType,
+                                                       uint64_t obj,
+                                                       size_t location,
+                                                       int32_t code,
+                                                       const char* layerPrefix,
+                                                       const char* msg,
+                                                       void* userData)
 {
-    Warning("\nValidation layer reports: \n" \
-            "Flags: not working right now \n" \
-            "Object type: {} \n" \
-            "Object: {} \n" \
-            "Location: {} \n" \
-            "Code: {} \n" \
-            "Layer prefix: {} \n" \
-            "Message: {} \n" \
+    Warning("\nValidation layer reports: \n"
+            "Flags: not working right now \n"
+            "Object type: {} \n"
+            "Object: {} \n"
+            "Location: {} \n"
+            "Code: {} \n"
+            "Layer prefix: {} \n"
+            "Message: {} \n"
             "User data: {}\n",
             //vk::to_string(flags),
-            vk::to_string(objType),
+            to_string(objType),
             obj, location,
             code, layerPrefix,
             msg, userData);

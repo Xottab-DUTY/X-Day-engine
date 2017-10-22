@@ -14,7 +14,7 @@ class XDRENDERER_API Renderer : r_vulkan_base
     using r_base = r_vulkan_base;
 
 public:
-    void initialize() override;
+    void Initialize() override;
 };
 extern XDRENDERER_API Renderer r_impl;
 }

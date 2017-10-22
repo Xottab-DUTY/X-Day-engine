@@ -104,7 +104,7 @@ void XDayEngine::createMainWindow()
 
 void XDayEngine::InitRender()
 {
-    GEnv.Render->initialize();
+    GEnv.Render->Initialize();
 }
 
 void XDayEngine::mainLoop()

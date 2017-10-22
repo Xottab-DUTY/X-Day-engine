@@ -154,6 +154,7 @@
     <ClInclude Include="renderer.hpp" />
     <ClInclude Include="r_vulkan_base.hpp" />
     <ClInclude Include="r_vulkan_debug_callback.hpp" />
+    <ClInclude Include="vulkan_helper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="r_vulkan_base.cpp" />
     <ClCompile Include="r_vulkan_debug_callback.cpp" />
+    <ClCompile Include="vulkan_helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\include\glfw.vcxproj">
