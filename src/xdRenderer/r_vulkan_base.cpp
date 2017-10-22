@@ -10,12 +10,12 @@
 
 #include <GLFW/glfw3.h>
 
-#include "xdCore//Log.hpp"
+#include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
 #include "r_vulkan_base.hpp"
 #include "r_vulkan_debug_callback.hpp"
 
-const bool enableValidationLayers = Core.isGlobalDebug();
+bool enableValidationLayers = false;
 
 namespace XDay
 {
@@ -81,6 +81,7 @@ bool r_vulkan_base::check_validation_layers_support() const
 
 void r_vulkan_base::initialize()
 {
+    enableValidationLayers = Core.isGlobalDebug();
     create_instance();
     create_debug_callback();
 }

@@ -42,7 +42,7 @@ using namespace XDay;
 
 VkDemoRenderer VkDemoRender;
 
-const bool enableValidationLayers = Core.isGlobalDebug();
+bool enableValidationLayers = true;
 
 const std::vector<const char*> validationLayers =
 {
@@ -108,6 +108,7 @@ VkDemoRenderer::VkDemoRenderer(): result(vk::Result::eNotReady),
 
 void VkDemoRenderer::Initialize()
 {
+    enableValidationLayers = Core.isGlobalDebug();
     InitializeResources();
     CreateVkInstance();
     CreateDebugCallback();
