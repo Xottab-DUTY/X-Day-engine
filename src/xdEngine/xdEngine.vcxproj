@@ -161,6 +161,7 @@
     <ClInclude Include="Console\ConsoleCommand.hpp" />
     <ClInclude Include="Console\ConsoleCommandBool.hpp" />
     <ClInclude Include="Console\ConsoleCommandCall.hpp" />
+    <ClInclude Include="Console\ConsoleCommandsMacros.hpp" />
     <ClInclude Include="Console\ConsoleCommandString.hpp" />
     <ClInclude Include="Console\ConsoleCommandValue.hpp" />
     <ClInclude Include="Console\ConsoleCommands.hpp" />

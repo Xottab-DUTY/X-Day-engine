@@ -49,6 +49,9 @@
     <ClInclude Include="Console\ConsoleCommands.hpp">
       <Filter>Console\Command</Filter>
     </ClInclude>
+    <ClInclude Include="Console\ConsoleCommandsMacros.hpp">
+      <Filter>Console\Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Console">
