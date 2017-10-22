@@ -16,12 +16,18 @@ void Call::Execute(const std::string& args)
 {
     if (function)
         function(args);
+    else if (isEmptyArgsAllowed() && function_no_args)
+        function_no_args();
+    else Status();
 }
 
 void Call::Execute()
 {
     if (function_no_args)
         function_no_args();
+    else if (isEmptyArgsAllowed() && function)
+        function("");
+    else Status();
 }
 } // namespace Command
 } // namespace XDay
