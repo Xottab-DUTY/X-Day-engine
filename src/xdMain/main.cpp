@@ -32,8 +32,8 @@ void watch_console()
 void AttachRenderer()
 {
     const auto handle = Dynlib::open(Core.GetModuleName(XDay::eRendererModule).c_str());
-
-    const auto func = (FunctionPointer)Dynlib::load(handle, "InitializeRenderer");
+    using pFunc = void(*)();
+    const auto func = static_cast<pFunc>(Dynlib::load(handle, "InitializeRenderer"));
     if (func)
         func();
     else
