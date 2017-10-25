@@ -84,13 +84,15 @@ public:
     void Initialize(std::string&& ApplicationName = "X-Day Engine");
     void Destroy();
 
-    static void GetParamsHelp();
-
     auto GetBuildId() const { return buildId; }
     auto GetBuildDate() const { return buildDate; }
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
     auto GetGLFWVersionString() const { return GLFWVersionString; }
+    auto GetParams() const { return Params; }
+    auto GetParamsString() const { return ParamsString; }
+
+    static void GetParamsHelp();
 
     void CreateDirIfNotExist(const filesystem::path& p) const;
 
