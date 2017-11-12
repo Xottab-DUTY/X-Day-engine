@@ -54,7 +54,7 @@ void console::Execute(const std::string& cmd)
 
     if (!command)
     {
-        Info("Unknown command: {}", cmd_str);
+        Log::Info("Unknown command: {}", cmd_str);
         return;
     }
 
@@ -65,7 +65,7 @@ void console::Execute(const std::string& cmd)
             if (command->isEmptyArgsAllowed())
                 command->Execute(cmd_val);
             else
-                Info("{} {}", command->GetName(), command->Status());
+                Log::Info("{} {}", command->GetName(), command->Status());
         }
         else
             command->Execute(cmd_val);
@@ -78,7 +78,7 @@ void console::Execute(const std::string& cmd)
             for (auto&& elem : cmd_val)
                 elem = tolower(elem, loc);
         }
-        Info("Command is disabled: {}", cmd_str);
+        Log::Info("Command is disabled: {}", cmd_str);
     }
     AddCommandToCache(cmd);
 }
@@ -93,10 +93,10 @@ void console::Execute(Command::command* cmd)
         if (cmd->isEmptyArgsAllowed())
             cmd->Execute();
         else
-            Info("{} {}", cmd->GetName(), cmd->Status());
+            Log::Info("{} {}", cmd->GetName(), cmd->Status());
     }
     else
-        Info("Command is disabled: {}", cmd->GetName());
+        Log::Info("Command is disabled: {}", cmd->GetName());
 }
 
 void console::Execute(Command::command* cmd, std::string&& args)
@@ -111,7 +111,7 @@ void console::Execute(Command::command* cmd, std::string&& args)
             if (cmd->isEmptyArgsAllowed())
                 cmd->Execute();
             else
-                Info("{} {}", cmd->GetName(), cmd->Status());
+                Log::Info("{} {}", cmd->GetName(), cmd->Status());
         }
         else
         {
@@ -125,7 +125,7 @@ void console::Execute(Command::command* cmd, std::string&& args)
         }
     }
     else
-        Info("Command is disabled: {}", cmd->GetName());
+        Log::Info("Command is disabled: {}", cmd->GetName());
 }
 
 void console::ExecuteConfig(const filesystem::path& path) const
@@ -140,10 +140,10 @@ void console::ExecuteBool(Command::Bool* cmd, bool value)
         if (cmd->isEnabled())
             cmd->Execute(value);
         else
-            Info("Command is disabled: {}", cmd->GetName());
+            Log::Info("Command is disabled: {}", cmd->GetName());
     }
     else
-        Error("Unknown command.");
+        Log::Error("Unknown command.");
 }
 
 Command::command* console::GetCommand(const std::string& cmd) const
@@ -166,7 +166,7 @@ bool console::GetBool(Command::Bool* cmd)
 {
     if (cmd)
         return cmd->GetValue();
-    Error("console::GetBool(): command is nullptr");
+    Log::Error("console::GetBool(): command is nullptr");
     return false;
 }
 
@@ -176,7 +176,7 @@ void console::AddCommand(Command::command* cmd)
     {
         if (i->GetName() == cmd->GetName())
         {
-            Critical("console::AddCommand({}):: dublicate found.", cmd->GetName());
+            Log::Warning("console::AddCommand({}):: dublicate found.", cmd->GetName());
             return;
         }
     }

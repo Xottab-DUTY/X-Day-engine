@@ -94,7 +94,7 @@ void r_vulkan_base::createInstance()
 {
     if (enableValidationLayers && !checkValidationLayersSupport())
     {
-        Error("Vulkan: not all validation layers supported.");
+        Log::Error("Vulkan: not all validation layers supported.");
         validationLayersAvailable = false;
     }
 

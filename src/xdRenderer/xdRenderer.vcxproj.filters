@@ -6,11 +6,13 @@
     <ClCompile Include="r_vulkan_debug_callback.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="vulkan_helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.hpp" />
     <ClInclude Include="r_vulkan_base.hpp" />
     <ClInclude Include="r_vulkan_debug_callback.hpp" />
     <ClInclude Include="pch.hpp" />
+    <ClInclude Include="vulkan_helper.hpp" />
   </ItemGroup>
 </Project>

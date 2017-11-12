@@ -31,21 +31,21 @@ void help(const std::string& args)
     {
         const auto cmd = Console.GetCommand(args);
         if (cmd)
-            Info("{} = {}. Description: {}", cmd->GetName(), cmd->Status(), cmd->Help());
+            Log::Info("{} = {}. Description: {}", cmd->GetName(), cmd->Status(), cmd->Help());
         else
-            Info("Command not found.");
+            Log::Info("Command not found.");
     }
     else
     {
-        Info("Available commands:");
+        Log::Info("Available commands:");
         for (auto cmd : Console.GetCommands())
-            Info("{} : {}. Current value: {}. Syntax: {}", cmd->GetName(), cmd->Info(), cmd->Status(), cmd->Syntax());
+            Log::Info("{} : {}. Current value: {}. Syntax: {}", cmd->GetName(), cmd->Info(), cmd->Status(), cmd->Syntax());
     }
 }
 
 void config_save(const std::string& args)
 {
-    DebugMsg("Saving config file {}...", args.empty() ? Console.ConfigFile.string() : args);
+    Log::Debug("Saving config file {}...", args.empty() ? Console.ConfigFile.string() : args);
     std::ofstream f(args.empty() ? Console.ConfigFile : args);
 
     for (auto cmd : Console.GetCommands())
@@ -53,12 +53,12 @@ void config_save(const std::string& args)
             f << cmd->Save() << std::endl;
 
     f.close();
-    Info("Saved config file {}", args.empty() ? Console.ConfigFile.string() : args);
+    Log::Info("Saved config file {}", args.empty() ? Console.ConfigFile.string() : args);
 }
 
 void config_load(const std::string& args)
 {
-    DebugMsg("Loading config file {}...", args.empty() ? Console.ConfigFile.string() : args);
+    Log::Debug("Loading config file {}...", args.empty() ? Console.ConfigFile.string() : args);
     std::ifstream config_file(args.empty() ? Console.ConfigFile : args);
 
     if (config_file.is_open())
@@ -66,17 +66,17 @@ void config_load(const std::string& args)
         std::string line;
         while (getline(config_file, line))
             Console.Execute(line);
-        Info("Loaded config file {}", args.empty() ? Console.ConfigFile.string() : args);
+        Log::Info("Loaded config file {}", args.empty() ? Console.ConfigFile.string() : args);
     }
     else
-        Error("Failed to open config file {}", args.empty() ? Console.ConfigFile.string() : args);
+        Log::Error("Failed to open config file {}", args.empty() ? Console.ConfigFile.string() : args);
 
     config_file.close();
 }
 
 void flush_log()
 {
-    FlushLog();
+    Log::Flush();
 }
 
 } // namespace Functions

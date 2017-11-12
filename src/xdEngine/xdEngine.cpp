@@ -36,7 +36,7 @@ void XDayEngine::onKeyPress(GLFWwindow* window, int key, int scancode, int actio
         }
         default:
         {
-            DebugMsg("Key pressed: {}", glfwGetKeyName(key, scancode));
+            Log::Trace("Key pressed: {}", glfwGetKeyName(key, scancode));
             break;
         }
         }

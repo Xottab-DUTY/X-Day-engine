@@ -14,8 +14,8 @@ command::~command() {}
 
 void command::InvalidSyntax(const std::string& args) const
 {
-    Warning("Invalid syntax in call [{} {}]", name, args);
-    Warning("Valid arguments: {}", Syntax());
+    Log::Warning("Invalid syntax in call [{} {}]", name, args);
+    Log::Warning("Valid arguments: {}", Syntax());
 }
 } // namespace Command
 } // namespace XDay

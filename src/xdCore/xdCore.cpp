@@ -17,7 +17,7 @@ XDCORE_API xdCore Core;
 
 static void error_callback(int error, const char* description)
 {
-    Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
+    Log::Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
 }
 
 bool xdCore::isGlobalDebug() const
@@ -48,8 +48,8 @@ void xdCore::InitializeArguments(int argc, char* argv[])
 
 void xdCore::Initialize(std::string&& _appname)
 {
-    Info("{} {} (build {})", EngineName, EngineVersion, buildId);
-    DebugMsg("Core: Initializing");
+    Log::Info("{} {} (build {})", EngineName, EngineVersion, buildId);
+    Log::Debug("Core: Initializing");
     AppVersion = "1.0";
     FindParam(eParamName) ? AppName = ReturnParam(eParamName) : AppName = _appname;
     FindParam(eParamGame) ? GameModule = ReturnParam(eParamGame) : GameModule = "xdGame";
@@ -81,8 +81,8 @@ void xdCore::Initialize(std::string&& _appname)
     buildString = fmt::format("{} build {}, {}, {}", GetModuleName(eCoreModule, false), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
-    DebugMsg("Core: Initialized");
-    GlobalLog.onCoreInitialized();
+    Log::Debug("Core: Initialized");
+    Log::onCoreInitialized();
 }
 
 void xdCore::InitializeResources()
@@ -119,7 +119,7 @@ std::string xdCore::ReturnParam(eCoreParams param) const
     {
         if (found && i.find(RecognizeParam(eParamPrefix)) != std::string::npos)
         {
-            Error("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
+            Log::Error("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
             break;
         }
         if (found)
@@ -129,7 +129,7 @@ std::string xdCore::ReturnParam(eCoreParams param) const
         found = true;
     }
 
-    Error("xdCore::ReturnParam(): returning empty string for param {}", p);
+    Log::Error("xdCore::ReturnParam(): returning empty string for param {}", p);
     return "";
 }
 
@@ -172,7 +172,7 @@ std::string xdCore::RecognizeParam(eCoreParams param)
 
 void xdCore::GetParamsHelp()
 {
-    Info("\nAvailable parameters:\n"\
+    Log::Info("\nAvailable parameters:\n"\
          "--p_name - Specifies AppName, default is \"X-Day Engine\" \n"\
          "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"\
          "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
@@ -187,7 +187,7 @@ void xdCore::GetParamsHelp()
          "--p_texture - Specifies path to texture file to load, default is \"texture.dds\"\n"\
          "--p_model - Specifies path to model file to model, default is \"model.dds\"\n");
 
-    Info("\nДоступные параметры:\n"\
+    Log::Info("\nДоступные параметры:\n"\
          "--p_name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
          "--p_game - Задаёт игровую библиотеку для подключения, по умолчанию: \"xdGame\";\n"
          "--p_datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\

@@ -84,7 +84,7 @@ static VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugCallback(
     const char* msg,
     void* userData)
 {
-    Warning("\nValidation layer reports: \n" \
+    Log::Warning("\nValidation layer reports: \n" \
         "Flags: not working right now \n" \
         "Object type: {} \n" \
         "Object: {} \n" \
@@ -303,7 +303,7 @@ void VkDemoRenderer::InitializeResources()
 void VkDemoRenderer::CreateVkInstance()
 {
     if (enableValidationLayers && !CheckValidationLayersSupport())
-        Warning("Vulkan: not all validation layers supported.");
+        Log::Warning("Vulkan: not all validation layers supported.");
 
     vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
                                 Core.EngineName.c_str(), stoi(Core.EngineVersion), 
@@ -834,7 +834,7 @@ void VkDemoRenderer::LoadModel()
 
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {
-        Error("VkDemoRenderer::LoadModel():: {}", err);
+        Log::Error("VkDemoRenderer::LoadModel():: {}", err);
         throw std::runtime_error(err);
     }
 
@@ -868,7 +868,7 @@ void VkDemoRenderer::LoadModel()
             indices.push_back(uniqueVertices[vertex]);
         }
     }
-    DebugMsg("VkDemoRenderer::LoadModel():: loaded model: {}", _path);
+    Log::Debug("VkDemoRenderer::LoadModel():: loaded model: {}", _path);
 }
 
 void VkDemoRenderer::CreateVertexBuffer()
@@ -1194,7 +1194,7 @@ void VkDemoRenderer::transitionImageLayout(vk::Image image, vk::Format format, v
     }
     else
     {
-        Error("VkDemoRenderer::transitionImageLayout():: unsupported layout transition!");
+        Log::Error("VkDemoRenderer::transitionImageLayout():: unsupported layout transition!");
         throw std::invalid_argument("unsupported layout transition!");
     }
         
@@ -1242,7 +1242,7 @@ vk::Format VkDemoRenderer::findSupportedFormat(const std::vector<vk::Format>& ca
         if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features)
             return format;
     }
-    Error("VkDemoRenderer::findSupportedFormat():: failed to find supported format!");
+    Log::Error("VkDemoRenderer::findSupportedFormat():: failed to find supported format!");
     return vk::Format::eUndefined;
 }
 
@@ -1366,6 +1366,6 @@ uint32_t VkDemoRenderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyF
         if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
             return i;
 
-    Error("VkDemoRenderer::findMemoryType():: failed to find suitable memory type!");
+    Log::Error("VkDemoRenderer::findMemoryType():: failed to find suitable memory type!");
     throw std::runtime_error("failed to find suitable memory type!");
 }

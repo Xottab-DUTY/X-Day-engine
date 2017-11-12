@@ -46,7 +46,7 @@ void xdXMLDocument::Load(const filesystem::path& resources_type, const filesyste
     std::string buffer(resources_type.string() + _path.string() + xml_filename);
 
     if (!xml_document.LoadFile(buffer.c_str()) == 0)
-        Error("XML failed to load file: {}", buffer);
+        Log::Error("XML failed to load file: {}", buffer);
 
     root_node = xml_document.FirstChild();
 }
@@ -56,7 +56,7 @@ void xdXMLDocument::Load(const filesystem::path& resources_type, const std::stri
     std::string buffer(resources_type.string() + xml_filename);
 
     if (!xml_document.LoadFile(buffer.c_str()) == 0)
-        Error("XML failed to load file: {}", buffer);
+        Log::Error("XML failed to load file: {}", buffer);
 
     root_node = xml_document.FirstChild();
 }
@@ -64,7 +64,7 @@ void xdXMLDocument::Load(const filesystem::path& resources_type, const std::stri
 void xdXMLDocument::Load(const filesystem::path& full_path)
 {
     if (!xml_document.LoadFile(full_path.string().c_str())) // string().c_str() what a nice costyl
-        Error("XML failed to load file: {}", full_path.string());
+        Log::Error("XML failed to load file: {}", full_path.string());
 
     root_node = xml_document.FirstChild();
 }

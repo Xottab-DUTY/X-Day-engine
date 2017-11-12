@@ -41,7 +41,7 @@ VKAPI_ATTR vk::Bool32 VKAPI_CALL vkDebugReportCallback(vk::DebugReportFlagsEXT f
                                                        const char* msg,
                                                        void* userData)
 {
-    Warning("\nValidation layer reports: \n"
+    XDay::Log::Warning("\nValidation layer reports: \n"
             "Flags: not working right now \n"
             "Object type: {} \n"
             "Object: {} \n"
