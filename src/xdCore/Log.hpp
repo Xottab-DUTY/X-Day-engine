@@ -1,124 +1,115 @@
 #pragma once
 
 #define SPDLOG_WCHAR_TO_UTF8_SUPPORT
+#define SPDLOG_FMT_EXTERNAL
 #include <spdlog/spdlog.h>
-
-#include "Common/import_export_macros.hpp"
 
 namespace XDay
 {
-class XDCORE_API Logger
+class XDCORE_API Log
 {
-    bool nolog = false;
-    bool nologflush = false;
-    std::string LogFile = "X-Day.init.log";
-    std::shared_ptr<spdlog::logger> spdlogger = nullptr;
+    bool noLog = false;
+    bool noLogFlush = false;
+    std::string logFile = "main.log";
+
+    explicit Log(bool coreInitialized = false);
+    ~Log();
+    static Log Global;
+
+    void CloseLog() const;
 
 public:
-    Logger(const std::string& _logfile, bool coreInitialized);
-    ~Logger();
+    static void Flush();
 
-    // Used only in GlobalLog
-    void onCoreInitialized();
+    static bool isNoLog();
+    static bool isNoLogFlush();
 
-    void CloseLog();
-    void FlushLog();
+    static void onCoreInitialized();
 
-    bool isNoLog() const { return nolog; }
-    bool isNoLogFlush() const { return nologflush; }
-
+#pragma region Log functions
+#pragma region Log::Trace
     template <typename... Args>
-    void Log(std::string log, spdlog::level::level_enum level, const Args&... args)
+    static void Trace(std::string&& msg, Args&&... args)
     {
-        if (nolog)
-            return;
-
-        spdlogger->log(level, log.c_str(), std::forward<Args>((Args)args)...);
+        spdlog::get("X-Day Engine")->trace(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    void LogIf(bool flag, std::string log, spdlog::level::level_enum level, const Args&... args)
+    static void TraceIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        if (nolog)
-            return;
+        spdlog::get("X-Day Engine")->trace_if(flag, msg.c_str(), std::forward<Args>(args)...);
+    }
+#pragma endregion Log::Trace
 
-        spdlogger->log_if(flag, level, log.c_str(), std::forward<Args>((Args)args)...);
+#pragma region Log::Debug
+    template <typename... Args>
+    static void Debug(std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->debug(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    void Trace(std::string trace, const Args&... args) { Log(trace, spdlog::level::trace, std::forward<Args>((Args)args)...); }
+    static void DebugIf(const bool flag, std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->debug_if(flag, msg.c_str(), std::forward<Args>(args)...);
+    }
+#pragma endregion Log::Debug
+
+#pragma region Log::Info
     template <typename... Args>
-    void TraceIf(bool flag, std::string trace, const Args&... args) { Log(flag, trace, spdlog::level::trace, std::forward<Args>((Args)args)...); }
+    static void Info(std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->info(msg.c_str(), std::forward<Args>(args)...);
+    }
 
     template <typename... Args>
-    void DebugMsg(std::string debug, const Args&... args) { Log(debug, spdlog::level::debug, std::forward<Args>((Args)args)...); }
+    static void InfoIf(const bool flag, std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->info_if(flag, msg.c_str(), std::forward<Args>(args)...);
+    }
+#pragma endregion Log::Info
+
+#pragma region Log::Warning
     template <typename... Args>
-    void DebugMsgIf(bool flag, std::string debug, const Args&... args) { Log(flag, debug, spdlog::level::debug, std::forward<Args>((Args)args)...); }
+    static void Warning(std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->warn(msg.c_str(), std::forward<Args>(args)...);
+    }
 
     template <typename... Args>
-    void Info(std::string info, const Args&... args) { Log(info, spdlog::level::info, std::forward<Args>((Args)args)...); };
+    static void WarningIf(const bool flag, std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->warn_if(flag, msg.c_str(), std::forward<Args>(args)...);
+    }
+#pragma endregion Log::Warning
+
+#pragma region Log::Error
     template <typename... Args>
-    void InfoIf(bool flag, std::string info, const Args&... args) { Log(flag, info, spdlog::level::info, std::forward<Args>((Args)args)...); };
+    static void Error(std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->error(msg.c_str(), std::forward<Args>(args)...);
+    }
 
     template <typename... Args>
-    void Warning(std::string warning, const Args&... args) { Log(warning, spdlog::level::warn, std::forward<Args>((Args)args)...); }
+    static void ErrorIf(const bool flag, std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->error_if(flag, msg.c_str(), std::forward<Args>(args)...);
+    }
+#pragma endregion Log::Error
+
+#pragma region Log::Critical
     template <typename... Args>
-    void WarningIf(bool flag, std::string warning, const Args&... args) { Log(flag, warning, spdlog::level::warn, std::forward<Args>((Args)args)...); }
+    static void Critical(std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->critical(msg.c_str(), std::forward<Args>(args)...);
+    }
 
     template <typename... Args>
-    void Error(std::string error, const Args&... args) { Log(error, spdlog::level::err, std::forward<Args>((Args)args)...); };
-    template <typename... Args>
-    void ErrorIf(bool flag, std::string error, const Args&... args) { Log(flag, error, spdlog::level::err, std::forward<Args>((Args)args)...); };
-
-    template <typename... Args>
-    void Critical(std::string critical, const Args&... args) { Log(critical, spdlog::level::critical, std::forward<Args>((Args)args)...); }
-    template <typename... Args>
-    void CriticalIf(bool flag, std::string critical, const Args&... args) { Log(flag, critical, spdlog::level::critical, std::forward<Args>((Args)args)...); }
-
+    static void CriticalIf(const bool flag, std::string&& msg, Args&&... args)
+    {
+        spdlog::get("X-Day Engine")->critical_if(flag, msg.c_str(), std::forward<Args>(args)...);
+    }
+#pragma endregion Log::Critical
+#pragma endregion Log functions
 };
 }
-
-extern XDCORE_API XDay::Logger GlobalLog;
-
-template <typename... Args>
-void Log(std::string log, spdlog::level::level_enum level, const Args&... args)
-{
-    GlobalLog.Log(log, level, std::forward<Args>((Args)args)...);
-}
-template <typename... Args>
-void LogIf(bool flag, std::string log, spdlog::level::level_enum level, const Args&... args)
-{
-    GlobalLog.LogIf(flag, log, level, std::forward<Args>((Args)args)...);
-}
-
-template <typename... Args>
-void Trace(std::string trace, const Args&... args) { Log(trace, spdlog::level::trace, std::forward<Args>((Args)args)...); }
-template <typename... Args>
-void TraceIf(bool flag, std::string trace, const Args&... args) { LogIf(flag, trace, spdlog::level::trace, std::forward<Args>((Args)args)...); }
-
-template <typename... Args>
-void DebugMsg(std::string debug, const Args&... args) { Log(debug, spdlog::level::debug, std::forward<Args>((Args)args)...); }
-template <typename... Args>
-void DebugMsgIf(bool flag, std::string debug, const Args&... args) { LogIf(flag, debug, spdlog::level::debug, std::forward<Args>((Args)args)...); }
-
-template <typename... Args>
-void Info(std::string info, const Args&... args) { Log(info, spdlog::level::info, std::forward<Args>((Args)args)...); };
-template <typename... Args>
-void InfoIf(bool flag, std::string info, const Args&... args) { LogIf(flag, info, spdlog::level::info, std::forward<Args>((Args)args)...); };
-
-template <typename... Args>
-void Warning(std::string warning, const Args&... args) { Log(warning, spdlog::level::warn, std::forward<Args>((Args)args)...); }
-template <typename... Args>
-void WarningIf(bool flag, std::string warning, const Args&... args) { LogIf(flag, warning, spdlog::level::warn, std::forward<Args>((Args)args)...); }
-
-template <typename... Args>
-void Error(std::string error, const Args&... args) { Log(error, spdlog::level::err, std::forward<Args>((Args)args)...); }
-template <typename... Args>
-void ErrorIf(bool flag, std::string error, const Args&... args) { LogIf(flag, error, spdlog::level::err, std::forward<Args>((Args)args)...); }
-
-template <typename... Args>
-void Critical(std::string critical, const Args&... args) { Log(critical, spdlog::level::critical, std::forward<Args>((Args)args)...); }
-template <typename... Args>
-void CriticalIf(bool flag, std::string critical, const Args&... args) { LogIf(flag, critical, spdlog::level::critical, std::forward<Args>((Args)args)...); }
-
-inline void FlushLog() { GlobalLog.FlushLog(); }
