@@ -5,7 +5,6 @@ namespace filesystem = std::experimental::filesystem;
 
 #include "tinyxml2/tinyxml2.h"
 
-#include "Common/import_export_macros.hpp"
 #include "XMLDocument.hpp"
 
 namespace XDay

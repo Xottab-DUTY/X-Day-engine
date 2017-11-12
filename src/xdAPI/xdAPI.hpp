@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Common/import_export_macros.hpp"
-
 namespace XDay
 {
 namespace Renderer

@@ -2,7 +2,6 @@
 #include <vulkan/vulkan.hpp>
 #include <glm/glm.hpp>
 
-#include "Common/import_export_macros.hpp"
 #include <ResourceLimits.h>
 
 class VkDemoRenderer

@@ -36,11 +36,14 @@
     <Import Project="..\..\Common.props" />
   </ImportGroup>
   <ItemGroup>
-    <None Include="import_export_macros.hpp" />
+    <None Include="CommonImportExport.inl" />
     <None Include="Compiler.inl" />
     <None Include="Platform.hpp" />
     <None Include="PlatformLinux.inl" />
     <None Include="PlatformWindows.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

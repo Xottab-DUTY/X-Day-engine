@@ -5,8 +5,6 @@ namespace filesystem = std::experimental::filesystem;
 
 #include "tinyxml2/tinyxml2.h"
 
-#include "Common/import_export_macros.hpp"
-
 namespace XDay
 {
 class XDCORE_API xdXMLDocument

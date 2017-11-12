@@ -8,8 +8,6 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include "Common/import_export_macros.hpp"
-
 #include "vulkan_helper.hpp"
 
 namespace XDay

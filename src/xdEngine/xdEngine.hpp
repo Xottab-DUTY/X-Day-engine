@@ -2,8 +2,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Common/import_export_macros.hpp"
-
 namespace XDay
 {
 class XDENGINE_API XDayEngine

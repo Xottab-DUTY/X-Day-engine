@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Common/import_export_macros.hpp"
-
-#include "xdAPI/xdAPI.hpp"
 #include "r_vulkan_base.hpp"
 
 namespace XDay

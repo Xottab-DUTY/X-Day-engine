@@ -4,8 +4,6 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
-#include "Common/import_export_macros.hpp"
-
 namespace XDay
 {
 enum eEngineModules

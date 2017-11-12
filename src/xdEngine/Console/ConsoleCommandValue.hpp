@@ -4,8 +4,6 @@
 
 #include <fmt/format.h>
 
-#include "Common/import_export_macros.hpp"
-
 #include "ConsoleCommand.hpp"
 
 namespace XDay
