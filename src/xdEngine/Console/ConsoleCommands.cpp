@@ -4,7 +4,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "xdCore/Log.hpp"
 #include "xdEngine/xdEngine.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"

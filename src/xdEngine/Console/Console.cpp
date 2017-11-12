@@ -2,7 +2,6 @@
 
 #include <sstream>
 
-#include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"

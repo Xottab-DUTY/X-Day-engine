@@ -8,8 +8,6 @@
 #include <GLFW/glfw3.h>
 #include "dynlib/Dynlib.hpp"
 
-#include "Common/Platform.hpp"
-#include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"

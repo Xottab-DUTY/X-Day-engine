@@ -3,7 +3,6 @@
 
 #include "pch.hpp"
 
-#include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
 #include "VkDemoEngine.hpp"
 

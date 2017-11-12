@@ -11,7 +11,6 @@
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 
-#include "xdCore/Log.hpp"
 #include "xdCore/xdCore.hpp"
 #include "xdEngine/xdEngine.hpp"
 #include "r_vulkan_base.hpp"

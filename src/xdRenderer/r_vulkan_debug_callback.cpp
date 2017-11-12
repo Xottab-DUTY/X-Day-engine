@@ -10,7 +10,6 @@
 #include <GLFW/glfw3.h>
 
 #include "r_vulkan_debug_callback.hpp"
-#include "xdCore/Log.hpp"
 
 VKAPI_ATTR VkResult VKAPI_CALL vkCreateDebugReportCallbackEXT(VkInstance instance,
                                         const VkDebugReportCallbackCreateInfoEXT* pCreateInfo,

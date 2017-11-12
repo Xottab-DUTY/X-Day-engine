@@ -1,6 +1,5 @@
 #include "pch.hpp"
 
-#include "xdCore/Log.hpp"
 #include "ConsoleCommand.hpp"
 
 namespace XDay
