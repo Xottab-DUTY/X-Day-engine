@@ -11,6 +11,7 @@
 #include "xdCore/xdCore.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"
+#include "xdCore/ModuleManager.hpp"
 
 using namespace XDay;
 
@@ -31,14 +32,14 @@ void watch_console()
 
 void AttachRenderer()
 {
-    const auto handle = Dynlib::open(Core.GetModuleName(XDay::eRendererModule).c_str());
+    ModuleManager::LoadModule(XDay::eRendererModule);
+
     using pFunc = void(*)();
-    const auto func = static_cast<pFunc>(Dynlib::load(handle, "InitializeRenderer"));
+    const auto func = static_cast<pFunc>(ModuleManager::GetProcFromModule(XDay::eRendererModule, "InitializeRenderer"));
     if (func)
         func();
     else
-        Log::Error("Cannot attach function InitializeRenderer from {}", Core.GetModuleName(XDay::eRendererModule));
-    //Dynlib::close(handle);
+        Log::Error("Cannot attach function InitializeRenderer from {}", ModuleManager::GetModuleName(XDay::eRendererModule));
 }
 
 int main(int argc, char* argv[])

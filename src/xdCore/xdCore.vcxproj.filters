@@ -12,6 +12,7 @@
       <Filter>XML</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="ModuleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdCore.hpp" />
@@ -26,6 +27,7 @@
     </ClInclude>
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="Types.hpp" />
+    <ClInclude Include="ModuleManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Logging">

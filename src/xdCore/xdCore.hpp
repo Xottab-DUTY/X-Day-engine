@@ -6,14 +6,6 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace XDay
 {
-enum eEngineModules
-{
-    eEngineModule,
-    eCoreModule,
-    eAPIModule,
-    eRendererModule
-};
-
 enum eCoreParams
 {
     eParamPrefix,
@@ -96,12 +88,7 @@ public:
     std::string ReturnParam(eCoreParams param) const;
     static std::string RecognizeParam(eCoreParams param);
 
-    static std::string GetModuleName(eEngineModules xdModule, bool needExt = true);
-
 private:
-    static std::string GetModuleName(std::string&& xdModule, bool needExt, bool isExecutable = false);
-    static std::string GetModuleExtension(std::string&& xdModule, bool isExecutable = false);
-
     void InitializeResources();
     void CalculateBuildId();
 };

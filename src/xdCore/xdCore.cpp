@@ -9,6 +9,7 @@ namespace filesystem = std::experimental::filesystem;
 #include <GLFW/glfw3.h>
 
 #include "xdCore.hpp"
+#include "ModuleManager.hpp"
 #include "XML/XMLResource.hpp"
 
 using namespace XDay;
@@ -78,7 +79,7 @@ void xdCore::Initialize(std::string&& _appname)
     CreateDirIfNotExist(SoundsPath);
     CreateDirIfNotExist(TexturesPath);
 
-    buildString = fmt::format("{} build {}, {}, {}", GetModuleName(eCoreModule, false), buildId, buildDate, buildTime);
+    buildString = fmt::format("{} build {}, {}, {}", ModuleManager::GetModuleName(eCoreModule, false), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
     Log::Debug("Core: Initialized");
@@ -206,65 +207,6 @@ void xdCore::GetParamsHelp()
 void xdCore::CreateDirIfNotExist(const filesystem::path& p) const
 {
     if (!filesystem::exists(p)) filesystem::create_directory(p);
-}
-
-// Returns module name with configuration, architecture and extension
-std::string xdCore::GetModuleName(eEngineModules xdModule, bool needExt)
-{
-    switch (xdModule)
-    {
-    case eEngineModule:
-        return GetModuleName("X-Day", needExt, true);
-    case eCoreModule:
-        return GetModuleName("X-Day.Core", needExt);
-    case eAPIModule:
-        return GetModuleName("X-Day.API", needExt);
-    case eRendererModule:
-        return GetModuleName("X-Day.Renderer", needExt);
-    default:
-        throw "Create the case for the module here!";
-    }
-}
-
-// Returns given module name with configuration and architecture and extension
-std::string xdCore::GetModuleName(std::string&& xdModule, bool needExt, bool isExecutable)
-{
-#ifdef DEBUG
-#ifdef XD_X64
-    if (needExt)
-        return GetModuleExtension(xdModule + ".Dx64", isExecutable);
-    return xdModule + ".Dx64";
-#else
-    if (needExt)
-        return GetModuleExtension(xdModule + ".Dx86", isExecutable);
-    return xdModule + ".Dx86";
-#endif
-#elif NDEBUG
-#ifdef XD_X64
-    if (needExt)
-        return GetModuleExtension(xdModule + ".Rx64", isExecutable);
-    return xdModule + ".Rx64";
-#else
-    if (needExt)
-        return GetModuleExtension(xdModule + ".Rx86", isExecutable);
-    return xdModule + ".Rx86";
-#endif
-#endif
-}
-
-// Returns given module name with extension
-std::string xdCore::GetModuleExtension(std::string&& xdModule, bool isExecutable)
-{
-#ifdef WINDOWS
-    if (isExecutable)
-        return xdModule + ".exe";
-    return xdModule + ".dll";
-#elif defined(LINUX)
-    if (isExecutable)
-        return xdModule;
-    return xdModule + ".so";
-#endif
-    return xdModule;
 }
 
 void xdCore::CalculateBuildId()
