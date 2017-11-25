@@ -178,8 +178,8 @@
     <ProjectReference Include="..\..\include\ClanLib\Projects\clanXML.vcxproj">
       <Project>{1ced5ffa-2337-43ee-9c97-fc649da49930}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\include\dynlib.vcxproj">
-      <Project>{0624a030-bc85-46ae-a529-a2ee1e656e2c}</Project>
+    <ProjectReference Include="..\..\include\fmt.vcxproj">
+      <Project>{f3a00ed5-79b7-43c7-8d9c-58874dc61845}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\include\glfw.vcxproj">
       <Project>{461392b0-8e09-312e-ae81-de5cd596ea12}</Project>

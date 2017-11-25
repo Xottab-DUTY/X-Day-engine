@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 15.0.26730.15
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "src\Common\Common.vcxproj", "{75E90AF7-38C1-4ACA-9193-D9C47085601C}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -18,8 +18,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "X-Day.Engine", "src\xdEngine\xdEngine.vcxproj", "{CD78FECA-F990-4EF5-A497-399E8B2CC08E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "X-Day.Renderer", "src\xdRenderer\xdRenderer.vcxproj", "{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dynlib", "include\dynlib.vcxproj", "{0624A030-BC85-46AE-A529-A2EE1E656E2C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fmt", "include\fmt.vcxproj", "{F3A00ED5-79B7-43C7-8D9C-58874DC61845}"
 EndProject
@@ -114,14 +112,6 @@ Global
 		{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}.Release|x64.Build.0 = Release|x64
 		{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}.Release|x86.ActiveCfg = Release|Win32
 		{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}.Release|x86.Build.0 = Release|Win32
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x64.ActiveCfg = Debug|x64
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x64.Build.0 = Debug|x64
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x86.ActiveCfg = Debug|Win32
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Debug|x86.Build.0 = Debug|Win32
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x64.ActiveCfg = Release|x64
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x64.Build.0 = Release|x64
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x86.ActiveCfg = Release|Win32
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C}.Release|x86.Build.0 = Release|Win32
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Debug|x64.ActiveCfg = Debug|x64
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Debug|x64.Build.0 = Debug|x64
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845}.Debug|x86.ActiveCfg = Debug|Win32
@@ -303,7 +293,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0624A030-BC85-46AE-A529-A2EE1E656E2C} = {B78C1315-EDB0-409A-9591-5071CE05D77C}
 		{F3A00ED5-79B7-43C7-8D9C-58874DC61845} = {B78C1315-EDB0-409A-9591-5071CE05D77C}
 		{B5C56F86-756F-4211-A456-4077A7B7E8B8} = {D9012303-EF05-480D-A620-27D8FB2D61E1}
 		{C3160892-FAA8-4011-8870-0E73C808C833} = {B78C1315-EDB0-409A-9591-5071CE05D77C}
