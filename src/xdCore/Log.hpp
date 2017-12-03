@@ -11,6 +11,7 @@ class XDCORE_API Log
     bool noLog = false;
     bool noLogFlush = false;
     std::string logFile = "main.log";
+    std::shared_ptr<spdlog::logger> spdlogger;
 
     explicit Log(bool coreInitialized = false);
     ~Log();
@@ -31,13 +32,13 @@ public:
     template <typename... Args>
     static void Trace(std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->trace(msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->trace(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     static void TraceIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->trace_if(flag, msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->trace_if(flag, msg.c_str(), std::forward<Args>(args)...);
     }
 #pragma endregion Log::Trace
 
@@ -45,13 +46,13 @@ public:
     template <typename... Args>
     static void Debug(std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->debug(msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->debug(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     static void DebugIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->debug_if(flag, msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->debug_if(flag, msg.c_str(), std::forward<Args>(args)...);
     }
 #pragma endregion Log::Debug
 
@@ -59,13 +60,13 @@ public:
     template <typename... Args>
     static void Info(std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->info(msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->info(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     static void InfoIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->info_if(flag, msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->info_if(flag, msg.c_str(), std::forward<Args>(args)...);
     }
 #pragma endregion Log::Info
 
@@ -73,13 +74,13 @@ public:
     template <typename... Args>
     static void Warning(std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->warn(msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->warn(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     static void WarningIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->warn_if(flag, msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->warn_if(flag, msg.c_str(), std::forward<Args>(args)...);
     }
 #pragma endregion Log::Warning
 
@@ -87,13 +88,13 @@ public:
     template <typename... Args>
     static void Error(std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->error(msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->error(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     static void ErrorIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->error_if(flag, msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->error_if(flag, msg.c_str(), std::forward<Args>(args)...);
     }
 #pragma endregion Log::Error
 
@@ -101,13 +102,13 @@ public:
     template <typename... Args>
     static void Critical(std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->critical(msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->critical(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     static void CriticalIf(const bool flag, std::string&& msg, Args&&... args)
     {
-        spdlog::get("X-Day Engine")->critical_if(flag, msg.c_str(), std::forward<Args>(args)...);
+        Global.spdlogger->critical_if(flag, msg.c_str(), std::forward<Args>(args)...);
     }
 #pragma endregion Log::Critical
 #pragma endregion Log functions

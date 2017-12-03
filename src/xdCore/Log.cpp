@@ -29,11 +29,11 @@ Log::Log(const bool coreInitialized /*= false*/)
     if (Core.isGlobalDebug())
         sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 
-    std::shared_ptr<spdlog::logger> spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
+    spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
     spdlogger->set_pattern("[%T] [%l] %v");
 
     if (Core.isGlobalDebug())
-    spdlogger->set_level(spdlog::level::trace);
+        spdlogger->set_level(spdlog::level::trace);
 
     spdlog::register_logger(spdlogger);
 }

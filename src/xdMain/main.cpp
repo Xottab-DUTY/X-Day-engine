@@ -22,10 +22,8 @@ void watch_console()
     {
         std::string input;
         std::getline(std::cin, input);
-        if (!glfwWindowShouldClose(Engine.windowMain))
+        if (!glfwWindowShouldClose(Engine.windowMain) && !input.empty())
             Console.Execute(input);
-        else
-            break;
     }
 }
 
