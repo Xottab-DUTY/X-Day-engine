@@ -1,81 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\context.c">
+    <ClCompile Include="glfw\src\context.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\init.c">
+    <ClCompile Include="glfw\src\init.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\input.c">
+    <ClCompile Include="glfw\src\input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\monitor.c">
+    <ClCompile Include="glfw\src\monitor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\vulkan.c">
+    <ClCompile Include="glfw\src\vulkan.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\window.c">
+    <ClCompile Include="glfw\src\window.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_init.c">
+    <ClCompile Include="glfw\src\win32_init.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_joystick.c">
+    <ClCompile Include="glfw\src\win32_joystick.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_monitor.c">
+    <ClCompile Include="glfw\src\win32_monitor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_time.c">
+    <ClCompile Include="glfw\src\win32_time.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_thread.c">
+    <ClCompile Include="glfw\src\win32_thread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_window.c">
+    <ClCompile Include="glfw\src\win32_window.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\wgl_context.c">
+    <ClCompile Include="glfw\src\wgl_context.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\egl_context.c">
+    <ClCompile Include="glfw\src\egl_context.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\osmesa_context.c">
+    <ClCompile Include="glfw\src\osmesa_context.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\internal.h">
+    <ClInclude Include="glfw\src\internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\mappings.h">
+    <ClInclude Include="glfw\src\mappings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\xdb\src\glfw_config.h">
+    <ClInclude Include="glfw\include\GLFW\glfw3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\include\GLFW\glfw3.h">
+    <ClInclude Include="glfw\include\GLFW\glfw3native.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\include\GLFW\glfw3native.h">
+    <ClInclude Include="glfw\src\win32_platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_platform.h">
+    <ClInclude Include="glfw\src\win32_joystick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_joystick.h">
+    <ClInclude Include="glfw\src\wgl_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\wgl_context.h">
+    <ClInclude Include="glfw\src\egl_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\egl_context.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\osmesa_context.h">
+    <ClInclude Include="glfw\src\osmesa_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

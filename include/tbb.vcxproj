@@ -38,7 +38,6 @@
     <ProjectGuid>{F62787DD-1327-448B-9818-030062BCFAA5}</ProjectGuid>
     <RootNamespace>tbb</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">

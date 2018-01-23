@@ -20,7 +20,6 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{461392B0-8E09-312E-AE81-DE5CD596EA12}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
     <ProjectName>GLFW3</ProjectName>
   </PropertyGroup>
@@ -114,31 +113,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\context.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\init.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\input.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\monitor.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\vulkan.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\window.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_init.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_joystick.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_monitor.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_time.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_thread.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_window.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\wgl_context.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\egl_context.c" />
-    <ClCompile Include="C:\GitHub\X-Day-engine\include\glfw\src\osmesa_context.c" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\internal.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\mappings.h" />
-    <ClInclude Include="C:\GitHub\xdb\src\glfw_config.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\include\GLFW\glfw3.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\include\GLFW\glfw3native.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_platform.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\win32_joystick.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\wgl_context.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\egl_context.h" />
-    <ClInclude Include="C:\GitHub\X-Day-engine\include\glfw\src\osmesa_context.h" />
+    <ClCompile Include="glfw\src\context.c" />
+    <ClCompile Include="glfw\src\init.c" />
+    <ClCompile Include="glfw\src\input.c" />
+    <ClCompile Include="glfw\src\monitor.c" />
+    <ClCompile Include="glfw\src\vulkan.c" />
+    <ClCompile Include="glfw\src\window.c" />
+    <ClCompile Include="glfw\src\win32_init.c" />
+    <ClCompile Include="glfw\src\win32_joystick.c" />
+    <ClCompile Include="glfw\src\win32_monitor.c" />
+    <ClCompile Include="glfw\src\win32_time.c" />
+    <ClCompile Include="glfw\src\win32_thread.c" />
+    <ClCompile Include="glfw\src\win32_window.c" />
+    <ClCompile Include="glfw\src\wgl_context.c" />
+    <ClCompile Include="glfw\src\egl_context.c" />
+    <ClCompile Include="glfw\src\osmesa_context.c" />
+    <ClInclude Include="glfw\src\internal.h" />
+    <ClInclude Include="glfw\src\mappings.h" />
+    <ClInclude Include="glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="glfw\include\GLFW\glfw3native.h" />
+    <ClInclude Include="glfw\src\win32_platform.h" />
+    <ClInclude Include="glfw\src\win32_joystick.h" />
+    <ClInclude Include="glfw\src\wgl_context.h" />
+    <ClInclude Include="glfw\src\egl_context.h" />
+    <ClInclude Include="glfw\src\osmesa_context.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
