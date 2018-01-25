@@ -174,7 +174,7 @@ private:
     bool hasStencilComponent(vk::Format format) const;
     QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice _physDevice) const;
     SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice _physDevice) const;
-    uint32_t VkDemoRenderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
+    uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties) const;
 };
 
 extern VkDemoRenderer VkDemoRender;
