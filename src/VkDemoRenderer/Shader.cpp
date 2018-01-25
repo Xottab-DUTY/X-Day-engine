@@ -57,7 +57,7 @@ void ShaderWorker::LoadBinaryShader()
     std::ifstream shader_binary_file(shader_binary_path, std::ios::binary);
 
     // check if file exist and it's not empty
-    if (!Core.FindParam(eParamShaderForceRecompilation) && shader_binary_file.is_open() && filesystem::file_size(shader_binary_path) != 0)
+    if (!Core.FindParam(CoreParams::ShaderForceRecompilation) && shader_binary_file.is_open() && filesystem::file_size(shader_binary_path) != 0)
     {
         // Found shader, but it is old? Use it.
         // Recompile it and only then try to use new shader.
@@ -138,7 +138,7 @@ void ShaderWorker::CompileShader()
     shader->setStrings(&source_bytes, 1);
     shader->setEntryPoint("main");
 
-    if (Core.isGlobalDebug() && Core.FindParam(eParamShaderPreprocess))
+    if (Core.isGlobalDebug() && Core.FindParam(CoreParams::ShaderPreprocess))
     {
         std::string preprocessed;
         glslang::TShader::ForbidIncluder includer;

@@ -9,7 +9,7 @@ XDay::ModuleManager XDay::ModuleManager::instance;
 
 namespace XDay
 {
-Module::Module(pcstr moduleName) : name(moduleName), handle(nullptr)
+ModuleHandle::ModuleHandle(const char* moduleName) : name(moduleName), handle(nullptr)
 {
     Log::Info("Loading module: {}", name);
 
@@ -28,7 +28,7 @@ Module::Module(pcstr moduleName) : name(moduleName), handle(nullptr)
     }
 }
 
-Module::~Module()
+ModuleHandle::~ModuleHandle()
 {
     bool closed = false;
 #ifdef WINDOWS
@@ -40,13 +40,15 @@ Module::~Module()
     if (closed == false)
     {
         Log::Error("Failed to close module: {}", name);
-#ifdef LINUX
+#ifdef WINDOWS
+        Log::Error(std::to_string(GetLastError()));
+#elif LINUX
         Log::Error(dlerror());
 #endif
-}
+    }
 }
 
-void* Module::Load(pcstr procName) const
+void* ModuleHandle::getProcAddress(const char* procName) const
 {
     void* proc = nullptr;
 
@@ -59,7 +61,9 @@ void* Module::Load(pcstr procName) const
     if (proc == nullptr)
     {
         Log::Error("Failed to load procedure [{}] from module: {}", procName, name);
-#ifdef LINUX
+#ifdef WINDOWS
+        Log::Error(std::to_string(GetLastError()));
+#elif LINUX
         Log::Error(dlerror());
 #endif
     }
@@ -72,15 +76,15 @@ std::string ModuleManager::GetModuleName(const EngineModules xdModule, const boo
 {
     switch (xdModule)
     {
-    case eAPIModule:
+    case EngineModules::API:
         return GetModuleName("X-Day.API", needExt);
-    case eCoreModule:
+    case EngineModules::Core:
         return GetModuleName("X-Day.Core", needExt);
-    case eEngineModule:
+    case EngineModules::Engine:
         return GetModuleName("X-Day.Engine", needExt);
-    case eMainModule:
+    case EngineModules::Main:
         return GetModuleName("X-Day", needExt, true);
-    case eRendererModule:
+    case EngineModules::Renderer:
         return GetModuleName("X-Day.Renderer", needExt);
     default:
         throw "Create the case for the module here!";
@@ -127,7 +131,7 @@ std::string ModuleManager::GetModuleExtension(std::string&& xdModule, const bool
 #endif
 }
 
-std::shared_ptr<Module> ModuleManager::GetModule(const EngineModules xdModule)
+std::shared_ptr<ModuleHandle> ModuleManager::GetModule(const EngineModules xdModule)
 {
     auto moduleName = GetModuleName(xdModule);
     for (const auto _module : instance.modules)
@@ -141,15 +145,15 @@ void ModuleManager::LoadModule(const EngineModules xdModule)
     if (GetModule(xdModule) != nullptr)
         return;
 
-    auto new_module = std::make_shared<Module>(GetModuleName(xdModule).c_str());
+    auto new_module = std::make_shared<ModuleHandle>(GetModuleName(xdModule).c_str());
     instance.modules.emplace_back(std::move(new_module));
 }
 
-void* ModuleManager::GetProcFromModule(const EngineModules xdModule, pcstr procName)
+void* ModuleManager::GetProcFromModule(EngineModules xdModule, const char* procName)
 {
     const auto _module = GetModule(xdModule);
     if (_module != nullptr)
-        return _module->Load(procName);
+        return _module->getProcAddress(procName);
     return nullptr;
 }
 } // namespace XDay

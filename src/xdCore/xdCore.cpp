@@ -26,7 +26,7 @@ bool xdCore::isGlobalDebug() const
 #ifdef DEBUG
     return true;
 #endif
-    return FindParam(eParamDebug);
+    return FindParam(CoreParams::Debug);
 }
 
 xdCore::xdCore()
@@ -52,13 +52,13 @@ void xdCore::Initialize(std::string&& _appname)
     Log::Info("{} {} (build {})", EngineName, EngineVersion, buildId);
     Log::Debug("Core: Initializing");
     AppVersion = "1.0";
-    FindParam(eParamName) ? AppName = ReturnParam(eParamName) : AppName = _appname;
-    FindParam(eParamGame) ? GameModule = ReturnParam(eParamGame) : GameModule = "xdGame";
+    FindParam(CoreParams::Name) ? AppName = ReturnParam(CoreParams::Name) : AppName = _appname;
+    FindParam(CoreParams::Game) ? GameModule = ReturnParam(CoreParams::Game) : GameModule = "xdGame";
     AppPath = filesystem::absolute(Params.front());
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
-    FindParam(eParamDataPath) ? DataPath = ReturnParam(eParamDataPath) : DataPath = WorkPath.string() + "/appdata/";
-    FindParam(eParamResPath) ? ResourcesPath = ReturnParam(eParamResPath) : ResourcesPath = WorkPath.string() + "/resources/";
+    FindParam(CoreParams::DataPath) ? DataPath = ReturnParam(CoreParams::DataPath) : DataPath = WorkPath.string() + "/appdata/";
+    FindParam(CoreParams::ResPath) ? ResourcesPath = ReturnParam(CoreParams::ResPath) : ResourcesPath = WorkPath.string() + "/resources/";
 
     BinaryShadersPath = DataPath.string() + "/binary_shaders/";
     LogsPath = DataPath.string() + "/logs/";
@@ -79,7 +79,7 @@ void xdCore::Initialize(std::string&& _appname)
     CreateDirIfNotExist(SoundsPath);
     CreateDirIfNotExist(TexturesPath);
 
-    buildString = fmt::format("{} build {}, {}, {}", ModuleManager::GetModuleName(eCoreModule, false), buildId, buildDate, buildTime);
+    buildString = fmt::format("{} build {}, {}, {}", ModuleManager::GetModuleName(EngineModules::Core, false), buildId, buildDate, buildTime);
     GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
     Log::Debug("Core: Initialized");
@@ -101,7 +101,7 @@ void xdCore::InitializeResources()
 }
 
 // Finds command line parameters and returns true if param exists
-bool xdCore::FindParam(eCoreParams param) const
+bool xdCore::FindParam(CoreParams param) const
 {
     if (ParamsString.find(RecognizeParam(param)) != std::string::npos)
         return true;
@@ -112,13 +112,13 @@ bool xdCore::FindParam(eCoreParams param) const
 // If parameter isn't found it returns empty string.
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
-std::string xdCore::ReturnParam(eCoreParams param) const
+std::string xdCore::ReturnParam(CoreParams param) const
 {
     bool found = false;
     const auto p = RecognizeParam(param);
     for (auto i : Params)
     {
-        if (found && i.find(RecognizeParam(eParamPrefix)) != std::string::npos)
+        if (found && i.find(RecognizeParam(CoreParams::Prefix)) != std::string::npos)
         {
             Log::Error("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
             break;
@@ -134,37 +134,37 @@ std::string xdCore::ReturnParam(eCoreParams param) const
     return "";
 }
 
-std::string xdCore::RecognizeParam(eCoreParams param)
+std::string xdCore::RecognizeParam(CoreParams param)
 {
     switch (param)
     {
-    case eParamPrefix:
+    case CoreParams::Prefix:
         return "--p_";
-    case eParamDebug:
+    case CoreParams::Debug:
         return "--p_debug";
-    case eParamNoLog:
+    case CoreParams::NoLog:
         return "--p_nolog";
-    case eParamNoLogFlush:
+    case CoreParams::NoLogFlush:
         return "--p_nologflush";
-    case eParamResPath:
+    case CoreParams::ResPath:
         return "--p_respath";
-    case eParamDataPath:
+    case CoreParams::DataPath:
         return "--p_datapath";
-    case eParamMainConfig:
+    case CoreParams::MainConfig:
         return "--p_mainconfig";
-    case eParamName:
+    case CoreParams::Name:
         return "--p_name";
-    case eParamGame:
+    case CoreParams::Game:
         return "--p_game";
-    case eParamDontHideSystemConsole:
+    case CoreParams::DontHideSystemConsole:
         return "--p_syscmd";
-    case eParamShaderForceRecompilation:
+    case CoreParams::ShaderForceRecompilation:
         return "--p_shrec";
-    case eParamShaderPreprocess:
+    case CoreParams::ShaderPreprocess:
         return "--p_shpre";
-    case eParamTexture:
+    case CoreParams::Texture:
         return "--p_texture";
-    case eParamModel:
+    case CoreParams::Model:
         return "--p_model";
     default:
         throw "Create the case for the param here!";

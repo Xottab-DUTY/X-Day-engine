@@ -2,29 +2,32 @@
 
 namespace XDay
 {
-enum EngineModules
+class XDCORE_API ModuleHandle
 {
-    eAPIModule,
-    eCoreModule,
-    eEngineModule,
-    eMainModule,
-    eRendererModule
-};
-class XDCORE_API Module
-{
-    pcstr name;
+    const char* const name;
     void* handle;
 
 public:
-    Module(pcstr moduleName);
-    Module(const Module&) = delete;
-    ~Module();
+    ModuleHandle(const char* moduleName);
+    ModuleHandle(const ModuleHandle&) = delete;
+    ~ModuleHandle();
 
     void* operator()() const { return handle; }
 
-    pcstr GetName() const { return name; }
+    const char* GetName() const { return name; }
     bool NotEmpty() const { return handle != nullptr; }
-    void* Load(pcstr procName) const;
+    void* getProcAddress(const char* procName) const;
+};
+
+using Module = std::unique_ptr<ModuleHandle>;
+
+enum class EngineModules
+{
+    API,
+    Core,
+    Engine,
+    Main,
+    Renderer
 };
 
 class XDCORE_API ModuleManager
@@ -32,14 +35,14 @@ class XDCORE_API ModuleManager
     //ModuleManager();
     //~ModuleManager();
 
-    std::vector<std::shared_ptr<Module>> modules;
+    std::vector<std::shared_ptr<ModuleHandle>> modules;
 
 public:
     static ModuleManager instance;
 
-    static std::shared_ptr<Module> GetModule(const EngineModules xdModule);
+    static std::shared_ptr<ModuleHandle> GetModule(const EngineModules xdModule);
     static void LoadModule(EngineModules xdModule);
-    static void* GetProcFromModule(EngineModules xdModule, pcstr procName);
+    static void* GetProcFromModule(EngineModules xdModule, const char* procName);
 
     static std::string GetModuleName(EngineModules xdModule, const bool needExt = true);
     static std::string GetModuleName(std::string&& xdModule, const bool needExt, bool isExecutable = false);

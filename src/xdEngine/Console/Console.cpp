@@ -13,8 +13,8 @@ namespace XDay
 {
 void console::Initialize()
 {
-    Core.FindParam(eParamMainConfig)
-        ? ConfigFile = Core.ReturnParam(eParamMainConfig)
+    Core.FindParam(CoreParams::MainConfig)
+        ? ConfigFile = Core.ReturnParam(CoreParams::MainConfig)
         : ConfigFile = Core.DataPath.string() + "main.config";
 
     CommandsCache.reserve(LRUCount + 1);

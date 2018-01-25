@@ -761,8 +761,8 @@ void VkDemoRenderer::CreateTextureImage()
 {
     auto _path = Core.TexturesPath.string() + "texture.dds";
 
-    if (Core.FindParam(eParamTexture))
-        _path = Core.TexturesPath.string() + Core.ReturnParam(eParamTexture);
+    if (Core.FindParam(CoreParams::Texture))
+        _path = Core.TexturesPath.string() + Core.ReturnParam(CoreParams::Texture);
 
     gli::texture2d tex2D(gli::load(_path));
 
@@ -829,8 +829,8 @@ void VkDemoRenderer::LoadModel()
 
     auto _path = Core.ModelsPath.string() + "model.obj";
 
-    if (Core.FindParam(eParamModel))
-        _path = Core.ModelsPath.string() + Core.ReturnParam(eParamModel);
+    if (Core.FindParam(CoreParams::Model))
+        _path = Core.ModelsPath.string() + Core.ReturnParam(CoreParams::Model);
 
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {

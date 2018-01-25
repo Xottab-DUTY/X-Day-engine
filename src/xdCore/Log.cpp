@@ -11,13 +11,13 @@ namespace XDay
 Log Log::Global;
 Log::Log(const bool coreInitialized /*= false*/)
 {
-    if (Core.FindParam(eParamNoLog))
+    if (Core.FindParam(CoreParams::NoLog))
     {
         noLog = true;
         return;
     }
 
-    if (Core.FindParam(eParamNoLogFlush))
+    if (Core.FindParam(CoreParams::NoLogFlush))
         noLogFlush = true;
 
     std::vector<spdlog::sink_ptr> sinks;

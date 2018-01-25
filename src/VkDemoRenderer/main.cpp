@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    if (!Core.FindParam(XDay::eParamDontHideSystemConsole))
+    if (!Core.FindParam(XDay::CoreParams::DontHideSystemConsole))
         FreeConsole();
 #endif
 

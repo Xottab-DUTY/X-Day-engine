@@ -16,7 +16,7 @@ using namespace XDay;
 
 void watch_console()
 {
-    const bool allowed = Core.FindParam(XDay::eParamDontHideSystemConsole);
+    const bool allowed = Core.FindParam(CoreParams::DontHideSystemConsole);
 
     while (allowed && !glfwWindowShouldClose(Engine.windowMain))
     {
@@ -29,14 +29,14 @@ void watch_console()
 
 void AttachRenderer()
 {
-    ModuleManager::LoadModule(XDay::eRendererModule);
+    ModuleManager::LoadModule(EngineModules::Renderer);
 
     using pFunc = void(*)();
-    const auto func = static_cast<pFunc>(ModuleManager::GetProcFromModule(XDay::eRendererModule, "InitializeRenderer"));
+    const auto func = static_cast<pFunc>(ModuleManager::GetProcFromModule(EngineModules::Renderer, "InitializeRenderer"));
     if (func)
         func();
     else
-        Log::Error("Cannot attach function InitializeRenderer from {}", ModuleManager::GetModuleName(XDay::eRendererModule));
+        Log::Error("Cannot attach function InitializeRenderer from {}", ModuleManager::GetModuleName(EngineModules::Renderer));
 }
 
 int main(int argc, char* argv[])
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    if (!Core.FindParam(XDay::eParamDontHideSystemConsole))
+    if (!Core.FindParam(CoreParams::DontHideSystemConsole))
         FreeConsole();
 #endif
 

@@ -6,24 +6,24 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace XDay
 {
-enum eCoreParams
+enum class CoreParams
 {
-    eParamPrefix,
-    eParamDebug,
-    eParamNoLog,
-    eParamNoLogFlush,
-    eParamResPath,
-    eParamDataPath,
-    eParamMainConfig,
-    eParamName,
-    eParamGame,
-    eParamDontHideSystemConsole,
+    Prefix,
+    Debug,
+    NoLog,
+    NoLogFlush,
+    ResPath,
+    DataPath,
+    MainConfig,
+    Name,
+    Game,
+    DontHideSystemConsole,
 
-    eParamShaderForceRecompilation,
-    eParamShaderPreprocess,
+    ShaderForceRecompilation,
+    ShaderPreprocess,
 
-    eParamTexture,
-    eParamModel
+    Texture,
+    Model
 };
 
 class XDCORE_API xdCore
@@ -84,9 +84,9 @@ public:
 
     void CreateDirIfNotExist(const filesystem::path& p) const;
 
-    bool FindParam(eCoreParams param) const;
-    std::string ReturnParam(eCoreParams param) const;
-    static std::string RecognizeParam(eCoreParams param);
+    bool FindParam(CoreParams param) const;
+    std::string ReturnParam(CoreParams param) const;
+    static std::string RecognizeParam(CoreParams param);
 
 private:
     void InitializeResources();
