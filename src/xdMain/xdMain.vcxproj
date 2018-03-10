@@ -159,33 +159,6 @@
     <ClInclude Include="pch.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanApp.vcxproj">
-      <Project>{d033a6ab-7bd4-46a4-a1d9-47610e04bbf2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanCore.vcxproj">
-      <Project>{c33270a3-7319-4e98-be3e-498967e5e951}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanD3D.vcxproj">
-      <Project>{376b3278-a1bd-44d3-b37e-12cb75047bc3}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanDisplay.vcxproj">
-      <Project>{dcd4d200-c50b-4d07-ae76-c2a3ebe608e5}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanGL.vcxproj">
-      <Project>{0ea0db88-17de-441e-af1e-e27d9ef8a285}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanNetwork.vcxproj">
-      <Project>{09f72707-c0b9-4bd1-be96-1ef9de4db8df}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanSound.vcxproj">
-      <Project>{51a282b5-f4ea-4c2d-af4b-f1468f2082e7}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanUI.vcxproj">
-      <Project>{92dc7e83-9a76-4d6c-8ae8-faa69e166676}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\include\ClanLib\Projects\clanXML.vcxproj">
-      <Project>{1ced5ffa-2337-43ee-9c97-fc649da49930}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\include\fmt.vcxproj">
       <Project>{f3a00ed5-79b7-43c7-8d9c-58874dc61845}</Project>
     </ProjectReference>
