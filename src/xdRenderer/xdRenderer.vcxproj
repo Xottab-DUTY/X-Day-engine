@@ -23,6 +23,7 @@
     <ProjectGuid>{D6E5C594-52BD-4FEE-A20A-D609E2A57CBD}</ProjectGuid>
     <RootNamespace>xdRenderer</RootNamespace>
     <ProjectName>X-Day.Renderer</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

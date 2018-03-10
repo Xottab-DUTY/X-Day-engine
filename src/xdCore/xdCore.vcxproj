@@ -23,6 +23,7 @@
     <ProjectGuid>{71090322-39A3-40B9-85D9-55A363670B5D}</ProjectGuid>
     <RootNamespace>xdCore</RootNamespace>
     <ProjectName>X-Day.Core</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
