@@ -2,20 +2,23 @@
 
 #include <string>
 #include <vector>
-#include <filesystem>
-namespace filesystem = std::experimental::filesystem;
-
-//#include <tbb/cache_aligned_allocator.h>
+#include <bitset>
 
 using pstr = char*;
 using pcstr = const char*;
+using pcstrc = const char* const;
 
 namespace XDay
 {
-template<class T>
-//class allocator : public tbb::cache_aligned_allocator<T> {};
-class allocator : public std::allocator<T> {};
+template<typename Type>
+using allocator = std::allocator<Type>;
 
-template<class T>
-class vector : public std::vector<T, allocator<T>> {};
+using string = std::basic_string<char, std::char_traits<char>, allocator<char>>;
+using stringc = string const;
+
+template<typename Type>
+using vector = std::vector<Type, allocator<Type>>;
+
+template<typename FlagsEnum>
+using flags = std::bitset<FlagsEnum::LastFlag>;
 } // namespace XDay
