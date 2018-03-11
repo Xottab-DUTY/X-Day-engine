@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandLine\Key.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="ModuleManager.cpp" />
     <ClCompile Include="pch.cpp">
@@ -167,6 +168,8 @@
     <ClCompile Include="XML\XMLResource.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandLine\Key.hpp" />
+    <ClInclude Include="CommandLine\Keys.hpp" />
     <ClInclude Include="Log.hpp" />
     <ClInclude Include="ModuleManager.hpp" />
     <ClInclude Include="pch.hpp" />

@@ -21,6 +21,7 @@
 #include <fmt/ostream.h>
 
 #include "xdCore/xdCore.hpp"
+#include "xdCore/CommandLine/Keys.hpp"
 #include "VkDemoEngine.hpp"
 #include "VkDemoRenderer.hpp"
 #include "Shader.hpp"
@@ -761,8 +762,8 @@ void VkDemoRenderer::CreateTextureImage()
 {
     auto _path = Core.TexturesPath.string() + "texture.dds";
 
-    if (Core.FindParam(CoreParams::Texture))
-        _path = Core.TexturesPath.string() + Core.ReturnParam(CoreParams::Texture);
+    if (CommandLine::KeyTexture.IsSet())
+        _path = Core.TexturesPath.string() + CommandLine::KeyTexture.StringValue();
 
     gli::texture2d tex2D(gli::load(_path));
 
@@ -829,8 +830,8 @@ void VkDemoRenderer::LoadModel()
 
     auto _path = Core.ModelsPath.string() + "model.obj";
 
-    if (Core.FindParam(CoreParams::Model))
-        _path = Core.ModelsPath.string() + Core.ReturnParam(CoreParams::Model);
+    if (CommandLine::KeyModel.IsSet())
+        _path = Core.ModelsPath.string() + CommandLine::KeyModel.StringValue();
 
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {

@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "xdCore/xdCore.hpp"
+#include "xdCore/CommandLine/Keys.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
@@ -13,8 +14,8 @@ namespace XDay
 {
 void console::Initialize()
 {
-    Core.FindParam(CoreParams::MainConfig)
-        ? ConfigFile = Core.ReturnParam(CoreParams::MainConfig)
+    CommandLine::KeyMainConfig.IsSet()
+        ? ConfigFile = CommandLine::KeyMainConfig.StringValue()
         : ConfigFile = Core.DataPath.string() + "main.config";
 
     CommandsCache.reserve(LRUCount + 1);

@@ -13,6 +13,9 @@
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="ModuleManager.cpp" />
+    <ClCompile Include="CommandLine\Key.cpp">
+      <Filter>CommandLine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xdCore.hpp" />
@@ -28,6 +31,12 @@
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="Types.hpp" />
     <ClInclude Include="ModuleManager.hpp" />
+    <ClInclude Include="CommandLine\Key.hpp">
+      <Filter>CommandLine</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine\Keys.hpp">
+      <Filter>CommandLine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Logging">
@@ -35,6 +44,9 @@
     </Filter>
     <Filter Include="XML">
       <UniqueIdentifier>{1f28fb21-07c1-4f2c-bbad-f121606052cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommandLine">
+      <UniqueIdentifier>{80d2f9e0-b715-4ccc-b5eb-0aeb85594c2b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

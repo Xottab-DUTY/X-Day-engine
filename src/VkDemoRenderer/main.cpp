@@ -4,6 +4,7 @@
 #include "pch.hpp"
 
 #include "xdCore/xdCore.hpp"
+#include "xdCore/CommandLine/Keys.hpp"
 #include "VkDemoEngine.hpp"
 
 int main(int argc, char* argv[])
@@ -13,7 +14,7 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    if (!Core.FindParam(XDay::CoreParams::DontHideSystemConsole))
+    if (XDay::CommandLine::KeyDontHideSystemConsole.IsSet())
         FreeConsole();
 #endif
 

@@ -6,7 +6,7 @@
 
 using pstr = char*;
 using pcstr = const char*;
-using pcstrc = const char* const;
+using cpcstr = const char* const;
 
 namespace XDay
 {

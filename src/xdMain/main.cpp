@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include "xdCore/xdCore.hpp"
+#include "xdCore/CommandLine/Keys.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"
 #include "xdCore/ModuleManager.hpp"
@@ -16,7 +17,7 @@ using namespace XDay;
 
 void watch_console()
 {
-    const bool allowed = Core.FindParam(CoreParams::DontHideSystemConsole);
+    const bool allowed = CommandLine::KeyDontHideSystemConsole.IsSet();
 
     while (allowed && !glfwWindowShouldClose(Engine.windowMain))
     {
@@ -46,7 +47,7 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    if (!Core.FindParam(CoreParams::DontHideSystemConsole))
+    if (!CommandLine::KeyDontHideSystemConsole.IsSet())
         FreeConsole();
 #endif
 
@@ -73,6 +74,8 @@ int main(int argc, char* argv[])
     Engine.InitRender();
 
     Engine.mainLoop();
+
+    Core.Destroy();
 
     WatchConsole.~thread();
 

@@ -4,6 +4,7 @@
 #include <spdlog/sinks/msvc_sink.h>
 
 #include "xdCore.hpp"
+#include "CommandLine/Keys.hpp"
 #include "Log.hpp"
 
 namespace XDay
@@ -11,13 +12,13 @@ namespace XDay
 Log Log::Global;
 Log::Log(const bool coreInitialized /*= false*/)
 {
-    if (Core.FindParam(CoreParams::NoLog))
+    if (CommandLine::KeyNoLog.IsSet())
     {
         noLog = true;
         return;
     }
 
-    if (Core.FindParam(CoreParams::NoLogFlush))
+    if (CommandLine::KeyNoLogFlush.IsSet())
         noLogFlush = true;
 
     std::vector<spdlog::sink_ptr> sinks;

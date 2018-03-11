@@ -6,6 +6,11 @@ namespace filesystem = std::experimental::filesystem;
 
 namespace XDay
 {
+namespace CommandLine
+{
+class Key;
+}
+
 enum class CoreParams
 {
     Prefix,
@@ -57,8 +62,6 @@ public:
     filesystem::path SoundsPath;
     filesystem::path TexturesPath;
 
-    std::string GameModule;
-
     std::string UserName = "X-Day User";
     std::string CompName = "X-Day Computer";
     std::vector<std::string> Params;
@@ -84,9 +87,8 @@ public:
 
     void CreateDirIfNotExist(const filesystem::path& p) const;
 
-    bool FindParam(CoreParams param) const;
-    std::string ReturnParam(CoreParams param) const;
-    static std::string RecognizeParam(CoreParams param);
+    bool FindParam(stringc param) const;
+    string ReturnParam(stringc param) const;
 
 private:
     void InitializeResources();

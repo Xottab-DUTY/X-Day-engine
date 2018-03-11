@@ -8,6 +8,7 @@ namespace filesystem = std::experimental::filesystem;
 #include <glslang/SPIRV/GlslangToSpv.h>
 
 #include "xdCore/xdCore.hpp"
+#include "xdCore/CommandLine/Keys.hpp"
 #include "Shader.hpp"
 
 using namespace XDay;
@@ -39,7 +40,7 @@ void ShaderWorker::Initialize()
 
 void ShaderWorker::LoadShader()
 {
-    auto shader_source_path = Core.ShadersPath.string() + shaderName;
+    const auto shader_source_path = Core.ShadersPath.string() + shaderName;
     std::fstream shader_source_file(shader_source_path);
 
     if (shader_source_file.is_open())
@@ -53,11 +54,11 @@ void ShaderWorker::LoadShader()
 
 void ShaderWorker::LoadBinaryShader()
 {
-    auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
+    const auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
     std::ifstream shader_binary_file(shader_binary_path, std::ios::binary);
 
     // check if file exist and it's not empty
-    if (!Core.FindParam(CoreParams::ShaderForceRecompilation) && shader_binary_file.is_open() && filesystem::file_size(shader_binary_path) != 0)
+    if (!CommandLine::KeyShaderForceRecompilation.IsSet() && shader_binary_file.is_open() && filesystem::file_size(shader_binary_path) != 0)
     {
         // Found shader, but it is old? Use it.
         // Recompile it and only then try to use new shader.
@@ -121,9 +122,9 @@ void ShaderWorker::CompileShader()
 {
     glslang::InitializeProcess();
 
-    auto shader_source_path = Core.ShadersPath.string() + shaderName;
-    auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
-    auto shader_hash_path = Core.BinaryShadersPath.string() + shaderName + ".hash";
+    const auto shader_source_path = Core.ShadersPath.string() + shaderName;
+    const auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
+    const auto shader_hash_path = Core.BinaryShadersPath.string() + shaderName + ".hash";
 
     if (Core.isGlobalDebug())
         Log::Debug("ShaderWorker::CompileShader():: compiling: {}", shaderName);
@@ -138,7 +139,7 @@ void ShaderWorker::CompileShader()
     shader->setStrings(&source_bytes, 1);
     shader->setEntryPoint("main");
 
-    if (Core.isGlobalDebug() && Core.FindParam(CoreParams::ShaderPreprocess))
+    if (Core.isGlobalDebug() && CommandLine::KeyShaderPreprocess.IsSet())
     {
         std::string preprocessed;
         glslang::TShader::ForbidIncluder includer;

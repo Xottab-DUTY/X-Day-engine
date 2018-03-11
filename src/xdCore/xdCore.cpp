@@ -9,6 +9,7 @@ namespace filesystem = std::experimental::filesystem;
 #include <GLFW/glfw3.h>
 
 #include "xdCore.hpp"
+#include "CommandLine/Keys.hpp"
 #include "ModuleManager.hpp"
 #include "XML/XMLResource.hpp"
 
@@ -26,7 +27,7 @@ bool xdCore::isGlobalDebug() const
 #ifdef DEBUG
     return true;
 #endif
-    return FindParam(CoreParams::Debug);
+    return CommandLine::KeyDebug.IsSet();
 }
 
 xdCore::xdCore()
@@ -45,6 +46,8 @@ void xdCore::InitializeArguments(int argc, char* argv[])
         ParamsString += str + " ";
 
     ParamsString.pop_back(); // remove the last " "
+
+    CommandLine::Keys::Initialize();
 }
 
 void xdCore::Initialize(std::string&& _appname)
@@ -52,13 +55,19 @@ void xdCore::Initialize(std::string&& _appname)
     Log::Info("{} {} (build {})", EngineName, EngineVersion, buildId);
     Log::Debug("Core: Initializing");
     AppVersion = "1.0";
-    FindParam(CoreParams::Name) ? AppName = ReturnParam(CoreParams::Name) : AppName = _appname;
-    FindParam(CoreParams::Game) ? GameModule = ReturnParam(CoreParams::Game) : GameModule = "xdGame";
+
     AppPath = filesystem::absolute(Params.front());
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
-    FindParam(CoreParams::DataPath) ? DataPath = ReturnParam(CoreParams::DataPath) : DataPath = WorkPath.string() + "/appdata/";
-    FindParam(CoreParams::ResPath) ? ResourcesPath = ReturnParam(CoreParams::ResPath) : ResourcesPath = WorkPath.string() + "/resources/";
+
+    auto& key = CommandLine::KeyName;
+    key.IsSet() ? AppName = key.StringValue() : AppName = _appname;
+
+    key = CommandLine::KeyDataPath;
+    key.IsSet() ? DataPath = key.StringValue() : DataPath = WorkPath.string() + "/appdata/";
+
+    key = CommandLine::KeyResPath;
+    key.IsSet() ? ResourcesPath = key.StringValue() : ResourcesPath = WorkPath.string() + "/resources/";
 
     BinaryShadersPath = DataPath.string() + "/binary_shaders/";
     LogsPath = DataPath.string() + "/logs/";
@@ -86,6 +95,12 @@ void xdCore::Initialize(std::string&& _appname)
     Log::onCoreInitialized();
 }
 
+void xdCore::Destroy()
+{
+    CommandLine::Keys::Destroy();
+}
+
+
 void xdCore::InitializeResources()
 {
     ArchivesPath = ResourcesPath.string() + "/archives/";
@@ -101,9 +116,9 @@ void xdCore::InitializeResources()
 }
 
 // Finds command line parameters and returns true if param exists
-bool xdCore::FindParam(CoreParams param) const
+bool xdCore::FindParam(stringc param) const
 {
-    if (ParamsString.find(RecognizeParam(param)) != std::string::npos)
+    if (ParamsString.find(CommandLine::KeyPrefix + param) != string::npos)
         return true;
     return false;
 }
@@ -112,81 +127,30 @@ bool xdCore::FindParam(CoreParams param) const
 // If parameter isn't found it returns empty string.
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
-std::string xdCore::ReturnParam(CoreParams param) const
+string xdCore::ReturnParam(stringc param) const
 {
     bool found = false;
-    const auto p = RecognizeParam(param);
-    for (auto i : Params)
+    for (auto& i : Params)
     {
-        if (found && i.find(RecognizeParam(CoreParams::Prefix)) != std::string::npos)
+        if (found && i.find(CommandLine::KeyPrefix) != string::npos)
         {
-            Log::Error("xdCore::ReturnParam(): wrong construction \"{0} {1}\" used instead of \"{0} *value* {1}\"", p, i);
+            Log::Error("xdCore::ReturnParam(): wrong construction [{0} {1}] used instead of [{0} *value* {1}]", param, i);
             break;
         }
         if (found)
             return i;
-        if (i.find(p) == std::string::npos)
+        if (i.find(CommandLine::KeyPrefix + param) == string::npos)
             continue;
         found = true;
     }
 
-    Log::Error("xdCore::ReturnParam(): returning empty string for param {}", p);
+    Log::Error("xdCore::ReturnParam(): returning empty string for param [{}]", param);
     return "";
-}
-
-std::string xdCore::RecognizeParam(CoreParams param)
-{
-    switch (param)
-    {
-    case CoreParams::Prefix:
-        return "--p_";
-    case CoreParams::Debug:
-        return "--p_debug";
-    case CoreParams::NoLog:
-        return "--p_nolog";
-    case CoreParams::NoLogFlush:
-        return "--p_nologflush";
-    case CoreParams::ResPath:
-        return "--p_respath";
-    case CoreParams::DataPath:
-        return "--p_datapath";
-    case CoreParams::MainConfig:
-        return "--p_mainconfig";
-    case CoreParams::Name:
-        return "--p_name";
-    case CoreParams::Game:
-        return "--p_game";
-    case CoreParams::DontHideSystemConsole:
-        return "--p_syscmd";
-    case CoreParams::ShaderForceRecompilation:
-        return "--p_shrec";
-    case CoreParams::ShaderPreprocess:
-        return "--p_shpre";
-    case CoreParams::Texture:
-        return "--p_texture";
-    case CoreParams::Model:
-        return "--p_model";
-    default:
-        throw "Create the case for the param here!";
-    }
 }
 
 void xdCore::GetParamsHelp()
 {
-    Log::Info("\nAvailable parameters:\n"\
-         "--p_name - Specifies AppName, default is \"X-Day Engine\" \n"\
-         "--p_game - Specifies game module to be attached, default is \"xdGame\";\n"\
-         "--p_datapath - Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"\n"\
-         "--p_respath - Specifies path of resources folder, default is \"*WorkingDirectory*/resources\"\n"\
-         "--p_mainconfig - Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\" \n"\
-         "--p_nolog - Completely disables engine log. May increase performance\n"\
-         "--p_nologflush - Disables log flushing. Useless if -nolog defined\n"\
-         "--p_debug - Enables debug mode\n"
-         "--p_syscmd - Disables system console hiding\n"
-         "--p_shrec - Compile shaders even if they already compiled\n"\
-         "--p_shpre - Outputs preprocessed shaders to the shader sources dir. Works only in debug mode\n"\
-         "--p_texture - Specifies path to texture file to load, default is \"texture.dds\"\n"\
-         "--p_model - Specifies path to model file to model, default is \"model.dds\"\n");
+    CommandLine::Keys::Help();
 
     Log::Info("\nДоступные параметры:\n"\
          "--p_name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
