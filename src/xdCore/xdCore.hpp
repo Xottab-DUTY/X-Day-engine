@@ -11,26 +11,6 @@ namespace CommandLine
 class Key;
 }
 
-enum class CoreParams
-{
-    Prefix,
-    Debug,
-    NoLog,
-    NoLogFlush,
-    ResPath,
-    DataPath,
-    MainConfig,
-    Name,
-    Game,
-    DontHideSystemConsole,
-
-    ShaderForceRecompilation,
-    ShaderPreprocess,
-
-    Texture,
-    Model
-};
-
 class XDCORE_API xdCore
 {
     double buildId = 0;

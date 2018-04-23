@@ -65,6 +65,7 @@ bool Keys::isAutoInitAllowed() noexcept
 
 void Keys::Help() noexcept
 {
+    Log::Info("Available command line parameters:");
     for (auto& key : Instance()->keys)
     {
         Log::Info("{} – {}", key->name,
