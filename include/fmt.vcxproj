@@ -104,12 +104,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="fmt\fmt\format.cc" />
-    <ClCompile Include="fmt\fmt\ostream.cc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="fmt\fmt\format.h" />
-    <ClInclude Include="fmt\fmt\ostream.h" />
+    <ClCompile Include="fmt\src\format.cc" />
+    <ClCompile Include="fmt\src\posix.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

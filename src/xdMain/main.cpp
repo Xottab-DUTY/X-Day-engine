@@ -62,7 +62,11 @@ int main(int argc, char* argv[])
     Core.GetParamsHelp();
 
     Console.ExecuteConfig();
-    Log::ErrorIf(!glfwInit(), "GLFW not initialized.");
+    if (!glfwInit())
+    {
+        Log::Error("GLFW not initialized.");
+        // XXX: Crash here
+    }
 
     AttachRenderer();
 

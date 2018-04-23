@@ -83,7 +83,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XDRENDERER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
@@ -103,7 +103,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XDRENDERER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
@@ -120,7 +120,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XDRENDERER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
@@ -140,7 +140,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;$(xdIncludeDir)spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(xdIncludeDir)glslang\glslang\Public;$(xdIncludeDir)glslang\glslang\Include;$(xdIncludeDir)glm;$(xdIncludeDir)gli;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XDRENDERER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>

@@ -18,7 +18,6 @@
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
-#include <fmt/ostream.h>
 
 #include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
