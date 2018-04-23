@@ -63,8 +63,6 @@ public:
     auto GetParams() const { return Params; }
     auto GetParamsString() const { return ParamsString; }
 
-    static void GetParamsHelp();
-
     void CreateDirIfNotExist(const filesystem::path& p) const;
 
     bool FindParam(stringc param) const;
