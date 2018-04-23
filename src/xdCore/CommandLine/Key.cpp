@@ -1,7 +1,7 @@
 #include "pch.hpp"
 #include "Key.hpp"
 #include "Keys.hpp"
-#include "xdCore.hpp"
+#include "Core.hpp"
 
 namespace XDay::CommandLine
 {

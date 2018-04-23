@@ -163,7 +163,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="xdCore.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="XML\XMLDocument.cpp" />
     <ClCompile Include="XML\XMLResource.cpp" />
   </ItemGroup>
@@ -174,7 +174,7 @@
     <ClInclude Include="ModuleManager.hpp" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="Types.hpp" />
-    <ClInclude Include="xdCore.hpp" />
+    <ClInclude Include="Core.hpp" />
     <ClInclude Include="XML\XMLDocument.hpp" />
     <ClInclude Include="XML\XMLResource.hpp" />
   </ItemGroup>

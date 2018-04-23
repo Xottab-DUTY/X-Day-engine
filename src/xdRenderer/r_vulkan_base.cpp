@@ -11,7 +11,7 @@
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 
-#include "xdCore/xdCore.hpp"
+#include "xdCore/Core.hpp"
 #include "xdEngine/xdEngine.hpp"
 #include "r_vulkan_base.hpp"
 #include "r_vulkan_debug_callback.hpp"

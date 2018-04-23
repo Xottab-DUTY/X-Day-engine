@@ -5,7 +5,7 @@ namespace filesystem = std::experimental::filesystem;
 #include "tinyxml2/tinyxml2.h"
 
 #include "XMLResource.hpp"
-#include "xdCore.hpp"
+#include "Core.hpp"
 
 using namespace XDay;
 

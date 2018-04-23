@@ -8,7 +8,7 @@ namespace filesystem = std::experimental::filesystem;
 #include <fmt/format.h>
 #include <GLFW/glfw3.h>
 
-#include "xdCore.hpp"
+#include "Core.hpp"
 #include "CommandLine/Keys.hpp"
 #include "ModuleManager.hpp"
 #include "XML/XMLResource.hpp"

@@ -3,7 +3,7 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/sinks/msvc_sink.h>
 
-#include "xdCore.hpp"
+#include "Core.hpp"
 #include "CommandLine/Keys.hpp"
 #include "Log.hpp"
 

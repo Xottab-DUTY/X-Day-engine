@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "xdEngine.hpp"
-#include "xdCore/xdCore.hpp"
+#include "xdCore/Core.hpp"
 #include "Console/Console.hpp"
 #include "xdAPI/xdAPI.hpp"
 #include "xdRenderer/renderer.hpp"

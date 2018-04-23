@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include "xdCore/xdCore.hpp"
+#include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
