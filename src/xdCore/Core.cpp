@@ -131,7 +131,7 @@ void xdCore::CalculateBuildId()
         startDate_tm.tm_mday = 1;
         startDate_tm.tm_mon = 0;
         startDate_tm.tm_year = 2017 - 1900;
-        startDate_tm.tm_hour = 12; //random hour(don't remember exact hour)
+        startDate_tm.tm_hour = 12; // I don't remember the exact hour of creation, this is just a random number
         startDate_tm.tm_min = 0;
         startDate_tm.tm_sec = 0;
     }
