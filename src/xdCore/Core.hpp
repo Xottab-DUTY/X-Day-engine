@@ -5,8 +5,8 @@ namespace XDay
 class XDCORE_API xdCore
 {
     double buildId = 0;
-    const string buildDate = __DATE__;
-    const string buildTime = __TIME__;
+    cpcstr buildDate = __DATE__;
+    cpcstr buildTime = __TIME__;
     string buildString;
     string glfwVersionString;
 
@@ -37,6 +37,7 @@ public:
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
     auto GetGLFWVersionString() const { return glfwVersionString; }
+    constexpr static pcstr GetBuildConfiguration();
 
     auto GetEngineName() const { return engineName; }
     auto GetEngineVersion() const { return engineVersion; }

@@ -75,7 +75,7 @@ void Keys::Help() noexcept
 
     }
 
-    Log::Info("\nДоступные параметры:\n"\
+    Log::Info("Доступные параметры:\n"\
         "--p_name - Задаёт AppName, по умолчанию: \"X-Day Engine\" \n"\
         "--p_game - Задаёт игровую библиотеку для подключения, по умолчанию: \"xdGame\";\n"
         "--p_datapath - Задаёт путь до папки с настройками, по умолчанию: \"*WorkingDirectory*/appdata\"\n"\

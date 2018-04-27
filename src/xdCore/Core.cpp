@@ -57,7 +57,7 @@ void xdCore::Initialize(stringc&& _appname)
     auto& key = CommandLine::KeyName;
     key.IsSet() ? appName = key.StringValue() : appName = _appname;
 
-    buildString = fmt::format("{} build {}, {}, {}", ModuleManager::GetModuleName(EngineModules::Core, false), buildId, buildDate, buildTime);
+    buildString = fmt::format("{} {} {} (build {}, {}, {})", engineName, engineVersion, GetBuildConfiguration(), buildId, buildDate, buildTime);
     glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
 
@@ -103,6 +103,23 @@ string xdCore::ReturnParam(stringc param) const
 
     Log::Error("xdCore::ReturnParam(): returning empty string for param [{}]", param);
     return "";
+}
+
+constexpr pcstr xdCore::GetBuildConfiguration()
+{
+#ifdef DEBUG
+#ifdef XR_X64
+    return "Dx64";
+#else
+    return "Dx86";
+#endif
+#else
+#ifdef XR_X64
+    return "Rx64";
+#else
+    return "Rx86";
+#endif
+#endif
 }
 
 void xdCore::CalculateBuildId()
