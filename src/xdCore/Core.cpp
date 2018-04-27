@@ -32,36 +32,36 @@ bool xdCore::isGlobalDebug() const
 
 xdCore::xdCore()
 {
-    EngineName = "X-Day Engine";
-    EngineVersion = "1.0";
+    engineName = "X-Day Engine";
+    engineVersion = "1.0";
     CalculateBuildId();
 }
 
 void xdCore::InitializeArguments(int argc, char* argv[])
 {
     for (int i = 0; i < argc; ++i)
-        Params.push_back(argv[i]);
+        params.push_back(argv[i]);
 
-    for (auto&& str : Params)
-        ParamsString += str + " ";
+    for (auto&& str : params)
+        paramsString += str + " ";
 
-    ParamsString.pop_back(); // remove the last " "
+    paramsString.pop_back(); // remove the last " "
 
     CommandLine::Keys::Initialize();
 }
 
-void xdCore::Initialize(std::string&& _appname)
+void xdCore::Initialize(stringc&& _appname)
 {
-    Log::Info("{} {} (build {})", EngineName, EngineVersion, buildId);
+    Log::Info("{} {} (build {})", engineName, engineVersion, buildId);
     Log::Debug("Core: Initializing");
-    AppVersion = "1.0";
+    appVersion = "1.0";
 
-    AppPath = filesystem::absolute(Params.front());
+    AppPath = filesystem::absolute(params.front());
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
 
     auto& key = CommandLine::KeyName;
-    key.IsSet() ? AppName = key.StringValue() : AppName = _appname;
+    key.IsSet() ? appName = key.StringValue() : appName = _appname;
 
     key = CommandLine::KeyDataPath;
     key.IsSet() ? DataPath = key.StringValue() : DataPath = WorkPath.string() + "/appdata/";
@@ -89,7 +89,7 @@ void xdCore::Initialize(std::string&& _appname)
     CreateDirIfNotExist(TexturesPath);
 
     buildString = fmt::format("{} build {}, {}, {}", ModuleManager::GetModuleName(EngineModules::Core, false), buildId, buildDate, buildTime);
-    GLFWVersionString = fmt::format("GLFW {}", glfwGetVersionString());
+    glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
     Log::Debug("Core: Initialized");
     Log::onCoreInitialized();
@@ -118,7 +118,7 @@ void xdCore::InitializeResources()
 // Finds command line parameters and returns true if param exists
 bool xdCore::FindParam(stringc param) const
 {
-    if (ParamsString.find(CommandLine::KeyPrefix + param) != string::npos)
+    if (paramsString.find(CommandLine::KeyPrefix + param) != string::npos)
         return true;
     return false;
 }
@@ -130,7 +130,7 @@ bool xdCore::FindParam(stringc param) const
 string xdCore::ReturnParam(stringc param) const
 {
     bool found = false;
-    for (auto& i : Params)
+    for (auto& i : params)
     {
         if (found && i.find(CommandLine::KeyPrefix) != string::npos)
         {

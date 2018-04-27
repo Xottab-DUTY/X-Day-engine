@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 
     Log::Debug(Core.GetGLFWVersionString());
     Log::Info(Core.GetBuildString());
-    Log::Info("Core.Params: " + Core.ParamsString);
+    Log::Info("Core.Params: " + Core.GetParamsString());
     Log::Info("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.");
     Log::Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
     CommandLine::Keys::Help();

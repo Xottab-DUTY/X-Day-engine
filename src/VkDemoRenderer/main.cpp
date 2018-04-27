@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 
     XDay::Log::Info(Core.GetGLFWVersionString());
     XDay::Log::Info(Core.GetBuildString());
-    XDay::Log::Info("Core.Params: " + Core.ParamsString);
+    XDay::Log::Info("Core.Params: " + Core.GetParamsString());
     XDay::Log::Info("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.");
     XDay::Log::Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
     XDay::CommandLine::Keys::Help();

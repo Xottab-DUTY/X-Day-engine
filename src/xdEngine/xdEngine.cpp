@@ -82,9 +82,9 @@ void XDayEngine::Initialize()
 void XDayEngine::createMainWindow()
 {
     if (Console.GetBool(&Command::FullscreenCC))
-        windowMain = glfwCreateWindow(currentMode->width, currentMode->height, Core.AppName.c_str(), currentMonitor, nullptr);
+        windowMain = glfwCreateWindow(currentMode->width, currentMode->height, Core.GetAppName().c_str(), currentMonitor, nullptr);
     else
-        windowMain = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.AppName.c_str(), nullptr, nullptr);
+        windowMain = glfwCreateWindow(currentMode->width-256, currentMode->height-256, Core.GetAppName().c_str(), nullptr, nullptr);
 
     glfwSetWindowSizeLimits(windowMain, 256, 256, GLFW_DONT_CARE, GLFW_DONT_CARE);
 

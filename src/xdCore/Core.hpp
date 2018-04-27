@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+// XXX: move the filesystem stuff out of Core
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
@@ -14,17 +14,24 @@ class Key;
 class XDCORE_API xdCore
 {
     double buildId = 0;
-    const std::string buildDate = __DATE__;
-    const std::string buildTime = __TIME__;
-    std::string buildString;
-    std::string GLFWVersionString;
+    const string buildDate = __DATE__;
+    const string buildTime = __TIME__;
+    string buildString;
+    string glfwVersionString;
+
+    string engineName;
+    string engineVersion;
+
+    vector<string> params;
+    string paramsString;
+
+    string appName;
+    string appVersion;
+
+    string userName = "X-Day User";
+    string compName = "X-Day Computer";
 
 public:
-    std::string EngineName;
-    std::string EngineVersion;
-
-    std::string AppName;
-    std::string AppVersion;
     filesystem::path AppPath;
     filesystem::path WorkPath;
     filesystem::path BinPath;
@@ -42,26 +49,31 @@ public:
     filesystem::path SoundsPath;
     filesystem::path TexturesPath;
 
-    std::string UserName = "X-Day User";
-    std::string CompName = "X-Day Computer";
-    std::vector<std::string> Params;
-    std::string ParamsString;
-
     bool isGlobalDebug() const;
 
 public:
     xdCore();
     void InitializeArguments(int argc, char* argv[]);
-    void Initialize(std::string&& ApplicationName = "X-Day Engine");
+    void Initialize(stringc&& _appname = "X-Day Engine");
     void Destroy();
 
     auto GetBuildId() const { return buildId; }
     auto GetBuildDate() const { return buildDate; }
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
-    auto GetGLFWVersionString() const { return GLFWVersionString; }
-    auto GetParams() const { return Params; }
-    auto GetParamsString() const { return ParamsString; }
+    auto GetGLFWVersionString() const { return glfwVersionString; }
+
+    auto GetEngineName() const { return engineName; }
+    auto GetEngineVersion() const { return engineVersion; }
+
+    auto GetParams() const { return params; }
+    auto GetParamsString() const { return paramsString; }
+
+    auto GetAppName() const { return appName; }
+    auto GetAppVersion() const { return appVersion; }
+
+    auto GetUsername() const { return userName; }
+    auto GetCompname() const { return compName; }
 
     void CreateDirIfNotExist(const filesystem::path& p) const;
 

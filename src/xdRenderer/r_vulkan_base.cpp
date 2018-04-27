@@ -98,8 +98,8 @@ void r_vulkan_base::createInstance()
         validationLayersAvailable = false;
     }
 
-    vk::ApplicationInfo appInfo(Core.AppName.c_str(), stoi(Core.AppVersion),
-                                Core.EngineName.c_str(), stoi(Core.EngineVersion),
+    vk::ApplicationInfo appInfo(Core.GetAppName().c_str(), std::stoi(Core.GetAppVersion()),
+                                Core.GetEngineName().c_str(), std::stoi(Core.GetEngineVersion()),
                                 VK_API_VERSION_1_0);
 
     auto extensions = getRequiredExtensions();
