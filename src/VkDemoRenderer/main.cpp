@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    if (XDay::CommandLine::KeyDontHideSystemConsole.IsSet())
+    if (!XDay::CommandLine::KeyDontHideSystemConsole.IsSet())
         FreeConsole();
 #endif
 
