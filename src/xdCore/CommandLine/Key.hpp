@@ -36,7 +36,7 @@ class Key;
 *
 * \brief Singleton that holds all known keys
 */
-class Keys
+class XDCORE_API Keys
 {
     vector<std::shared_ptr<KeyData>> keys;
     bool autoInitAllowed = false;
@@ -65,7 +65,7 @@ public:
  *
  * \brief The actual information about key
  */
-struct KeyData
+struct XDCORE_API KeyData
 {
     KeyData(stringc _name, stringc _description, const KeyType _type);
 
