@@ -21,6 +21,7 @@
 
 #include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/Filesystem.hpp"
 #include "VkDemoEngine.hpp"
 #include "VkDemoRenderer.hpp"
 #include "Shader.hpp"
@@ -759,10 +760,10 @@ void VkDemoRenderer::CreateDepthResources()
 
 void VkDemoRenderer::CreateTextureImage()
 {
-    auto _path = Core.TexturesPath.string() + "texture.dds";
+    auto _path = FS.TexturesPath.string() + "texture.dds";
 
     if (CommandLine::KeyTexture.IsSet())
-        _path = Core.TexturesPath.string() + CommandLine::KeyTexture.StringValue();
+        _path = FS.TexturesPath.string() + CommandLine::KeyTexture.StringValue();
 
     gli::texture2d tex2D(gli::load(_path));
 
@@ -827,10 +828,10 @@ void VkDemoRenderer::LoadModel()
     std::vector<tinyobj::material_t> materials;
     std::string err;
 
-    auto _path = Core.ModelsPath.string() + "model.obj";
+    auto _path = FS.ModelsPath.string() + "model.obj";
 
     if (CommandLine::KeyModel.IsSet())
-        _path = Core.ModelsPath.string() + CommandLine::KeyModel.StringValue();
+        _path = FS.ModelsPath.string() + CommandLine::KeyModel.StringValue();
 
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {

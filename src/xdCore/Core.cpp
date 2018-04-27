@@ -2,16 +2,14 @@
 
 #include <ctime>
 #include <sstream>
-#include <filesystem>
-namespace filesystem = std::experimental::filesystem;
 
 #include <fmt/format.h>
 #include <GLFW/glfw3.h>
 
 #include "Core.hpp"
 #include "CommandLine/Keys.hpp"
+#include "Filesystem.hpp"
 #include "ModuleManager.hpp"
-#include "XML/XMLResource.hpp"
 
 using namespace XDay;
 
@@ -22,7 +20,7 @@ static void error_callback(int error, const char* description)
     Log::Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
 }
 
-bool xdCore::isGlobalDebug() const
+bool xdCore::isGlobalDebug()
 {
 #ifdef DEBUG
     return true;
@@ -56,41 +54,15 @@ void xdCore::Initialize(stringc&& _appname)
     Log::Debug("Core: Initializing");
     appVersion = "1.0";
 
-    AppPath = filesystem::absolute(params.front());
-    WorkPath = filesystem::current_path();
-    BinPath = WorkPath.string() + "/bin/";
-
     auto& key = CommandLine::KeyName;
     key.IsSet() ? appName = key.StringValue() : appName = _appname;
-
-    key = CommandLine::KeyDataPath;
-    key.IsSet() ? DataPath = key.StringValue() : DataPath = WorkPath.string() + "/appdata/";
-
-    key = CommandLine::KeyResPath;
-    key.IsSet() ? ResourcesPath = key.StringValue() : ResourcesPath = WorkPath.string() + "/resources/";
-
-    BinaryShadersPath = DataPath.string() + "/binary_shaders/";
-    LogsPath = DataPath.string() + "/logs/";
-    SavesPath = DataPath.string() + "/saves/";
-    
-    InitializeResources();
-
-    CreateDirIfNotExist(DataPath);
-    CreateDirIfNotExist(BinaryShadersPath);
-    CreateDirIfNotExist(LogsPath);
-    CreateDirIfNotExist(SavesPath);
-
-    CreateDirIfNotExist(ResourcesPath);
-    CreateDirIfNotExist(ArchivesPath);
-    CreateDirIfNotExist(ConfigsPath);
-    CreateDirIfNotExist(ModelsPath);
-    CreateDirIfNotExist(ShadersPath);
-    CreateDirIfNotExist(SoundsPath);
-    CreateDirIfNotExist(TexturesPath);
 
     buildString = fmt::format("{} build {}, {}, {}", ModuleManager::GetModuleName(EngineModules::Core, false), buildId, buildDate, buildTime);
     glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     glfwSetErrorCallback(error_callback);
+
+    FS.Initialize();
+
     Log::Debug("Core: Initialized");
     Log::onCoreInitialized();
 }
@@ -98,21 +70,6 @@ void xdCore::Initialize(stringc&& _appname)
 void xdCore::Destroy()
 {
     CommandLine::Keys::Destroy();
-}
-
-
-void xdCore::InitializeResources()
-{
-    ArchivesPath = ResourcesPath.string() + "/archives/";
-    ConfigsPath = ResourcesPath.string() + "/configs/";
-    ModelsPath = ResourcesPath.string() + "/models/";
-    ShadersPath = ResourcesPath.string() + "/shaders/";
-    SoundsPath = ResourcesPath.string() + "/sounds/";
-    TexturesPath = ResourcesPath.string() + "/textures/";
-
-    xdXMLResource resource_initializer(ResourcesPath, "resources.xml");
-    if (!resource_initializer.isErrored())
-        resource_initializer.ParseResources();
 }
 
 // Finds command line parameters and returns true if param exists
@@ -146,11 +103,6 @@ string xdCore::ReturnParam(stringc param) const
 
     Log::Error("xdCore::ReturnParam(): returning empty string for param [{}]", param);
     return "";
-}
-
-void xdCore::CreateDirIfNotExist(const filesystem::path& p) const
-{
-    if (!filesystem::exists(p)) filesystem::create_directory(p);
 }
 
 void xdCore::CalculateBuildId()

@@ -16,6 +16,10 @@
       <Filter>CommandLine</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Module.cpp" />
+    <ClCompile Include="Filesystem.cpp">
+      <Filter>Filesystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.hpp">
@@ -37,6 +41,10 @@
       <Filter>CommandLine</Filter>
     </ClInclude>
     <ClInclude Include="Core.hpp" />
+    <ClInclude Include="Module.hpp" />
+    <ClInclude Include="Filesystem.hpp">
+      <Filter>Filesystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Logging">
@@ -47,6 +55,9 @@
     </Filter>
     <Filter Include="CommandLine">
       <UniqueIdentifier>{80d2f9e0-b715-4ccc-b5eb-0aeb85594c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Filesystem">
+      <UniqueIdentifier>{e9ae7b7b-28b7-4a80-a477-24ac7cfc93d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

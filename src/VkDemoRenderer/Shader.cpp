@@ -9,6 +9,7 @@ namespace filesystem = std::experimental::filesystem;
 
 #include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/Filesystem.hpp"
 #include "Shader.hpp"
 
 using namespace XDay;
@@ -40,7 +41,7 @@ void ShaderWorker::Initialize()
 
 void ShaderWorker::LoadShader()
 {
-    const auto shader_source_path = Core.ShadersPath.string() + shaderName;
+    const auto shader_source_path = FS.ShadersPath.string() + shaderName;
     std::fstream shader_source_file(shader_source_path);
 
     if (shader_source_file.is_open())
@@ -54,7 +55,7 @@ void ShaderWorker::LoadShader()
 
 void ShaderWorker::LoadBinaryShader()
 {
-    const auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
+    const auto shader_binary_path = FS.BinaryShadersPath.string() + shaderName + binaryExt;
     std::ifstream shader_binary_file(shader_binary_path, std::ios::binary);
 
     // check if file exist and it's not empty
@@ -108,9 +109,8 @@ void ShaderWorker::LoadBinaryShader()
 
 bool ShaderWorker::CheckIfShaderChanged()
 {
-    
-    auto shader_source_path = Core.ShadersPath.string() + shaderName;
-    auto shader_hash_path = Core.BinaryShadersPath.string() + shaderName + ".hash";
+    auto shader_source_path = FS.ShadersPath.string() + shaderName;
+    auto shader_hash_path = FS.BinaryShadersPath.string() + shaderName + ".hash";
 
     // Check the current source file hash and the saved hash
     // TODO: Implement
@@ -122,9 +122,9 @@ void ShaderWorker::CompileShader()
 {
     glslang::InitializeProcess();
 
-    const auto shader_source_path = Core.ShadersPath.string() + shaderName;
-    const auto shader_binary_path = Core.BinaryShadersPath.string() + shaderName + binaryExt;
-    const auto shader_hash_path = Core.BinaryShadersPath.string() + shaderName + ".hash";
+    const auto shader_source_path = FS.ShadersPath.string() + shaderName;
+    const auto shader_binary_path = FS.BinaryShadersPath.string() + shaderName + binaryExt;
+    const auto shader_hash_path = FS.BinaryShadersPath.string() + shaderName + ".hash";
 
     if (Core.isGlobalDebug())
         Log::Debug("ShaderWorker::CompileShader():: compiling: {}", shaderName);

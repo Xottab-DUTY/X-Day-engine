@@ -2,10 +2,10 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
-#include "tinyxml2/tinyxml2.h"
+#include <tinyxml2/tinyxml2.h>
 
+#include "Filesystem.hpp"
 #include "XMLResource.hpp"
-#include "Core.hpp"
 
 using namespace XDay;
 
@@ -29,39 +29,39 @@ void xdXMLResource::ParseResources() const
     {
         if (strcmp(resource->Attribute("type"), "archives") == 0)
             if (!resource->BoolAttribute("absolute"))
-                Core.ArchivesPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+                FS.ArchivesPath = FS.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
             else
-                Core.ArchivesPath = resource->FirstChildElement("path")->GetText();
+                FS.ArchivesPath = resource->FirstChildElement("path")->GetText();
 
         else if (strcmp(resource->Attribute("type"), "configs") == 0)
             if (!resource->BoolAttribute("absolute"))
-                Core.ConfigsPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+                FS.ConfigsPath = FS.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
             else
-                Core.ConfigsPath = resource->FirstChildElement("path")->GetText();
+                FS.ConfigsPath = resource->FirstChildElement("path")->GetText();
 
         else if (strcmp(resource->Attribute("type"), "models") == 0)
             if (!resource->BoolAttribute("absolute"))
-                Core.ModelsPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+                FS.ModelsPath = FS.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
             else
-                Core.ModelsPath = resource->FirstChildElement("path")->GetText();
+                FS.ModelsPath = resource->FirstChildElement("path")->GetText();
 
         else if (strcmp(resource->Attribute("type"), "shaders") == 0)
             if (!resource->BoolAttribute("absolute"))
-                Core.ShadersPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+                FS.ShadersPath = FS.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
             else
-                Core.ShadersPath = resource->FirstChildElement("path")->GetText();
+                FS.ShadersPath = resource->FirstChildElement("path")->GetText();
 
         else if (strcmp(resource->Attribute("type"), "sounds") == 0)
             if (!resource->BoolAttribute("absolute"))
-                Core.SoundsPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+                FS.SoundsPath = FS.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
             else
-                Core.SoundsPath = resource->FirstChildElement("path")->GetText();
+                FS.SoundsPath = resource->FirstChildElement("path")->GetText();
 
         else if (strcmp(resource->Attribute("type"), "textures") == 0)
             if (!resource->BoolAttribute("absolute"))
-                Core.TexturesPath = Core.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
+                FS.TexturesPath = FS.ResourcesPath.string() + resource->FirstChildElement("path")->GetText();
             else
-                Core.TexturesPath = resource->FirstChildElement("path")->GetText();
+                FS.TexturesPath = resource->FirstChildElement("path")->GetText();
     }
 }
 

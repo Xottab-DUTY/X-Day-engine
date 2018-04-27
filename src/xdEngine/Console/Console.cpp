@@ -4,6 +4,7 @@
 
 #include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/Filesystem.hpp"
 #include "Console.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
@@ -16,7 +17,7 @@ void console::Initialize()
 {
     CommandLine::KeyMainConfig.IsSet()
         ? ConfigFile = CommandLine::KeyMainConfig.StringValue()
-        : ConfigFile = Core.DataPath.string() + "main.config";
+        : ConfigFile = FS.DataPath.string() + "main.config";
 
     CommandsCache.reserve(LRUCount + 1);
     CommandsCache.erase(CommandsCache.begin(), CommandsCache.end());

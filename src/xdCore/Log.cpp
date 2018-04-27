@@ -5,6 +5,7 @@
 
 #include "Core.hpp"
 #include "CommandLine/Keys.hpp"
+#include "Filesystem.hpp"
 #include "Log.hpp"
 
 namespace XDay
@@ -25,7 +26,7 @@ Log::Log(const bool coreInitialized /*= false*/)
     sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 
     if (!noLogFlush && coreInitialized)
-        sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(Core.LogsPath.string() + logFile, true));
+        sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(FS.LogsPath.string() + logFile, true));
 
     if (Core.isGlobalDebug())
         sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
