@@ -4,23 +4,24 @@ namespace XDay
 {
 class XDCORE_API ModuleHandle
 {
-    const char* const name;
+    cpcstr name;
     void* handle;
 
 public:
-    ModuleHandle(const char* moduleName);
+    ModuleHandle(cpcstr moduleName);
     ModuleHandle(const ModuleHandle&) = delete;
     ~ModuleHandle();
 
-    void* operator()() const { return handle; }
+    auto operator()() const { return handle; }
 
-    const char* GetName() const { return name; }
+    auto GetName() const { return name; }
     bool NotEmpty() const { return handle != nullptr; }
-    void* getProcAddress(const char* procName) const;
+    void* getProcAddress(cpcstr procName) const;
 };
 
 using Module = std::unique_ptr<ModuleHandle>;
 
+// XXX: Do something with all the ModuleManager stuff: refactor, rewrite or remove it
 enum class EngineModules
 {
     API,
@@ -35,17 +36,17 @@ class XDCORE_API ModuleManager
     //ModuleManager();
     //~ModuleManager();
 
-    std::vector<std::shared_ptr<ModuleHandle>> modules;
+    vector<std::shared_ptr<ModuleHandle>> modules;
 
 public:
     static ModuleManager instance;
 
     static std::shared_ptr<ModuleHandle> GetModule(const EngineModules xdModule);
     static void LoadModule(EngineModules xdModule);
-    static void* GetProcFromModule(EngineModules xdModule, const char* procName);
+    static void* GetProcFromModule(EngineModules xdModule, cpcstr procName);
 
-    static std::string GetModuleName(EngineModules xdModule, const bool needExt = true);
-    static std::string GetModuleName(std::string&& xdModule, const bool needExt, bool isExecutable = false);
-    static std::string GetModuleExtension(std::string&& xdModule, bool isExecutable = false);
+    static stringc GetModuleName(EngineModules xdModule, const bool needExt = true);
+    static stringc GetModuleName(stringc&& xdModule, const bool needExt, bool isExecutable = false);
+    static stringc GetModuleExtension(stringc&& xdModule, bool isExecutable = false);
 };
 } // namespace XDay

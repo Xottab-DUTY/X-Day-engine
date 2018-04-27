@@ -9,7 +9,7 @@ XDay::ModuleManager XDay::ModuleManager::instance;
 
 namespace XDay
 {
-ModuleHandle::ModuleHandle(const char* moduleName) : name(moduleName), handle(nullptr)
+ModuleHandle::ModuleHandle(cpcstr moduleName) : name(moduleName), handle(nullptr)
 {
     Log::Info("Loading module: {}", name);
 
@@ -48,7 +48,7 @@ ModuleHandle::~ModuleHandle()
     }
 }
 
-void* ModuleHandle::getProcAddress(const char* procName) const
+void* ModuleHandle::getProcAddress(cpcstr procName) const
 {
     void* proc = nullptr;
 
@@ -72,7 +72,7 @@ void* ModuleHandle::getProcAddress(const char* procName) const
 }
 
 // Returns module name with configuration, architecture and extension
-std::string ModuleManager::GetModuleName(const EngineModules xdModule, const bool needExt)
+stringc ModuleManager::GetModuleName(const EngineModules xdModule, const bool needExt)
 {
     switch (xdModule)
     {
@@ -92,7 +92,7 @@ std::string ModuleManager::GetModuleName(const EngineModules xdModule, const boo
 }
 
 // Returns given module name with configuration and architecture and extension
-std::string ModuleManager::GetModuleName(std::string&& xdModule, const bool needExt, const bool isExecutable)
+stringc ModuleManager::GetModuleName(stringc&& xdModule, const bool needExt, const bool isExecutable)
 {
 #ifdef DEBUG
 #ifdef XD_X64
@@ -118,7 +118,7 @@ std::string ModuleManager::GetModuleName(std::string&& xdModule, const bool need
 }
 
 // Returns given module name with extension
-std::string ModuleManager::GetModuleExtension(std::string&& xdModule, const bool isExecutable)
+stringc ModuleManager::GetModuleExtension(stringc&& xdModule, const bool isExecutable)
 {
 #ifdef WINDOWS
     if (isExecutable)
@@ -149,7 +149,7 @@ void ModuleManager::LoadModule(const EngineModules xdModule)
     instance.modules.emplace_back(std::move(new_module));
 }
 
-void* ModuleManager::GetProcFromModule(EngineModules xdModule, const char* procName)
+void* ModuleManager::GetProcFromModule(EngineModules xdModule, cpcstr procName)
 {
     const auto _module = GetModule(xdModule);
     if (_module != nullptr)
