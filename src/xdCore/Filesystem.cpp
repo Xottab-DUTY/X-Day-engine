@@ -61,4 +61,29 @@ void Filesystem::CreateDirIfNotExist(const filesystem::path& p) const
 {
     if (!filesystem::exists(p)) filesystem::create_directory(p);
 }
+
+stringc Filesystem::GetModulePath(string&& initialPath, const bool extension)
+{
+#ifdef DEBUG
+#ifdef XD_X64
+    if (extension)
+        return initialPath + ".Dx64.dll";
+    return initialPath + ".Dx64";
+#else
+    if (extension)
+        return initialPath + ".Dx86.dll";
+    return initialPath + ".Dx86";
+#endif
+#elif NDEBUG
+#ifdef XD_X64
+    if (extension)
+        return initialPath + ".Rx64.dll";
+    return initialPath + ".Rx64";
+#else
+    if (extension)
+        return initialPath + ".Rx86.dll";
+    return initialPath + ".Rx86";
+#endif
+#endif
+}
 } // namespace XDay

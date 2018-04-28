@@ -9,7 +9,7 @@
 #include "Core.hpp"
 #include "CommandLine/Keys.hpp"
 #include "Filesystem.hpp"
-#include "ModuleManager.hpp"
+#include "Module.hpp"
 
 using namespace XDay;
 

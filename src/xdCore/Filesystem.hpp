@@ -16,6 +16,8 @@ public:
 
     void CreateDirIfNotExist(const filesystem::path& p) const;
 
+    static stringc GetModulePath(string&& initialPath, const bool extension = true);
+
     void InitializeResources();
 
     // temporary:

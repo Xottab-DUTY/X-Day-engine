@@ -11,7 +11,7 @@
 #include "xdCore/CommandLine/Keys.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"
-#include "xdCore/ModuleManager.hpp"
+#include "xdCore/Module.hpp"
 
 using namespace XDay;
 
@@ -26,18 +26,6 @@ void watch_console()
         if (!glfwWindowShouldClose(Engine.windowMain) && !input.empty())
             Console.Execute(input);
     }
-}
-
-void AttachRenderer()
-{
-    ModuleManager::LoadModule(EngineModules::Renderer);
-
-    using pFunc = void(*)();
-    const auto func = static_cast<pFunc>(ModuleManager::GetProcFromModule(EngineModules::Renderer, "InitializeRenderer"));
-    if (func)
-        func();
-    else
-        Log::Error("Cannot attach function InitializeRenderer from {}", ModuleManager::GetModuleName(EngineModules::Renderer));
 }
 
 int main(int argc, char* argv[])
@@ -67,8 +55,6 @@ int main(int argc, char* argv[])
         Log::Error("GLFW not initialized.");
         // XXX: Crash here
     }
-
-    AttachRenderer();
 
     Engine.Initialize();
     Engine.createMainWindow();

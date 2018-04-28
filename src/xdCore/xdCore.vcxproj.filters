@@ -11,7 +11,6 @@
       <Filter>XML</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="ModuleManager.cpp" />
     <ClCompile Include="CommandLine\Key.cpp">
       <Filter>CommandLine</Filter>
     </ClCompile>
@@ -33,7 +32,6 @@
     </ClInclude>
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="Types.hpp" />
-    <ClInclude Include="ModuleManager.hpp" />
     <ClInclude Include="CommandLine\Key.hpp">
       <Filter>CommandLine</Filter>
     </ClInclude>
