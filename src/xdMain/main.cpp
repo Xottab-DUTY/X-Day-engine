@@ -11,7 +11,6 @@
 #include "xdCore/CommandLine/Keys.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"
-#include "xdCore/Module.hpp"
 
 using namespace XDay;
 
