@@ -10,9 +10,6 @@
 [submodule "include/openal-soft"]
 	path = include/openal-soft
 	url = https://github.com/kcat/openal-soft.git
-[submodule "include/tinyxml2"]
-	path = include/tinyxml2
-	url = https://github.com/leethomason/tinyxml2.git
 [submodule "include/glslang"]
 	path = include/glslang
 	url = https://github.com/KhronosGroup/glslang.git

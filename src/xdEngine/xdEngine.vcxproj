@@ -179,9 +179,6 @@
     <ProjectReference Include="..\..\include\glfw.vcxproj">
       <Project>{461392b0-8e09-312e-ae81-de5cd596ea12}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\include\tinyxml2.vcxproj">
-      <Project>{d1c528b6-aa02-4d29-9d61-dc08e317a70d}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\xdAPI\xdAPI.vcxproj">
       <Project>{969a8669-130b-47e9-9eb6-e0c70d2a2a6a}</Project>
     </ProjectReference>

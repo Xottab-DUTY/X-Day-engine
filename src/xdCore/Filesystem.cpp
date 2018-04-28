@@ -2,7 +2,6 @@
 #include "Core.hpp"
 #include "CommandLine/Keys.hpp"
 #include "Filesystem.hpp"
-#include "XML/XMLResource.hpp"
 
 XDCORE_API XDay::Filesystem FS;
 
@@ -27,7 +26,12 @@ void Filesystem::Initialize()
     LogsPath = DataPath.string() + "/logs/";
     SavesPath = DataPath.string() + "/saves/";
 
-    InitializeResources();
+    ArchivesPath = ResourcesPath.string() + "/archives/";
+    ConfigsPath = ResourcesPath.string() + "/configs/";
+    ModelsPath = ResourcesPath.string() + "/models/";
+    ShadersPath = ResourcesPath.string() + "/shaders/";
+    SoundsPath = ResourcesPath.string() + "/sounds/";
+    TexturesPath = ResourcesPath.string() + "/textures/";
 
     CreateDirIfNotExist(DataPath);
     CreateDirIfNotExist(BinaryShadersPath);
@@ -41,20 +45,6 @@ void Filesystem::Initialize()
     CreateDirIfNotExist(ShadersPath);
     CreateDirIfNotExist(SoundsPath);
     CreateDirIfNotExist(TexturesPath);
-}
-
-void Filesystem::InitializeResources()
-{
-    ArchivesPath = ResourcesPath.string() + "/archives/";
-    ConfigsPath = ResourcesPath.string() + "/configs/";
-    ModelsPath = ResourcesPath.string() + "/models/";
-    ShadersPath = ResourcesPath.string() + "/shaders/";
-    SoundsPath = ResourcesPath.string() + "/sounds/";
-    TexturesPath = ResourcesPath.string() + "/textures/";
-
-    xdXMLResource resource_initializer(ResourcesPath, "resources.xml");
-    if (!resource_initializer.isErrored())
-        resource_initializer.ParseResources();
 }
 
 void Filesystem::CreateDirIfNotExist(const filesystem::path& p) const

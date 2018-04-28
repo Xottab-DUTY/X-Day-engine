@@ -4,12 +4,6 @@
     <ClCompile Include="Log.cpp">
       <Filter>Logging</Filter>
     </ClCompile>
-    <ClCompile Include="XML\XMLDocument.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
-    <ClCompile Include="XML\XMLResource.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="CommandLine\Key.cpp">
       <Filter>CommandLine</Filter>
@@ -23,12 +17,6 @@
   <ItemGroup>
     <ClInclude Include="Log.hpp">
       <Filter>Logging</Filter>
-    </ClInclude>
-    <ClInclude Include="XML\XMLDocument.hpp">
-      <Filter>XML</Filter>
-    </ClInclude>
-    <ClInclude Include="XML\XMLResource.hpp">
-      <Filter>XML</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="Types.hpp" />

@@ -18,8 +18,6 @@ public:
 
     static stringc GetModulePath(string&& initialPath, const bool extension = true);
 
-    void InitializeResources();
-
     // temporary:
     filesystem::path AppPath;
     filesystem::path WorkPath;
