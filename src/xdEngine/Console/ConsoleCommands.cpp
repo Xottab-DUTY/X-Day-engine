@@ -4,77 +4,75 @@
 
 #include <GLFW/glfw3.h>
 
-#include "xdEngine/xdEngine.hpp"
-#include "Console.hpp"
+#include "xdCore/Console/ConsoleCommand.hpp"
+#include "xdCore/Console/ConsoleCommands.hpp"
+#include "xdCore/Console/ConsoleCommandsMacros.hpp"
 #include "ConsoleCommands.hpp"
+#include "Console.hpp"
 
-namespace XDay
+#include "xdEngine/xdEngine.hpp"
+
+namespace XDay::Console
 {
-namespace Command
+namespace Calls
 {
-namespace Functions
-{
-void quit()
+void Quit()
 {
     glfwSetWindowShouldClose(Engine.windowMain, true);
 }
 
-
-void config_save(const std::string& args)
+void ConfigSave(stringc&& args)
 {
-    Log::Debug("Saving config file {}...", args.empty() ? Console.ConfigFile.string() : args);
-    std::ofstream f(args.empty() ? Console.ConfigFile : args);
+    Log::Debug("Saving config file {}...", args.empty() ? ::Console.ConfigFile.string() : args);
+    std::ofstream f(args.empty() ? ::Console.ConfigFile : args);
 
-    for (auto cmd : Console.GetCommands())
-        if (cmd->isSaveAllowed())
+    for (auto cmd : Commands::Get())
+        if (cmd->SaveAllowed())
             f << cmd->Save() << std::endl;
 
     f.close();
-    Log::Info("Saved config file {}", args.empty() ? Console.ConfigFile.string() : args);
+    Log::Info("Saved config file {}", args.empty() ? ::Console.ConfigFile.string() : args);
 }
 
-void config_load(const std::string& args)
+void ConfigLoad(stringc&& args)
 {
-    Log::Debug("Loading config file {}...", args.empty() ? Console.ConfigFile.string() : args);
-    std::ifstream config_file(args.empty() ? Console.ConfigFile : args);
+    std::ifstream config_file(args.empty() ? ::Console.ConfigFile : args);
 
     if (config_file.is_open())
     {
-        std::string line;
+        string line;
         while (getline(config_file, line))
-            Console.Execute(line);
-        Log::Info("Loaded config file {}", args.empty() ? Console.ConfigFile.string() : args);
+            Commands::Execute(line.c_str());
+        Log::Info("Loaded config file {}", args.empty() ? ::Console.ConfigFile.string() : args);
     }
     else
-        Log::Error("Failed to open config file {}", args.empty() ? Console.ConfigFile.string() : args);
+        Log::Error("Failed to open config file {}", args.empty() ? ::Console.ConfigFile.string() : args);
 
     config_file.close();
 }
-} // namespace Functions
+} // namespace Calls
 
 int tint = 0;
 float fint = 0.0;
 double dint = 0.0;
-Value<int> TestIntCC("test_int", test_description, tint, 0, 10);
-Value<float> TestFloatCC("test_float", test_description, fint, 0, 10);
-Value<double> TestDoubleCC("test_double", test_description, dint, 0, 10);
+string sint;
+Command<int> TestInt("test_int", testDescription, tint, 0, 10);
+Command<float> TestFloat("test_float", testDescription, fint, 0, 10);
+Command<double> TestDouble("test_double", testDescription, dint, 0, 10);
+Command<string> TestString("test_string", testDescription, sint, 0);
 
-XDENGINE_API void RegisterConsoleCommands()
+void RegisterEngineCommands()
 {
-    CMDA(QuitCC);
-    CMDA(ExitCC);
-    CMDA(HelpCC);
-    CMDA(FlushLogCC);
-    CMDA(ConfigSaveCC);
-    CMDA(ConfigLoadCC);
-    CMDA(FullscreenCC);
+    CMDA(Quit);
+    CMDA(Exit);
+    CMDA(ConfigSave);
+    CMDA(ConfigLoad);
+    CMDA(Fullscreen);
 
-    CMDA(TestIntCC);
-    CMDA(TestFloatCC);
-    CMDA(TestDoubleCC);
-
-    CMD3(String, "test_string", test_description, "test!");
+    CMDA(TestInt);
+    CMDA(TestFloat);
+    CMDA(TestDouble);
+    CMDA(TestString);
 }
 
-} // namespace Command
-} // namespace XDay
+} // namespace XDay::Console

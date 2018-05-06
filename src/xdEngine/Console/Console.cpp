@@ -1,12 +1,8 @@
 #include "pch.hpp"
 
-#include <sstream>
-
-#include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
 #include "xdCore/Filesystem.hpp"
 #include "Console.hpp"
-#include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 
 XDENGINE_API XDay::console Console;
@@ -22,7 +18,7 @@ void console::Initialize()
     CommandsCache.reserve(LRUCount + 1);
     CommandsCache.erase(CommandsCache.begin(), CommandsCache.end());
 
-    Command::RegisterConsoleCommands();
+    Console::RegisterEngineCommands();
 }
 
 void console::Show()
@@ -39,53 +35,9 @@ void console::Hide()
     isVisible = false;
 }
 
-void console::Execute(const std::string& cmd)
-{
-    std::string cmd_str, cmd_val;
-
-    std::istringstream buffer(cmd);
-    buffer >> cmd_str;
-    for (std::string i; buffer >> i;)
-    {
-        cmd_val += i + " ";
-    }
-    if (!cmd_val.empty())
-        cmd_val.pop_back(); // remove the last " "
-
-    const auto command = GetCommand(cmd_str);
-
-    if (!command)
-    {
-        Log::Info("Unknown command: {}", cmd_str);
-        return;
-    }
-
-    if (command->isEnabled())
-    {
-        if (cmd_val.empty())
-        {
-            if (command->isEmptyArgsAllowed())
-                command->Execute(cmd_val);
-            else
-                Log::Info("{} {}", command->GetName(), command->Status());
-        }
-        else
-            command->Execute(cmd_val);
-    }
-    else
-    {
-        if (command->isLowerCaseArgs())
-        {
-            const std::locale loc;
-            for (auto&& elem : cmd_val)
-                elem = tolower(elem, loc);
-        }
-        Log::Info("Command is disabled: {}", cmd_str);
-    }
-    AddCommandToCache(cmd);
-}
 void console::ExecuteConfig(const filesystem::path& path) const
 {
+    Console::ConfigLoad.Execute(path.string());
 }
 
 void console::AddCommandToCache(const std::string& cmd)

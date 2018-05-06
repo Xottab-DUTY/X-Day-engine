@@ -1,30 +1,24 @@
 #pragma once
 
+#include "xdCore/Console/ConsoleCommand.hpp"
+#include "xdCore/Console/ConsoleCommands.hpp"
 #include "xdEngine/xdEngine.hpp"
 
-namespace XDay
+namespace XDay::Console
 {
-namespace Command
+namespace Calls
 {
-namespace Functions
-{
-XDENGINE_API void help(const std::string& args);
-XDENGINE_API void config_save(const std::string& args);
-XDENGINE_API void config_load(const std::string& args);
-} // namespace Functions
+XDENGINE_API void Quit();
+XDENGINE_API void ConfigSave(stringc&& args);
+XDENGINE_API void ConfigLoad(stringc&& args);
+} // namespace Calls
 
-constexpr const char* no_description = "no description";
-constexpr const char* test_description = "test function";
-constexpr const char* self_description = "Function name describes itself";
+static Command<Call> Quit("quit", selfDescription, { Calls::Quit, nullptr});
+static Command<Call> Exit("exit", selfDescription, { Calls::Quit, nullptr });
+static Command<Call> ConfigSave("config_save", selfDescription, { [] { Calls::ConfigSave(""); }, Calls::ConfigSave });
+static Command<Call> ConfigLoad("config_load", selfDescription, { [] { Calls::ConfigLoad(""); }, Calls::ConfigLoad });
 
-static Call QuitCC("quit", self_description, Functions::quit, true);
-static Call ExitCC("exit", self_description, Functions::quit, true);
-static Call HelpCC("help", "Get list of available commands or specific command help", Functions::help, true);
-static Call FlushLogCC("flush", "Flush the log", Functions::flush_log, true);
-static Call ConfigSaveCC("config_save", "Save the config", Functions::config_save, true);
-static Call ConfigLoadCC("config_load", "Load the config", Functions::config_load, true);
-static Bool FullscreenCC("fullscreen", "Switch fullscreen", *&Engine.windowMainFullscreen);
+static Command<bool> Fullscreen("fullscreen", "Switch fullscreen", Engine.windowMainFullscreen);
 
-XDENGINE_API void RegisterConsoleCommands();
-} // namespace Command
-} // namespace XDay
+XDENGINE_API void RegisterEngineCommands();
+} // XDay::Console

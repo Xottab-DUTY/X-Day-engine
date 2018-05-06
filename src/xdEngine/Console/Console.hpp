@@ -3,7 +3,6 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
-#include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 
 namespace XDay
@@ -23,7 +22,6 @@ public:
     void Show();
     void Hide();
 
-    void Execute(const std::string& cmd);
     void ExecuteConfig() const { ExecuteConfig(ConfigFile); }
     void ExecuteConfig(const filesystem::path& path) const;
 
