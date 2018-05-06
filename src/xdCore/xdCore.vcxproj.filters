@@ -13,6 +13,9 @@
     <ClCompile Include="Filesystem.cpp">
       <Filter>Filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="Console\ConsoleCommand.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.hpp">
@@ -31,6 +34,9 @@
     <ClInclude Include="Filesystem.hpp">
       <Filter>Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="Console\ConsoleCommand.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Logging">
@@ -44,6 +50,9 @@
     </Filter>
     <Filter Include="Filesystem">
       <UniqueIdentifier>{e9ae7b7b-28b7-4a80-a477-24ac7cfc93d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console">
+      <UniqueIdentifier>{414b7323-22cc-4f0c-9a5e-3624e29da413}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

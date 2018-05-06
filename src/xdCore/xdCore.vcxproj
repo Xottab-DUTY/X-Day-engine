@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandLine\Key.cpp" />
+    <ClCompile Include="Console\ConsoleCommand.cpp" />
     <ClCompile Include="Filesystem.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Module.cpp" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="CommandLine\Key.hpp" />
     <ClInclude Include="CommandLine\Keys.hpp" />
+    <ClInclude Include="Console\ConsoleCommand.hpp" />
     <ClInclude Include="Filesystem.hpp" />
     <ClInclude Include="Log.hpp" />
     <ClInclude Include="Module.hpp" />
