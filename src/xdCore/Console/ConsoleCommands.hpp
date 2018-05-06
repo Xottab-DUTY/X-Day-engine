@@ -10,9 +10,9 @@ XDCORE_API void Help();
 XDCORE_API void Help(stringc&& args);
 } // namespace Calls
 
-constexpr pcstr noDescription = "no description";
-constexpr pcstr testDescription = "test function";
-constexpr pcstr selfDescription = "Function name describes itself";
+constexpr cpcstr noDescription = "no description";
+constexpr cpcstr testDescription = "test function";
+constexpr cpcstr selfDescription = "Function name describes itself";
 
 static Command<Call> Terminate("terminate", selfDescription, { [] { std::terminate(); }, nullptr });
 static Command<Call> FlushLog("flush", selfDescription, { [] { Log::Flush(); }, nullptr });
@@ -37,6 +37,8 @@ public:
 
     template <typename Type>
     static Type GetValue(stringc&& command);
+
+    static bool Execute(cpcstr raw);
 
     static bool Execute(stringc&& command);
     static bool Execute(stringc&& command, string&& args);

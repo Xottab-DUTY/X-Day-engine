@@ -6,13 +6,7 @@
 
 #include "xdEngine/xdEngine.hpp"
 #include "Console.hpp"
-#include "ConsoleCommand.hpp"
-#include "ConsoleCommandBool.hpp"
-#include "ConsoleCommandCall.hpp"
-#include "ConsoleCommandString.hpp"
-#include "ConsoleCommandValue.hpp"
 #include "ConsoleCommands.hpp"
-#include "ConsoleCommandsMacros.hpp"
 
 namespace XDay
 {
@@ -25,23 +19,6 @@ void quit()
     glfwSetWindowShouldClose(Engine.windowMain, true);
 }
 
-void help(const std::string& args)
-{
-    if (!args.empty())
-    {
-        const auto cmd = Console.GetCommand(args);
-        if (cmd)
-            Log::Info("{} = {}. Description: {}", cmd->GetName(), cmd->Status(), cmd->Help());
-        else
-            Log::Info("Command not found.");
-    }
-    else
-    {
-        Log::Info("Available commands:");
-        for (auto cmd : Console.GetCommands())
-            Log::Info("{} : {}. Current value: {}. Syntax: {}", cmd->GetName(), cmd->Info(), cmd->Status(), cmd->Syntax());
-    }
-}
 
 void config_save(const std::string& args)
 {
@@ -73,12 +50,6 @@ void config_load(const std::string& args)
 
     config_file.close();
 }
-
-void flush_log()
-{
-    Log::Flush();
-}
-
 } // namespace Functions
 
 int tint = 0;

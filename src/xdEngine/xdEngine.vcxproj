@@ -144,11 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Console\Console.cpp" />
-    <ClCompile Include="Console\ConsoleCommand.cpp" />
-    <ClCompile Include="Console\ConsoleCommandBool.cpp" />
-    <ClCompile Include="Console\ConsoleCommandCall.cpp" />
-    <ClCompile Include="Console\ConsoleCommandString.cpp" />
-    <ClCompile Include="Console\ConsoleCommandValue.cpp" />
     <ClCompile Include="Console\ConsoleCommands.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -162,12 +157,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console\Console.hpp" />
-    <ClInclude Include="Console\ConsoleCommand.hpp" />
-    <ClInclude Include="Console\ConsoleCommandBool.hpp" />
-    <ClInclude Include="Console\ConsoleCommandCall.hpp" />
-    <ClInclude Include="Console\ConsoleCommandsMacros.hpp" />
-    <ClInclude Include="Console\ConsoleCommandString.hpp" />
-    <ClInclude Include="Console\ConsoleCommandValue.hpp" />
     <ClInclude Include="Console\ConsoleCommands.hpp" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="xdEngine.hpp" />

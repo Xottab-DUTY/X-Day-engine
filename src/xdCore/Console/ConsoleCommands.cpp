@@ -1,5 +1,7 @@
 #include "pch.hpp"
 
+#include <sstream>
+
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "ConsoleCommandsMacros.hpp"
@@ -87,6 +89,22 @@ template <typename Type>
 Type Commands::GetValue(stringc&& command)
 {
     return static_cast<CommandBase<Type>>(Get(std::move(command))).Value();
+}
+
+bool Commands::Execute(cpcstr raw)
+{
+    string command, arguments;
+
+    std::istringstream buffer(raw);
+    buffer >> command;
+
+    for (std::string i; buffer >> i;)
+        arguments += i + " ";
+
+    if (!arguments.empty())
+        arguments.pop_back(); // remove the last " "
+
+    return Execute(std::move(command), std::move(arguments));
 }
 
 bool Commands::Execute(stringc&& command)

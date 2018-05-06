@@ -1,10 +1,6 @@
 #pragma once
 
 #include "xdEngine/xdEngine.hpp"
-#include "ConsoleCommand.hpp"
-#include "ConsoleCommandBool.hpp"
-#include "ConsoleCommandCall.hpp"
-#include "ConsoleCommandValue.hpp"
 
 namespace XDay
 {
@@ -12,11 +8,9 @@ namespace Command
 {
 namespace Functions
 {
-XDENGINE_API void quit();
 XDENGINE_API void help(const std::string& args);
 XDENGINE_API void config_save(const std::string& args);
 XDENGINE_API void config_load(const std::string& args);
-XDENGINE_API void flush_log();
 } // namespace Functions
 
 constexpr const char* no_description = "no description";
