@@ -3,30 +3,17 @@
 #include <filesystem>
 namespace filesystem = std::experimental::filesystem;
 
-#include "ConsoleCommands.hpp"
-
-namespace XDay
+namespace XDay::Console
 {
-class XDENGINE_API console
+class XDENGINE_API CConsole
 {
 public:
-    bool isVisible = false;
     filesystem::path ConfigFile;
-
-    // Commands LRU cache
-    unsigned LRUCount = 10; // Max latest commands to remember
-    std::vector<std::string> CommandsCache;
 
     void Initialize();
 
-    void Show();
-    void Hide();
-
     void ExecuteConfig() const { ExecuteConfig(ConfigFile); }
-    void ExecuteConfig(const filesystem::path& path) const;
-
-    void AddCommandToCache(const std::string& cmd);
+    static void ExecuteConfig(const filesystem::path& path);
 };
-} // namespace XDay
-
-extern XDENGINE_API XDay::console Console;
+extern XDENGINE_API CConsole Console;
+} // namespace XDay::Console

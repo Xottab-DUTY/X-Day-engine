@@ -15,16 +15,16 @@ constexpr cpcstr noDescription = "no description";
 constexpr cpcstr testDescription = "test function";
 constexpr cpcstr selfDescription = "Function name describes itself";
 
-static Command<Call> Terminate("terminate", selfDescription, { [] { std::terminate(); }, nullptr });
-static Command<Call> Crash("crash", selfDescription, { Calls::Crash, nullptr });
-static Command<Call> FlushLog("flush", selfDescription, { [] { Log::Flush(); }, nullptr });
-static Command<Call> Help("help", "Get list of available commands or specific command help", { Calls::Help, Calls::Help });
+// Waiting for "inline" keyword...
+extern XDCORE_API Command<Call> Terminate;
+extern XDCORE_API Command<Call> Crash;
+extern XDCORE_API Command<Call> FlushLog;
+extern XDCORE_API Command<Call> Help;
 
 class XDCORE_API Commands
 {
     vector<ICommand*> commands;
     static Commands instance;
-    Commands();
 
 public:
     static const auto Get() { return instance.commands; }

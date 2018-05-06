@@ -284,7 +284,7 @@ public:
 #pragma endregion Command<string>
 
 #pragma region Command<Call>
-class Call
+class XDCORE_API Call
 {
     using funcNoArgs = void(*)();
     using funcWithArgs = void(*)(stringc&& args);
@@ -293,7 +293,11 @@ class Call
     funcWithArgs withArgs;
 
 public:
-    Call(const funcNoArgs noArgs, const funcWithArgs withArgs): noArgs(noArgs), withArgs(withArgs) {}
+    Call(const funcNoArgs _noArgs, const funcWithArgs _withArgs)
+        : noArgs(_noArgs), withArgs(_withArgs)
+    {
+        return;
+    }
 
     bool NoArgs() const { return noArgs != nullptr; }
     void NoArgs(nullptr_t) const { noArgs(); }

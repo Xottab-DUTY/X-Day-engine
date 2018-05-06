@@ -35,13 +35,10 @@ void Help()
 }
 } // namespace Calls
 
-Commands::Commands()
-{
-    CMDA(Terminate);
-    CMDA(FlushLog);
-    CMDA(Help);
-}
-
+XDCORE_API Command<Call> Terminate("terminate", selfDescription, { [] { std::terminate(); }, nullptr });
+XDCORE_API Command<Call> Crash("crash", selfDescription, { Calls::Crash, nullptr });
+XDCORE_API Command<Call> FlushLog("flush", selfDescription, { [] { Log::Flush(); }, nullptr });
+XDCORE_API Command<Call> Help("help", "Get list of available commands or specific command help", { Calls::Help, Calls::Help });
 
 void Commands::Register(ICommand* command) noexcept
 {

@@ -9,6 +9,7 @@
 
 #include "xdCore/Core.hpp"
 #include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/Console/ConsoleCommands.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"
 
@@ -23,7 +24,7 @@ void watch_console()
         std::string input;
         std::getline(std::cin, input);
         if (!glfwWindowShouldClose(Engine.windowMain) && !input.empty())
-            Console.Execute(input);
+            Console::Commands::Execute(input.c_str());
     }
 }
 
@@ -39,7 +40,7 @@ int main(int argc, char* argv[])
 #endif
 
     Core.Initialize();
-    Console.Initialize();
+    Console::Console.Initialize();
 
     Log::Debug(Core.GetGLFWVersionString());
     Log::Info(Core.GetBuildString());
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
     Log::Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
     CommandLine::Keys::Help();
 
-    Console.ExecuteConfig();
+    Console::Console.ExecuteConfig();
     if (!glfwInit())
     {
         Log::Error("GLFW not initialized.");
