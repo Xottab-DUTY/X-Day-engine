@@ -12,6 +12,12 @@ Commands Commands::instance;
 
 namespace Calls
 {
+void Crash()
+{
+    int* crash = nullptr;
+    *crash = 0;
+}
+
 void Help(stringc&& args)
 {
     const auto cmd = Commands::Get(std::move(args));

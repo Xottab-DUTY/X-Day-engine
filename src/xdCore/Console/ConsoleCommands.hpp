@@ -6,6 +6,7 @@ namespace XDay::Console
 {
 namespace Calls
 {
+XDCORE_API void Crash();
 XDCORE_API void Help();
 XDCORE_API void Help(stringc&& args);
 } // namespace Calls
@@ -15,6 +16,7 @@ constexpr cpcstr testDescription = "test function";
 constexpr cpcstr selfDescription = "Function name describes itself";
 
 static Command<Call> Terminate("terminate", selfDescription, { [] { std::terminate(); }, nullptr });
+static Command<Call> Crash("crash", selfDescription, { Calls::Crash, nullptr });
 static Command<Call> FlushLog("flush", selfDescription, { [] { Log::Flush(); }, nullptr });
 static Command<Call> Help("help", "Get list of available commands or specific command help", { Calls::Help, Calls::Help });
 
