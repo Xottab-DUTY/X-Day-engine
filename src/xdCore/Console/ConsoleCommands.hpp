@@ -7,7 +7,6 @@ namespace XDay::Console
 namespace Calls
 {
 XDCORE_API void Crash();
-XDCORE_API void Help();
 XDCORE_API void Help(stringc&& args);
 } // namespace Calls
 
@@ -19,7 +18,7 @@ constexpr cpcstr selfDescription = "Function name describes itself";
 extern XDCORE_API Command<Call> Terminate;
 extern XDCORE_API Command<Call> Crash;
 extern XDCORE_API Command<Call> FlushLog;
-extern XDCORE_API Command<Call> Help;
+extern XDCORE_API Command<CallWithArgs> Help;
 
 class XDCORE_API Commands
 {
@@ -28,6 +27,8 @@ class XDCORE_API Commands
 
 public:
     static const auto Get() { return instance.commands; }
+
+    static void Initialize();
 
     static void Register(ICommand* command) noexcept;
     static void Unregister(ICommand* command) noexcept;

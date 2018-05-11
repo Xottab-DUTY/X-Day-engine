@@ -18,27 +18,33 @@ void Crash()
     *crash = 0;
 }
 
+void HelpAll()
+{
+    Log::Info("Available commands:");
+    for (const auto& cmd : Commands::Get())
+        Log::Info("{}<{}> = [{}] ({})", cmd->Name(), cmd->Type(), cmd->Status(), cmd->Help());
+}
+
 void Help(stringc&& args)
 {
+    if (args.empty())
+    {
+        HelpAll();
+        return;
+    }
+
     const auto cmd = Commands::Get(std::move(args));
     if (cmd)
         Log::Info("{}<{}> = [{}] ({}) {{}}", cmd->Name(), cmd->Type(), cmd->Status(), cmd->Help(), cmd->Syntax());
     else
         Log::Error("Unknown console command: [{}]", args);
 }
-
-void Help()
-{
-    Log::Info("Available commands:");
-    for (const auto& cmd : Commands::Get())
-        Log::Info("{}<{}> = [{}] ({})", cmd->Name(), cmd->Type(), cmd->Status(), cmd->Help());
-}
 } // namespace Calls
 
-XDCORE_API Command<Call> Terminate("terminate", selfDescription, { [] { std::terminate(); }, nullptr });
-XDCORE_API Command<Call> Crash("crash", selfDescription, { Calls::Crash, nullptr });
-XDCORE_API Command<Call> FlushLog("flush", selfDescription, { [] { Log::Flush(); }, nullptr });
-XDCORE_API Command<Call> Help("help", "Get list of available commands or specific command help", { Calls::Help, Calls::Help });
+XDCORE_API Command<Call> Terminate("terminate", selfDescription, [] { std::terminate(); });
+XDCORE_API Command<Call> Crash("crash", selfDescription, Calls::Crash);
+XDCORE_API Command<Call> FlushLog("flush", selfDescription, [] { Log::Flush(); });
+XDCORE_API Command<CallWithArgs> Help("help", "Get list of available commands or specific command help", Calls::Help, true);
 
 void Commands::Register(ICommand* command) noexcept
 {
@@ -168,5 +174,13 @@ bool Commands::Execute(ICommand* command, string&& args)
     }
 
     return false;
+}
+
+void Commands::Initialize()
+{
+    CMDA(Terminate);
+    CMDA(Crash);
+    CMDA(FlushLog);
+    CMDA(Help);
 }
 } // namespace XDay::Console

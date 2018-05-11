@@ -283,28 +283,9 @@ public:
 };
 #pragma endregion Command<string>
 
-#pragma region Command<Call>
-class XDCORE_API Call
-{
-    using funcNoArgs = void(*)();
-    using funcWithArgs = void(*)(stringc&& args);
-
-    funcNoArgs noArgs;
-    funcWithArgs withArgs;
-
-public:
-    Call(const funcNoArgs _noArgs, const funcWithArgs _withArgs)
-        : noArgs(_noArgs), withArgs(_withArgs)
-    {
-        return;
-    }
-
-    bool NoArgs() const { return noArgs != nullptr; }
-    void NoArgs(nullptr_t) const { noArgs(); }
-
-    bool WithArgs() const { return withArgs != nullptr; }
-    void WithArgs(stringc&& args) const { withArgs(std::move(args)); }
-};
+#pragma region Command<FunctionCall>
+using Call = void(*)();
+using CallWithArgs = void(*)(stringc&& args);
 
 template <>
 class Command<Call> : public CommandBase<Call>
@@ -316,24 +297,54 @@ public:
         const bool lowerCaseArguments = true, stringc&& syntax = "no syntax")
         : CommandBase(std::move(name), std::move(description), call), syntax(syntax)
     {
-        CommandBase<Call>::EmptyArgumentsHandled(call.NoArgs());
+        CommandBase<Call>::EmptyArgumentsHandled(true);
         CommandBase<Call>::LowerCaseArguments(lowerCaseArguments);
     }
 
     void Execute() override
     {
-        if (value.NoArgs())
-            value.NoArgs(nullptr);
+        if (value)
+            value();
     }
 
     void Execute(stringc&& args) override
     {
-        if (value.WithArgs())
-            value.WithArgs(std::move(args));
+        Log::Warning("Console: dropping arguments in call [{} {}]", name, args);
+        Execute();
     }
 
-    stringc Status() const override { return fmt::format("Can call: NoArgs({}), WithArgs({})", value.NoArgs(), value.WithArgs()); }
+    stringc Status() const override { return fmt::format("Function signature: {}", typeid(value).name()); }
     stringc Syntax() const override { return syntax; }
 };
-#pragma endregion Command<Call>
+
+template <>
+class Command<CallWithArgs> : public CommandBase<CallWithArgs>
+{
+    stringc syntax;
+
+public:
+    Command(stringc&& name, stringc&& description, CallWithArgs call, const bool emptyArgumentsHandled = false,
+        const bool lowerCaseArguments = true, stringc&& syntax = "no syntax")
+        : CommandBase(std::move(name), std::move(description), call), syntax(syntax)
+    {
+        CommandBase<CallWithArgs>::EmptyArgumentsHandled(emptyArgumentsHandled);
+        CommandBase<CallWithArgs>::LowerCaseArguments(lowerCaseArguments);
+    }
+
+    void Execute() override
+    {
+        if (value)
+            value(std::move(""));
+    }
+
+    void Execute(stringc&& args) override
+    {
+        if (value)
+            value(std::move(args));
+    }
+
+    stringc Status() const override { return fmt::format("Function signature: {}", typeid(value).name()); }
+    stringc Syntax() const override { return syntax; }
+};
+#pragma endregion Command<FunctionCall>
 } //namespace XDay::Console

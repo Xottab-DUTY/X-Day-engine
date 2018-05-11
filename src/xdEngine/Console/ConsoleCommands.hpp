@@ -13,10 +13,10 @@ XDENGINE_API void ConfigSave(stringc&& args);
 XDENGINE_API void ConfigLoad(stringc&& args);
 } // namespace Calls
 
-static Command<Call> Quit("quit", selfDescription, { Calls::Quit, nullptr});
-static Command<Call> Exit("exit", selfDescription, { Calls::Quit, nullptr });
-static Command<Call> ConfigSave("config_save", selfDescription, { [] { Calls::ConfigSave(""); }, Calls::ConfigSave });
-static Command<Call> ConfigLoad("config_load", selfDescription, { [] { Calls::ConfigLoad(""); }, Calls::ConfigLoad });
+static Command<Call> Quit("quit", selfDescription, Calls::Quit);
+static Command<Call> Exit("exit", selfDescription, Calls::Quit);
+static Command<CallWithArgs> ConfigSave("config_save", selfDescription, Calls::ConfigSave);
+static Command<CallWithArgs> ConfigLoad("config_load", selfDescription, Calls::ConfigLoad);
 
 static Command<bool> Fullscreen("fullscreen", "Switch fullscreen", Engine.windowMainFullscreen);
 
