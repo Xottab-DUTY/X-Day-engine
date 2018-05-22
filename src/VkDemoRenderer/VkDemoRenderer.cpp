@@ -388,8 +388,8 @@ void VkDemoRenderer::CreateDebugCallback()
 void VkDemoRenderer::CreateVkSurface()
 {
     result = (vk::Result)glfwCreateWindowSurface(
-        (VkInstance&)vkInstance, VkDemo.windowDemo,
-        nullptr, (VkSurfaceKHR*)&surface);
+        (VkInstance)*vkInstance, VkDemo.windowDemo,
+        nullptr, (VkSurfaceKHR*)&*surface);
 
     assert(result == vk::Result::eSuccess);
 }
@@ -839,6 +839,7 @@ void VkDemoRenderer::LoadModel()
     if (CommandLine::KeyModel.IsSet())
         _path = FS.ModelsPath.string() + CommandLine::KeyModel.StringValue();
 
+    Log::Debug("VkDemoRenderer::LoadModel():: loading model: {}", _path);
     if (!LoadObj(&attrib, &shapes, &materials, &err, _path.c_str()))
     {
         Log::Error("VkDemoRenderer::LoadModel():: {}", err);
