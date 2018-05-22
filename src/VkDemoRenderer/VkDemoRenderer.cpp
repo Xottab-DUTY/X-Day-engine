@@ -314,7 +314,7 @@ void VkDemoRenderer::CreateVkInstance()
 
     vk::ApplicationInfo appInfo(Core.GetAppName().c_str(), std::stoi(Core.GetAppVersion()),
                                 Core.GetEngineName().c_str(), std::stoi(Core.GetEngineVersion()),
-                                VK_API_VERSION_1_0);
+                                VK_API_VERSION_1_1);
 
     auto extensions = getRequiredExtensions();
 
