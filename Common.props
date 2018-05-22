@@ -41,6 +41,11 @@
       <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(xdSrcDir);$(xdIncludeDir);$(xdIncludeDir)fmt\include;$(xdIncludeDir)spdlog\include;$(xdIncludeDir)glfw\include;$(xdIncludeDir)ClanLib\include;$(VULKAN_SDK)\include;(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!--
+        4251 : class 'x' needs to have dll-interface to be used by clients of class 'y'
+        4275 : non dll-interface class 'x' used as base for dll-interface class 'y' 
+      -->
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories Condition="'$(Platform)'=='x64'">$(xdLibDir);$(VULKAN_SDK)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
