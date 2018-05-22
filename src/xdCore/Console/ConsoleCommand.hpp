@@ -36,7 +36,6 @@ public:
 #pragma endregion ICommand
 
 #pragma region CommandBase
-template <typename type>
 class CommandBase : public ICommand
 {
 protected:
@@ -49,18 +48,15 @@ protected:
     bool emptyArgumentsHandled;
     bool saveAllowed;
 
-    type& value;
-
 public:
     CommandBase() = delete;
-    CommandBase(stringc&& name, stringc&& description, type& value)
+    CommandBase(stringc&& name, stringc&& description)
         : name(std::move(name)),
           description(std::move(description)),
           enabled(true),
           lowerCaseArguments(false),
           emptyArgumentsHandled(false),
-          saveAllowed(true),
-          value(value) {}
+          saveAllowed(true) {}
 
     stringc Name() const override { return name; }
 
@@ -76,9 +72,6 @@ public:
     bool SaveAllowed() const override { return saveAllowed; }
     void SaveAllowed(const bool newValue) override { saveAllowed = newValue; }
 
-    type Value() const { return value; }
-    void Value(const type newValue) { value = newValue; }
-
     void InvalidSyntax(stringc&& args) const override
     {
         Log::Warning("Invalid syntax in call [{} {}]", name, args);
@@ -87,28 +80,76 @@ public:
 
     stringc Save() const override { return name + " " + Status(); }
 
-    constexpr stringc Type() override { return typeid(type).name(); }
-
     stringc Help() const override { return localized_description.empty() ? description : localized_description; }
 };
 #pragma endregion CommandBase
+
+#pragma region CommandWithValue<>
+template <typename type>
+class CommandWithValue : public CommandBase
+{
+protected:
+    type value;
+
+public:
+    explicit CommandWithValue(stringc&& name, stringc&& description, type value)
+        : CommandBase(std::move(name), std::move(description)), value(value) {}
+
+    type Value() const { return value; }
+    void Value(const type newValue) { value = newValue; }
+
+    constexpr stringc Type() override { return typeid(type).name(); }
+};
+
+template <typename type>
+class CommandWithValueRef : public CommandBase
+{
+protected:
+    type& value;
+
+public:
+    explicit CommandWithValueRef(stringc&& name, stringc&& description, type& value)
+        : CommandBase(std::move(name), std::move(description)), value(value) {}
+
+    type Value() const { return value; }
+    void Value(const type newValue) { value = newValue; }
+
+    constexpr stringc Type() override { return typeid(type).name(); }
+};
+
+template <typename type>
+class CommandWithValuePtr : public CommandBase
+{
+protected:
+    type* value;
+
+public:
+    explicit CommandWithValuePtr(stringc&& name, stringc&& description, type* value)
+        : CommandBase(std::move(name), std::move(description)), value(value) {}
+
+    type Value() const { return value; }
+    void Value(const type newValue) { value = newValue; }
+
+    constexpr stringc Type() override { return typeid(type).name(); }
+};
+#pragma endregion CommandWithValue<>
 
 #pragma region Command<>
 // You should instantiate template
 // with the type you want to use before using it
 template <typename type>
-class Command : public CommandBase<type> {};
+class Command : public CommandBase {};
 #pragma endregion Command<>
 
 #pragma region Command<bool>
 template <>
-class Command<bool> : public CommandBase<bool>
+class Command<bool> : public CommandWithValueRef<bool>
 {
 public:
     Command(stringc&& name, stringc&& description, bool& value)
-        : CommandBase(std::move(name), std::move(description), value)
+        : CommandWithValueRef(std::move(name), std::move(description), value)
     {
-        CommandBase<bool>::LowerCaseArguments(true);
+        CommandBase::LowerCaseArguments(true);
     }
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
@@ -137,13 +178,13 @@ public:
 
 #pragma region Command<int>
 template <>
-class Command<int> : public CommandBase<int>
+class Command<int> : public CommandWithValueRef<int>
 {
     int min, max;
 
 public:
     Command(stringc&& name, stringc&& description, int& value, const int min, const int max)
-        : CommandBase(std::move(name), std::move(description), value), min(min), max(max) {}
+        : CommandWithValueRef(std::move(name), std::move(description), value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -177,13 +218,13 @@ public:
 
 #pragma region Command<float>
 template <>
-class Command<float> : public CommandBase<float>
+class Command<float> : public CommandWithValueRef<float>
 {
     float min, max;
 
 public:
     Command(stringc&& name, stringc&& description, float& value, const float min, const float max)
-        : CommandBase(std::move(name), std::move(description), value), min(min), max(max) {}
+        : CommandWithValueRef(std::move(name), std::move(description), value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -217,13 +258,13 @@ public:
 
 #pragma region Command<double>
 template <>
-class Command<double> : public CommandBase<double>
+class Command<double> : public CommandWithValueRef<double>
 {
     double min, max;
 
 public:
     Command(stringc&& name, stringc&& description, double& value, const double min, const double max)
-        : CommandBase(std::move(name), std::move(description), value), min(min), max(max) {}
+        : CommandWithValueRef(std::move(name), std::move(description), value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -257,13 +298,13 @@ public:
 
 #pragma region Command<string>
 template <>
-class Command<string> : public CommandBase<string>
+class Command<string> : public CommandWithValueRef<string>
 {
     size_t maxSize;
 
 public:
     Command(stringc&& name, stringc&& description, string& value, const size_t maxSize)
-        : CommandBase(std::move(name), std::move(description), value), maxSize(maxSize) {}
+        : CommandWithValueRef(std::move(name), std::move(description), value), maxSize(maxSize) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -280,25 +321,28 @@ public:
     {
         return maxSize == 0 ? "max size is not defined" : fmt::format("max size is {}", maxSize);
     }
+
+    stringc Type() override { return "string"; }
 };
 #pragma endregion Command<string>
 
 #pragma region Command<FunctionCall>
-using Call = void(*)();
-using CallWithArgs = void(*)(stringc&& args);
+// const pointer to function
+using Call = void(*const)();
+using CallWithArgs = void(*const)(stringc&&);
 
 template <>
-class Command<Call> : public CommandBase<Call>
+class Command<Call> : public CommandWithValue<Call>
 {
     stringc syntax;
 
 public:
-    Command(stringc&& name, stringc&& description, Call call,
+    Command(stringc&& name, stringc&& description, Call value,
         const bool lowerCaseArguments = true, stringc&& syntax = "no syntax")
-        : CommandBase(std::move(name), std::move(description), call), syntax(syntax)
+        : CommandWithValue(std::move(name), std::move(description), value), syntax(syntax)
     {
-        CommandBase<Call>::EmptyArgumentsHandled(true);
-        CommandBase<Call>::LowerCaseArguments(lowerCaseArguments);
+        CommandBase::EmptyArgumentsHandled(true);
+        CommandBase::LowerCaseArguments(lowerCaseArguments);
     }
 
     void Execute() override
@@ -313,22 +357,24 @@ public:
         Execute();
     }
 
-    stringc Status() const override { return fmt::format("Function signature: {}", typeid(value).name()); }
+    stringc Status() const override { return ""; }
     stringc Syntax() const override { return syntax; }
+
+    stringc Type() override { return "Call"; }
 };
 
 template <>
-class Command<CallWithArgs> : public CommandBase<CallWithArgs>
+class Command<CallWithArgs> : public CommandWithValue<CallWithArgs>
 {
     stringc syntax;
 
 public:
-    Command(stringc&& name, stringc&& description, CallWithArgs call, const bool emptyArgumentsHandled = false,
+    Command(stringc&& name, stringc&& description, CallWithArgs value, const bool emptyArgumentsHandled = false,
         const bool lowerCaseArguments = true, stringc&& syntax = "no syntax")
-        : CommandBase(std::move(name), std::move(description), call), syntax(syntax)
+        : CommandWithValue(std::move(name), std::move(description), value), syntax(syntax)
     {
-        CommandBase<CallWithArgs>::EmptyArgumentsHandled(emptyArgumentsHandled);
-        CommandBase<CallWithArgs>::LowerCaseArguments(lowerCaseArguments);
+        CommandBase::EmptyArgumentsHandled(emptyArgumentsHandled);
+        CommandBase::LowerCaseArguments(lowerCaseArguments);
     }
 
     void Execute() override
@@ -343,8 +389,10 @@ public:
             value(std::move(args));
     }
 
-    stringc Status() const override { return fmt::format("Function signature: {}", typeid(value).name()); }
+    stringc Status() const override { return ""; }
     stringc Syntax() const override { return syntax; }
+
+    stringc Type() override { return "CallWithArgs"; }
 };
 #pragma endregion Command<FunctionCall>
 } //namespace XDay::Console

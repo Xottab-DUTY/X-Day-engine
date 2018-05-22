@@ -35,7 +35,7 @@ void Help(stringc&& args)
 
     const auto cmd = Commands::Get(std::move(args));
     if (cmd)
-        Log::Info("{}<{}> = [{}] ({}) {{}}", cmd->Name(), cmd->Type(), cmd->Status(), cmd->Help(), cmd->Syntax());
+        Log::Info("{}<{}> = [{}] ({}) {}{}{}", cmd->Name(), cmd->Type(), cmd->Status(), cmd->Help(), "{", cmd->Syntax(), "}");
     else
         Log::Error("Unknown console command: [{}]", args);
 }
