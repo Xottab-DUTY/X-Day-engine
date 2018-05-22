@@ -4,7 +4,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "xdCore/Console/ConsoleCommand.hpp"
 #include "xdCore/Console/ConsoleCommands.hpp"
 #include "xdCore/Console/ConsoleCommandsMacros.hpp"
 #include "ConsoleCommands.hpp"
@@ -52,15 +51,6 @@ void ConfigLoad(stringc&& args)
 }
 } // namespace Calls
 
-int tint = 0;
-float fint = 0.0;
-double dint = 0.0;
-string sint;
-Command<int> TestInt("test_int", testDescription, tint, 0, 10);
-Command<float> TestFloat("test_float", testDescription, fint, 0, 10);
-Command<double> TestDouble("test_double", testDescription, dint, 0, 10);
-Command<string> TestString("test_string", testDescription, sint, 0);
-
 void RegisterEngineCommands()
 {
     CMDA(Quit);
@@ -68,11 +58,6 @@ void RegisterEngineCommands()
     CMDA(ConfigSave);
     CMDA(ConfigLoad);
     CMDA(Fullscreen);
-
-    CMDA(TestInt);
-    CMDA(TestFloat);
-    CMDA(TestDouble);
-    CMDA(TestString);
 }
 
 } // namespace XDay::Console
