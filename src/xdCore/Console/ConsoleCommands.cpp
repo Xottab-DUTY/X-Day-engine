@@ -117,12 +117,6 @@ ICommand* Commands::Get(stringc&& needed)
     return nullptr;
 }
 
-template <typename Type>
-Type Commands::GetValue(stringc&& command)
-{
-    return static_cast<CommandBase<Type>>(Get(std::move(command))).Value();
-}
-
 bool Commands::Execute(cpcstr raw)
 {
     string command, arguments;

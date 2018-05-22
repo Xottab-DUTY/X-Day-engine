@@ -40,8 +40,19 @@ public:
 
     static ICommand* Get(stringc&& needed);
 
-    template <typename Type>
-    static Type GetValue(stringc&& command);
+    template <typename type>
+    static type GetValue(stringc&& command)
+    {
+        auto icmd = Get(std::move(command));
+
+        auto cmd = static_cast<Command<type>*>(icmd);
+        if (cmd)
+            return cmd->Value();
+
+        Log::Error("Console: failed to find value for [{}]", std::move(command));
+        // XXX: Crash here?
+        return type(0);
+    }
 
     static bool Execute(cpcstr raw);
 
