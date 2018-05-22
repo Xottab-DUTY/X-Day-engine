@@ -91,6 +91,9 @@
     <ClInclude Include="glslang\glslang\MachineIndependent\propagateNoContraction.h">
       <Filter>MachineIndependent</Filter>
     </ClInclude>
+    <ClInclude Include="glslang\glslang\MachineIndependent\attribute.h">
+      <Filter>MachineIndependent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glslang\glslang\MachineIndependent\preprocessor\Pp.cpp">
@@ -175,6 +178,9 @@
       <Filter>GenericCodeGen</Filter>
     </ClCompile>
     <ClCompile Include="glslang\glslang\MachineIndependent\propagateNoContraction.cpp">
+      <Filter>MachineIndependent</Filter>
+    </ClCompile>
+    <ClCompile Include="glslang\glslang\MachineIndependent\attribute.cpp">
       <Filter>MachineIndependent</Filter>
     </ClCompile>
   </ItemGroup>

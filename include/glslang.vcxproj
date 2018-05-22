@@ -31,6 +31,7 @@
     <ClInclude Include="glslang\glslang\Include\revision.h" />
     <ClInclude Include="glslang\glslang\Include\ShHandle.h" />
     <ClInclude Include="glslang\glslang\Include\Types.h" />
+    <ClInclude Include="glslang\glslang\MachineIndependent\attribute.h" />
     <ClInclude Include="glslang\glslang\MachineIndependent\glslang_tab.cpp.h" />
     <ClInclude Include="glslang\glslang\MachineIndependent\gl_types.h" />
     <ClInclude Include="glslang\glslang\MachineIndependent\Initialize.h" />
@@ -53,6 +54,7 @@
   <ItemGroup>
     <ClCompile Include="glslang\glslang\GenericCodeGen\CodeGen.cpp" />
     <ClCompile Include="glslang\glslang\GenericCodeGen\Link.cpp" />
+    <ClCompile Include="glslang\glslang\MachineIndependent\attribute.cpp" />
     <ClCompile Include="glslang\glslang\MachineIndependent\Constant.cpp" />
     <ClCompile Include="glslang\glslang\MachineIndependent\glslang_tab.cpp" />
     <ClCompile Include="glslang\glslang\MachineIndependent\InfoSink.cpp" />

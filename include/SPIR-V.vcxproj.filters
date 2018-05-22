@@ -12,6 +12,10 @@
     <ClInclude Include="glslang\SPIRV\GlslangToSpv.h" />
     <ClInclude Include="glslang\SPIRV\hex_float.h" />
     <ClInclude Include="glslang\SPIRV\Logger.h" />
+    <ClInclude Include="glslang\SPIRV\GLSL.ext.AMD.h" />
+    <ClInclude Include="glslang\SPIRV\GLSL.ext.EXT.h" />
+    <ClInclude Include="glslang\SPIRV\GLSL.ext.NV.h" />
+    <ClInclude Include="glslang\SPIRV\SPVRemapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glslang\SPIRV\SpvBuilder.cpp" />
@@ -20,5 +24,6 @@
     <ClCompile Include="glslang\SPIRV\GlslangToSpv.cpp" />
     <ClCompile Include="glslang\SPIRV\InReadableOrder.cpp" />
     <ClCompile Include="glslang\SPIRV\Logger.cpp" />
+    <ClCompile Include="glslang\SPIRV\SPVRemapper.cpp" />
   </ItemGroup>
 </Project>

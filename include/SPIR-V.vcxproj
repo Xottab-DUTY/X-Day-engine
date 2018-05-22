@@ -117,7 +117,10 @@
     <ClInclude Include="glslang\SPIRV\bitutils.h" />
     <ClInclude Include="glslang\SPIRV\disassemble.h" />
     <ClInclude Include="glslang\SPIRV\doc.h" />
+    <ClInclude Include="glslang\SPIRV\GLSL.ext.AMD.h" />
+    <ClInclude Include="glslang\SPIRV\GLSL.ext.EXT.h" />
     <ClInclude Include="glslang\SPIRV\GLSL.ext.KHR.h" />
+    <ClInclude Include="glslang\SPIRV\GLSL.ext.NV.h" />
     <ClInclude Include="glslang\SPIRV\GLSL.std.450.h" />
     <ClInclude Include="glslang\SPIRV\GlslangToSpv.h" />
     <ClInclude Include="glslang\SPIRV\hex_float.h" />
@@ -125,6 +128,7 @@
     <ClInclude Include="glslang\SPIRV\spirv.hpp" />
     <ClInclude Include="glslang\SPIRV\SpvBuilder.h" />
     <ClInclude Include="glslang\SPIRV\spvIR.h" />
+    <ClInclude Include="glslang\SPIRV\SPVRemapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glslang\SPIRV\disassemble.cpp" />
@@ -133,6 +137,7 @@
     <ClCompile Include="glslang\SPIRV\InReadableOrder.cpp" />
     <ClCompile Include="glslang\SPIRV\Logger.cpp" />
     <ClCompile Include="glslang\SPIRV\SpvBuilder.cpp" />
+    <ClCompile Include="glslang\SPIRV\SPVRemapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="glslang.vcxproj">
