@@ -5,6 +5,9 @@
 #include <bitset>
 
 /*!
+*   \typedef using cbool = const bool;
+*   \brief constant boolean
+*   
 *   \typedef using pstr = char*
 *   \brief pointer to string
 *   
@@ -20,6 +23,8 @@
 *   \typedef using pstr = char*
 *   \brief pointer to string
 */
+
+using cbool = const bool;
 
 using pstr = char*;
 using cpstr = char* const;
