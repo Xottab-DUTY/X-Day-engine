@@ -27,37 +27,6 @@ enum class KeyType
     String
 };
 
-struct KeyData;
-class Key;
-
-/*!
-* \class Keys
-* \ingroup command_line
-*
-* \brief Singleton that holds all known keys
-*/
-class XDCORE_API Keys
-{
-    vector<std::shared_ptr<KeyData>> keys;
-    bool autoInitAllowed = false;
-
-public:
-    ~Keys();
-
-    static Keys* singleton;
-    inline static Keys* Instance();
-
-    static void Initialize() noexcept;
-    static void Destroy();
-
-    static std::shared_ptr<KeyData> AddKey(stringc _name, stringc _description, const KeyType _type) noexcept;
-    static std::shared_ptr<KeyData> GetKey(stringc _name) noexcept;
-
-    static bool isAutoInitAllowed() noexcept;
-
-    static void Help() noexcept;
-};
-
 /*!
  * \struct KeyData
  *
