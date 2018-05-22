@@ -54,6 +54,6 @@ public:
 private:
     void CalculateBuildId();
 };
-}
+} // namespace XDay
 
 extern XDCORE_API XDay::xdCore Core;

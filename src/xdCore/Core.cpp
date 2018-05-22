@@ -8,6 +8,7 @@
 
 #include "Core.hpp"
 #include "CommandLine/Keys.hpp"
+#include "Console/ConsoleCommands.hpp"
 #include "Filesystem.hpp"
 #include "Module.hpp"
 
@@ -65,6 +66,7 @@ void xdCore::Initialize(stringc&& _appname)
 
     Log::Debug("Core: Initialized");
     Log::onCoreInitialized();
+    Console::Commands::Initialize();
 }
 
 void xdCore::Destroy()
