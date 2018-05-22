@@ -12,6 +12,12 @@ namespace filesystem = std::experimental::filesystem;
 #include "xdCore/Filesystem.hpp"
 #include "Shader.hpp"
 
+namespace XDay::CommandLine
+{
+Key KeyShaderForceRecompilation("shrec", "Force shader recompilation", KeyType::Boolean);
+Key KeyShaderPreprocess("shpre", "Outputs preprocessed shaders to the shader sources dir. Works only in debug mode", KeyType::Boolean);
+} // XDay::CommandLine
+
 using namespace XDay;
 
 ShaderWorker::ShaderWorker(std::string _name, const vk::UniqueDevice& _device, const TBuiltInResource& _resources)

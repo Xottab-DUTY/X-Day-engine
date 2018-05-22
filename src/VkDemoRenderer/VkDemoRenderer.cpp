@@ -38,6 +38,12 @@ namespace std
     };
 }
 
+namespace XDay::CommandLine
+{
+Key KeyTexture("texture", "Specifies path to texture file to load, default is \"texture.dds\"", KeyType::String);
+Key KeyModel("model", "Specifies path to model file to model, default is \"model.dds\"", KeyType::String);
+} // XDay::CommandLine
+
 using namespace XDay;
 
 VkDemoRenderer VkDemoRender;
