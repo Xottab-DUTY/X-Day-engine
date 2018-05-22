@@ -15,10 +15,10 @@ constexpr cpcstr testDescription = "test function";
 constexpr cpcstr selfDescription = "Function name describes itself";
 
 // Waiting for "inline" keyword...
-extern XDCORE_API Command<Call> Terminate;
-extern XDCORE_API Command<Call> Crash;
-extern XDCORE_API Command<Call> FlushLog;
-extern XDCORE_API Command<CallWithArgs> Help;
+static Command<Call> Terminate("terminate", selfDescription, [] { std::terminate(); });
+static Command<Call> Crash("crash", selfDescription, Calls::Crash);
+static Command<Call> FlushLog("flush", selfDescription, [] { Log::Flush(); });
+static Command<CallWithArgs> Help("help", "Get list of available commands or specific command help", Calls::Help, true);
 
 class XDCORE_API Commands
 {

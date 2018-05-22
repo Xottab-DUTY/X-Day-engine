@@ -41,11 +41,6 @@ void Help(stringc&& args)
 }
 } // namespace Calls
 
-XDCORE_API Command<Call> Terminate("terminate", selfDescription, [] { std::terminate(); });
-XDCORE_API Command<Call> Crash("crash", selfDescription, Calls::Crash);
-XDCORE_API Command<Call> FlushLog("flush", selfDescription, [] { Log::Flush(); });
-XDCORE_API Command<CallWithArgs> Help("help", "Get list of available commands or specific command help", Calls::Help, true);
-
 void Commands::Register(ICommand* command) noexcept
 {
     for (const auto& i : instance.commands)
