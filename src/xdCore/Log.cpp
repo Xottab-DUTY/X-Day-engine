@@ -28,8 +28,9 @@ Log::Log(const bool coreInitialized /*= false*/)
     if (!noLogFlush && coreInitialized)
         sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(FS.LogsPath.string() + logFile, true));
 
-    if (Core.isGlobalDebug())
-        sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
+#ifdef WINDOWS
+    sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
+#endif
 
     spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
     spdlogger->set_pattern("[%T] [%l] %v");
