@@ -178,7 +178,6 @@
     <ClInclude Include="Log.hpp" />
     <ClInclude Include="Module.hpp" />
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="Types.hpp" />
     <ClInclude Include="Core.hpp" />
   </ItemGroup>
   <ItemGroup>

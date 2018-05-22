@@ -44,6 +44,17 @@
   <ItemGroup>
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="Noncopyable.hpp" />
+    <ClInclude Include="Types\Allocator.hpp" />
+    <ClInclude Include="Types\BasicTypes.hpp" />
+    <ClInclude Include="Types\Deque.hpp" />
+    <ClInclude Include="Types\List.hpp" />
+    <ClInclude Include="Types\Map.hpp" />
+    <ClInclude Include="Types\Set.hpp" />
+    <ClInclude Include="Types\Stack.hpp" />
+    <ClInclude Include="Types\String.hpp" />
+    <ClInclude Include="Types\StringView.hpp" />
+    <ClInclude Include="Types\UnorderedMap.hpp" />
+    <ClInclude Include="Types\Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

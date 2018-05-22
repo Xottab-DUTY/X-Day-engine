@@ -25,7 +25,6 @@
       <Filter>Logging</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="Types.hpp" />
     <ClInclude Include="CommandLine\Key.hpp">
       <Filter>CommandLine</Filter>
     </ClInclude>

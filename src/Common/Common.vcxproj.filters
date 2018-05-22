@@ -10,5 +10,43 @@
   <ItemGroup>
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="Noncopyable.hpp" />
+    <ClInclude Include="Types\Allocator.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\BasicTypes.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Map.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Vector.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\UnorderedMap.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Deque.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\List.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Set.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Stack.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\String.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\StringView.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Types">
+      <UniqueIdentifier>{1360e0af-4923-4cf9-abb6-c1818dcac6ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
