@@ -8,6 +8,7 @@ namespace Calls
 {
 XDCORE_API void Crash();
 XDCORE_API void Help(stringc&& args);
+XDCORE_API void CommandLine(stringc&& args);
 } // namespace Calls
 
 constexpr cpcstr noDescription = "no description";
@@ -19,6 +20,7 @@ static Command<Call> Terminate("terminate", selfDescription, [] { std::terminate
 static Command<Call> Crash("crash", selfDescription, Calls::Crash);
 static Command<Call> FlushLog("flush", selfDescription, [] { Log::Flush(); });
 static Command<CallWithArgs> Help("help", "Get list of available commands or specific command help", Calls::Help, true);
+static Command<CallWithArgs> Cmd("cmd", "Get list of available keys or specific key help", Calls::CommandLine, true);
 
 class XDCORE_API Commands
 {
@@ -49,7 +51,4 @@ public:
     static bool Execute(ICommand* command);
     static bool Execute(ICommand* command, string&& args);
 };
-
-
-
 } // namespace XDay::Console

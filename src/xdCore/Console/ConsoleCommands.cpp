@@ -2,9 +2,11 @@
 
 #include <sstream>
 
+#include "Core.hpp"
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "ConsoleCommandsMacros.hpp"
+#include "CommandLine/Keys.hpp"
 
 namespace XDay::Console
 {
@@ -39,6 +41,32 @@ void Help(stringc&& args)
     else
         Log::Error("Unknown console command: [{}]", args);
 }
+
+void CommandLineAll()
+{
+    Log::Info("Command line:\n" + Core.GetParamsString());
+    CommandLine::Keys::Help();
+}
+
+void CommandLine(stringc&& args)
+{
+    if (args.empty())
+    {
+        CommandLineAll();
+        return;
+    }
+
+    const auto key = CommandLine::Keys::GetKey(args);
+    if (key)
+    {
+        string help;
+        key->localized_description.empty() ? help = key->description : help = key->localized_description;
+        Log::Info(std::move(help));
+    }
+    else
+        Log::Error("Unknown key: [{}]", args);
+}
+
 } // namespace Calls
 
 void Commands::Register(ICommand* command) noexcept
@@ -177,5 +205,6 @@ void Commands::Initialize()
     CMDA(Crash);
     CMDA(FlushLog);
     CMDA(Help);
+    CMDA(Cmd);
 }
 } // namespace XDay::Console
