@@ -88,10 +88,10 @@ bool xdCore::FindParam(stringc param) const
 // If parameter isn't found it returns empty string.
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
-string xdCore::ReturnParam(stringc param) const
+stringc xdCore::ReturnParam(stringc param) const
 {
     bool found = false;
-    for (auto& i : params)
+    for (const auto& i : params)
     {
         if (found && i.find(CommandLine::KeyPrefix) != string::npos)
         {

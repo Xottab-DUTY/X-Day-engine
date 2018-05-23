@@ -30,7 +30,7 @@ public:
 
     static bool isGlobalDebug();
     bool FindParam(stringc param) const;
-    string ReturnParam(stringc param) const;
+    stringc ReturnParam(stringc param) const;
 
     auto GetBuildId() const { return buildId; }
     auto GetBuildDate() const { return buildDate; }
