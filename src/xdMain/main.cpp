@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     Core.InitializeArguments(argc, argv);
 
 #ifdef WINDOWS
-    SetConsoleCP(65001);
+    //SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
     if (!CommandLine::KeyDontHideSystemConsole.IsSet())
         FreeConsole();
