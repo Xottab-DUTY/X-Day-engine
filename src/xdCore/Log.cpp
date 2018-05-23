@@ -10,48 +10,50 @@
 
 namespace XDay
 {
-Log Log::Global;
-Log::Log(const bool coreInitialized /*= false*/)
+Log Log::instance;
+
+void Log::Initialize()
 {
     if (CommandLine::KeyNoLog.IsSet())
     {
-        noLog = true;
+        instance.noLog = true;
         return;
     }
 
     if (CommandLine::KeyNoLogFlush.IsSet())
-        noLogFlush = true;
+        instance.noLogFlush = true;
 
     std::vector<spdlog::sink_ptr> sinks;
     sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 
-    if (!noLogFlush && coreInitialized)
-        sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(FS.LogsPath.string() + logFile, true));
+    if (!instance.noLogFlush)
+        sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(FS.LogsPath.string() + instance.logFile, true));
 
 #ifdef WINDOWS
     sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 
-    spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
-    spdlogger->set_pattern("[%T] [%l] %v");
+    instance.spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
+    instance.spdlogger->set_pattern("[%T] [%l] %v");
 
     if (Core.isGlobalDebug())
-        spdlogger->set_level(spdlog::level::trace);
+        instance.spdlogger->set_level(spdlog::level::trace);
 
-    spdlog::register_logger(spdlogger);
+    spdlog::register_logger(instance.spdlogger);
 }
 
-Log::~Log()
+void Log::Destroy()
 {
-    if (!noLogFlush)
+    if (!instance.noLogFlush)
         Flush();
 
-    spdlog::drop_all();
+    if (!instance.noLog)
+        spdlog::drop(instance.spdlogger->name());
 }
 
 void Log::Flush()
 {
-    if (Global.noLogFlush)
+    if (instance.noLogFlush)
         return;
 
     spdlog::get("X-Day Engine")->flush();
@@ -59,21 +61,21 @@ void Log::Flush()
 
 bool Log::isNoLog()
 {
-    return Global.noLog;
+    return instance.noLog;
 }
 
 bool Log::isNoLogFlush()
 {
-    return Global.noLogFlush;
+    return instance.noLogFlush;
 }
 
 void Log::onCoreInitialized()
 {
-    if (Global.noLog || Global.noLogFlush)
+    if (instance.noLog || instance.noLogFlush)
         return;
 
-    Global.CloseLog();
-    Global.Log::Log(true);
+    instance.CloseLog();
+    instance.Log::Log();
 }
 
 void Log::CloseLog() const

@@ -33,15 +33,17 @@ xdCore::xdCore()
 {
     engineName = "X-Day Engine";
     engineVersion = "1.0";
+    appName = "X-Day Engine";
+    appVersion = "1.0";
     CalculateBuildId();
 }
 
-void xdCore::InitializeArguments(int argc, char* argv[])
+void xdCore::InitializeArguments(const int argc, char* argv[])
 {
     for (int i = 0; i < argc; ++i)
         params.push_back(argv[i]);
 
-    for (auto&& str : params)
+    for (const auto& str : params)
         paramsString += str + " ";
 
     paramsString.pop_back(); // remove the last " "
@@ -49,23 +51,25 @@ void xdCore::InitializeArguments(int argc, char* argv[])
     CommandLine::Keys::Initialize();
 }
 
-void xdCore::Initialize(stringc&& _appname)
+void xdCore::Initialize()
 {
-    Log::Info("{} {} (build {})", engineName, engineVersion, buildId);
-    Log::Debug("Core: Initializing");
-    appVersion = "1.0";
+    FS.Initialize();
+    Log::Initialize();
 
-    auto& key = CommandLine::KeyName;
-    key.IsSet() ? appName = key.StringValue() : appName = _appname;
+    const auto& key = CommandLine::KeyName;
+    if (key.IsSet())
+        appName = key.StringValue();
 
     buildString = fmt::format("{} {} {} (build {}, {}, {})", engineName, engineVersion, GetBuildConfiguration(), buildId, buildDate, buildTime);
     glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());
+    Log::Info(Core.GetBuildString());
+    Log::Info(Core.GetGLFWVersionString());
+    Log::Info("Core.Params: " + Core.GetParamsString());
+    Log::Info("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.");
+    Log::Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
+
     glfwSetErrorCallback(error_callback);
 
-    FS.Initialize();
-
-    Log::Debug("Core: Initialized");
-    Log::onCoreInitialized();
     Console::Commands::Initialize();
 }
 
@@ -73,6 +77,7 @@ void xdCore::Destroy()
 {
     CommandLine::Keys::Destroy();
     Console::Commands::Destroy();
+    Log::Destroy();
 }
 
 // Finds command line parameters and returns true if param exists
@@ -164,5 +169,5 @@ void xdCore::CalculateBuildId()
         buffer2 >> buildDate_tm.tm_hour >> buildDate_tm.tm_min >> buildDate_tm.tm_sec;
     }
 
-    buildId = -difftime(std::mktime(&startDate_tm), std::mktime(&buildDate_tm)) / 86400;
+    buildId = -std::difftime(std::mktime(&startDate_tm), std::mktime(&buildDate_tm)) / 86400;
 }

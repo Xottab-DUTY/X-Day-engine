@@ -24,8 +24,8 @@ class XDCORE_API xdCore
 
 public:
     xdCore();
-    void InitializeArguments(int argc, char* argv[]);
-    void Initialize(stringc&& _appname = "X-Day Engine");
+    void InitializeArguments(const int argc, char* argv[]);
+    void Initialize();
     void Destroy();
 
     static bool isGlobalDebug();
