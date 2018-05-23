@@ -56,10 +56,6 @@ void xdCore::Initialize()
     FS.Initialize();
     Log::Initialize();
 
-    const auto& key = CommandLine::KeyName;
-    if (key.IsSet())
-        appName = key.StringValue();
-
     buildString = fmt::format("{} {} {} (build {}, {}, {})", engineName, engineVersion, GetBuildConfiguration(), buildId, buildDate, buildTime);
     glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     Log::Info(Core.GetBuildString());
