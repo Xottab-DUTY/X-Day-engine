@@ -43,6 +43,9 @@
     <ClInclude Include="Types\StringView.hpp">
       <Filter>Types</Filter>
     </ClInclude>
+    <ClInclude Include="Types\IntegerTypes.hpp">
+      <Filter>Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Types">
