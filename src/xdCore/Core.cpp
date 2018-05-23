@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Core.hpp"
+#include "Debug.hpp"
 #include "CommandLine/Keys.hpp"
 #include "Console/ConsoleCommands.hpp"
 #include "Filesystem.hpp"
@@ -55,6 +56,7 @@ void xdCore::Initialize()
 {
     FS.Initialize();
     Log::Initialize();
+    Debug::Initialize();
 
     buildString = fmt::format("{} {} {} (build {}, {}, {})", engineName, engineVersion, GetBuildConfiguration(), buildId, buildDate, buildTime);
     glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());

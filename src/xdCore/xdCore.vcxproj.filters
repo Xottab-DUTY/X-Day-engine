@@ -13,6 +13,9 @@
     <ClCompile Include="Filesystem.cpp">
       <Filter>Filesystem</Filter>
     </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
     <ClCompile Include="Console\ConsoleCommand.cpp">
       <Filter>Console</Filter>
     </ClCompile>
@@ -36,6 +39,9 @@
     <ClInclude Include="Filesystem.hpp">
       <Filter>Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="Debug.hpp">
+      <Filter>Debug</Filter>
+    </ClInclude>
     <ClInclude Include="Console\ConsoleCommand.hpp">
       <Filter>Console</Filter>
     </ClInclude>
@@ -44,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="Console\ConsoleCommandsMacros.hpp">
       <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMacros.hpp">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +67,9 @@
     </Filter>
     <Filter Include="Filesystem">
       <UniqueIdentifier>{e9ae7b7b-28b7-4a80-a477-24ac7cfc93d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{655d0e7a-2b82-41a4-b4c4-f98d1360f736}</UniqueIdentifier>
     </Filter>
     <Filter Include="Console">
       <UniqueIdentifier>{414b7323-22cc-4f0c-9a5e-3624e29da413}</UniqueIdentifier>
