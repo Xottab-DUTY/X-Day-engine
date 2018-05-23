@@ -201,4 +201,9 @@ void Commands::Initialize()
     CMDA(Help);
     CMDA(Cmd);
 }
+
+void Commands::Destroy()
+{
+    instance.commands.clear();
+}
 } // namespace XDay::Console

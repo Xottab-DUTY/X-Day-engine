@@ -72,6 +72,7 @@ void xdCore::Initialize(stringc&& _appname)
 void xdCore::Destroy()
 {
     CommandLine::Keys::Destroy();
+    Console::Commands::Destroy();
 }
 
 // Finds command line parameters and returns true if param exists

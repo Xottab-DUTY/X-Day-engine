@@ -31,6 +31,7 @@ public:
     static const auto Get() { return instance.commands; }
 
     static void Initialize();
+    static void Destroy();
 
     static void Register(ICommand* command) noexcept;
     static void Unregister(ICommand* command) noexcept;
