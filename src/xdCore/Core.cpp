@@ -54,6 +54,7 @@ void xdCore::InitializeArguments(const int argc, char* argv[])
 
 void xdCore::Initialize()
 {
+    Filesystem::BasicInit();
     FS.Initialize();
     Log::Initialize();
     Debug::Initialize();
@@ -76,6 +77,7 @@ void xdCore::Destroy()
     CommandLine::Keys::Destroy();
     Console::Commands::Destroy();
     Log::Destroy();
+    Filesystem::Destroy();
 }
 
 // Finds command line parameters and returns true if param exists

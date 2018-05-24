@@ -7,9 +7,20 @@ namespace XDay
 {
 class XDCORE_API Filesystem
 {
+    Filesystem() = default;
+    static Filesystem instance;
+
 public:
-    Filesystem();
-    ~Filesystem();
+    static void BasicInit();
+    static void Initialize();
+    static void Destroy();
+};
+
+class XDCORE_API CFilesystem
+{
+public:
+    CFilesystem();
+    ~CFilesystem();
 
     void Initialize();
     void Destroy();
@@ -38,4 +49,4 @@ public:
 };
 } // namespace XDay
 
-extern XDCORE_API XDay::Filesystem FS;
+extern XDCORE_API XDay::CFilesystem FS;

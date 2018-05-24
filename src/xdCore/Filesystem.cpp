@@ -3,14 +3,31 @@
 #include "CommandLine/Keys.hpp"
 #include "Filesystem.hpp"
 
-XDCORE_API XDay::Filesystem FS;
-
 namespace XDay
 {
-Filesystem::Filesystem() {}
-Filesystem::~Filesystem() {}
+XDCORE_API Filesystem Filesystem::instance;
+
+void Filesystem::BasicInit()
+{
+    // XXX: just load basic paths – DataPath and ResourcesPath
+}
 
 void Filesystem::Initialize()
+{
+
+}
+
+void Filesystem::Destroy()
+{
+
+}
+
+XDCORE_API CFilesystem FS;
+
+CFilesystem::CFilesystem() {}
+CFilesystem::~CFilesystem() {}
+
+void CFilesystem::Initialize()
 {
     AppPath = filesystem::absolute(Core.GetParams().front());
     WorkPath = filesystem::current_path();
@@ -47,12 +64,12 @@ void Filesystem::Initialize()
     CreateDirIfNotExist(TexturesPath);
 }
 
-void Filesystem::CreateDirIfNotExist(const filesystem::path& p) const
+void CFilesystem::CreateDirIfNotExist(const filesystem::path& p) const
 {
     if (!filesystem::exists(p)) filesystem::create_directory(p);
 }
 
-stringc Filesystem::GetModulePath(string&& initialPath, const bool extension)
+stringc CFilesystem::GetModulePath(string&& initialPath, const bool extension)
 {
 #ifdef DEBUG
 #ifdef XD_X64
