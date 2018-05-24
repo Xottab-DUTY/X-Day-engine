@@ -165,7 +165,7 @@ void VkDemoRenderer::DrawFrame()
     uint32_t imageIndex;
     result = device->acquireNextImageKHR(*swapchain, std::numeric_limits<uint64_t>::max(), nullptr, *imageAvailableFence, &imageIndex);
 
-    assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
+    ASSERT1(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
 
     if (result == vk::Result::eErrorOutOfDateKHR)
     {
@@ -185,14 +185,14 @@ void VkDemoRenderer::DrawFrame()
     submitInfo.setPSignalSemaphores(signalSemaphores);
 
     result = graphicsQueue.submit(1, &submitInfo, nullptr);
-    assert(result == vk::Result::eSuccess);
+    ASSERT1(result == vk::Result::eSuccess);
 
     vk::SwapchainKHR swapChains[] = { *swapchain };
 
     vk::PresentInfoKHR presentInfo(1, signalSemaphores, 1, swapChains, &imageIndex);
 
     result = presentQueue.presentKHR(&presentInfo);
-    assert(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
+    ASSERT1(result == vk::Result::eSuccess || result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR);
 
     if (result != vk::Result::eSuccess)
         RecreateSwapChain();
@@ -329,7 +329,7 @@ void VkDemoRenderer::CreateVkInstance()
     }
 
     vkInstance = vk::createInstanceUnique(i);
-    assert(vkInstance);
+    ASSERT1(vkInstance);
 }
 
 bool VkDemoRenderer::CheckValidationLayersSupport() const
@@ -382,7 +382,7 @@ void VkDemoRenderer::CreateDebugCallback()
         (PFN_vkDebugReportCallbackEXT)vkDebugCallback);
 
     vkCallback = vkInstance->createDebugReportCallbackEXTUnique(callbackInfo);
-    assert(vkCallback);
+    ASSERT1(vkCallback);
 }
 
 void VkDemoRenderer::CreateVkSurface()
@@ -391,7 +391,7 @@ void VkDemoRenderer::CreateVkSurface()
         (VkInstance)*vkInstance, VkDemo.windowDemo,
         nullptr, (VkSurfaceKHR*)&*surface);
 
-    assert(result == vk::Result::eSuccess);
+    ASSERT1(result == vk::Result::eSuccess);
 }
 
 void VkDemoRenderer::GetPhysDevice()
@@ -404,7 +404,7 @@ void VkDemoRenderer::GetPhysDevice()
             break;
         }
 
-    assert(physDevice);
+    ASSERT1(physDevice);
 }
 
 bool VkDemoRenderer::isPhysDeviceSuitable(vk::PhysicalDevice _physDevice) const
@@ -470,7 +470,7 @@ void VkDemoRenderer::CreateDevice()
         deviceCreateInfo.enabledLayerCount = 0;
 
     device = physDevice.createDeviceUnique(deviceCreateInfo);
-    assert(device);
+    ASSERT1(device);
 
     device->getQueue(indices.graphicsFamily, 0, &graphicsQueue);
     device->getQueue(indices.presentFamily, 0, &presentQueue);
@@ -556,7 +556,7 @@ void VkDemoRenderer::CreateSwapChain()
         swapchainInfo.setOldSwapchain(*swapchain);
 
     swapchain = device->createSwapchainKHRUnique(swapchainInfo);
-    assert(swapchain);
+    ASSERT1(swapchain);
 
     swapChainImages = device->getSwapchainImagesKHR(*swapchain);
     swapChainImageFormat = surfaceFormat.format;
@@ -615,7 +615,7 @@ void VkDemoRenderer::CreateRenderPass()
     renderPassInfo.setPDependencies(&dependency);
 
     renderPass = device->createRenderPassUnique(renderPassInfo);
-    assert(renderPass);
+    ASSERT1(renderPass);
 }
 
 void VkDemoRenderer::CreateDescriptorSetLayout()
@@ -630,7 +630,7 @@ void VkDemoRenderer::CreateDescriptorSetLayout()
     vk::DescriptorSetLayoutCreateInfo layoutInfo({}, static_cast<uint32_t>(bindings.size()), bindings.data());
 
     descriptorSetLayout = device->createDescriptorSetLayoutUnique(layoutInfo);
-    assert(descriptorSetLayout);
+    ASSERT1(descriptorSetLayout);
 }
 
 void VkDemoRenderer::CreateGraphicsPipeline()
@@ -699,7 +699,7 @@ void VkDemoRenderer::CreateGraphicsPipeline()
     vk::PipelineLayoutCreateInfo pipelineLayoutInfo({}, 1, &*descriptorSetLayout);
 
     pipelineLayout = device->createPipelineLayoutUnique(pipelineLayoutInfo);
-    assert(pipelineLayout);
+    ASSERT1(pipelineLayout);
 
     vk::GraphicsPipelineCreateInfo pipelineInfo;
     pipelineInfo.setStageCount(2);
@@ -716,7 +716,7 @@ void VkDemoRenderer::CreateGraphicsPipeline()
     pipelineInfo.setRenderPass(*renderPass);
 
     graphicsPipeline = device->createGraphicsPipelineUnique(nullptr, pipelineInfo, nullptr);
-    assert(graphicsPipeline);
+    ASSERT1(graphicsPipeline);
 }
 
 void VkDemoRenderer::CreateFramebuffers()
@@ -735,7 +735,7 @@ void VkDemoRenderer::CreateFramebuffers()
                                                   attachments.data(), swapChainExtent.width, swapChainExtent.height, 1);
 
         swapChainFramebuffers[i] = device->createFramebufferUnique(framebufferInfo);
-        assert(swapChainFramebuffers[i]);
+        ASSERT1(swapChainFramebuffers[i]);
     }
 }
 
@@ -746,7 +746,7 @@ void VkDemoRenderer::CreateCommandPool()
     vk::CommandPoolCreateInfo poolInfo({}, queueFamilyIndices.graphicsFamily);
 
     commandPool = device->createCommandPoolUnique(poolInfo);
-    assert(commandPool);
+    ASSERT1(commandPool);
 }
 
 void VkDemoRenderer::CreateDepthResources()
@@ -824,7 +824,7 @@ void VkDemoRenderer::CreateTextureSampler()
     samplerInfo.setMipmapMode(vk::SamplerMipmapMode::eLinear);
 
     textureSampler = device->createSamplerUnique(samplerInfo);
-    assert(textureSampler);
+    ASSERT1(textureSampler);
 }
 
 void VkDemoRenderer::LoadModel()
@@ -949,7 +949,7 @@ void VkDemoRenderer::CreateDescriptorPool()
     vk::DescriptorPoolCreateInfo poolInfo({}, 1, static_cast<uint32_t>(poolSizes.size()), poolSizes.data());
 
     descriptorPool = device->createDescriptorPoolUnique(poolInfo);
-    assert(descriptorPool);
+    ASSERT1(descriptorPool);
 }
 
 void VkDemoRenderer::CreateDescriptorSet()
@@ -957,7 +957,7 @@ void VkDemoRenderer::CreateDescriptorSet()
     vk::DescriptorSetLayout layouts[] = { *descriptorSetLayout };
     vk::DescriptorSetAllocateInfo allocInfo(*descriptorPool, 1, layouts);
     result = device->allocateDescriptorSets(&allocInfo, &descriptorSet);
-    assert(result == vk::Result::eSuccess);
+    ASSERT1(result == vk::Result::eSuccess);
 
     vk::DescriptorBufferInfo bufferInfo(*uniformBuffer, 0, sizeof(UniformBufferObject));
 
@@ -991,7 +991,7 @@ void VkDemoRenderer::CreateCommandBuffers()
         static_cast<uint32_t>(commandBuffers.size()));
 
     commandBuffers = device->allocateCommandBuffersUnique(allocInfo);
-    assert(!commandBuffers.empty());
+    ASSERT1(!commandBuffers.empty());
 
     for (size_t i = 0; i < commandBuffers.size(); ++i)
     {
@@ -1031,11 +1031,11 @@ void VkDemoRenderer::CreateSynchronizationPrimitives()
 {
     vk::FenceCreateInfo fenceInfo;
     imageAvailableFence = device->createFenceUnique(fenceInfo);
-    assert(imageAvailableFence);
+    ASSERT1(imageAvailableFence);
 
     vk::SemaphoreCreateInfo semaphoreInfo;
     renderFinishedSemaphore = device->createSemaphoreUnique(semaphoreInfo);
-    assert(renderFinishedSemaphore);
+    ASSERT1(renderFinishedSemaphore);
 }
 
 void VkDemoRenderer::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory)
@@ -1097,13 +1097,13 @@ void VkDemoRenderer::createImage(uint32_t width, uint32_t height, vk::Format for
     imageInfo.setSharingMode(vk::SharingMode::eExclusive);
 
     image = device->createImage(imageInfo);
-    assert(image);
+    ASSERT1(image);
 
     auto memRequirements = device->getImageMemoryRequirements(image);
     vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
 
     imageMemory = device->allocateMemory(allocInfo);
-    assert(imageMemory);
+    ASSERT1(imageMemory);
 
     device->bindImageMemory(image, imageMemory, 0);
 }
@@ -1126,14 +1126,14 @@ void VkDemoRenderer::createImageUnique(uint32_t width, uint32_t height, vk::Form
     imageInfo.setSharingMode(vk::SharingMode::eExclusive);
 
     image = device->createImageUnique(imageInfo);
-    assert(image);
+    ASSERT1(image);
 
     auto memRequirements = device->getImageMemoryRequirements(*image);
 
     vk::MemoryAllocateInfo allocInfo(memRequirements.size, findMemoryType(memRequirements.memoryTypeBits, properties));
     imageMemory = device->allocateMemoryUnique(allocInfo);
 
-    assert(imageMemory);
+    ASSERT1(imageMemory);
 
     device->bindImageMemory(*image, *imageMemory, 0);
 }

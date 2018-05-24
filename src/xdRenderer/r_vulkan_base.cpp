@@ -115,7 +115,7 @@ void r_vulkan_base::createInstance()
     }
 
     instance = createInstanceUnique(i);
-    assert(instance);
+    ASSERT1(instance);
 }
 
 void r_vulkan_base::createDebugCallback()
@@ -127,7 +127,7 @@ void r_vulkan_base::createDebugCallback()
         PFN_vkDebugReportCallbackEXT(vkDebugReportCallback));
 
     callback = instance->createDebugReportCallbackEXTUnique(callbackInfo);
-    assert(callback);
+    ASSERT1(callback);
 }
 
 void r_vulkan_base::createSurface()
@@ -136,7 +136,7 @@ void r_vulkan_base::createSurface()
         reinterpret_cast<VkInstance&>(instance), Engine.windowMain,
         nullptr, reinterpret_cast<VkSurfaceKHR*>(&surface)));
 
-    assert(result == vk::Result::eSuccess);
+    ASSERT1(result == vk::Result::eSuccess);
 }
 
 void r_vulkan_base::getPhysicalDevice()
@@ -149,7 +149,7 @@ void r_vulkan_base::getPhysicalDevice()
             break;
         }
 
-    assert(physicalDevice);
+    ASSERT1(physicalDevice);
 }
 
 void r_vulkan_base::createDevice()
@@ -184,7 +184,7 @@ void r_vulkan_base::createDevice()
     }
 
     device = physicalDevice.createDeviceUnique(i);
-    assert(device);
+    ASSERT1(device);
 
     //device->getQueue(indices.graphicsFamily, 0, &graphicsQueue);
     //device->getQueue(indices.presentFamily, 0, &presentQueue);
