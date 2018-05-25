@@ -3,6 +3,8 @@
 #include "CommandLine/Keys.hpp"
 #include "Filesystem.hpp"
 
+XDCORE_API XDay::CFilesystem FS;
+
 namespace XDay
 {
 XDCORE_API Filesystem Filesystem::instance;
@@ -21,8 +23,6 @@ void Filesystem::Destroy()
 {
 
 }
-
-XDCORE_API CFilesystem FS;
 
 CFilesystem::CFilesystem() {}
 CFilesystem::~CFilesystem() {}
