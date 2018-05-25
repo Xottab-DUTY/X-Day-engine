@@ -39,9 +39,9 @@ public:
 class CommandBase : public ICommand
 {
 protected:
-    string name;
-    string description;
-    string localized_description;
+    cpcstr name;
+    cpcstr description;
+    pcstr localized_description;
 
     bool enabled;
     bool lowerCaseArguments;
@@ -50,9 +50,10 @@ protected:
 
 public:
     CommandBase() = delete;
-    CommandBase(stringc&& name, stringc&& description)
-        : name(std::move(name)),
-          description(std::move(description)),
+    constexpr CommandBase(cpcstr name, cpcstr description)
+        : name(name),
+          description(description),
+          localized_description(nullptr),
           enabled(true),
           lowerCaseArguments(false),
           emptyArgumentsHandled(false),
@@ -78,9 +79,9 @@ public:
         Log::Warning("Valid arguments: {}", Syntax());
     }
 
-    stringc Save() const override { return name + " " + Status(); }
+    stringc Save() const override { return Name() + " " + Status(); }
 
-    stringc Help() const override { return localized_description.empty() ? description : localized_description; }
+    stringc Help() const override { return localized_description ? localized_description : description; }
 };
 #pragma endregion CommandBase
 
@@ -92,8 +93,8 @@ protected:
     type value;
 
 public:
-    explicit CommandWithValue(stringc&& name, stringc&& description, type value)
-        : CommandBase(std::move(name), std::move(description)), value(value) {}
+    constexpr explicit CommandWithValue(cpcstr name, cpcstr description, type value)
+        : CommandBase(name, description), value(value) {}
 
     type Value() const { return value; }
     void Value(const type newValue) { value = newValue; }
@@ -108,8 +109,8 @@ protected:
     type& value;
 
 public:
-    explicit CommandWithValueRef(stringc&& name, stringc&& description, type& value)
-        : CommandBase(std::move(name), std::move(description)), value(value) {}
+    constexpr explicit CommandWithValueRef(cpcstr name, cpcstr description, type& value)
+        : CommandBase(name, description), value(value) {}
 
     type Value() const { return value; }
     void Value(const type newValue) { value = newValue; }
@@ -124,8 +125,8 @@ protected:
     type* value;
 
 public:
-    explicit CommandWithValuePtr(stringc&& name, stringc&& description, type* value)
-        : CommandBase(std::move(name), std::move(description)), value(value) {}
+    constexpr explicit CommandWithValuePtr(cpcstr name, cpcstr description, type* value)
+        : CommandBase(name, description), value(value) {}
 
     type Value() const { return value; }
     void Value(const type newValue) { value = newValue; }
@@ -146,8 +147,8 @@ template <>
 class Command<bool> : public CommandWithValueRef<bool>
 {
 public:
-    Command(stringc&& name, stringc&& description, bool& value)
-        : CommandWithValueRef(std::move(name), std::move(description), value)
+    constexpr Command(cpcstr name, cpcstr description, bool& value)
+        : CommandWithValueRef(name, description, value)
     {
         CommandBase::LowerCaseArguments(true);
     }
@@ -183,8 +184,8 @@ class Command<int> : public CommandWithValueRef<int>
     int min, max;
 
 public:
-    Command(stringc&& name, stringc&& description, int& value, const int min, const int max)
-        : CommandWithValueRef(std::move(name), std::move(description), value), min(min), max(max) {}
+    constexpr Command(cpcstr name, cpcstr description, int& value, const int min, const int max)
+        : CommandWithValueRef(name, description, value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -223,8 +224,8 @@ class Command<float> : public CommandWithValueRef<float>
     float min, max;
 
 public:
-    Command(stringc&& name, stringc&& description, float& value, const float min, const float max)
-        : CommandWithValueRef(std::move(name), std::move(description), value), min(min), max(max) {}
+    constexpr Command(cpcstr name, cpcstr description, float& value, const float min, const float max)
+        : CommandWithValueRef(name, description, value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -263,8 +264,8 @@ class Command<double> : public CommandWithValueRef<double>
     double min, max;
 
 public:
-    Command(stringc&& name, stringc&& description, double& value, const double min, const double max)
-        : CommandWithValueRef(std::move(name), std::move(description), value), min(min), max(max) {}
+    constexpr Command(cpcstr name, cpcstr description, double& value, const double min, const double max)
+        : CommandWithValueRef(name, description, value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -303,8 +304,8 @@ class Command<string> : public CommandWithValueRef<string>
     size_t maxSize;
 
 public:
-    Command(stringc&& name, stringc&& description, string& value, const size_t maxSize)
-        : CommandWithValueRef(std::move(name), std::move(description), value), maxSize(maxSize) {}
+    constexpr Command(cpcstr name, cpcstr description, string& value, const size_t maxSize)
+        : CommandWithValueRef(name, description, value), maxSize(maxSize) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
 
@@ -334,12 +335,12 @@ using CallWithArgs = void(*const)(stringc&&);
 template <>
 class Command<Call> : public CommandWithValue<Call>
 {
-    stringc syntax;
+    cpcstr syntax;
 
 public:
-    Command(stringc&& name, stringc&& description, Call value,
-        const bool lowerCaseArguments = true, stringc&& syntax = "no syntax")
-        : CommandWithValue(std::move(name), std::move(description), value), syntax(syntax)
+    constexpr Command(cpcstr name, cpcstr description, Call value,
+        const bool lowerCaseArguments = true, cpcstr syntax = "no syntax")
+        : CommandWithValue(name, description, value), syntax(syntax)
     {
         CommandBase::EmptyArgumentsHandled(true);
         CommandBase::LowerCaseArguments(lowerCaseArguments);
@@ -366,12 +367,12 @@ public:
 template <>
 class Command<CallWithArgs> : public CommandWithValue<CallWithArgs>
 {
-    stringc syntax;
+    cpcstr syntax;
 
 public:
-    Command(stringc&& name, stringc&& description, CallWithArgs value, const bool emptyArgumentsHandled = false,
-        const bool lowerCaseArguments = true, stringc&& syntax = "no syntax")
-        : CommandWithValue(std::move(name), std::move(description), value), syntax(syntax)
+    constexpr Command(cpcstr name, cpcstr description, CallWithArgs value, const bool emptyArgumentsHandled = false,
+        const bool lowerCaseArguments = true, cpcstr syntax = "no syntax")
+        : CommandWithValue(name, description, value), syntax(syntax)
     {
         CommandBase::EmptyArgumentsHandled(emptyArgumentsHandled);
         CommandBase::LowerCaseArguments(lowerCaseArguments);

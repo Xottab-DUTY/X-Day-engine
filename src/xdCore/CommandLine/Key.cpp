@@ -122,7 +122,7 @@ Key::Key(stringc _name, stringc _description, const KeyType _type)
         Initialize();
 }
 
-Key::Key(const std::shared_ptr<KeyData> _data) : data(_data), is_initialized(true) {}
+Key::Key(const std::shared_ptr<KeyData>& _data) : data(_data), is_initialized(true) {}
 
 Key::Key(stringc _name)
 {

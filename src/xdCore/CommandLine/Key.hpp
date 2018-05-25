@@ -65,7 +65,7 @@ class XDCORE_API Key
 public:
     Key(stringc _name, stringc _description, const KeyType _type);
     Key(stringc _name);
-    explicit Key(std::shared_ptr<KeyData> _data);
+    explicit Key(const std::shared_ptr<KeyData>& _data);
 
     void Initialize() noexcept;
     
