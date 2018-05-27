@@ -13,6 +13,11 @@
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"
 
+namespace XDay::CommandLine
+{
+Key KeyDontHideSystemConsole("syscmd", "Disables system console hiding", KeyType::Boolean);
+}
+
 using namespace XDay;
 
 void watch_console()

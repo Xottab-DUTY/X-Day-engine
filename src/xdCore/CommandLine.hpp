@@ -18,9 +18,6 @@ namespace XDay::CommandLine
 {
 constexpr cpcstr KeyPrefix = "--p_";
 
-class Key;
-extern XDCORE_API Key KeyDontHideSystemConsole;
-
 /**
 * \enum KeyType
 * \ingroup command_line
@@ -82,6 +79,8 @@ class XDCORE_API Keys
 public:
     static void Initialize() noexcept;
     static void Destroy() noexcept;
+
+    static void Localize() noexcept;
 
     static bool AddKey(Key* newKey) noexcept;
     static Key* GetKey(cpcstr keyName) noexcept;

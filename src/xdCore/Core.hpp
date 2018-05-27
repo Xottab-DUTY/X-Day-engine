@@ -30,14 +30,14 @@ public:
 
     static bool isGlobalDebug();
     bool FindParam(stringc param) const;
-    stringc ReturnParam(stringc param) const;
+    cpcstr ReturnParam(stringc param) const;
 
     auto GetBuildId() const { return buildId; }
     auto GetBuildDate() const { return buildDate; }
     auto GetBuildTime() const { return buildTime; }
     auto GetBuildString() const { return buildString; }
     auto GetGLFWVersionString() const { return glfwVersionString; }
-    constexpr static pcstr GetBuildConfiguration();
+    constexpr static cpcstr GetBuildConfiguration();
 
     auto GetEngineName() const { return engineName; }
     auto GetEngineVersion() const { return engineVersion; }

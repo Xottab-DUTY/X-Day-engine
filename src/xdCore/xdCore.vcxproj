@@ -175,7 +175,6 @@
     <ClInclude Include="Console\ConsoleCommands.hpp" />
     <ClInclude Include="Console\ConsoleCommandsMacros.hpp" />
     <ClInclude Include="Debug.hpp" />
-    <ClInclude Include="DebugMacros.hpp" />
     <ClInclude Include="Filesystem.hpp" />
     <ClInclude Include="Log.hpp" />
     <ClInclude Include="Module.hpp" />

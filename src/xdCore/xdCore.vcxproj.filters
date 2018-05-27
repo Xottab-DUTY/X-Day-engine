@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Log.cpp">
-      <Filter>Logging</Filter>
+      <Filter>General\Logging</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Filesystem.cpp">
-      <Filter>Filesystem</Filter>
+      <Filter>General\Filesystem</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
-      <Filter>Debug</Filter>
+      <Filter>General\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Console\ConsoleCommand.cpp">
       <Filter>Console</Filter>
@@ -19,23 +19,23 @@
       <Filter>Console</Filter>
     </ClCompile>
     <ClCompile Include="CommandLine.cpp">
-      <Filter>CommandLine</Filter>
+      <Filter>General\CommandLine</Filter>
     </ClCompile>
     <ClCompile Include="Module.cpp">
-      <Filter>Dynamic library linking</Filter>
+      <Filter>General\Dynamic library linking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.hpp">
-      <Filter>Logging</Filter>
+      <Filter>General\Logging</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="Core.hpp" />
     <ClInclude Include="Filesystem.hpp">
-      <Filter>Filesystem</Filter>
+      <Filter>General\Filesystem</Filter>
     </ClInclude>
     <ClInclude Include="Debug.hpp">
-      <Filter>Debug</Filter>
+      <Filter>General\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Console\ConsoleCommand.hpp">
       <Filter>Console</Filter>
@@ -46,37 +46,37 @@
     <ClInclude Include="Console\ConsoleCommandsMacros.hpp">
       <Filter>Console</Filter>
     </ClInclude>
-    <ClInclude Include="DebugMacros.hpp">
-      <Filter>Debug</Filter>
-    </ClInclude>
     <ClInclude Include="CommandLine.hpp">
-      <Filter>CommandLine</Filter>
+      <Filter>General\CommandLine</Filter>
     </ClInclude>
     <ClInclude Include="Module.hpp">
-      <Filter>Dynamic library linking</Filter>
+      <Filter>General\Dynamic library linking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Logging">
-      <UniqueIdentifier>{59d66110-cd5f-4bf1-87eb-25ac9f793336}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="XML">
-      <UniqueIdentifier>{1f28fb21-07c1-4f2c-bbad-f121606052cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CommandLine">
-      <UniqueIdentifier>{80d2f9e0-b715-4ccc-b5eb-0aeb85594c2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Filesystem">
-      <UniqueIdentifier>{e9ae7b7b-28b7-4a80-a477-24ac7cfc93d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Debug">
-      <UniqueIdentifier>{655d0e7a-2b82-41a4-b4c4-f98d1360f736}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Console">
       <UniqueIdentifier>{414b7323-22cc-4f0c-9a5e-3624e29da413}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dynamic library linking">
+    <Filter Include="General">
+      <UniqueIdentifier>{857316e6-c361-43ef-a7a0-16f9fbccaaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\CommandLine">
+      <UniqueIdentifier>{80d2f9e0-b715-4ccc-b5eb-0aeb85594c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Debug">
+      <UniqueIdentifier>{655d0e7a-2b82-41a4-b4c4-f98d1360f736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Filesystem">
+      <UniqueIdentifier>{e9ae7b7b-28b7-4a80-a477-24ac7cfc93d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Logging">
+      <UniqueIdentifier>{59d66110-cd5f-4bf1-87eb-25ac9f793336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Dynamic library linking">
       <UniqueIdentifier>{ccef3228-2f68-4873-934f-02e1394deac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\XML">
+      <UniqueIdentifier>{1f28fb21-07c1-4f2c-bbad-f121606052cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

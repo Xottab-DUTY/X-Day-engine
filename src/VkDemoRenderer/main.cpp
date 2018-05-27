@@ -7,6 +7,11 @@
 #include "xdCore/CommandLine.hpp"
 #include "VkDemoEngine.hpp"
 
+namespace XDay::CommandLine
+{
+Key KeyDontHideSystemConsole("syscmd", "Disables system console hiding", KeyType::Boolean);
+}
+
 int main(int argc, char* argv[])
 {
     Core.InitializeArguments(argc, argv);

@@ -12,18 +12,18 @@
 #include "Console/ConsoleCommands.hpp"
 #include "Filesystem.hpp"
 
-namespace XDay::CommandLine
-{
-Key KeyDebug("debug", "Enables debug mode", KeyType::Boolean);
-}
-
-using namespace XDay;
-
-XDCORE_API xdCore Core;
-
 static void error_callback(int error, const char* description)
 {
-    Log::Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
+    XDay::Log::Error("GLFW Error: \nCode: {} \nMeans: {}", error, description);
+}
+
+XDCORE_API XDay::xdCore Core;
+
+namespace XDay
+{
+namespace CommandLine
+{
+Key KeyDebug("debug", "Enables debug mode", KeyType::Boolean);
 }
 
 bool xdCore::isGlobalDebug()
@@ -96,28 +96,28 @@ bool xdCore::FindParam(stringc param) const
 // If parameter isn't found it returns empty string.
 // Do not use ReturnParam() if FindParam() returns false
 // else you will get an unexpected behavior
-stringc xdCore::ReturnParam(stringc param) const
+cpcstr xdCore::ReturnParam(stringc param) const
 {
     bool found = false;
     for (const auto& i : params)
     {
         if (found && i.find(CommandLine::KeyPrefix) != string::npos)
         {
-            Log::Error("xdCore::ReturnParam(): wrong construction [{0} {1}] used instead of [{0} *value* {1}]", param, i);
+            Log::Error("{}:: wrong construction [{1} {2}] used instead of [{1} *value* {2}]", __FUNCTION__, param, i);
             break;
         }
         if (found)
-            return i;
+            return i.c_str();
         if (i.find(CommandLine::KeyPrefix + param) == string::npos)
             continue;
         found = true;
     }
 
-    Log::Error("xdCore::ReturnParam(): returning empty string for param [{}]", param);
+    Log::Error("{}:: returning empty string for param [{}]", __FUNCTION__, param);
     return "";
 }
 
-constexpr pcstr xdCore::GetBuildConfiguration()
+constexpr cpcstr xdCore::GetBuildConfiguration()
 {
 #ifdef DEBUG
 #ifdef XR_X64
@@ -175,3 +175,4 @@ void xdCore::CalculateBuildId()
 
     buildId = -std::difftime(std::mktime(&startDate_tm), std::mktime(&buildDate_tm)) / 86400;
 }
+} // namespace XDay
