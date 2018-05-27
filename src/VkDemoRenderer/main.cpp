@@ -4,7 +4,7 @@
 #include "pch.hpp"
 
 #include "xdCore/Core.hpp"
-#include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/CommandLine.hpp"
 #include "VkDemoEngine.hpp"
 
 int main(int argc, char* argv[])

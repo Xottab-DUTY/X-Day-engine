@@ -8,7 +8,7 @@ namespace filesystem = std::experimental::filesystem;
 #include <glslang/SPIRV/GlslangToSpv.h>
 
 #include "xdCore/Core.hpp"
-#include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/CommandLine.hpp"
 #include "xdCore/Filesystem.hpp"
 #include "Shader.hpp"
 

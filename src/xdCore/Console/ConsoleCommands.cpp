@@ -6,7 +6,7 @@
 #include "ConsoleCommand.hpp"
 #include "ConsoleCommands.hpp"
 #include "ConsoleCommandsMacros.hpp"
-#include "CommandLine/Keys.hpp"
+#include "CommandLine.hpp"
 
 namespace XDay::Console
 {
@@ -56,11 +56,10 @@ void CommandLine(stringc&& args)
         return;
     }
 
-    const auto key = CommandLine::Keys::GetKey(args);
+    const auto key = CommandLine::Keys::GetKey(args.c_str());
     if (key)
     {
-        string help;
-        key->localized_description.empty() ? help = key->description : help = key->localized_description;
+        string help = key->Description();
         Log::Info(std::move(help));
     }
     else

@@ -4,12 +4,18 @@
 #include <spdlog/sinks/msvc_sink.h>
 
 #include "Core.hpp"
-#include "CommandLine/Keys.hpp"
+#include "CommandLine.hpp"
 #include "Filesystem.hpp"
 #include "Log.hpp"
 
 namespace XDay
 {
+namespace CommandLine
+{
+Key KeyNoLog("nolog", "Disables engine log", KeyType::Boolean);
+Key KeyNoLogFlush("nologflush", "Disables log flushing", KeyType::Boolean);
+}
+
 Log Log::instance;
 
 void Log::Initialize()

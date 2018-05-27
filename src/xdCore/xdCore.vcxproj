@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CommandLine\Key.cpp" />
+    <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="Console\ConsoleCommand.cpp" />
     <ClCompile Include="Console\ConsoleCommands.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -170,8 +170,7 @@
     <ClCompile Include="Core.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CommandLine\Key.hpp" />
-    <ClInclude Include="CommandLine\Keys.hpp" />
+    <ClInclude Include="CommandLine.hpp" />
     <ClInclude Include="Console\ConsoleCommand.hpp" />
     <ClInclude Include="Console\ConsoleCommands.hpp" />
     <ClInclude Include="Console\ConsoleCommandsMacros.hpp" />

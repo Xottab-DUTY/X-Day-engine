@@ -1,9 +1,14 @@
 #include "pch.hpp"
 
-#include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/CommandLine.hpp"
 #include "xdCore/Filesystem.hpp"
 #include "Console.hpp"
 #include "ConsoleCommands.hpp"
+
+namespace XDay::CommandLine
+{
+Key KeyMainConfig("mainconfig", "Specifies path and name of main config file (path/name.extension), default is \"*DataPath*/main.config\"", KeyType::String);
+}
 
 namespace XDay::Console
 {
@@ -21,4 +26,4 @@ void CConsole::ExecuteConfig(const filesystem::path& path)
 {
     ConfigLoad.Execute(path.string());
 }
-} // namespace XDay
+} // namespace XDay::::Console

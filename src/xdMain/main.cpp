@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include "xdCore/Core.hpp"
-#include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/CommandLine.hpp"
 #include "xdCore/Console/ConsoleCommands.hpp"
 #include "xdEngine/Console/Console.hpp"
 #include "xdEngine/xdEngine.hpp"

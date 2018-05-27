@@ -5,11 +5,7 @@
       <Filter>Logging</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="CommandLine\Key.cpp">
-      <Filter>CommandLine</Filter>
-    </ClCompile>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Module.cpp" />
     <ClCompile Include="Filesystem.cpp">
       <Filter>Filesystem</Filter>
     </ClCompile>
@@ -22,20 +18,19 @@
     <ClCompile Include="Console\ConsoleCommands.cpp">
       <Filter>Console</Filter>
     </ClCompile>
+    <ClCompile Include="CommandLine.cpp">
+      <Filter>CommandLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Module.cpp">
+      <Filter>Dynamic library linking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.hpp">
       <Filter>Logging</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp" />
-    <ClInclude Include="CommandLine\Key.hpp">
-      <Filter>CommandLine</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandLine\Keys.hpp">
-      <Filter>CommandLine</Filter>
-    </ClInclude>
     <ClInclude Include="Core.hpp" />
-    <ClInclude Include="Module.hpp" />
     <ClInclude Include="Filesystem.hpp">
       <Filter>Filesystem</Filter>
     </ClInclude>
@@ -53,6 +48,12 @@
     </ClInclude>
     <ClInclude Include="DebugMacros.hpp">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine.hpp">
+      <Filter>CommandLine</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.hpp">
+      <Filter>Dynamic library linking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,9 @@
     </Filter>
     <Filter Include="Console">
       <UniqueIdentifier>{414b7323-22cc-4f0c-9a5e-3624e29da413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dynamic library linking">
+      <UniqueIdentifier>{ccef3228-2f68-4873-934f-02e1394deac0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

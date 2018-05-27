@@ -8,10 +8,14 @@
 
 #include "Core.hpp"
 #include "Debug.hpp"
-#include "CommandLine/Keys.hpp"
+#include "CommandLine.hpp"
 #include "Console/ConsoleCommands.hpp"
 #include "Filesystem.hpp"
-#include "Module.hpp"
+
+namespace XDay::CommandLine
+{
+Key KeyDebug("debug", "Enables debug mode", KeyType::Boolean);
+}
 
 using namespace XDay;
 

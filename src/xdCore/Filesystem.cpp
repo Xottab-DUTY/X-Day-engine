@@ -1,12 +1,18 @@
 #include "pch.hpp"
 #include "Core.hpp"
-#include "CommandLine/Keys.hpp"
+#include "CommandLine.hpp"
 #include "Filesystem.hpp"
 
 XDCORE_API XDay::CFilesystem FS;
 
 namespace XDay
 {
+namespace CommandLine
+{
+Key KeyResPath("respath", "Specifies path of resources folder, default is \"*WorkingDirectory*/resources\"", KeyType::String);
+Key KeyDataPath("datapath", "Specifies path of application data folder, default is \"*WorkingDirectory*/appdata\"", KeyType::String);
+}
+
 XDCORE_API Filesystem Filesystem::instance;
 
 void Filesystem::BasicInit()
@@ -33,11 +39,11 @@ void CFilesystem::Initialize()
     WorkPath = filesystem::current_path();
     BinPath = WorkPath.string() + "/bin/";
 
-    auto& key = CommandLine::KeyDataPath;
-    key.IsSet() ? DataPath = key.StringValue() : DataPath = WorkPath.string() + "/appdata/";
+    CommandLine::Key* key = &CommandLine::KeyDataPath;
+    key->IsSet() ? DataPath = key->StringValue() : DataPath = WorkPath.string() + "/appdata/";
 
-    key = CommandLine::KeyResPath;
-    key.IsSet() ? ResourcesPath = key.StringValue() : ResourcesPath = WorkPath.string() + "/resources/";
+    key = &CommandLine::KeyResPath;
+    key->IsSet() ? ResourcesPath = key->StringValue() : ResourcesPath = WorkPath.string() + "/resources/";
 
     BinaryShadersPath = DataPath.string() + "/binary_shaders/";
     LogsPath = DataPath.string() + "/logs/";

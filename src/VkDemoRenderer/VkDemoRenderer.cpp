@@ -20,7 +20,7 @@
 #include <tiny_obj_loader.h>
 
 #include "xdCore/Core.hpp"
-#include "xdCore/CommandLine/Keys.hpp"
+#include "xdCore/CommandLine.hpp"
 #include "xdCore/Filesystem.hpp"
 #include "VkDemoEngine.hpp"
 #include "VkDemoRenderer.hpp"
