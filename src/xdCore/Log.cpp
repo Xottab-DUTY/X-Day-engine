@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/msvc_sink.h>
 
@@ -17,6 +17,8 @@ Key KeyNoLog("nolog", "Disables engine log", KeyType::Boolean);
 Key KeyNoLogFlush("nologflush", "Disables log flushing", KeyType::Boolean);
 }
 
+constexpr cpcstr LOGGER_NAME = "X-Day Engine";
+
 Log Log::instance;
 
 void Log::Initialize()
@@ -30,8 +32,8 @@ void Log::Initialize()
     if (CommandLine::KeyNoLogFlush.IsSet())
         instance.noLogFlush = true;
 
-    std::vector<spdlog::sink_ptr> sinks;
-    sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
+    vector<spdlog::sink_ptr> sinks;
+    sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 
     if (!instance.noLogFlush)
         sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(FS.LogsPath.string() + instance.logFile, true));
@@ -40,8 +42,8 @@ void Log::Initialize()
     sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());
 #endif
 
-    instance.spdlogger = std::make_shared<spdlog::logger>("X-Day Engine", begin(sinks), end(sinks));
-    instance.spdlogger->set_pattern("[%T] [%l] %v");
+    instance.spdlogger = std::make_shared<spdlog::logger>(LOGGER_NAME, begin(sinks), end(sinks));
+    instance.spdlogger->set_pattern("%^ [%T] [%l] %v %$");
 
     if (Core.isGlobalDebug())
         instance.spdlogger->set_level(spdlog::level::trace);
@@ -63,7 +65,7 @@ void Log::Flush()
     if (instance.noLogFlush)
         return;
 
-    spdlog::get("X-Day Engine")->flush();
+    spdlog::get(LOGGER_NAME)->flush();
 }
 
 bool Log::isNoLog()

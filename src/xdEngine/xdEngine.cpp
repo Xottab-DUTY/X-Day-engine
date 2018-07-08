@@ -114,3 +114,4 @@ void XDayEngine::mainLoop()
         glfwWaitEvents();
     }
 }
+

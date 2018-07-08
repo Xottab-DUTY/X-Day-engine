@@ -2,6 +2,7 @@
 
 #include "Common/Types/String.hpp"
 
+#define FMT_HEADER_ONLY
 #include <fmt/format.h>
 
 namespace fmt

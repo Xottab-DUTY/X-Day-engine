@@ -162,9 +162,6 @@
     <ClInclude Include="xdEngine.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\include\fmt.vcxproj">
-      <Project>{f3a00ed5-79b7-43c7-8d9c-58874dc61845}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\include\glfw.vcxproj">
       <Project>{461392b0-8e09-312e-ae81-de5cd596ea12}</Project>
     </ProjectReference>

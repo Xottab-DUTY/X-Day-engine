@@ -73,5 +73,5 @@ public:
 
     static stringc FormatInfo(ErrorLocation&& location, cpcstr&& expression, cpcstr&& description);
     static void Fail(const bool fatal, const bool& ignoreAlways, ErrorLocation&& location, pcstr expression, pcstr description);
-    };
+};
 } // namespace XDay

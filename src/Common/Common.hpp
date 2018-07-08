@@ -5,6 +5,7 @@
 #include "Common/Types/BasicTypes.hpp"
 #include "Common/Types/IntegerTypes.hpp"
 #include "Common/Types/String.hpp"
+#include "Common/Types/StringView.hpp"
 #include "Common/Types/Vector.hpp"
 #include "Common/fmt.hpp"
 
