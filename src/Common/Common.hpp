@@ -6,8 +6,6 @@
 #include "Common/Types/IntegerTypes.hpp"
 #include "Common/Types/String.hpp"
 #include "Common/Types/Vector.hpp"
-
-// XXX: uncomment when SPDLOG_FMT_EXTERNAL will be fixed
-// #include <fmt/format.h>
+#include "Common/fmt.hpp"
 
 #include "xdAPI/xdAPI.hpp"

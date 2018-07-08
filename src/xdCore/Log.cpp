@@ -1,6 +1,7 @@
 #include "pch.hpp"
 
 #include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/msvc_sink.h>
 
 #include "Core.hpp"
@@ -33,7 +34,7 @@ void Log::Initialize()
     sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
 
     if (!instance.noLogFlush)
-        sinks.emplace_back(std::make_shared<spdlog::sinks::simple_file_sink_mt>(FS.LogsPath.string() + instance.logFile, true));
+        sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(FS.LogsPath.string() + instance.logFile, true));
 
 #ifdef WINDOWS
     sinks.emplace_back(std::make_shared<spdlog::sinks::msvc_sink_mt>());

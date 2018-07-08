@@ -1,8 +1,6 @@
 #pragma once
 
-#define SPDLOG_WCHAR_TO_UTF8_SUPPORT
-// XXX: Uncomment when it will be fixed
-//#define SPDLOG_FMT_EXTERNAL
+#define SPDLOG_FMT_EXTERNAL
 #include <spdlog/spdlog.h>
 
 namespace XDay

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="fmt.hpp" />
     <ClInclude Include="Noncopyable.hpp" />
     <ClInclude Include="Types\Allocator.hpp" />
     <ClInclude Include="Types\BasicTypes.hpp" />

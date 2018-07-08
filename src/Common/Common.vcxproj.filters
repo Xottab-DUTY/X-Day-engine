@@ -46,6 +46,7 @@
     <ClInclude Include="Types\IntegerTypes.hpp">
       <Filter>Types</Filter>
     </ClInclude>
+    <ClInclude Include="fmt.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Types">
