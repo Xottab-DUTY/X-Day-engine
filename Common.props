@@ -23,6 +23,7 @@
     <xdIntDir>$(SolutionDir)intermediate\$(xdPlatform)\$(Configuration)\</xdIntDir>
     <xdSrcDir>$(SolutionDir)src\</xdSrcDir>
     <xdIncludeDir>$(SolutionDir)include\</xdIncludeDir>
+    <xdDependenciesDir>$(SolutionDir)dependencies\</xdDependenciesDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ConfigurationType)'=='Application'">
     <OutDir>$(xdBinDir)</OutDir>
@@ -38,7 +39,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(xdSrcDir);$(xdIncludeDir);$(xdIncludeDir)fmt\include;$(xdIncludeDir)spdlog\include;$(xdIncludeDir)glfw\include;$(xdIncludeDir)ClanLib\include;$(VULKAN_SDK)\include;(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(xdSrcDir);$(xdIncludeDir);$(xdDependenciesDir)include;$(xdIncludeDir)fmt\include;$(xdIncludeDir)spdlog\include;$(xdIncludeDir)glfw\include;$(xdIncludeDir)ClanLib\include;$(VULKAN_SDK)\include;(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <!--
@@ -48,8 +49,9 @@
       <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories Condition="'$(Platform)'=='x64'">$(xdLibDir);$(VULKAN_SDK)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Platform)'=='Win32'">$(xdLibDir);$(VULKAN_SDK)\Lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(xdLibDir);$(xdDependenciesDir)libraries\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Platform)'=='x64'">$(VULKAN_SDK)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Platform)'=='Win32'">$(VULKAN_SDK)\Lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(xdLibDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <Lib>
