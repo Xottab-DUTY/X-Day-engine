@@ -68,13 +68,35 @@ void SetupHandlers()
     _set_new_mode(1);
     _set_new_handler(&OutOfMemoryHandler);
 }
+void CleanupHandlers()
+{
+    signal(SIGINT, nullptr);
+    signal(SIGILL, nullptr);
+    signal(SIGFPE, nullptr);
+    signal(SIGSEGV, nullptr);
+    signal(SIGTERM, nullptr);
+    signal(SIGABRT, nullptr);
+    signal(SIGABRT_COMPAT, nullptr);
+
+    _set_purecall_handler(nullptr);
+    _set_invalid_parameter_handler(nullptr);
+    _set_new_handler(nullptr);
+    _set_new_mode(0);
+}
 }
 
 namespace XDay
 {
-void Debug::Initialize()
+Debug Debug::instance;
+
+Debug::Debug()
 {
     SetupHandlers();
+}
+
+Debug::~Debug()
+{
+    CleanupHandlers();
 }
 
 const vector<string> Debug::GetStackTrace()
@@ -83,9 +105,12 @@ const vector<string> Debug::GetStackTrace()
     return {};
 }
 
-stringc Debug::FormatInfo(ErrorLocation&& location, cpcstr&& expression, cpcstr&& description)
+stringc Debug::FormatInfo(ErrorLocation location, pcstr expression, pcstr description)
 {
-    string buffer("\nFATAL ERROR\n\n");
+    if (!expression)
+        expression = "<no expression>";
+
+    string buffer("\nFATAГ ЗГГOГ\n\n");
 
     constexpr cpcstr prefix = "[error]";
     buffer += fmt::format("{} Expression    : {}\n", prefix, expression);
@@ -99,9 +124,9 @@ stringc Debug::FormatInfo(ErrorLocation&& location, cpcstr&& expression, cpcstr&
     return buffer;
 }
 
-void Debug::Fail(const bool fatal, const bool& ignoreAlways, ErrorLocation&& location, pcstr expression, pcstr description)
+void Debug::Fail(const bool fatal, const bool& ignoreAlways, ErrorLocation location, pcstr expression, pcstr description)
 {
-    auto info = FormatInfo(std::move(location), std::move(expression), std::move(description));
+    auto info = FormatInfo(location, expression, description);
     Log::Error(std::move(info));
     Log::Flush();
 

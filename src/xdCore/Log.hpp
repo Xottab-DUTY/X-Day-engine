@@ -7,25 +7,22 @@ namespace XDay
 {
 class XDCORE_API Log
 {
-    bool noLog = false;
-    bool noLogFlush = false;
+    bool noLog;
+    bool noLogFlush;
     std::string logFile = "main.log";
     std::shared_ptr<spdlog::logger> spdlogger;
 
+    Log();
+    ~Log();
     static Log instance;
-
-    void CloseLog() const;
 
 public:
     static void Initialize();
-    static void Destroy();
 
     static void Flush();
 
     static bool isNoLog();
     static bool isNoLogFlush();
-
-    static void onCoreInitialized();
 
 #pragma region Log functions
     template <typename... Args>

@@ -44,7 +44,7 @@ void Help(stringc&& args)
 
 void CommandLineAll()
 {
-    Log::Info("Command line:\n" + Core.GetParamsString());
+    Log::Info("{}: {}", "Core.Params", Core.GetParamsString());
     CommandLine::Keys::Help();
 }
 
@@ -58,10 +58,7 @@ void CommandLine(stringc&& args)
 
     const auto key = CommandLine::Keys::GetKey(args.c_str());
     if (key)
-    {
-        string help = key->Description();
-        Log::Info(std::move(help));
-    }
+        Log::Info(key->Description());
     else
         Log::Error("Unknown key: [{}]", args);
 }

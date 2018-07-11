@@ -7,20 +7,20 @@ class XDCORE_API xdCore
     double buildId = 0;
     cpcstr buildDate = __DATE__;
     cpcstr buildTime = __TIME__;
-    string buildString;
-    string glfwVersionString;
+    pcstr buildString;
+    pcstr glfwVersionString;
 
-    string engineName;
-    string engineVersion;
+    pcstr engineName;
+    pcstr engineVersion;
 
     vector<string> params;
     string paramsString;
 
-    string appName;
-    string appVersion;
+    pcstr appName;
+    pcstr appVersion;
 
-    string userName = "X-Day User";
-    string compName = "X-Day Computer";
+    pcstr userName;
+    pcstr compName;
 
 public:
     xdCore();

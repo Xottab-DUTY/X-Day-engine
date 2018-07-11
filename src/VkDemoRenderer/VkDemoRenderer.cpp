@@ -312,8 +312,8 @@ void VkDemoRenderer::CreateVkInstance()
     if (enableValidationLayers && !CheckValidationLayersSupport())
         Log::Warning("Vulkan: not all validation layers supported.");
 
-    vk::ApplicationInfo appInfo(Core.GetAppName().c_str(), std::stoi(Core.GetAppVersion()),
-                                Core.GetEngineName().c_str(), std::stoi(Core.GetEngineVersion()),
+    vk::ApplicationInfo appInfo(Core.GetAppName(), std::stoi(Core.GetAppVersion()),
+                                Core.GetEngineName(), std::stoi(Core.GetEngineVersion()),
                                 VK_API_VERSION_1_1);
 
     auto extensions = getRequiredExtensions();

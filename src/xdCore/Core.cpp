@@ -36,11 +36,20 @@ bool xdCore::isGlobalDebug()
 
 xdCore::xdCore()
 {
+    CalculateBuildId();
     engineName = "X-Day Engine";
     engineVersion = "1.0";
-    appName = "X-Day Engine";
+    buildString = format("{} {} {} (build {}, {}, {})",
+                         engineName, engineVersion,
+                         GetBuildConfiguration(), buildId,
+                         buildDate, buildTime).c_str();
+
+    glfwVersionString = format("GLFW {}", glfwGetVersionString()).c_str();
+
+    appName = "X-Day Application";
     appVersion = "1.0";
-    CalculateBuildId();
+    userName = "X-Day User";
+    compName = "X-Day Computer";
 }
 
 void xdCore::InitializeArguments(const int argc, char* argv[])
@@ -61,13 +70,9 @@ void xdCore::Initialize()
     Filesystem::BasicInit();
     FS.Initialize();
     Log::Initialize();
-    Debug::Initialize();
-
-    buildString = fmt::format("{} {} {} (build {}, {}, {})", engineName, engineVersion, GetBuildConfiguration(), buildId, buildDate, buildTime);
-    glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString());
     Log::Info(Core.GetBuildString());
     Log::Info(Core.GetGLFWVersionString());
-    Log::Info("Core.Params: " + Core.GetParamsString());
+    Log::Info("{}: {}", "Core.Params", Core.GetParamsString());
     Log::Info("Девиз: Чем стрелы коленом ловить, гораздо интереснее отстреливать свои ноги. Продолжим.");
     Log::Info("Slogan: It's more interesting to shoot your feet, than catch arrows by your knee. Let's continue.");
 
@@ -80,7 +85,6 @@ void xdCore::Destroy()
 {
     CommandLine::Keys::Destroy();
     Console::Commands::Destroy();
-    Log::Destroy();
     Filesystem::Destroy();
 }
 

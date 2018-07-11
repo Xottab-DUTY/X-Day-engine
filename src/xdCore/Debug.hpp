@@ -50,7 +50,7 @@
         XDay::Debug::Fail(true, ignoreAlways, DEBUG_INFO, nullptr, fmt::format(description, __VA_ARGS__).c_str());\
     } while (false);
 
-#define NODEFAULT() FATAL("No default in {} reached", __FUNCTION__)
+#define NODEFAULT() FATAL("No default reached in {}", __FUNCTION__)
 #define NOT_IMPLEMENTED() VERIFY(false, "Function {} is not implemented", __FUNCTION__)
 
 namespace XDay
@@ -60,18 +60,21 @@ struct ErrorLocation
     cpcstr File = nullptr;
     const int Line = -1;
     cpcstr Function = nullptr;
+    ErrorLocation() = delete;
+    constexpr ErrorLocation(cpcstr file, const int line, cpcstr function)
+        : File(file), Line(line), Function(function) {}
 };
 
 class XDCORE_API Debug
 {
-    Debug() = delete;
+    Debug();
+    ~Debug();
+    static Debug instance;
 
 public:
-    static void Initialize();
-
     static const vector<string> GetStackTrace();
 
-    static stringc FormatInfo(ErrorLocation&& location, cpcstr&& expression, cpcstr&& description);
-    static void Fail(const bool fatal, const bool& ignoreAlways, ErrorLocation&& location, pcstr expression, pcstr description);
+    static stringc FormatInfo(ErrorLocation location, pcstr expression, pcstr description);
+    static void Fail(const bool fatal, const bool& ignoreAlways, ErrorLocation location, pcstr expression, pcstr description);
 };
 } // namespace XDay
