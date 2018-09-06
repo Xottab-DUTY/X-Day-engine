@@ -4,9 +4,6 @@
 [submodule "include/glfw"]
 	path = include/glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "include/openal-soft"]
-	path = include/openal-soft
-	url = https://github.com/kcat/openal-soft.git
 [submodule "include/glslang"]
 	path = include/glslang
 	url = https://github.com/KhronosGroup/glslang.git
@@ -19,15 +16,6 @@
 [submodule "include/tinyobjloader"]
 	path = include/tinyobjloader
 	url = https://github.com/syoyo/tinyobjloader.git
-[submodule "include/pugixml"]
-	path = include/pugixml
-	url = https://github.com/zeux/pugixml.git
-[submodule "include/assimp"]
-	path = include/assimp
-	url = https://github.com/assimp/assimp.git
-[submodule "include/imgui"]
-	path = include/imgui
-	url = https://github.com/ocornut/imgui.git
 [submodule "include/spdlog"]
 	path = include/spdlog
 	url = https://github.com/gabime/spdlog.git
