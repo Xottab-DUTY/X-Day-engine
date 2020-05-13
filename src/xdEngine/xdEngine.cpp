@@ -9,7 +9,6 @@
 #include "xdCore/Core.hpp"
 #include "xdCore/Console/ConsoleCommands.hpp"
 #include "Console/ConsoleCommands.hpp"
-#include "xdRenderer/renderer.hpp"
 
 using namespace XDay;
 

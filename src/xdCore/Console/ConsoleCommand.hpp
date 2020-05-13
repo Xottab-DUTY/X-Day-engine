@@ -50,7 +50,7 @@ protected:
 
 public:
     CommandBase() = delete;
-    constexpr CommandBase(cpcstr name, cpcstr description)
+    CommandBase(cpcstr name, cpcstr description)
         : name(name),
           description(description),
           localized_description(nullptr),
@@ -93,7 +93,7 @@ protected:
     type value;
 
 public:
-    constexpr explicit CommandWithValue(cpcstr name, cpcstr description, type value)
+    explicit CommandWithValue(cpcstr name, cpcstr description, type value)
         : CommandBase(name, description), value(value) {}
 
     type Value() const { return value; }
@@ -109,7 +109,7 @@ protected:
     type& value;
 
 public:
-    constexpr explicit CommandWithValueRef(cpcstr name, cpcstr description, type& value)
+    explicit CommandWithValueRef(cpcstr name, cpcstr description, type& value)
         : CommandBase(name, description), value(value) {}
 
     type Value() const { return value; }
@@ -125,7 +125,7 @@ protected:
     type* value;
 
 public:
-    constexpr explicit CommandWithValuePtr(cpcstr name, cpcstr description, type* value)
+    explicit CommandWithValuePtr(cpcstr name, cpcstr description, type* value)
         : CommandBase(name, description), value(value) {}
 
     type Value() const { return value; }
@@ -147,7 +147,7 @@ template <>
 class Command<bool> : public CommandWithValueRef<bool>
 {
 public:
-    constexpr Command(cpcstr name, cpcstr description, bool& value)
+    Command(cpcstr name, cpcstr description, bool& value)
         : CommandWithValueRef(name, description, value)
     {
         CommandBase::LowerCaseArguments(true);
@@ -184,7 +184,7 @@ class Command<int> : public CommandWithValueRef<int>
     int min, max;
 
 public:
-    constexpr Command(cpcstr name, cpcstr description, int& value, const int min, const int max)
+    Command(cpcstr name, cpcstr description, int& value, const int min, const int max)
         : CommandWithValueRef(name, description, value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
@@ -224,7 +224,7 @@ class Command<float> : public CommandWithValueRef<float>
     float min, max;
 
 public:
-    constexpr Command(cpcstr name, cpcstr description, float& value, const float min, const float max)
+    Command(cpcstr name, cpcstr description, float& value, const float min, const float max)
         : CommandWithValueRef(name, description, value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
@@ -264,7 +264,7 @@ class Command<double> : public CommandWithValueRef<double>
     double min, max;
 
 public:
-    constexpr Command(cpcstr name, cpcstr description, double& value, const double min, const double max)
+    Command(cpcstr name, cpcstr description, double& value, const double min, const double max)
         : CommandWithValueRef(name, description, value), min(min), max(max) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
@@ -304,7 +304,7 @@ class Command<string> : public CommandWithValueRef<string>
     size_t maxSize;
 
 public:
-    constexpr Command(cpcstr name, cpcstr description, string& value, const size_t maxSize)
+    Command(cpcstr name, cpcstr description, string& value, const size_t maxSize)
         : CommandWithValueRef(name, description, value), maxSize(maxSize) {}
 
     void Execute() override { Log::Warning("{} called, which shouldn't happen.", __FUNCTION__); }
@@ -338,7 +338,7 @@ class Command<Call> : public CommandWithValue<Call>
     cpcstr syntax;
 
 public:
-    constexpr Command(cpcstr name, cpcstr description, Call value,
+    Command(cpcstr name, cpcstr description, Call value,
         const bool lowerCaseArguments = true, cpcstr syntax = "no syntax")
         : CommandWithValue(name, description, value), syntax(syntax)
     {
@@ -370,7 +370,7 @@ class Command<CallWithArgs> : public CommandWithValue<CallWithArgs>
     cpcstr syntax;
 
 public:
-    constexpr Command(cpcstr name, cpcstr description, CallWithArgs value, const bool emptyArgumentsHandled = false,
+    Command(cpcstr name, cpcstr description, CallWithArgs value, const bool emptyArgumentsHandled = false,
         const bool lowerCaseArguments = true, cpcstr syntax = "no syntax")
         : CommandWithValue(name, description, value), syntax(syntax)
     {

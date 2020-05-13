@@ -3,19 +3,6 @@
 #include <set>
 #include <unordered_map>
 
-#include <vulkan/vulkan.hpp>
-
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/hash.hpp>
-
-#include <gli/gli.hpp>
-#include <GLFW/glfw3.h>
-
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
@@ -1300,39 +1287,17 @@ VkDemoRenderer::QueueFamilyIndices VkDemoRenderer::findQueueFamilies(vk::Physica
     return indices;
 }
 
-
-
 VkDemoRenderer::SwapChainSupportDetails VkDemoRenderer::querySwapChainSupport(vk::PhysicalDevice _physDevice) const
 {
     SwapChainSupportDetails details;
 
     _physDevice.getSurfaceCapabilitiesKHR(*surface, &details.capabilities);
 
-    {
-        uint32_t formatCount;
-        _physDevice.getSurfaceFormatsKHR(*surface, &formatCount, nullptr);
-
-        if (formatCount != 0)
-        {
-            details.formats.resize(static_cast<size_t>(formatCount));
-            _physDevice.getSurfaceFormatsKHR(*surface, &formatCount, details.formats.data());
-        }
-    }
-
-    {
-        uint32_t presentModeCount;
-        _physDevice.getSurfacePresentModesKHR(*surface, &presentModeCount, nullptr);
-
-        if (presentModeCount != 0)
-        {
-            details.presentModes.resize(static_cast<size_t>(presentModeCount));
-            _physDevice.getSurfacePresentModesKHR(*surface, &presentModeCount, details.presentModes.data());
-        }
-    }
+    details.formats = _physDevice.getSurfaceFormatsKHR(*surface);
+    details.presentModes = _physDevice.getSurfacePresentModesKHR(*surface);
 
     return details;
 }
-
 
 vk::VertexInputBindingDescription VkDemoRenderer::Vertex::getBindingDescription()
 {

@@ -26,37 +26,37 @@ public:
 
 #pragma region Log functions
     template <typename... Args>
-    static void Trace(std::string&& msg, Args&&... args)
+    static void Trace(const string& msg, Args&&... args)
     {
         instance.spdlogger->trace(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void Debug(std::string&& msg, Args&&... args)
+    static void Debug(const string& msg, Args&&... args)
     {
         instance.spdlogger->debug(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void Info(std::string&& msg, Args&&... args)
+    static void Info(const string& msg, Args&&... args)
     {
         instance.spdlogger->info(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void Warning(std::string&& msg, Args&&... args)
+    static void Warning(const string& msg, Args&&... args)
     {
         instance.spdlogger->warn(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void Error(std::string&& msg, Args&&... args)
+    static void Error(const string& msg, Args&&... args)
     {
         instance.spdlogger->error(msg.c_str(), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    static void Critical(std::string&& msg, Args&&... args)
+    static void Critical(const string& msg, Args&&... args)
     {
         instance.spdlogger->critical(msg.c_str(), std::forward<Args>(args)...);
     }

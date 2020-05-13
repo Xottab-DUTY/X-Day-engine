@@ -1,7 +1,7 @@
 #pragma once
 
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem;
+namespace filesystem = std::filesystem;
 
 namespace XDay::Console
 {

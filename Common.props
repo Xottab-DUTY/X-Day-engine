@@ -41,7 +41,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(xdSrcDir);$(xdIncludeDir);$(xdDependenciesDir)include;$(xdIncludeDir)fmt\include;$(xdIncludeDir)spdlog\include;$(xdIncludeDir)glfw\include;$(xdIncludeDir)ClanLib\include;$(VULKAN_SDK)\include;(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <!--
         4251 : class 'x' needs to have dll-interface to be used by clients of class 'y'
         4275 : non dll-interface class 'x' used as base for dll-interface class 'y' 

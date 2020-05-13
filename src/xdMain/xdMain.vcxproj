@@ -87,7 +87,7 @@
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -102,7 +102,7 @@
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <LargeAddressAware>true</LargeAddressAware>
@@ -170,9 +170,6 @@
     </ProjectReference>
     <ProjectReference Include="..\xdEngine\xdEngine.vcxproj">
       <Project>{cd78feca-f990-4ef5-a497-399e8b2cc08e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\xdRenderer\xdRenderer.vcxproj">
-      <Project>{d6e5c594-52bd-4fee-a20a-d609e2a57cbd}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

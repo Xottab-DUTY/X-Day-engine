@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <filesystem>
-namespace filesystem = std::experimental::filesystem;
+namespace filesystem = std::filesystem;
 
 #include <ShaderLang.h>
 #include <glslang/SPIRV/GlslangToSpv.h>

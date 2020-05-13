@@ -39,12 +39,12 @@ xdCore::xdCore()
     CalculateBuildId();
     engineName = "X-Day Engine";
     engineVersion = "1.0";
-    buildString = format("{} {} {} (build {}, {}, {})",
+    buildString = fmt::format("{} {} {} (build {}, {}, {})",
                          engineName, engineVersion,
                          GetBuildConfiguration(), buildId,
                          buildDate, buildTime).c_str();
 
-    glfwVersionString = format("GLFW {}", glfwGetVersionString()).c_str();
+    glfwVersionString = fmt::format("GLFW {}", glfwGetVersionString()).c_str();
 
     appName = "X-Day Application";
     appVersion = "1.0";
